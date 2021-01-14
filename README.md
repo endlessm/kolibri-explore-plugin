@@ -37,12 +37,30 @@ Deployment
 ----------
 
 1. Clone this repo.
-2. Open terminal in your Kolibri repo.
-3. Run the following commands, with your Kolibri development virtual env
-   enabled:
+2. Install dependencies with pipenv
+
+```
+    pipenv --python 3
+    pipenv shell
+    pip install -r requirements.txt --upgrade
+```
+
+3. Install node.js and yarn
+
+```
+    nodeenv -p --node=10.15.3
+    npm install -g yarn
+```
+
+3. Install plugin javascript dependencies and build
 
 ```
     yarn install
+```
+
+4. Now that all dependencies are installed, it's possible to build using make
+
+```
     make dist
 ```
 
@@ -51,13 +69,7 @@ folder.
 
 5. Upload to PyPi:
 
-You should have python `twine` package installed:
-
-```
-    pip install twine
-```
-
-Then you can publish the generated `dist/kolibri_explore_plugin*.whl` to pypi
+You can publish the generated `dist/kolibri_explore_plugin*.whl` to pypi
 just running:
 
 ```
@@ -82,4 +94,13 @@ calling the `make dist` again, you should remove the `kolibri_explore_plugin`:
 
 ```
     pip uninstall kolibri_explore_plugin
+```
+
+Configure precommit hook
+------------------------
+
+To run lint before any commit just run this command:
+
+```
+    pre-commit install -f --install-hooks
 ```

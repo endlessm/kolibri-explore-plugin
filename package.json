@@ -2,7 +2,9 @@
   "scripts": {
     "build": "kolibri-tools build prod --plugins kolibri_explore_plugin",
     "clean": "kolibri-tools build clean --plugins kolibri_explore_plugin",
-    "dev": "kolibri-tools build dev --plugins kolibri_explore_plugin --port 4000"
+    "dev": "kolibri-tools build dev --plugins kolibri_explore_plugin --port 4000",
+    "lint-frontend": "kolibri-tools lint -p 'kolibri_explore_plugin/assets/**/*.{js,vue,scss,less,css}'",
+    "lint-frontend:format": "yarn run lint-frontend --write"
   },
   "name": "kolibri-explore-render-plugin",
   "description": "Explore Plugin for Kolibri",
