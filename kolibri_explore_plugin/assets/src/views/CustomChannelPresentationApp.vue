@@ -14,10 +14,11 @@
 <script>
 
   import { mapState } from 'vuex';
-  import { nameSpace } from 'hashi/src/hashiBase';
   import { ContentNodeResource } from 'kolibri.resources';
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
   import axios from 'axios';
+
+  const nameSpace = 'hashi';
 
   export default {
     name: 'CustomChannelPresentationApp',
