@@ -60,7 +60,7 @@ class ExploreContentNodeHook(ContentNodeDisplayHook):
             kind_slug = "c/"
         if kind_slug is not None:
             return (
-                reverse("kolibri:kolibri.plugins.explore:explore")
+                reverse("kolibri:kolibri_explore_plugin:explore")
                 + "#/topics/"
                 + kind_slug
                 + node.id
