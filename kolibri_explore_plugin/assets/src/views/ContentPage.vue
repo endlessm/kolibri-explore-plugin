@@ -155,7 +155,7 @@
         return false;
       },
       canShare() {
-        let supported_types = ['mp4', 'mp3', 'pdf', 'epub'];
+        const supported_types = ['mp4', 'mp3', 'pdf', 'epub'];
         return shareFile && supported_types.includes(this.primaryFile.extension);
       },
       description() {
