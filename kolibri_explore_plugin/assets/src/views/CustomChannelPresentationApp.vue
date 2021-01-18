@@ -72,7 +72,7 @@
             const message = {
               event,
               nameSpace,
-              data: { channel, node },
+              data: { channel, nodes: node },
             };
             iframeWindow.postMessage(message, '*');
           });
