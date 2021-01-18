@@ -33,6 +33,25 @@ javascript or python, the kolibri web will be updated automatically.
 yarn run devserver-hot
 ```
 
+## A
+
+An alternative for development is to install the repository as an
+editable package, which creates a symlink:
+
+```
+pip install -e .
+```
+
+And then run the Javascript in watch mode in a separate terminal:
+
+```
+yarn dev
+```
+
+This approach has advantages to the one above:
+- The development code is the same as the build.
+- No need to edit the plugins text file.
+
 Deployment
 ----------
 
