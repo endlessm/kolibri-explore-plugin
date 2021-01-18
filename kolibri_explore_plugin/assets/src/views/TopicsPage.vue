@@ -59,7 +59,7 @@
           :layout12="{ span: 12 }"
         >
           <ProgressIcon
-            v-if="calculateProgress !== undefined"
+            v-if="calculateProgress !== null"
             class="progress-icon"
             :progress="calculateProgress"
           />
@@ -130,10 +130,10 @@
           const computedSum =
             this.contents.map(content => content.progress).reduce((acc, val) => acc + val) /
             contentsLength;
-          return computedSum !== 0 ? computedSum : undefined;
+          return computedSum === 0 ? null : computedSum;
         }
 
-        return undefined;
+        return null;
       },
     },
     methods: {

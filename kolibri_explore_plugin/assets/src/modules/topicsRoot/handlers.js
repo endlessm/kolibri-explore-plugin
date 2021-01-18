@@ -20,15 +20,15 @@ export function showChannels(store) {
         const rootNodes = channels
           .map(channel => {
             const node = _collectionState(channelCollection).find(n => n.channel_id === channel.id);
-            if (node) {
-              // The `channel` comes with additional data that is
-              // not returned from the ContentNodeResource.
-              // Namely thumbnail, description and tagline (so far)
-              node.thumbnail = channel.thumbnail;
-              node.description = channel.description;
-              node.tagline = channel.tagline;
-              return node;
-            }
+            if (!node) return null;
+
+            // The `channel` comes with additional data that is
+            // not returned from the ContentNodeResource.
+            // Namely thumbnail, description and tagline (so far)
+            node.thumbnail = channel.thumbnail;
+            node.description = channel.description;
+            node.tagline = channel.tagline;
+            return node;
           })
           .filter(Boolean);
         store.commit('topicsRoot/SET_STATE', { rootNodes });
@@ -63,32 +63,30 @@ export function showFilteredChannels(store) {
               const node = _collectionState(channelCollection).find(
                 n => n.channel_id === channel.id
               );
-              if (node) {
-                // The `channel` comes with additional data that is
-                // not returned from the ContentNodeResource.
-                // Namely thumbnail, description and tagline (so far)
-                node.thumbnail = channel.thumbnail;
-                node.description = channel.description;
-                node.tagline = channel.tagline;
-                const getParams = {
-                  search: CUSTOM_PRESENTATION_TITLE,
-                  kind: ContentNodeKinds.HTML5,
-                  channel_id: channel.id,
-                };
-                return ContentNodeSearchResource.getCollection(getParams)
-                  .fetch()
-                  .then(({ results }) => {
-                    if (results.length) {
-                      const thumb = results[0].files.find(file =>
-                        file.preset.endsWith('thumbnail')
-                      );
-                      if (thumb) {
-                        node.html5Thumbnail = thumb.storage_url;
-                      }
-                      return node;
-                    }
-                  });
-              }
+              if (!node) return null;
+
+              // The `channel` comes with additional data that is
+              // not returned from the ContentNodeResource.
+              // Namely thumbnail, description and tagline (so far)
+              node.thumbnail = channel.thumbnail;
+              node.description = channel.description;
+              node.tagline = channel.tagline;
+              const getParams = {
+                search: CUSTOM_PRESENTATION_TITLE,
+                kind: ContentNodeKinds.HTML5,
+                channel_id: channel.id,
+              };
+              return ContentNodeSearchResource.getCollection(getParams)
+                .fetch()
+                .then(({ results }) => {
+                  if (!results.length) return null;
+
+                  const thumb = results[0].files.find(file => file.preset.endsWith('thumbnail'));
+                  if (thumb) {
+                    node.html5Thumbnail = thumb.storage_url;
+                  }
+                  return node;
+                });
             })
           );
         })

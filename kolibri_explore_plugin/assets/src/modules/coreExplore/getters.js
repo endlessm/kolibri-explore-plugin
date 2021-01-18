@@ -7,9 +7,14 @@ export function pageMode(state) {
     PageNames.TOPICS_TOPIC,
     PageNames.TOPICS_CONTENT,
   ];
-  const pageNameMatches = page => page === state.pageName;
+
+  function pageNameMatches(page) {
+    return page === state.pageName;
+  }
+
   if (topicsPages.some(pageNameMatches)) {
     return PageModes.TOPICS;
   }
-  return undefined;
+
+  return null;
 }

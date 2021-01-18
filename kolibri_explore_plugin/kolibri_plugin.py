@@ -3,7 +3,6 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from django.urls import reverse
-
 from kolibri.core.auth.constants.user_kinds import ANONYMOUS
 from kolibri.core.auth.constants.user_kinds import LEARNER
 from kolibri.core.content.hooks import ContentNodeDisplayHook

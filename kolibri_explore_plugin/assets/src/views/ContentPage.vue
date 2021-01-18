@@ -155,7 +155,7 @@
         return false;
       },
       canShare() {
-        let supported_types = ['mp4', 'mp3', 'pdf', 'epub'];
+        const supported_types = ['mp4', 'mp3', 'pdf', 'epub'];
         return shareFile && supported_types.includes(this.primaryFile.extension);
       },
       description() {
@@ -169,7 +169,7 @@
         if (this.isUserLoggedIn) {
           // if there no attempts for this exercise, there is no progress
           if (this.content.kind === ContentNodeKinds.EXERCISE && this.masteryAttempts === 0) {
-            return undefined;
+            return null;
           }
           return this.summaryProgress;
         }
@@ -245,7 +245,7 @@
             topic: this.content.breadcrumbs.slice(-1)[0].title,
             copyrightHolder: this.content.license_owner,
           }),
-        }).catch(() => {});
+        });
       },
     },
     $trs: {
