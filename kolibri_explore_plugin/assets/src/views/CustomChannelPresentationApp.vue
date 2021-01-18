@@ -24,7 +24,7 @@
     name: 'CustomChannelPresentationApp',
     computed: {
       rooturl() {
-        return `${this.content.files[0].storage_url}?SKIP_HASHI=true` + `?date=${+new Date()}`;
+        return `${this.content.files[0].storage_url}?SKIP_HASHI=true?date=${+new Date()}`;
       },
       ...mapState('topicsTree', { content: 'content' }),
     },
@@ -67,12 +67,12 @@
             return node.id !== currentNodeId;
           });
 
-          Promise.all(promises).then(nodes => {
+          Promise.all(promises).then(node => {
             const event = 'sendChannelInformation';
             const message = {
               event,
               nameSpace,
-              data: { channel, nodes },
+              data: { channel, node },
             };
             iframeWindow.postMessage(message, '*');
           });
