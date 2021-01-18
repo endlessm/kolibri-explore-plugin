@@ -245,7 +245,7 @@
             topic: this.content.breadcrumbs.slice(-1)[0].title,
             copyrightHolder: this.content.license_owner,
           }),
-        }).catch(() => {});
+        });
       },
     },
     $trs: {

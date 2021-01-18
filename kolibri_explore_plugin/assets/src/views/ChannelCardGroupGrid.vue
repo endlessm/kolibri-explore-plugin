@@ -63,6 +63,7 @@
         validator(value) {
           return validateLinkObject(value(1, 'exercise'));
         },
+        /* eslint-disable no-empty-function */
         default: () => {},
         required: false,
       },
