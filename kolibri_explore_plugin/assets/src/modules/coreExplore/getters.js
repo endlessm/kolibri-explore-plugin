@@ -11,5 +11,6 @@ export function pageMode(state) {
   if (topicsPages.some(pageNameMatches)) {
     return PageModes.TOPICS;
   }
-  return undefined;
+
+  return null;
 }

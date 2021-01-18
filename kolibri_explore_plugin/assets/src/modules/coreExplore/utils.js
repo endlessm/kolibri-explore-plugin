@@ -8,7 +8,7 @@ export function normalizeContentNode(node) {
   return {
     ...node,
     kind: node.parent ? node.kind : ContentNodeKinds.CHANNEL,
-    thumbnail: getContentNodeThumbnail(node) || undefined,
+    thumbnail: getContentNodeThumbnail(node) || null,
     breadcrumbs: tail(node.ancestors),
     progress: Math.min(node.progress_fraction || 0, 1.0),
   };

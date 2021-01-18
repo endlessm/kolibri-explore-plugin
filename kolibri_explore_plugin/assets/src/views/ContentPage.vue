@@ -169,7 +169,7 @@
         if (this.isUserLoggedIn) {
           // if there no attempts for this exercise, there is no progress
           if (this.content.kind === ContentNodeKinds.EXERCISE && this.masteryAttempts === 0) {
-            return undefined;
+            return null;
           }
           return this.summaryProgress;
         }
