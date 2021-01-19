@@ -18,6 +18,10 @@ from kolibri.plugins.hooks import register_hook
 class Explore(KolibriPluginBase):
     translated_view_urls = "urls"
 
+    @property
+    def url_slug(self):
+        return r"explore/"
+
 
 @register_hook
 class ExploreRedirect(RoleBasedRedirectHook):
