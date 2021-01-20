@@ -1,22 +1,6 @@
 <template>
 
-  <CoreBase
-    :marginBottom="bottomSpaceReserved"
-    :authorized="userIsAuthorized"
-    authorizedRole="registeredUser"
-    v-bind="immersivePageProps"
-    :maxMainWidth="Infinity"
-  >
-    <template v-if="pageName !== 'TOPICS_ROOT'" slot="app-bar-actions">
-      <router-link
-        class="rm-link-style"
-        :style="{ color: $themeTokens.textInverted }"
-        to="/"
-      >
-        Back
-      </router-link>
-    </template>
-
+  <BaseComponent :back="pageName !== 'TOPICS_ROOT'">
     <!--
       Topics pages have a different heading style which
       includes passing the breadcrumbs
@@ -30,20 +14,18 @@
       <component :is="currentPage" v-if="currentPage" />
       <router-view />
     </div>
-
-  </CoreBase>
+  </BaseComponent>
 
 </template>
 
 
 <script>
 
-  import { mapGetters, mapState } from 'vuex';
-  import lastItem from 'lodash/last';
+  import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
-  import CoreBase from 'kolibri.coreVue.components.CoreBase';
   import { PageNames } from '../constants';
+  import BaseComponent from './Base';
   import commonExploreStrings from './commonExploreStrings';
   import ChannelsPage from './ChannelsPage';
   import CustomChannelsPage from './CustomChannelsPage';
@@ -63,7 +45,7 @@
   export default {
     name: 'ExploreIndex',
     components: {
-      CoreBase,
+      BaseComponent,
     },
     mixins: [commonCoreStrings, commonExploreStrings, responsiveWindowMixin],
     data() {
@@ -72,15 +54,7 @@
       };
     },
     computed: {
-      ...mapGetters(['isUserLoggedIn']),
-      ...mapState('topicsTree', {
-        topicsTreeContent: 'content',
-        topicsTreeChannel: 'channel',
-      }),
       ...mapState(['pageName']),
-      userIsAuthorized() {
-        return this.$store.getters.allowAccess || this.isUserLoggedIn;
-      },
       currentPage() {
         return pageNameToComponentMap[this.pageName] || null;
       },
@@ -89,42 +63,6 @@
           pageNameToComponentMap[PageNames.TOPICS_TOPIC],
           pageNameToComponentMap[PageNames.TOPICS_CHANNEL],
         ].includes(this.currentPage);
-      },
-      immersivePageProps() {
-        if (this.pageName === PageNames.TOPICS_CONTENT) {
-          let immersivePageRoute = {};
-          let appBarTitle;
-          if (this.topicsTreeContent.parent) {
-            // Need to guard for parent being non-empty to avoid console errors
-            immersivePageRoute = this.$router.getRoute(PageNames.TOPICS_TOPIC, {
-              id: this.topicsTreeContent.parent,
-            });
-
-            if (this.topicsTreeContent.breadcrumbs.length > 0) {
-              appBarTitle = lastItem(this.topicsTreeContent.breadcrumbs).title;
-              immersivePageRoute = this.lastRoute || this.$router.getRoute(PageNames.TOPICS_ROOT);
-            } else {
-              // `breadcrumbs` is empty if the direct parent is the channel, so pull
-              // channel info from state.topicsTree.channel
-              appBarTitle = this.topicsTreeChannel.title;
-            }
-          }
-          return {
-            appBarTitle,
-            immersivePage: true,
-            immersivePageRoute,
-            immersivePagePrimary: true,
-            immersivePageIcon: 'close',
-          };
-        }
-
-        return {
-          appBarTitle: this.exploreString('exploreLabel'),
-          immersivePage: false,
-        };
-      },
-      bottomSpaceReserved() {
-        return 0;
       },
     },
     watch: {
