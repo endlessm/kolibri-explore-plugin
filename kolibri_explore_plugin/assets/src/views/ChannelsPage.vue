@@ -64,9 +64,7 @@
 
   .channels {
     width: 100%;
-
-    // Remove header size (64px) and 5px for avoiding scrollbar.
-    height: calc(100vh - 64px);
+    height: 100vh;
     min-height: 600px;
     padding: 20px;
     color: white;
