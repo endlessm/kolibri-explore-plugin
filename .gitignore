@@ -1,6 +1,7 @@
 *.swp
 
 node_modules/*
+kolibri_explore_plugin/apps/*.zip
 kolibri_explore_plugin/static/*
 kolibri_explore_plugin/build/*
 kolibri_explore_plugin/__pycache__

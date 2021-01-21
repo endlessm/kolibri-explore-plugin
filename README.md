@@ -1,3 +1,12 @@
+Bundle Apps
+-----------
+
+All custom presentation app bundles should be added in the
+`kolibri_explore_plugin/apps` directory to have this fully working.
+
+You can find the custom channel presentation vue applications in this repository:
+https://github.com/endlessm/kolibri-channel-custom-web-app
+
 Getting started with development
 --------------------------------
 
