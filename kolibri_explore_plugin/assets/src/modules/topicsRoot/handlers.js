@@ -1,7 +1,28 @@
-import { ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
-import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
-import { PageNames, CUSTOM_PRESENTATION_TITLE } from '../../constants';
+import { ContentNodeResource } from 'kolibri.resources';
+import { PageNames, CustomChannelApps } from '../../constants';
 import { _collectionState } from '../coreExplore/utils';
+
+function _findNodes(channels, channelCollection) {
+  // we want them to be in the same order as the channels list
+  return channels
+    .map(channel => {
+      const node = _collectionState(channelCollection).find(n => n.channel_id === channel.id);
+      if (!node) return null;
+
+      // The `channel` comes with additional data that is
+      // not returned from the ContentNodeResource.
+      // Namely thumbnail, description and tagline (so far)
+      node.thumbnail = channel.thumbnail;
+      node.description = channel.description;
+      node.tagline = channel.tagline;
+      return node;
+    })
+    .filter(Boolean);
+}
+
+function _filterCustomApp(channel) {
+  return !!CustomChannelApps[channel.id];
+}
 
 export function showChannels(store) {
   store.commit('CORE_SET_PAGE_LOADING', true);
@@ -15,26 +36,13 @@ export function showChannels(store) {
       const channelRootIds = channels.map(channel => channel.root);
       ContentNodeResource.fetchCollection({
         getParams: { ids: channelRootIds, user_kind: store.getters.getUserKind },
-      }).then(channelCollection => {
-        // we want them to be in the same order as the channels list
-        const rootNodes = channels
-          .map(channel => {
-            const node = _collectionState(channelCollection).find(n => n.channel_id === channel.id);
-            if (!node) return null;
-
-            // The `channel` comes with additional data that is
-            // not returned from the ContentNodeResource.
-            // Namely thumbnail, description and tagline (so far)
-            node.thumbnail = channel.thumbnail;
-            node.description = channel.description;
-            node.tagline = channel.tagline;
-            return node;
-          })
-          .filter(Boolean);
-        store.commit('topicsRoot/SET_STATE', { rootNodes });
-        store.commit('CORE_SET_PAGE_LOADING', false);
-        store.commit('CORE_SET_ERROR', null);
-      });
+      })
+        .then(collection => _findNodes(channels, collection))
+        .then(rootNodes => {
+          store.commit('topicsRoot/SET_STATE', { rootNodes });
+          store.commit('CORE_SET_PAGE_LOADING', false);
+          store.commit('CORE_SET_ERROR', null);
+        });
     },
     error => {
       store.dispatch('handleApiError', error);
@@ -49,50 +57,16 @@ export function showFilteredChannels(store) {
 
   return store.dispatch('setAndCheckChannels').then(
     channels => {
-      if (!channels.length) {
+      const filteredChannels = channels.filter(_filterCustomApp);
+
+      if (!filteredChannels.length) {
         return;
       }
-      const channelRootIds = channels.map(channel => channel.root);
+      const channelRootIds = filteredChannels.map(channel => channel.root);
       ContentNodeResource.fetchCollection({
         getParams: { ids: channelRootIds, user_kind: store.getters.getUserKind },
       })
-        .then(channelCollection => {
-          // we want them to be in the same order as the channels list
-          return Promise.all(
-            channels.map(channel => {
-              const node = _collectionState(channelCollection).find(
-                n => n.channel_id === channel.id
-              );
-              if (!node) return null;
-
-              // The `channel` comes with additional data that is
-              // not returned from the ContentNodeResource.
-              // Namely thumbnail, description and tagline (so far)
-              node.thumbnail = channel.thumbnail;
-              node.description = channel.description;
-              node.tagline = channel.tagline;
-              const getParams = {
-                search: CUSTOM_PRESENTATION_TITLE,
-                kind: ContentNodeKinds.HTML5,
-                channel_id: channel.id,
-              };
-              return ContentNodeSearchResource.getCollection(getParams)
-                .fetch()
-                .then(({ results }) => {
-                  if (!results.length) return null;
-
-                  const thumb = results[0].files.find(file => file.preset.endsWith('thumbnail'));
-                  if (thumb) {
-                    node.html5Thumbnail = thumb.storage_url;
-                  }
-                  return node;
-                });
-            })
-          );
-        })
-        .then(rootNodes => {
-          return rootNodes.filter(Boolean);
-        })
+        .then(collection => _findNodes(filteredChannels, collection))
         .then(rootNodes => {
           store.commit('topicsRoot/SET_STATE', { rootNodes });
           store.commit('CORE_SET_PAGE_LOADING', false);

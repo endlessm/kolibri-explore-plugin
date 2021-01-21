@@ -91,8 +91,11 @@
         return content.tagline || content.description;
       },
       getBackgroundImage(content) {
-        if (content.html5Thumbnail) {
-          return `url(${content.html5Thumbnail})`;
+        // TODO: attach a better background image to the content bundle and try to get from there
+        // urls['kolibri:kolibri_explore_plugin:app']({ app: app, path: '/background.jpg' });
+
+        if (content.thumbnail) {
+          return `url(${content.thumbnail})`;
         }
         // Random image if there's no thumnail
         return `url(https://picsum.photos/500/300?random=${Math.random() * 10})`;

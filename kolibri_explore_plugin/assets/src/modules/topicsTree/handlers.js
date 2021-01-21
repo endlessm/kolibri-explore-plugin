@@ -1,13 +1,8 @@
-import {
-  ContentNodeResource,
-  ContentNodeSearchResource,
-  ContentNodeProgressResource,
-} from 'kolibri.resources';
+import { ContentNodeResource, ContentNodeProgressResource } from 'kolibri.resources';
 import samePageCheckGenerator from 'kolibri.utils.samePageCheckGenerator';
 import ConditionalPromise from 'kolibri.lib.conditionalPromise';
 import router from 'kolibri.coreVue.router';
-import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
-import { PageNames, CUSTOM_PRESENTATION_TITLE } from '../../constants';
+import { PageNames } from '../../constants';
 import { _collectionState, normalizeContentNode, contentState } from '../coreExplore/utils';
 
 export function showTopicsTopic(store, { id, isRoot = false }) {
@@ -74,7 +69,7 @@ export function showCustomContent(store, id) {
   ConditionalPromise.all(promises).only(
     samePageCheckGenerator(store),
     ([content]) => {
-      const currentChannel = store.getters.getChannelObject(content.channel_id);
+      const currentChannel = store.getters.getChannelObject(id);
       if (!currentChannel) {
         router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
         return;
@@ -95,21 +90,7 @@ export function showCustomContent(store, id) {
 export function showTopicsChannel(store, id) {
   return store.dispatch('loading').then(() => {
     store.commit('SET_PAGE_NAME', PageNames.TOPICS_CHANNEL);
-    // Check if the channel has a node with a custom presentation. If
-    // so, go to it directly.
-    const getParams = {
-      search: CUSTOM_PRESENTATION_TITLE,
-      kind: ContentNodeKinds.HTML5,
-      channel_id: id,
-    };
-    ContentNodeSearchResource.getCollection(getParams)
-      .fetch()
-      .then(({ results }) => {
-        if (results.length) {
-          return showCustomContent(store, results[0].id);
-        }
-        return showTopicsTopic(store, { id, isRoot: true });
-      });
+    return showCustomContent(store, id);
   });
 }
 
