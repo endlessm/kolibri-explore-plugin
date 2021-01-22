@@ -16,7 +16,10 @@
   import { mapState } from 'vuex';
   import { ContentNodeResource } from 'kolibri.resources';
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
+  import urls from 'kolibri.urls';
   import axios from 'axios';
+
+  import { CustomChannelApps } from '../constants';
 
   const nameSpace = 'hashi';
 
@@ -24,7 +27,8 @@
     name: 'CustomChannelPresentationApp',
     computed: {
       rooturl() {
-        return `${this.content.files[0].storage_url}?SKIP_HASHI=true?date=${+new Date()}`;
+        const app = CustomChannelApps[this.content.channel_id];
+        return urls['kolibri:kolibri_explore_plugin:app']({ app: app, path: '/' });
       },
       ...mapState('topicsTree', { content: 'content' }),
     },
@@ -55,7 +59,6 @@
         }
         const iframeWindow = this.$refs.iframe.contentWindow;
         const { channel } = this.$store.state.topicsTree;
-        const currentNodeId = this.$store.state.topicsTree.content.id;
 
         ContentNodeResource.fetchCollection({
           getParams: {
@@ -63,11 +66,7 @@
             user_kind: this.$store.getters.getUserKind,
           },
         }).then(nodes => {
-          const promises = nodes.filter(node => {
-            return node.id !== currentNodeId;
-          });
-
-          Promise.all(promises).then(node => {
+          Promise.all(nodes).then(node => {
             const event = 'sendChannelInformation';
             const message = {
               event,
