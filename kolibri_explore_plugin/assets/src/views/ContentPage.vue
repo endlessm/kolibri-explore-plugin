@@ -7,7 +7,6 @@
 
     <PageHeader
       :title="content.title"
-      :progress="progress"
       dir="auto"
       :contentType="content.kind"
     />

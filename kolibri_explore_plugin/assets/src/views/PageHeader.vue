@@ -10,9 +10,6 @@
         <KLabeledIcon :icon="contentType" :label="title" />
       </h1>
     </KGridItem>
-    <KGridItem :layout="{ span: 1, alignment: 'right' }">
-      <ProgressIcon class="progress-icon" :progress="progress" />
-    </KGridItem>
   </KGrid>
 
 </template>
@@ -20,20 +17,11 @@
 
 <script>
 
-  import ProgressIcon from 'kolibri.coreVue.components.ProgressIcon';
-
   export default {
     name: 'PageHeader',
-    components: {
-      ProgressIcon,
-    },
     props: {
       title: {
         type: String,
-      },
-      progress: {
-        type: Number,
-        required: false,
       },
       contentType: {
         type: String,
