@@ -120,19 +120,12 @@
 </script>
 
 
-<style lang="scss">
-
-  // NOTE: This style is NOT scoped! Because it overrides margin and padding for .content
-
-  .content {
-    padding: 0 !important;
-    margin-bottom: 0 !important;
-  }
+<style lang="scss" scoped>
 
   .custom-presentation-iframe {
     width: 100%;
-    // Remove 5px for avoiding scrollbar.
     height: 100vh;
+    // Remove 5px for avoiding scrollbar.
     margin-bottom: -5px;
   }
 
