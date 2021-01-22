@@ -44,7 +44,9 @@
 <script>
 
   import { validateLinkObject } from 'kolibri.utils.validators';
+  import urls from 'kolibri.urls';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
+  import { CustomChannelApps } from '../constants';
   import ChannelCard from './ChannelCard';
 
   export default {
@@ -91,14 +93,9 @@
         return content.tagline || content.description;
       },
       getBackgroundImage(content) {
-        // TODO: attach a better background image to the content bundle and try to get from there
-        // urls['kolibri:kolibri_explore_plugin:app']({ app: app, path: '/background.jpg' });
-
-        if (content.thumbnail) {
-          return `url(${content.thumbnail})`;
-        }
-        // Random image if there's no thumnail
-        return `url(https://picsum.photos/500/300?random=${Math.random() * 10})`;
+        const app = CustomChannelApps[content.id];
+        const bg = urls['kolibri:kolibri_explore_plugin:app_bg']({ app: app });
+        return `url(${bg})`;
       },
       scrollLeft() {
         this.smoothScroll(this.scrollOffset);

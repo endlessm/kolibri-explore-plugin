@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import os
 import zipfile
 
+from django.http import FileResponse
 from django.http import Http404
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
@@ -22,7 +23,7 @@ class ExploreView(TemplateView):
     template_name = "explore/explore.html"
 
 
-class AppView(View):
+class AppBase(View):
     @xframe_options_exempt
     @add_security_headers
     def options(self, request, *args, **kwargs):
@@ -32,15 +33,25 @@ class AppView(View):
         """
         return HttpResponse()
 
+    def _get_file(self, app, path):
+        base = os.path.join(os.path.dirname(__file__), "apps")
+
+        if path.startswith("/"):
+            path = path[1:]
+
+        filename = os.path.join(base, app, path)
+        if not os.path.exists(filename):
+            raise Http404
+
+        return filename
+
+
+class AppView(AppBase):
     @cache_forever
     @xframe_options_exempt
     @add_security_headers
     def get(self, request, app, path):
-        base = os.path.join(os.path.dirname(__file__), "apps")
-        filename = os.path.join(base, app + ".zip")
-
-        if not os.path.exists(filename):
-            raise Http404
+        filename = self._get_file(app, "custom-channel-ui.zip")
 
         if path.startswith("/"):
             path = path[1:]
@@ -53,3 +64,11 @@ class AppView(View):
         response["Accept-Ranges"] = "none"
 
         return response
+
+
+class AppBackgroundView(AppBase):
+    @xframe_options_exempt
+    @add_security_headers
+    def get(self, request, app):
+        filename = self._get_file(app, "background.jpg")
+        return FileResponse(open(filename, "rb"))
