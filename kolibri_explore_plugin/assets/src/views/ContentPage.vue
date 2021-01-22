@@ -1,5 +1,8 @@
 <template>
 
+<div class="main-wrapper">
+<div class="page-wrapper">
+
   <KPageContainer>
 
     <PageHeader
@@ -85,6 +88,9 @@
     </slot>
 
   </KPageContainer>
+
+</div>
+</div>
 
 </template>
 
@@ -286,6 +292,18 @@
 
   .license-details-name {
     font-weight: bold;
+  }
+
+  .main-wrapper {
+    background-color: #3a3a3a;
+    height: 100vh;
+  }
+
+  .page-wrapper {
+    padding: 32px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1000px;
   }
 
 </style>
