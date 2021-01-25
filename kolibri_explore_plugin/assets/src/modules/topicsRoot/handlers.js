@@ -20,7 +20,7 @@ function _findNodes(channels, channelCollection) {
       // For custom presentations:
       const appName = CustomChannelApps[channel.id];
 
-      if (appName !== undefined) {
+      if (appName) {
         const backgroundUrl = urls['kolibri:kolibri_explore_plugin:app_file']({
           app: appName,
           filename: 'background.jpg',

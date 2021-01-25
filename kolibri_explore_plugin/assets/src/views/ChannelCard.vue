@@ -83,17 +83,25 @@
         required: true,
         validator: validateLinkObject,
       },
+      height: {
+        type: Number,
+        required: false,
+        default: 300,
+      },
+      width: {
+        type: Number,
+        required: false,
+        default: 400,
+      },
     },
     computed: {
-      overallHeight() {
-        return 300;
-      },
       cardStyle() {
         return {
           backgroundImage: this.backgroundImage,
           color: 'white',
           marginBottom: `${this.windowGutter}px`,
-          minHeight: `${this.overallHeight}px`,
+          minHeight: `${this.height}px`,
+          minWidth: `${this.width}px`,
         };
       },
       thumbStyle() {
@@ -128,7 +136,6 @@
 
     position: relative;
     display: inline-block;
-    width: 400px;
     padding-bottom: $margin;
     text-decoration: none;
     vertical-align: top;
