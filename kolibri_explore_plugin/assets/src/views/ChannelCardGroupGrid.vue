@@ -5,6 +5,7 @@
       <div
         v-for="content in contents"
         :key="content.id"
+        :style="cardStyle"
         class="carousel-item"
       >
         <ChannelCard
@@ -14,6 +15,7 @@
           :tagline="getTagLine(content)"
           :progress="content.progress || 0"
           :link="genContentLink(content.id, content.kind)"
+          :height="cardHeight"
           :contentId="content.content_id"
         />
       </div>
@@ -60,6 +62,14 @@
         type: Array,
         required: true,
       },
+      size: {
+        type: String,
+        required: false,
+        default: 'medium',
+        validator(value) {
+          return ['small', 'medium', 'large'].indexOf(value) !== -1;
+        },
+      },
       genContentLink: {
         type: Function,
         validator(value) {
@@ -78,10 +88,24 @@
       leftButton: false,
       rightButton: false,
       offset: 0,
-      scrollOffset: 510,
+      sizes: {
+        small: { width: 150, height: 100 },
+        medium: { width: 300, height: 200 },
+        large: { width: 500, height: 300 },
+      },
     }),
 
-    computed: {},
+    computed: {
+      cardHeight() {
+        return this.sizes[this.size].height;
+      },
+      cardStyle() {
+        return { minWidth: `${this.sizes[this.size].width}px` };
+      },
+      scrollOffset() {
+        return this.sizes[this.size].width + 10;
+      },
+    },
 
     mounted() {
       this.isMounted = true;
@@ -146,7 +170,6 @@
   }
 
   .carousel-item {
-    min-width: 500px;
     margin: 5px;
   }
 

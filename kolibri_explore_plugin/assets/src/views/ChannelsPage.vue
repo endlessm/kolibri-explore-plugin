@@ -35,6 +35,7 @@
       <h3>{{ group.name }}</h3>
       <ChannelCardGroupGrid
         class="grid"
+        :size="group.size"
         :contents="getChannels(group)"
         :genContentLink="genChannelLink"
       />

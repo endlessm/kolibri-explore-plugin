@@ -32,11 +32,12 @@ export const CustomChannelApps = {
 
 export const CustomChannelGroups = [
   {
-    name: 'Explore',
-    channels: ['1306b5d7d1ce4b98b0039324f368ce6a', '8b51ac7fc47344a699eaf57c4fd31c70'],
+    name: 'Recommended',
+    size: 'large',
+    channels: ['1306b5d7d1ce4b98b0039324f368ce6a'],
   },
   {
-    name: 'Test',
-    channels: ['1306b5d7d1ce4b98b0039324f368ce6a'],
+    name: 'Explore',
+    channels: ['1306b5d7d1ce4b98b0039324f368ce6a', '8b51ac7fc47344a699eaf57c4fd31c70'],
   },
 ];

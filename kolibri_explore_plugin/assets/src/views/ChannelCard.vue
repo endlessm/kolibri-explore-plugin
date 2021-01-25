@@ -77,17 +77,19 @@
         required: true,
         validator: validateLinkObject,
       },
+      height: {
+        type: Number,
+        required: false,
+        default: 300,
+      },
     },
     computed: {
-      overallHeight() {
-        return 300;
-      },
       cardStyle() {
         return {
           backgroundImage: this.backgroundImage,
           color: 'white',
           marginBottom: `${this.windowGutter}px`,
-          minHeight: `${this.overallHeight}px`,
+          minHeight: `${this.height}px`,
         };
       },
       taglineHeight() {
