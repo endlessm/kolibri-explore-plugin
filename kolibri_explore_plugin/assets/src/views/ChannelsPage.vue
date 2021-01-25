@@ -27,11 +27,15 @@
       />
     </div>
 
-    <div class="channelsgrid">
+    <div
+      v-for="group in groups"
+      :key="group.name"
+      class="channelsgrid"
+    >
+      <h3>{{ group.name }}</h3>
       <ChannelCardGroupGrid
-        v-if="filteredChannels.length"
         class="grid"
-        :contents="filteredChannels"
+        :contents="getChannels(group)"
         :genContentLink="genChannelLink"
       />
     </div>
@@ -45,7 +49,7 @@
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import KIconButton from 'kolibri-design-system/lib/buttons-and-links/KIconButton';
-  import { PageNames } from '../constants';
+  import { PageNames, CustomChannelGroups } from '../constants';
   import PageHeader from './PageHeader';
   import ChannelCardGroupGrid from './ChannelCardGroupGrid';
 
@@ -74,6 +78,9 @@
         const re = new RegExp(`.*${this.searchQuery}.*`, 'i');
         return this.channels.filter(c => c.title.match(re));
       },
+      groups() {
+        return CustomChannelGroups.filter(g => this.getChannels(g).length);
+      },
     },
     methods: {
       genChannelLink(channel_id) {
@@ -87,6 +94,9 @@
       },
       searchAppareance() {
         return this.searchFocus ? 'raised-button' : 'flat-button';
+      },
+      getChannels(group) {
+        return this.filteredChannels.filter(c => group.channels.includes(c.id));
       },
     },
     $trs: {
