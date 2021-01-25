@@ -1,90 +1,95 @@
 <template>
 
-  <KPageContainer>
+  <div class="main-wrapper">
+    <div class="page-wrapper">
 
-    <PageHeader
-      :title="content.title"
-      :progress="progress"
-      dir="auto"
-      :contentType="content.kind"
-    />
-    <template v-if="sessionReady">
-      <KContentRenderer
-        class="content-renderer"
-        :kind="content.kind"
-        :lang="content.lang"
-        :files="content.files"
-        :options="content.options"
-        :available="content.available"
-        :extraFields="extraFields"
-        :progress="summaryProgress"
-        :userId="currentUserId"
-        :userFullName="fullName"
-        :timeSpent="summaryTimeSpent"
-        @startTracking="startTracking"
-        @stopTracking="stopTracking"
-        @updateProgress="updateProgress"
-        @addProgress="addProgress"
-        @updateContentState="updateContentState"
-      />
-    </template>
-    <KCircularLoader v-else />
+      <KPageContainer>
 
-    <!-- eslint-disable-next-line vue/no-v-html -->
-    <p dir="auto" v-html="description"></p>
-
-
-    <section class="metadata">
-      <!-- TODO: RTL - Do not interpolate strings -->
-      <p v-if="content.author">
-        {{ $tr('author', { author: content.author }) }}
-      </p>
-      <p v-if="licenseShortName">
-        {{ $tr('license', { license: licenseShortName }) }}
-
-        <template v-if="licenseDescription">
-          <KIconButton
-            :icon="licenceDescriptionIsVisible ? 'chevronUp' : 'chevronDown'"
-            :ariaLabel="$tr('toggleLicenseDescription')"
-            size="small"
-            type="secondary"
-            @click="licenceDescriptionIsVisible = !licenceDescriptionIsVisible"
+        <PageHeader
+          :title="content.title"
+          dir="auto"
+          :contentType="content.kind"
+        />
+        <template v-if="sessionReady">
+          <KContentRenderer
+            class="content-renderer"
+            :kind="content.kind"
+            :lang="content.lang"
+            :files="content.files"
+            :options="content.options"
+            :available="content.available"
+            :extraFields="extraFields"
+            :progress="summaryProgress"
+            :userId="currentUserId"
+            :userFullName="fullName"
+            :timeSpent="summaryTimeSpent"
+            @startTracking="startTracking"
+            @stopTracking="stopTracking"
+            @updateProgress="updateProgress"
+            @addProgress="addProgress"
+            @updateContentState="updateContentState"
           />
-          <div v-if="licenceDescriptionIsVisible" dir="auto" class="license-details">
-            <p class="license-details-name">
-              {{ licenseLongName }}
-            </p>
-            <p>{{ licenseDescription }}</p>
-          </div>
         </template>
-      </p>
+        <KCircularLoader v-else />
 
-      <p v-if="content.license_owner">
-        {{ $tr('copyrightHolder', { copyrightHolder: content.license_owner }) }}
-      </p>
-    </section>
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <p dir="auto" v-html="description"></p>
 
-    <div>
 
-      <DownloadButton
-        v-if="canDownload"
-        :files="downloadableFiles"
-        class="download-button"
-      />
+        <section class="metadata">
+          <!-- TODO: RTL - Do not interpolate strings -->
+          <p v-if="content.author">
+            {{ $tr('author', { author: content.author }) }}
+          </p>
+          <p v-if="licenseShortName">
+            {{ $tr('license', { license: licenseShortName }) }}
 
-      <KButton
-        v-if="canShare"
-        :text="$tr('shareFile')"
-        class="share-button"
-        @click="launchIntent()"
-      />
+            <template v-if="licenseDescription">
+              <KIconButton
+                :icon="licenceDescriptionIsVisible ? 'chevronUp' : 'chevronDown'"
+                :ariaLabel="$tr('toggleLicenseDescription')"
+                size="small"
+                type="secondary"
+                @click="licenceDescriptionIsVisible = !licenceDescriptionIsVisible"
+              />
+              <div v-if="licenceDescriptionIsVisible" dir="auto" class="license-details">
+                <p class="license-details-name">
+                  {{ licenseLongName }}
+                </p>
+                <p>{{ licenseDescription }}</p>
+              </div>
+            </template>
+          </p>
+
+          <p v-if="content.license_owner">
+            {{ $tr('copyrightHolder', { copyrightHolder: content.license_owner }) }}
+          </p>
+        </section>
+
+        <div>
+
+          <DownloadButton
+            v-if="canDownload"
+            :files="downloadableFiles"
+            class="download-button"
+          />
+
+          <KButton
+            v-if="canShare"
+            :text="$tr('shareFile')"
+            class="share-button"
+            @click="launchIntent()"
+          />
+
+        </div>
+
+        <slot name="below_content">
+        </slot>
+
+      </KPageContainer>
 
     </div>
-
-    <slot name="below_content">
-    </slot>
-
-  </KPageContainer>
+  </div>
 
 </template>
 
@@ -286,6 +291,18 @@
 
   .license-details-name {
     font-weight: bold;
+  }
+
+  .main-wrapper {
+    height: 100vh;
+    background-color: #3a3a3a;
+  }
+
+  .page-wrapper {
+    max-width: 1000px;
+    padding: 32px;
+    margin-right: auto;
+    margin-left: auto;
   }
 
 </style>

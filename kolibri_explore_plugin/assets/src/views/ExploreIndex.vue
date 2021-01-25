@@ -92,12 +92,4 @@
 
   @import './explore';
 
-  .content {
-    margin: auto;
-  }
-
-  .rm-link-style {
-    text-decoration: none;
-  }
-
 </style>
