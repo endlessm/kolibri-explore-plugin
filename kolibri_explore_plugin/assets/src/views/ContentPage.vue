@@ -1,6 +1,6 @@
 <template>
 
-  <div class="main-wrapper">
+  <div class="main-wrapper" :style="{ backgroundColor: contentBackgroundColor }">
     <div class="page-wrapper">
 
       <KPageContainer>
@@ -101,6 +101,8 @@
   import DownloadButton from 'kolibri.coreVue.components.DownloadButton';
   import { isEmbeddedWebView } from 'kolibri.utils.browserInfo';
   import { shareFile } from 'kolibri.utils.appCapabilities';
+  import urls from 'kolibri.urls';
+  import axios from 'axios';
   import markdownIt from 'markdown-it';
   import {
     licenseShortName,
@@ -108,6 +110,7 @@
     licenseDescriptionForConsumer,
   } from 'kolibri.utils.licenseTranslations';
   import { updateContentNodeProgress } from '../modules/coreExplore/utils';
+  import { CustomChannelApps } from '../constants';
   import PageHeader from './PageHeader';
   import commonExploreStrings from './commonExploreStrings';
 
@@ -131,6 +134,7 @@
         wasIncomplete: false,
         licenceDescriptionIsVisible: false,
         sessionReady: false,
+        appMetadata: {},
       };
     },
     computed: {
@@ -201,6 +205,12 @@
           this.content.license_description
         );
       },
+      contentBackgroundColor() {
+        if (this.appMetadata.contentBackgroundColor) {
+          return this.appMetadata.contentBackgroundColor;
+        }
+        return '#3a3a3a';
+      },
     },
     created() {
       return this.initSessionAction({
@@ -211,6 +221,9 @@
         this.sessionReady = true;
         this.setWasIncomplete();
       });
+    },
+    mounted() {
+      this.getAppMetadata();
     },
     beforeDestroy() {
       this.stopTracking();
@@ -250,6 +263,13 @@
             topic: this.content.breadcrumbs.slice(-1)[0].title,
             copyrightHolder: this.content.license_owner,
           }),
+        });
+      },
+      getAppMetadata() {
+        const app = CustomChannelApps[this.channelId];
+        const url = urls['kolibri:kolibri_explore_plugin:app_metadata']({ app: app });
+        axios.get(url).then(({ data }) => {
+          this.appMetadata = data;
         });
       },
     },
@@ -295,7 +315,6 @@
 
   .main-wrapper {
     height: 100vh;
-    background-color: #3a3a3a;
   }
 
   .page-wrapper {

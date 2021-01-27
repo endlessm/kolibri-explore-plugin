@@ -72,3 +72,12 @@ class AppBackgroundView(AppBase):
     def get(self, request, app):
         filename = self._get_file(app, "background.jpg")
         return FileResponse(open(filename, "rb"))
+
+
+class AppMetadataView(AppBase):
+    @xframe_options_exempt
+    @add_security_headers
+    def get(self, request, app):
+        filename = self._get_file(app, "metadata.json")
+        with open(filename) as json_file:
+            return HttpResponse(json_file, content_type="application/json")
