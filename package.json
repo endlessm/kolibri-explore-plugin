@@ -10,7 +10,8 @@
   "description": "Explore Plugin for Kolibri",
   "private": true,
   "dependencies": {
-    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system"
+    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system",
+    "vue-matomo": "^3.14.0-0"
   },
   "devDependencies": {
     "kolibri-tools": "0.14.5-dev.4"
