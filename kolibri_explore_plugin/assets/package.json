@@ -7,7 +7,8 @@
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.21.2",
     "eos-components": "^0.1.0",
-    "underscore": "^1.13.1"
+    "underscore": "^1.13.1",
+    "vue-matomo": "^3.14.0-0"
   },
   "devDependencies": {
     "kolibri-tools": "0.14.5-dev.4"

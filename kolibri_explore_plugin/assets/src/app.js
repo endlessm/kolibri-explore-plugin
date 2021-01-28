@@ -3,6 +3,9 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import router from 'kolibri.coreVue.router';
 import KolibriApp from 'kolibri_app';
 import eosComponents from 'eos-components';
+
+import VueMatomo from 'vue-matomo';
+
 import RootVue from './views/ExploreIndex';
 import routes from './routes';
 import { setFacilitiesAndConfig } from './modules/coreExplore/actions';
@@ -46,6 +49,13 @@ class ExploreModule extends KolibriApp {
       this.store.dispatch('blockDoubleClicks');
       this.store.dispatch('resetModuleState', { toRoute, fromRoute });
     });
+
+    Vue.use(VueMatomo, {
+      host: 'matomo',
+      router: router._vueRouter,
+      siteId: 3,
+    });
+
     super.ready();
 
     // FIXME: Manual change of hash into the URL doesn't trigger the route in IE11.

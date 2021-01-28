@@ -17690,6 +17690,10 @@ vue-material-design-icons@^4.12.1:
   version "4.12.1"
   resolved "https://registry.yarnpkg.com/vue-material-design-icons/-/vue-material-design-icons-4.12.1.tgz#5fa15011f0aae567ea65171c4849ef7e4e031ea9"
   integrity sha512-IDGGV5fC2VPN3zPRNEpm47MjJL1CIPfK34wx3+SRTkUL8dt5/hONmQ2WguBivE1uZVExMVFHekNDnEJamkJ8hA==
+vue-matomo@^3.14.0-0:
+  version "3.14.0-0"
+  resolved "https://registry.yarnpkg.com/vue-matomo/-/vue-matomo-3.14.0-0.tgz#f8e668c26ec1f2f7b4498f758edfb7c387259735"
+  integrity sha512-i1IkZGSXNY84zg1gVU8TOuaqajYDWQYl4Vs7M1mEb21cNhlMZKUxxgElvj+xmv7ytYUc/6ekZbxIS+y6W4qTMQ==
 
 vue-meta@^1.5.0:
   version "1.6.0"

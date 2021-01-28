@@ -4,6 +4,7 @@ include CHANGELOG.rst
 include LICENSE
 include README.rst
 include kolibri_explore_plugin/content_types.json
+include kolibri_explore_plugin/matomo.js
 recursive-exclude kolibri_explore_plugin/* *pyc
 recursive-exclude kolibri_explore_plugin/assets *
 recursive-include kolibri_explore_plugin/templates *.*
