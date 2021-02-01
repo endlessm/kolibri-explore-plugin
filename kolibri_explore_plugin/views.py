@@ -66,12 +66,12 @@ class AppView(AppBase):
         return response
 
 
-class AppBackgroundView(AppBase):
+class AppFileView(AppBase):
     @xframe_options_exempt
     @add_security_headers
-    def get(self, request, app):
-        filename = self._get_file(app, "background.jpg")
-        return FileResponse(open(filename, "rb"))
+    def get(self, request, app, filename):
+        full_filename = self._get_file(app, filename)
+        return FileResponse(open(full_filename, "rb"))
 
 
 class AppMetadataView(AppBase):

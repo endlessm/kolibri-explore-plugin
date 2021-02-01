@@ -94,7 +94,10 @@
       },
       getBackgroundImage(content) {
         const app = CustomChannelApps[content.id];
-        const bg = urls['kolibri:kolibri_explore_plugin:app_bg']({ app: app });
+        const bg = urls['kolibri:kolibri_explore_plugin:app_file']({
+          app: app,
+          filename: 'background.jpg',
+        });
         return `url(${bg})`;
       },
       scrollLeft() {

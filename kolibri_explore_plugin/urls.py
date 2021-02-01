@@ -1,15 +1,15 @@
 from django.conf.urls import url
 
-from .views import AppBackgroundView
+from .views import AppFileView
 from .views import AppMetadataView
 from .views import AppView
 from .views import ExploreView
 
 urlpatterns = [
     url(
-        r"^app/(?P<app>[\w\-]+)/background",
-        AppBackgroundView.as_view(),
-        name="app_bg",
+        r"^app/static/(?P<app>[\w\-]+)/(?P<filename>[\w\-.]+)",
+        AppFileView.as_view(),
+        name="app_file",
     ),
     url(
         r"^app/(?P<app>[\w\-]+)/metadata.json",
