@@ -1,6 +1,6 @@
 <template>
 
-  <div class="main-wrapper" :style="{ backgroundColor: contentBackgroundColor }">
+  <div class="main-wrapper" :style="getStyle()">
     <div class="page-wrapper">
 
       <KPageContainer>
@@ -211,6 +211,16 @@
         }
         return '#3a3a3a';
       },
+      contentBackgroundImage() {
+        if (this.appMetadata.contentBackgroundImage) {
+          const backgroundUrl = urls['kolibri:kolibri_explore_plugin:app_file']({
+            app: CustomChannelApps[this.channelId],
+            filename: this.appMetadata.contentBackgroundImage,
+          });
+          return `url(${backgroundUrl})`;
+        }
+        return 'none';
+      },
     },
     created() {
       return this.initSessionAction({
@@ -272,6 +282,12 @@
           this.appMetadata = data;
         });
       },
+      getStyle() {
+        return {
+          backgroundImage: this.contentBackgroundImage,
+          backgroundColor: this.contentBackgroundColor,
+        };
+      },
     },
     $trs: {
       author: 'Author: {author}',
@@ -315,6 +331,7 @@
 
   .main-wrapper {
     height: 100vh;
+    background-size: cover;
   }
 
   .page-wrapper {
