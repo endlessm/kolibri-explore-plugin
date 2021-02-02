@@ -101,8 +101,6 @@
   import DownloadButton from 'kolibri.coreVue.components.DownloadButton';
   import { isEmbeddedWebView } from 'kolibri.utils.browserInfo';
   import { shareFile } from 'kolibri.utils.appCapabilities';
-  import urls from 'kolibri.urls';
-  import axios from 'axios';
   import markdownIt from 'markdown-it';
   import {
     licenseShortName,
@@ -110,7 +108,6 @@
     licenseDescriptionForConsumer,
   } from 'kolibri.utils.licenseTranslations';
   import { updateContentNodeProgress } from '../modules/coreExplore/utils';
-  import { CustomChannelApps } from '../constants';
   import PageHeader from './PageHeader';
   import commonExploreStrings from './commonExploreStrings';
 
@@ -134,12 +131,11 @@
         wasIncomplete: false,
         licenceDescriptionIsVisible: false,
         sessionReady: false,
-        appMetadata: {},
       };
     },
     computed: {
       ...mapGetters(['isUserLoggedIn', 'facilityConfig', 'currentUserId']),
-      ...mapState('topicsTree', ['content', 'channel']),
+      ...mapState('topicsTree', ['content', 'channel', 'appMetadata']),
       ...mapState('topicsTree', {
         contentId: state => state.content.content_id,
         contentNodeId: state => state.content.id,
@@ -205,22 +201,6 @@
           this.content.license_description
         );
       },
-      contentBackgroundColor() {
-        if (this.appMetadata.contentBackgroundColor) {
-          return this.appMetadata.contentBackgroundColor;
-        }
-        return '#3a3a3a';
-      },
-      contentBackgroundImage() {
-        if (this.appMetadata.contentBackgroundImage) {
-          const backgroundUrl = urls['kolibri:kolibri_explore_plugin:app_file']({
-            app: CustomChannelApps[this.channelId],
-            filename: this.appMetadata.contentBackgroundImage,
-          });
-          return `url(${backgroundUrl})`;
-        }
-        return 'none';
-      },
     },
     created() {
       return this.initSessionAction({
@@ -231,9 +211,6 @@
         this.sessionReady = true;
         this.setWasIncomplete();
       });
-    },
-    mounted() {
-      this.getAppMetadata();
     },
     beforeDestroy() {
       this.stopTracking();
@@ -275,17 +252,10 @@
           }),
         });
       },
-      getAppMetadata() {
-        const app = CustomChannelApps[this.channelId];
-        const url = urls['kolibri:kolibri_explore_plugin:app_metadata']({ app: app });
-        axios.get(url).then(({ data }) => {
-          this.appMetadata = data;
-        });
-      },
       getStyle() {
         return {
-          backgroundImage: this.contentBackgroundImage,
-          backgroundColor: this.contentBackgroundColor,
+          backgroundImage: this.appMetadata.contentBackgroundImage,
+          backgroundColor: this.appMetadata.contentBackgroundColor,
         };
       },
     },
