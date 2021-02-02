@@ -1,4 +1,5 @@
 import { ContentNodeResource } from 'kolibri.resources';
+import urls from 'kolibri.urls';
 import { PageNames, CustomChannelApps } from '../../constants';
 import { _collectionState } from '../coreExplore/utils';
 
@@ -15,6 +16,19 @@ function _findNodes(channels, channelCollection) {
       node.thumbnail = channel.thumbnail;
       node.description = channel.description;
       node.tagline = channel.tagline;
+
+      // For custom presentations:
+      const appName = CustomChannelApps[channel.id];
+
+      if (appName !== undefined) {
+        const backgroundUrl = urls['kolibri:kolibri_explore_plugin:app_file']({
+          app: appName,
+          filename: 'background.jpg',
+        });
+        node.cardBackgroundImage = `url(${backgroundUrl})`;
+      } else {
+        node.cardBackgroundImage = 'none';
+      }
       return node;
     })
     .filter(Boolean);
