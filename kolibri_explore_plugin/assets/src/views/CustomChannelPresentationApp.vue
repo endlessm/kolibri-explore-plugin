@@ -27,7 +27,7 @@
     name: 'CustomChannelPresentationApp',
     computed: {
       rooturl() {
-        const app = CustomChannelApps[this.content.channel_id];
+        const app = CustomChannelApps[this.content.channel_id] || 'default';
         return urls['kolibri:kolibri_explore_plugin:app_custom_presentation']({ app: app });
       },
       ...mapState('topicsTree', { content: 'content' }),

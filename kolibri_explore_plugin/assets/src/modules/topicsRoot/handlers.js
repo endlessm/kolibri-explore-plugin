@@ -27,7 +27,17 @@ function _findNodes(channels, channelCollection) {
         });
         node.cardBackgroundImage = `url(${backgroundUrl})`;
       } else {
-        node.cardBackgroundImage = 'none';
+        // No custom channel, we create a default card background with the thumbnail
+        const colors = [
+          ['#99c1f1', '#1a5fb4'],
+          ['#8ff0a4', '#26a269'],
+          ['#f9f06b', '#e5a50a'],
+          ['#ffbe6f', '#c64600'],
+          ['#f66151', '#a51d2d'],
+          ['#dc8add', '#613583'],
+        ];
+        const color = colors[node.sort_order % colors.length];
+        node.cardBackgroundImage = `linear-gradient(${color[0]}, ${color[1]})`;
       }
       return node;
     })

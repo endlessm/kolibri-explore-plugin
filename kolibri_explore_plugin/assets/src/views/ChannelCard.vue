@@ -16,6 +16,8 @@
       :progress="progress"
     />
 
+    <div v-if="thumbnail" class="thumbnail" :style="thumbStyle"></div>
+
     <div class="card-content">
       <h3
         class="title"
@@ -60,6 +62,10 @@
         type: String,
         required: true,
       },
+      thumbnail: {
+        type: String,
+        default: '',
+      },
       tagline: {
         type: String,
         required: false,
@@ -90,6 +96,17 @@
           minHeight: `${this.overallHeight}px`,
         };
       },
+      thumbStyle() {
+        return {
+          backgroundImage: `url(${this.thumbnail})`,
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'right',
+          width: '210px',
+          height: '92px',
+          margin: '10px',
+        };
+      },
       taglineHeight() {
         return 165;
       },
@@ -111,7 +128,7 @@
 
     position: relative;
     display: inline-block;
-    width: 100%;
+    width: 400px;
     padding-bottom: $margin;
     text-decoration: none;
     vertical-align: top;
@@ -167,6 +184,12 @@
 
   h3.title {
     padding-left: 0;
+  }
+
+  .thumbnail {
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 
 </style>
