@@ -2,7 +2,9 @@ import { ContentNodeResource, ContentNodeProgressResource } from 'kolibri.resour
 import samePageCheckGenerator from 'kolibri.utils.samePageCheckGenerator';
 import ConditionalPromise from 'kolibri.lib.conditionalPromise';
 import router from 'kolibri.coreVue.router';
-import { PageNames } from '../../constants';
+import urls from 'kolibri.urls';
+import axios from 'axios';
+import { PageNames, CustomChannelApps } from '../../constants';
 import { _collectionState, normalizeContentNode, contentState } from '../coreExplore/utils';
 
 export function showTopicsTopic(store, { id, isRoot = false }) {
@@ -60,15 +62,43 @@ export function showTopicsTopic(store, { id, isRoot = false }) {
   });
 }
 
+function _parseAppMetadata(data, appName) {
+  if (!data) {
+    return {};
+  }
+
+  const newData = { ...data };
+
+  if (data.contentBackgroundImage) {
+    const backgroundUrl = urls['kolibri:kolibri_explore_plugin:app_file']({
+      app: appName,
+      filename: data.contentBackgroundImage,
+    });
+    newData.contentBackgroundImage = `url(${backgroundUrl})`;
+  }
+
+  return newData;
+}
+
 export function showCustomContent(store, id) {
   store.commit('SET_EMPTY_LOGGING_STATE');
   store.commit('CORE_SET_PAGE_LOADING', true);
   store.commit('SET_PAGE_NAME', PageNames.TOPICS_CUSTOM_CHANNEL);
 
   const promises = [ContentNodeResource.fetchModel({ id }), store.dispatch('setChannelInfo')];
+
+  // Fetch app metadata:
+  const appName = CustomChannelApps[id];
+  if (appName !== undefined) {
+    const url = urls['kolibri:kolibri_explore_plugin:app_metadata']({ app: appName });
+    const promise = axios.get(url);
+    promises.push(promise);
+  }
+
   ConditionalPromise.all(promises).only(
     samePageCheckGenerator(store),
-    ([content]) => {
+    // eslint-disable-next-line no-unused-vars
+    ([content, _, { data }]) => {
       const currentChannel = store.getters.getChannelObject(id);
       if (!currentChannel) {
         router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
@@ -77,6 +107,7 @@ export function showCustomContent(store, id) {
       store.commit('topicsTree/SET_STATE', {
         content: contentState(content, content),
         channel: currentChannel,
+        appMetadata: _parseAppMetadata(data, appName),
       });
       store.commit('CORE_SET_PAGE_LOADING', false);
       store.commit('CORE_SET_ERROR', null);

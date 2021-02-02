@@ -1,6 +1,6 @@
 <template>
 
-  <div class="main-wrapper">
+  <div class="main-wrapper" :style="getStyle()">
     <div class="page-wrapper">
 
       <KPageContainer>
@@ -135,7 +135,7 @@
     },
     computed: {
       ...mapGetters(['isUserLoggedIn', 'facilityConfig', 'currentUserId']),
-      ...mapState('topicsTree', ['content', 'channel']),
+      ...mapState('topicsTree', ['content', 'channel', 'appMetadata']),
       ...mapState('topicsTree', {
         contentId: state => state.content.content_id,
         contentNodeId: state => state.content.id,
@@ -252,6 +252,12 @@
           }),
         });
       },
+      getStyle() {
+        return {
+          backgroundImage: this.appMetadata.contentBackgroundImage,
+          backgroundColor: this.appMetadata.contentBackgroundColor,
+        };
+      },
     },
     $trs: {
       author: 'Author: {author}',
@@ -295,7 +301,7 @@
 
   .main-wrapper {
     height: 100vh;
-    background-color: #3a3a3a;
+    background-size: cover;
   }
 
   .page-wrapper {

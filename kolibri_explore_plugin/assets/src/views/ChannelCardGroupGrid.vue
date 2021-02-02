@@ -9,7 +9,7 @@
       >
         <ChannelCard
           :title="content.title"
-          :backgroundImage="getBackgroundImage(content)"
+          :backgroundImage="content.cardBackgroundImage"
           :kind="content.kind"
           :tagline="getTagLine(content)"
           :progress="content.progress || 0"
@@ -44,9 +44,7 @@
 <script>
 
   import { validateLinkObject } from 'kolibri.utils.validators';
-  import urls from 'kolibri.urls';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
-  import { CustomChannelApps } from '../constants';
   import ChannelCard from './ChannelCard';
 
   export default {
@@ -91,11 +89,6 @@
     methods: {
       getTagLine(content) {
         return content.tagline || content.description;
-      },
-      getBackgroundImage(content) {
-        const app = CustomChannelApps[content.id];
-        const bg = urls['kolibri:kolibri_explore_plugin:app_bg']({ app: app });
-        return `url(${bg})`;
       },
       scrollLeft() {
         this.smoothScroll(this.scrollOffset);

@@ -1,5 +1,10 @@
 import Vue from 'kolibri.lib.vue';
 
+const defaultAppMetadata = {
+  contentBackgroundColor: '#3a3a3a',
+  contentBackgroundImage: 'none',
+};
+
 function defaultState() {
   return {
     channel: {},
@@ -10,6 +15,8 @@ function defaultState() {
     topic: {},
     // used in RECOMMENDED_CONTENT
     recommended: [],
+    // used for custom presentations
+    appMetadata: defaultAppMetadata,
   };
 }
 
@@ -24,6 +31,9 @@ export default {
       state.isRoot = payload.isRoot || null;
       state.topic = payload.topic || {};
       state.recommended = payload.recommended || [];
+      if (payload.appMetadata) {
+        state.appMetadata = { ...defaultAppMetadata, ...payload.appMetadata };
+      }
     },
     RESET_STATE(state) {
       Object.assign(state, defaultState());
