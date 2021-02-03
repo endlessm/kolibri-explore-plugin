@@ -7,8 +7,7 @@ include kolibri_explore_plugin/content_types.json
 recursive-exclude kolibri_explore_plugin/* *pyc
 recursive-exclude kolibri_explore_plugin/assets *
 recursive-include kolibri_explore_plugin/templates *.*
-recursive-include kolibri_explore_plugin/apps *.zip
-recursive-include kolibri_explore_plugin/apps *.jpg
+recursive-include kolibri_explore_plugin/apps *.*
 recursive-include kolibri_explore_plugin/static *.*
 recursive-include kolibri_explore_plugin/build *.json
 recursive-include kolibri_explore_plugin/locale *.mo
