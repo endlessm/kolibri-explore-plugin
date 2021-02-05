@@ -28,7 +28,7 @@
     computed: {
       rooturl() {
         const app = CustomChannelApps[this.content.channel_id];
-        return urls['kolibri:kolibri_explore_plugin:app']({ app: app, path: '/' });
+        return urls['kolibri:kolibri_explore_plugin:app_custom_presentation']({ app: app });
       },
       ...mapState('topicsTree', { content: 'content' }),
     },
