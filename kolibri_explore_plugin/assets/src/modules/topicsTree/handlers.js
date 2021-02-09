@@ -88,7 +88,7 @@ export function showCustomContent(store, id) {
   const promises = [ContentNodeResource.fetchModel({ id }), store.dispatch('setChannelInfo')];
 
   // Fetch app metadata:
-  const appName = CustomChannelApps[id];
+  const appName = CustomChannelApps[id] || 'default';
   if (appName) {
     const url = urls['kolibri:kolibri_explore_plugin:app_metadata']({ app: appName });
     const promise = axios.get(url);
