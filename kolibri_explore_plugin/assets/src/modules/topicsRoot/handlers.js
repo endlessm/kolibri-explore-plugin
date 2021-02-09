@@ -1,6 +1,7 @@
 import { ContentNodeResource } from 'kolibri.resources';
 import urls from 'kolibri.urls';
-import { PageNames, CustomChannelApps } from '../../constants';
+import { PageNames } from '../../constants';
+import { CustomChannelApps } from '../../customApps';
 import { _collectionState } from '../coreExplore/utils';
 
 function _findNodes(channels, channelCollection) {

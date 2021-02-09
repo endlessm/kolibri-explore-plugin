@@ -4,7 +4,8 @@ import ConditionalPromise from 'kolibri.lib.conditionalPromise';
 import router from 'kolibri.coreVue.router';
 import urls from 'kolibri.urls';
 import axios from 'axios';
-import { PageNames, CustomChannelApps } from '../../constants';
+import { PageNames } from '../../constants';
+import { getAppNameByID } from '../../customApps';
 import { _collectionState, normalizeContentNode, contentState } from '../coreExplore/utils';
 
 export function showTopicsTopic(store, { id, isRoot = false }) {
@@ -88,7 +89,7 @@ export function showCustomContent(store, id) {
   const promises = [ContentNodeResource.fetchModel({ id }), store.dispatch('setChannelInfo')];
 
   // Fetch app metadata:
-  const appName = CustomChannelApps[id] || 'default';
+  const appName = getAppNameByID(id);
   if (appName) {
     const url = urls['kolibri:kolibri_explore_plugin:app_metadata']({ app: appName });
     const promise = axios.get(url);
