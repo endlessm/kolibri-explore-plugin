@@ -50,11 +50,8 @@ class AppView(AppBase):
     @cache_forever
     @xframe_options_exempt
     @add_security_headers
-    def get(self, request, app, path):
+    def get(self, request, app, path=""):
         filename = self._get_file(app, "custom-channel-ui.zip")
-
-        if path.startswith("/"):
-            path = path[1:]
 
         with zipfile.ZipFile(filename) as zf:
             response = get_embedded_file(

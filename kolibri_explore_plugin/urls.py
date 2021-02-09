@@ -16,6 +16,10 @@ urlpatterns = [
         AppMetadataView.as_view(),
         name="app_metadata",
     ),
-    url(r"^app/(?P<app>[\w\-]+)(?P<path>.*)", AppView.as_view(), name="app"),
+    url(
+        r"^app/(?P<app>[\w\-]+)/(?P<path>.*)?",
+        AppView.as_view(),
+        name="app_custom_presentation",
+    ),
     url(r"^$", ExploreView.as_view(), name="explore"),
 ]
