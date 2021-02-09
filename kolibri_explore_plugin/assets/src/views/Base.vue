@@ -93,6 +93,9 @@
     position: absolute;
     top: 10px;
     left: 5px;
+
+    /* Just below the sidenav */
+    z-index: 14;
   }
 
 </style>

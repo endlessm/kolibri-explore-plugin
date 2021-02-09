@@ -5,7 +5,7 @@ import {
   showTopicsChannel,
   showTopicsContent,
 } from '../modules/topicsTree/handlers';
-import { showFilteredChannels } from '../modules/topicsRoot/handlers';
+import { showChannels } from '../modules/topicsRoot/handlers';
 import { PageNames } from '../constants';
 
 export default [
@@ -22,7 +22,7 @@ export default [
     name: PageNames.TOPICS_ROOT,
     path: '/topics',
     handler: () => {
-      showFilteredChannels(store);
+      showChannels(store);
     },
   },
   {

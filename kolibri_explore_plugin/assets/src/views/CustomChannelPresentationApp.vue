@@ -19,7 +19,7 @@
   import urls from 'kolibri.urls';
   import axios from 'axios';
 
-  import { CustomChannelApps } from '../constants';
+  import { getAppNameByID } from '../customApps';
 
   const nameSpace = 'hashi';
 
@@ -27,7 +27,7 @@
     name: 'CustomChannelPresentationApp',
     computed: {
       rooturl() {
-        const app = CustomChannelApps[this.content.channel_id];
+        const app = getAppNameByID(this.content.channel_id);
         return urls['kolibri:kolibri_explore_plugin:app_custom_presentation']({ app: app });
       },
       ...mapState('topicsTree', { content: 'content' }),
