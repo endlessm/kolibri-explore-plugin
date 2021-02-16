@@ -20,7 +20,7 @@ class Explore(KolibriPluginBase):
 
     @property
     def url_slug(self):
-        return r"explore/"
+        return r"learn/"
 
 
 @register_hook
