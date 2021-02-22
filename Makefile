@@ -3,8 +3,9 @@
 help:
 	@echo "clean-build - remove build artifacts"
 	@echo "clean-pyc - remove Python file artifacts"
-	@echo "release - package and upload a release"
+	@echo "bumpversion - bump the package version"
 	@echo "dist - package"
+	@echo "release - upload a release"
 
 clean: clean-build clean-pyc clean-plugin
 
@@ -35,6 +36,9 @@ assets:
 	mkdir kolibri_explore_plugin/static
 
 	yarn run clean && yarn run build
+
+bumpversion:
+	bump2version $(part)
 
 dist: clean assets
 	python setup.py bdist_wheel --universal
