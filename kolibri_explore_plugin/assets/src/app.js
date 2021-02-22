@@ -23,6 +23,13 @@ class ExploreModule extends KolibriApp {
     return pluginModule;
   }
 
+  checkIE() {
+    // Detect it's IE11
+    const scrollLimit = '-ms-scroll-limit' in document.documentElement.style;
+    const imeAlign = '-ms-ime-align' in document.documentElement.style;
+    return scrollLimit && imeAlign;
+  }
+
   ready() {
     // after every navigation, block double-clicks
     router.afterEach((toRoute, fromRoute) => {
@@ -30,6 +37,19 @@ class ExploreModule extends KolibriApp {
       this.store.dispatch('resetModuleState', { toRoute, fromRoute });
     });
     super.ready();
+
+    if (this.checkIE()) {
+      window.addEventListener(
+        'hashchange',
+        () => {
+          var currentPath = window.location.hash.slice(1);
+          if (this.store.state.route.path !== currentPath) {
+            router.push(currentPath);
+          }
+        },
+        false
+      );
+    }
   }
 }
 
