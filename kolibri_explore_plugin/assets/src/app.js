@@ -38,6 +38,8 @@ class ExploreModule extends KolibriApp {
     });
     super.ready();
 
+    // FIXME: Manual change of hash into the URL doesn't trigger the route in IE11.
+    // See: https://github.com/vuejs/vue-router/issues/1849#issuecomment-340767577
     if (this.checkIE()) {
       window.addEventListener(
         'hashchange',
