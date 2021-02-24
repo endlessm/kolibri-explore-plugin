@@ -90,6 +90,15 @@ Deployment
 
 4. Now that all dependencies are installed, it's possible to build using make
 
+If you are releasing a new version, please bump to either major, minor
+or patch. Eg:
+
+```
+    make bumpversion part=patch
+```
+
+Then:
+
 ```
     make dist
 ```
