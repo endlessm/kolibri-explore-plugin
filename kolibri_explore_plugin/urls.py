@@ -1,10 +1,16 @@
+import os
+
 from django.conf.urls import url
 
 from . import __version__ as VERSION
 from .views import AppFileView
 from .views import AppMetadataView
-from .views import AppView
 from .views import ExploreView
+
+if os.environ.get("PROXY_CUSTOM_CHANNEL", None):
+    from .views import AppViewDev as AppView
+else:
+    from .views import AppView
 
 urlpatterns = [
     url(
