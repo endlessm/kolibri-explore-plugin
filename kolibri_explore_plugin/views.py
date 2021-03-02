@@ -2,13 +2,16 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import io
 import os
 import zipfile
 
+import requests
 from django.http import FileResponse
 from django.http import Http404
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic.base import TemplateView
 from django.views.generic.base import View
@@ -61,6 +64,15 @@ class AppView(AppBase):
         response["Accept-Ranges"] = "none"
 
         return response
+
+
+class AppViewDev(AppBase):
+    BASE_APP = "http://localhost:8080/"
+
+    @never_cache
+    def get(self, request, app, path=""):
+        response = requests.get(f"{self.BASE_APP}{path}", stream=True)
+        return FileResponse(io.BytesIO(response.content))
 
 
 class AppFileView(AppBase):

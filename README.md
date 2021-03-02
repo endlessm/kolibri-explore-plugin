@@ -63,6 +63,31 @@ This approach has advantages to the one above:
 - The development code is the same as the build.
 - No need to edit the plugins text file.
 
+## Custom channel presentation proxy development
+
+Instead of bundle the custom channel presentation bundle inside the apps
+directory, it's possible to work with a proxy for development.
+
+1. Run the custom channel presentation development server without mock data:
+
+```
+$ cd kolibri-channel-custom-web-app/template-ui
+$ VUE_APP_USE_MOCK_DATA=false yarn serve
+```
+
+2. Ensure to run the kolibri devserver with the `PROXY_CUSTOM_CHANNEL` environ
+   enabled:
+
+```
+PROXY_CUSTOM_CHANNEL=1 yarn run devserver-hot
+```
+
+Every request to the custom-channel-ui.zip will be proxied to the devserver.
+Note that the devserver is serving just one custom channel app so every channel
+will show the same custom channel.
+
+The hot reloading should work here too!
+
 Deployment
 ----------
 
