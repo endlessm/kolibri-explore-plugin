@@ -6,14 +6,13 @@
   >
     <div v-if="!loading" class="explore-main-content">
       <div class="explore-buttons">
-        <KIconButton
+        <b-button
           v-if="back"
-          class="right"
-          icon="close"
-          size="large"
-          appearance="raised-button"
+          class="back-button"
           @click="goBack()"
-        />
+        >
+          <b-icon-chevron-left />
+        </b-button>
       </div>
 
       <slot></slot>
@@ -26,15 +25,9 @@
 <script>
 
   import { mapState } from 'vuex';
-  import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
-  import KIconButton from 'kolibri-design-system/lib/buttons-and-links/KIconButton';
 
   export default {
     name: 'Base',
-    components: {
-      KIconButton,
-    },
-    mixins: [responsiveWindowMixin],
     props: {
       back: {
         type: Boolean,
@@ -70,6 +63,14 @@
 
     /* Just below the sidenav */
     z-index: 14;
+  }
+
+  .back-button {
+    width: 50px;
+    height: 50px;
+    padding: 7px 10px;
+    text-align: center;
+    border-radius: 25px;
   }
 
 </style>
