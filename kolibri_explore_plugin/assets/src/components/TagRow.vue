@@ -7,6 +7,7 @@
     <b-button-toolbar ref="toolbar" class="my-4">
       <b-button
         v-if="hasPrevious"
+        :disabled="buttonsDisabled"
         variant="dark"
         pill
         class="nav-button prev"
@@ -17,6 +18,7 @@
       </b-button>
       <b-button
         v-if="hasNext"
+        :disabled="buttonsDisabled"
         variant="dark"
         pill
         class="nav-button next"
@@ -69,6 +71,8 @@
         buttonHeight: 0,
         cardsPerRow: 5,
         offset: 0,
+        animating: false,
+        animateTo: 0, // -1 left, 1 right
         nodes: [
           { title: '1', id: '1' },
           { title: '2', id: '2' },
@@ -89,6 +93,9 @@
       },
       hasNext: function() {
         return this.offset + this.cardsPerRow < this.nodes.length;
+      },
+      buttonsDisabled: function() {
+        return this.animating;
       },
     },
     watch: {
@@ -135,10 +142,20 @@
         return this.nodes.slice(this.offset, this.offset + this.cardsPerRow + 2); // FIXME slice, offset
       },
       goNext() {
-        this.offset += 1;
+        this.animating = true;
+        this.animateTo = -1;
+        setTimeout(() => {
+          this.offset += 1;
+          this.animating = false;
+        }, 500);
       },
       goPrevious() {
-        this.offset -= 1;
+        this.animating = true;
+        this.animateTo = 1;
+        setTimeout(() => {
+          this.offset -= 1;
+          this.animating = false;
+        }, 500);
       },
       isButtonDisabled(index) {
         return (
@@ -148,8 +165,25 @@
         );
       },
       getButtonStyle(index) {
-        if (index === 0 && this.hasPrevious) {
-          return { marginLeft: `-${this.buttonWidth + this.margin}px` };
+        if (index !== 0) {
+          return {};
+        }
+        const m = this.buttonWidth + this.margin;
+        if (this.animating) {
+          const step = 0.5; // FIXME animate from 0 to 1
+          const dx = m * step * this.animateTo;
+          if (this.hasPrevious) {
+            if (this.animateTo === -1) {
+              return { marginLeft: `-${m * 2 + dx}px` };
+            } else {
+              return { marginLeft: `-${m - dx}px` };
+            }
+          } else {
+            return { marginLeft: `-${m + dx}px` };
+          }
+        }
+        if (this.hasPrevious) {
+          return { marginLeft: `-${m}px` };
         }
         return {};
       },
