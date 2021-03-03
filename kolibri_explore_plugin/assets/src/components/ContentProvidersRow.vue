@@ -6,11 +6,7 @@
         <b-button
           variant="outline-light"
           class="demo-button mx-1 mx-lg-3 mx-md-2 shadow-lg"
-          :style="{
-            width: `${buttonWidth}px`,
-            height: `${buttonHeight}px`,
-            backgroundImage: `url(${node.thumbnail})`
-          }"
+          :style="getButtonStyle(node)"
         />
       </b-button-group>
     </b-button-toolbar>
@@ -90,6 +86,13 @@
       this.onResize();
     },
     methods: {
+      getButtonStyle(node) {
+        return {
+          width: `${this.buttonWidth}px`,
+          height: `${this.buttonHeight}px`,
+          backgroundImage: `url(${node.thumbnail}), linear-gradient(to bottom, rgba(185, 185, 185, 0.8), rgba(255, 255, 255, 0.3))`,
+        };
+      },
       onResize() {
         this.containerWidth = this.$refs.toolbar.$el.clientWidth;
       },
