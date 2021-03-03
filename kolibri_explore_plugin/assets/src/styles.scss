@@ -2,3 +2,25 @@
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap-vue/src/index';
 @import './bootswatch';
+
+@include media-breakpoint-up(md) {
+  .container-fluid {
+    padding-right: 80px;
+    // background: rgba(255, 0, 0, .2); // 5 cards
+    padding-left: 80px;
+  }
+}
+@include media-breakpoint-between(sm, md) {
+  .container-fluid {
+    padding-right: 60px;
+    // background: rgba(0, 255, 0, .2); // 3, 4, 5 cards
+    padding-left: 60px;
+  }
+}
+@include media-breakpoint-down(sm) {
+  .container-fluid {
+    padding-right: 40px;
+    // background: rgba(0, 0, 255, .2); // 2 cards
+    padding-left: 40px;
+  }
+}
