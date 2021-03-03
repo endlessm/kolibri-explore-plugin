@@ -1,9 +1,17 @@
 import router from 'kolibri.coreVue.router';
 import KolibriApp from 'kolibri_app';
+import Vue from 'vue';
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import RootVue from './views/ExploreIndex';
 import routes from './routes';
 import { setFacilitiesAndConfig } from './modules/coreExplore/actions';
 import pluginModule from './modules/pluginModule';
+import './styles.scss';
+
+// Make BootstrapVue available throughout your project
+Vue.use(BootstrapVue);
+// Optionally install the BootstrapVue icon components plugin
+Vue.use(IconsPlugin);
 
 /* eslint-disable class-methods-use-this */
 class ExploreModule extends KolibriApp {
