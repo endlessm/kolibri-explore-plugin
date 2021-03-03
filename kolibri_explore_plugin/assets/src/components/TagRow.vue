@@ -4,24 +4,27 @@
     <h4 class="mx-1 mx-lg-3 mx-md-2">
       {{ label }}:
     </h4>
-    <b-button-group class="mx-1 mx-lg-3 mx-md-2">
+    <b-button-toolbar ref="toolbar" class="my-4">
       <b-button
-        :disabled="!hasPrevious"
-        variant="outline-light"
+        v-if="hasPrevious"
+        variant="dark"
+        pill
+        class="nav-button prev"
+        size="lg"
         @click="goPrevious"
       >
         <b-icon-chevron-left />
       </b-button>
       <b-button
-        :disabled="!hasNext"
-        variant="outline-light"
+        v-if="hasNext"
+        variant="dark"
+        pill
+        class="nav-button next"
+        size="lg"
         @click="goNext"
       >
         <b-icon-chevron-right />
       </b-button>
-    </b-button-group>
-
-    <b-button-toolbar ref="toolbar" class="my-4">
       <b-button-group
         v-for="(node, index) in getVisibleCards()"
         :key="node.id"
@@ -186,7 +189,26 @@
   }
 
   .btn-toolbar {
+    position: relative;
     flex-wrap: nowrap;
+  }
+
+  $nav-button-size: 50px;
+
+  .nav-button {
+    position: absolute;
+    top: 50%;
+    z-index: 1000;
+    width: $nav-button-size;
+    height: $nav-button-size;
+    padding: 6px 0;
+    transform: translateY(-$nav-button-size/2);
+    &.prev {
+      left: -$nav-button-size;
+    }
+    &.next {
+      right: -$nav-button-size;
+    }
   }
 
   .demo-button {
