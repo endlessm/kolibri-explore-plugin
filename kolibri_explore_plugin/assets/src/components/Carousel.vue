@@ -36,6 +36,8 @@
 <script>
 
   import { PageNames } from '../constants';
+  import sikanaImage from '../assets/sikana-yoga.jpg';
+  import pbsImage from '../assets/pbs-kids-banner.jpg';
 
   export default {
     name: 'Carousel',
@@ -44,17 +46,16 @@
         type: Array,
         default: () => [
           {
-            caption: 'Example content',
-            image: 'https://picsum.photos/1440/368/?image=54',
+            image: sikanaImage,
             content: '4adb51edf0e75de6be1c81be58e27a0d',
           },
           {
-            image: 'https://picsum.photos/1440/368/?image=23',
-            content: '4adb51edf0e75de6be1c81be58e27a0d',
+            image: pbsImage,
+            content: '4adb51edf0e75de6be1c81be58e27a0e',
           },
           {
             image: 'https://picsum.photos/1440/368/?image=43',
-            content: '4adb51edf0e75de6be1c81be58e27a0d',
+            content: '4adb51edf0e75de6be1c81be58e27a0f',
           },
         ],
       },
