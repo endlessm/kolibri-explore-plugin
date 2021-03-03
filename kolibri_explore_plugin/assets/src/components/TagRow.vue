@@ -139,7 +139,9 @@
       },
       isButtonDisabled(index) {
         return (
-          (index === 0 && this.hasPrevious) || (index === this.cardsPerRow + 1 && this.hasNext)
+          (this.offset === 0 && index === this.cardsPerRow) ||
+          (index === 0 && this.hasPrevious) ||
+          (index === this.cardsPerRow + 1 && this.hasNext)
         );
       },
       getButtonStyle(index) {
