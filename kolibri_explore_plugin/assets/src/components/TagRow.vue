@@ -187,10 +187,6 @@
     flex-wrap: nowrap;
   }
 
-  .offsetfirst {
-    margin-left: -100px;
-  }
-
   .demo-button {
     padding: 0;
     background-repeat: no-repeat;
@@ -198,10 +194,12 @@
     background-size: contain;
     transition: all 300ms;
 
-    &:not(.disabled) &:hover {
-      border-color: white;
-      border-width: 3px;
-      transform: scale(1.05);
+    &:not(.disabled) {
+      &:hover {
+        border-color: white;
+        border-width: 3px;
+        transform: scale(1.05);
+      }
     }
   }
 
