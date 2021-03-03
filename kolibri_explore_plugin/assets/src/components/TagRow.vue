@@ -97,19 +97,24 @@
       window.addEventListener('resize', this.onResize);
       const style = getComputedStyle(document.body);
       this.breakpoints['xs'] = parseInt(
-        style.getPropertyValue('--breakpoint-xs').replace('px', '')
+        style.getPropertyValue('--breakpoint-xs').replace('px', ''),
+        10
       );
       this.breakpoints['sm'] = parseInt(
-        style.getPropertyValue('--breakpoint-sm').replace('px', '')
+        style.getPropertyValue('--breakpoint-sm').replace('px', ''),
+        10
       );
       this.breakpoints['md'] = parseInt(
-        style.getPropertyValue('--breakpoint-md').replace('px', '')
+        style.getPropertyValue('--breakpoint-md').replace('px', ''),
+        10
       );
       this.breakpoints['lg'] = parseInt(
-        style.getPropertyValue('--breakpoint-lg').replace('px', '')
+        style.getPropertyValue('--breakpoint-lg').replace('px', ''),
+        10
       );
       this.breakpoints['xl'] = parseInt(
-        style.getPropertyValue('--breakpoint-xl').replace('px', '')
+        style.getPropertyValue('--breakpoint-xl').replace('px', ''),
+        10
       );
       this.debouncedUpdate = debounce(this.updateImageWidth, 500);
     },
