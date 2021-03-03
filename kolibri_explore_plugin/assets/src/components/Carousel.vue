@@ -38,6 +38,8 @@
   import { PageNames } from '../constants';
   import sikanaImage from '../assets/sikana-yoga.jpg';
   import pbsImage from '../assets/pbs-kids-banner.jpg';
+  import oceanxImage from '../assets/oceanx.jpg';
+  import commonImage from '../assets/common-sense.jpg';
 
   export default {
     name: 'Carousel',
@@ -54,8 +56,12 @@
             content: '4adb51edf0e75de6be1c81be58e27a0e',
           },
           {
-            image: 'https://picsum.photos/1440/368/?image=43',
+            image: oceanxImage,
             content: '4adb51edf0e75de6be1c81be58e27a0f',
+          },
+          {
+            image: commonImage,
+            content: '4adb51edf0e75de6be1c81be58e27a0g',
           },
         ],
       },
