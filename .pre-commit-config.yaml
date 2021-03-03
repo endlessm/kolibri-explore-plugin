@@ -6,7 +6,6 @@ repos:
   - id: trailing-whitespace
   - id: flake8
   - id: check-yaml
-  - id: check-added-large-files
   - id: debug-statements
   - id: end-of-file-fixer
     exclude: '^.+?(\.json|\.po)$'
