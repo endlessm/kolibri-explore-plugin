@@ -1,6 +1,6 @@
 <template>
 
-  <div class="channels">
+  <div class="channels d-flex flex-column h-100">
     <PageHeader
       :title="coreString('channelsLabel')"
       class="visuallyhidden"
@@ -35,6 +35,8 @@
         :genContentLink="genChannelLink"
       />
     </div>
+
+    <Footer />
   </div>
 
 </template>
@@ -46,6 +48,7 @@
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import KIconButton from 'kolibri-design-system/lib/buttons-and-links/KIconButton';
   import { PageNames } from '../constants';
+  import Footer from '../components/Footer';
   import PageHeader from './PageHeader';
   import ChannelCardGroupGrid from './ChannelCardGroupGrid';
 
@@ -60,6 +63,7 @@
       KIconButton,
       PageHeader,
       ChannelCardGroupGrid,
+      Footer,
     },
     mixins: [commonCoreStrings],
     data() {
