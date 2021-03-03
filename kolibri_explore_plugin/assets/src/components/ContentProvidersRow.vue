@@ -1,11 +1,11 @@
 <template>
 
   <b-container fluid>
-    <b-button-toolbar ref="toolbar" justify class="my-4">
+    <b-button-toolbar ref="toolbar" class="my-4">
       <b-button-group v-for="i in 5" :key="i">
         <b-button
           variant="outline-light"
-          class="demo-button shadow-lg"
+          class="demo-button mx-1 mx-lg-3 mx-md-2 shadow-lg"
           :style="{
             width: `${buttonWidth}px`,
             height: `${buttonHeight}px`,
@@ -33,6 +33,7 @@
         containerWidth: 0,
         buttonWidth: 0,
         buttonHeight: 0,
+        cardsPerRow: 5,
       };
     },
     watch: {
@@ -79,13 +80,13 @@
         const width = window.innerWidth;
         let margin;
         if (width >= this.breakpoints['lg']) {
-          margin = 20;
+          margin = 30; // 2 * spacers[3]
         } else if (width < this.breakpoints['lg'] && width >= this.breakpoints['md']) {
-          margin = 15;
+          margin = 15; // 2 * spacers[2]
         } else if (width < this.breakpoints['md']) {
-          margin = 10;
+          margin = 7.5; // 2 * spacers[1]
         }
-        this.buttonWidth = (this.containerWidth - 4 * margin) / 5;
+        this.buttonWidth = (this.containerWidth - this.cardsPerRow * margin) / this.cardsPerRow;
         this.buttonHeight = this.buttonWidth / 1.7804; // aprox 600 / 337
       },
     },
@@ -95,6 +96,10 @@
 
 
 <style lang="scss" scoped>
+
+  .container-fluid {
+    overflow: hidden;
+  }
 
   .btn-toolbar {
     flex-wrap: nowrap;

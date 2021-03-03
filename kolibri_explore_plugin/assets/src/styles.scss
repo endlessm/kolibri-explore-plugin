@@ -1,4 +1,7 @@
 @import './variables';
+
+$spacer: 15px;
+
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap-vue/src/index';
 @import './bootswatch';
