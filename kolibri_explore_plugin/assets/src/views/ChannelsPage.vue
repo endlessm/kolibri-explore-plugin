@@ -6,7 +6,7 @@
       class="visuallyhidden"
     />
 
-    <Header @searchClick="filter" />
+    <Header />
     <b-container fluid>
       <Carousel />
     </b-container>
@@ -30,10 +30,8 @@
 
 <script>
 
-  import { mapState } from 'vuex';
   import { ContentNodeResource } from 'kolibri.resources';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
-  import { PageNames } from '../constants';
   import Carousel from '../components/Carousel';
   import ContentProvidersRow from '../components/ContentProvidersRow';
   import Footer from '../components/Footer';
@@ -60,19 +58,11 @@
     mixins: [commonCoreStrings],
     data() {
       return {
-        searchQuery: '',
         nodes: {},
         loading: true,
       };
     },
     computed: {
-      ...mapState('topicsRoot', { channels: 'rootNodes' }),
-      /* eslint-disable kolibri/vue-no-unused-properties */
-      filteredChannels() {
-        const re = new RegExp(`.*${this.searchQuery}.*`, 'i');
-        return this.channels.filter(c => c.title.match(re));
-      },
-
       tags() {
         return DemoData.tags;
       },
@@ -98,16 +88,6 @@
       });
     },
     methods: {
-      /* eslint-disable kolibri/vue-no-unused-methods */
-      genChannelLink(channel_id) {
-        return {
-          name: PageNames.TOPICS_CHANNEL,
-          params: { channel_id },
-        };
-      },
-      filter(searchQuery) {
-        this.searchQuery = searchQuery;
-      },
       getNodes(tag) {
         return tag.nodes.map(n => {
           return this.nodes[n] || { title: 'Not found', id: n };
