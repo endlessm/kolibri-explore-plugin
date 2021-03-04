@@ -10,14 +10,12 @@
 
     <Carousel />
 
-    <div class="channelsgrid">
-      <ChannelCardGroupGrid
-        v-if="filteredChannels.length"
-        class="grid"
-        :contents="filteredChannels"
-        :genContentLink="genChannelLink"
-      />
-    </div>
+    <ContentProvidersRow />
+    <TagRow label="Sports" />
+    <TagRow label="Nature" />
+    <TagRow label="Health" />
+    <TagRow label="Art" />
+    <TagRow label="DIY" />
 
     <Footer />
   </div>
@@ -31,10 +29,11 @@
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import { PageNames } from '../constants';
   import Carousel from '../components/Carousel';
+  import ContentProvidersRow from '../components/ContentProvidersRow';
   import Footer from '../components/Footer';
   import Header from '../components/Header';
+  import TagRow from '../components/TagRow';
   import PageHeader from './PageHeader';
-  import ChannelCardGroupGrid from './ChannelCardGroupGrid';
 
   export default {
     name: 'ChannelsPage',
@@ -46,9 +45,10 @@
     components: {
       PageHeader,
       Carousel,
-      ChannelCardGroupGrid,
+      ContentProvidersRow,
       Footer,
       Header,
+      TagRow,
     },
     mixins: [commonCoreStrings],
     data() {
@@ -58,12 +58,14 @@
     },
     computed: {
       ...mapState('topicsRoot', { channels: 'rootNodes' }),
+      /* eslint-disable kolibri/vue-no-unused-properties */
       filteredChannels() {
         const re = new RegExp(`.*${this.searchQuery}.*`, 'i');
         return this.channels.filter(c => c.title.match(re));
       },
     },
     methods: {
+      /* eslint-disable kolibri/vue-no-unused-methods */
       genChannelLink(channel_id) {
         return {
           name: PageNames.TOPICS_CHANNEL,
@@ -80,21 +82,3 @@
   };
 
 </script>
-
-
-<style lang="scss" scoped>
-
-  .channels {
-    width: 100%;
-    min-height: 100vh;
-    padding: 20px;
-    color: white;
-    background-color: #3a3a3a;
-
-    .channelsgrid {
-      padding-top: 40px;
-      clear: both;
-    }
-  }
-
-</style>

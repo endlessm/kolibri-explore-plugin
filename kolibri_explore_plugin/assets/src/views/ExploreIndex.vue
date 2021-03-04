@@ -25,6 +25,7 @@
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
   import { PageNames } from '../constants';
+  import Footer from '../components/Footer';
   import BaseComponent from './Base';
   import commonExploreStrings from './commonExploreStrings';
   import ChannelsPage from './ChannelsPage';
@@ -46,6 +47,7 @@
     name: 'ExploreIndex',
     components: {
       BaseComponent,
+      Footer,
     },
     mixins: [commonCoreStrings, commonExploreStrings, responsiveWindowMixin],
     data() {
