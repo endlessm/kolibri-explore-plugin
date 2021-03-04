@@ -275,6 +275,12 @@
 
 <style lang="scss" scoped>
 
+  @import '../styles';
+
+  .page-container {
+    color: $black;
+  }
+
   .content-renderer {
     // Needs to be one less than the ScrollingHeader's z-index of 4
     z-index: 3;
