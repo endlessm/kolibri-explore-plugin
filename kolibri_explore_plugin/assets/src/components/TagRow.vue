@@ -36,7 +36,7 @@
           <b-button
             :disabled="isButtonDisabled(index)"
             variant="outline-light"
-            class="demo-button mx-1 mx-lg-3 mx-md-2 shadow-lg"
+            class="demo-button mx-1 mx-lg-3 mx-md-2 shadow"
             :style="getNodeStyles(node)"
           />
         </router-link>
@@ -256,17 +256,22 @@
     }
   }
 
+  .btn-outline-light.disabled:hover {
+    border-color: transparent;
+  }
+
   .demo-button {
     padding: 0;
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
+    border-color: transparent;
+    border-width: 3px;
     transition: all 300ms;
 
     &:not(.disabled) {
       &:hover {
         border-color: white;
-        border-width: 3px;
         transform: scale(1.05);
       }
     }
