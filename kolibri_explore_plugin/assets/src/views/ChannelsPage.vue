@@ -11,11 +11,15 @@
     <Carousel />
 
     <ContentProvidersRow />
-    <TagRow label="Sports" />
-    <TagRow label="Nature" />
-    <TagRow label="Health" />
-    <TagRow label="Art" />
-    <TagRow label="DIY" />
+
+    <div v-if="!loading">
+      <TagRow
+        v-for="tag in tags"
+        :key="tag.name"
+        :label="tag.name"
+        :nodes="getNodes(tag)"
+      />
+    </div>
 
     <Footer />
   </div>
@@ -26,6 +30,7 @@
 <script>
 
   import { mapState } from 'vuex';
+  import { ContentNodeResource } from 'kolibri.resources';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import { PageNames } from '../constants';
   import Carousel from '../components/Carousel';
@@ -33,6 +38,7 @@
   import Footer from '../components/Footer';
   import Header from '../components/Header';
   import TagRow from '../components/TagRow';
+  import DemoData from '../chromeos-demo.json';
   import PageHeader from './PageHeader';
 
   export default {
@@ -54,6 +60,8 @@
     data() {
       return {
         searchQuery: '',
+        nodes: {},
+        loading: true,
       };
     },
     computed: {
@@ -63,6 +71,23 @@
         const re = new RegExp(`.*${this.searchQuery}.*`, 'i');
         return this.channels.filter(c => c.title.match(re));
       },
+
+      tags() {
+        return DemoData.tags;
+      },
+    },
+    mounted() {
+      this.tags.forEach(t => {
+        const nodes = t.nodes.map(n => {
+          return ContentNodeResource.fetchModel({ id: n });
+        });
+        Promise.all(nodes).then(ns => {
+          ns.forEach(n => {
+            this.nodes[n.id] = n;
+          });
+          this.loading = false;
+        });
+      });
     },
     methods: {
       /* eslint-disable kolibri/vue-no-unused-methods */
@@ -74,6 +99,11 @@
       },
       filter(searchQuery) {
         this.searchQuery = searchQuery;
+      },
+      getNodes(tag) {
+        return tag.nodes.map(n => {
+          return this.nodes[n] || { title: 'Not found', id: n.id };
+        });
       },
     },
     $trs: {
