@@ -36,14 +36,8 @@
           :disabled="isButtonDisabled(index)"
           variant="outline-light"
           class="demo-button mx-1 mx-lg-3 mx-md-2 shadow-lg"
-          :style="{
-            width: `${buttonWidth}px`,
-            height: `${buttonHeight}px`,
-            backgroundImageFoo: `url(${placeholder})`
-          }"
-        >
-          {{ node.title }}
-        </b-button>
+          :style="getNodeStyles(node)"
+        />
       </b-button-group>
     </b-button-toolbar>
   </b-container>
@@ -54,6 +48,7 @@
 <script>
 
   import debounce from 'lodash/debounce';
+  import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
   import placeholder from '../assets/placeholder.png';
 
   export default {
@@ -129,6 +124,18 @@
           return this.nodes.slice(this.offset - 1, this.offset + this.cardsPerRow + 1); // FIXME slice, offset
         }
         return this.nodes.slice(this.offset, this.offset + this.cardsPerRow + 2); // FIXME slice, offset
+      },
+      getNodeStyles(node) {
+        var background = this.placeholder;
+        if (node.files) {
+          background = getContentNodeThumbnail(node) || this.placeholder;
+        }
+
+        return {
+          width: `${this.buttonWidth}px`,
+          height: `${this.buttonHeight}px`,
+          backgroundImage: `url(${background})`,
+        };
       },
       goNext() {
         const { toolbar } = this.$refs;
