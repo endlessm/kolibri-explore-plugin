@@ -3,11 +3,13 @@
   <b-container fluid>
     <b-button-toolbar ref="toolbar" class="my-4">
       <b-button-group v-for="node in nodes" :key="node.id">
-        <b-button
-          variant="outline-light"
-          class="demo-button mx-1 mx-lg-3 mx-md-2 shadow"
-          :style="getButtonStyle(node)"
-        />
+        <router-link :to="contentLink(node.id)">
+          <b-button
+            variant="outline-light"
+            class="demo-button mx-1 mx-lg-3 mx-md-2 shadow"
+            :style="getButtonStyle(node)"
+          />
+        </router-link>
       </b-button-group>
     </b-button-toolbar>
   </b-container>
@@ -18,6 +20,7 @@
 <script>
 
   import debounce from 'lodash/debounce';
+  import { PageNames } from '../constants';
   // import placeholder from '../assets/placeholder.png';
   import sikanaImage from '../assets/sikana-cp.png';
   import pbsImage from '../assets/pbs-kids-cp.png';
@@ -35,12 +38,12 @@
         buttonWidth: 0,
         buttonHeight: 0,
         nodes: [
-          { thumbnail: sikanaImage, id: '1' },
-          { thumbnail: pbsImage, id: '2' },
-          { thumbnail: oceanxImage, id: '3' },
-          { thumbnail: tedxImage, id: '4' },
-          // { thumbnail: khanImage, id: '5' },
-          { thumbnail: commonImage, id: '6' },
+          { thumbnail: sikanaImage, id: '3e464ee12f6a50a781cddf59147b48b1' },
+          { thumbnail: pbsImage, id: '1306b5d7d1ce4b98b0039324f368ce6a' },
+          { thumbnail: oceanxImage, id: '85b42a40745f4e2392ed62e72d4dad6e' },
+          { thumbnail: tedxImage, id: '1e378725d3924b47aa5e1260628820b5' },
+          // { thumbnail: khanImage, id: 'c9d7f950ab6b5a1199e3d6c10d7f0103' },
+          { thumbnail: commonImage, id: 'bcc6e12a0ddf4a17a8b600c6b880e3ed' },
         ],
       };
     },
@@ -108,6 +111,12 @@
         }
         this.buttonWidth = (this.containerWidth - this.cardsPerRow * margin) / this.cardsPerRow;
         this.buttonHeight = this.buttonWidth / 1.7804; // aprox 600 / 337
+      },
+      contentLink(channel_id) {
+        return {
+          name: PageNames.TOPICS_CHANNEL,
+          params: { channel_id },
+        };
       },
     },
   };
