@@ -5,7 +5,7 @@
       <b-button-group v-for="node in nodes" :key="node.id">
         <b-button
           variant="outline-light"
-          class="demo-button mx-1 mx-lg-3 mx-md-2 shadow-lg"
+          class="demo-button mx-1 mx-lg-3 mx-md-2 shadow"
           :style="getButtonStyle(node)"
         />
       </b-button-group>

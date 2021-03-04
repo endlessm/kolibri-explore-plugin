@@ -3,7 +3,7 @@
   <div>
     <b-carousel
       id="carousel"
-      class="carousel"
+      class="carousel shadow"
       :interval="interval"
       indicators
       :imgWidth="width"
