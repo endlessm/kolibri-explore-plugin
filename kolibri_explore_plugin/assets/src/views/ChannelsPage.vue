@@ -79,18 +79,20 @@
     },
     mounted() {
       this.tags.forEach(t => {
-        const nodes = t.nodes.map(n => {
-          return ContentNodeResource.fetchModel({ id: n });
+        const nodes = t.nodes.map(nodeID => {
+          return ContentNodeResource.fetchModel({ id: nodeID })
+            .then(result => {
+              this.nodes[nodeID] = result;
+            })
+            .catch(() => {
+              this.nodes[nodeID] = null;
+            });
         });
         Promise.all(nodes)
-          .then(ns => {
-            ns.forEach(n => {
-              this.nodes[n.id] = n;
-            });
+          .then(() => {
             this.loading = false;
           })
-          .catch(error => {
-            console.error(error.message);
+          .catch(() => {
             this.loading = false;
           });
       });
