@@ -4,11 +4,11 @@
     <h4 class="mx-1 mx-lg-3 mx-md-2">
       {{ label }}:
     </h4>
-    <b-button-toolbar ref="toolbar" class="my-4">
+    <b-button-toolbar ref="toolbar" v-b-hover="onHover" class="my-4">
       <b-button
-        v-if="hasPrevious && !animating"
+        v-if="navButtonsVisible && hasPrevious && !animating"
         :disabled="buttonsDisabled"
-        variant="dark"
+        variant="outline"
         pill
         class="nav-button prev"
         size="lg"
@@ -17,9 +17,9 @@
         <b-icon-chevron-left />
       </b-button>
       <b-button
-        v-if="hasNext && !animating"
+        v-if="navButtonsVisible && hasNext && !animating"
         :disabled="buttonsDisabled"
-        variant="dark"
+        variant="outline"
         pill
         class="nav-button next"
         size="lg"
@@ -63,6 +63,7 @@
     data() {
       return {
         placeholder,
+        navButtonsVisible: false,
         breakpoints: {},
         margin: 0,
         containerWidth: 0,
@@ -122,6 +123,9 @@
       this.onResize();
     },
     methods: {
+      onHover(isHovered) {
+        this.navButtonsVisible = isHovered;
+      },
       getVisibleCards() {
         if (this.hasPrevious) {
           return this.nodes.slice(this.offset - 1, this.offset + this.cardsPerRow + 1); // FIXME slice, offset
