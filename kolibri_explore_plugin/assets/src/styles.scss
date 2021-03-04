@@ -1,6 +1,8 @@
 @import './variables';
 
 $spacer: 15px;
+$body-bg: $gray-800;
+$box-shadow: 0 0.5rem 1rem rgba($black, 0.8);
 
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap-vue/src/index';

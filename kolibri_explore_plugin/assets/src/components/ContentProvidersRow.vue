@@ -5,7 +5,7 @@
       <b-button-group v-for="node in nodes" :key="node.id">
         <b-button
           variant="outline-light"
-          class="demo-button mx-1 mx-lg-3 mx-md-2 shadow-lg"
+          class="demo-button mx-1 mx-lg-3 mx-md-2 shadow"
           :style="getButtonStyle(node)"
         />
       </b-button-group>
@@ -130,11 +130,12 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
+    border-color: transparent;
+    border-width: 3px;
     transition: all 300ms;
 
     &:hover {
       border-color: white;
-      border-width: 3px;
       transform: scale(1.05);
     }
   }
