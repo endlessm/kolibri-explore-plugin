@@ -4,7 +4,11 @@
     ref="mainWrapper"
     class="main-wrapper"
   >
-    <div v-if="!loading" class="explore-main-content">
+    <b-container
+      v-if="!loading"
+      fluid
+      class="explore-main-content"
+    >
       <div class="explore-buttons">
         <b-button
           v-if="back"
@@ -16,7 +20,7 @@
       </div>
 
       <slot></slot>
-    </div>
+    </b-container>
   </div>
 
 </template>

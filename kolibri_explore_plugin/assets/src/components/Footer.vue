@@ -1,6 +1,7 @@
 <template>
 
   <div class="footer mt-auto text-center text-lg-start text-light">
+    <hr>
     <b-container fluid>
       <p>
         Endless OS Foundation LLC is a program of Endless Network Inc., a
@@ -43,13 +44,9 @@
 <style lang="scss" scoped>
 
   .footer {
-    padding-top: 20px;
+    padding: 20px;
     margin-top: 40px;
-    margin-right: -20px;
-    margin-bottom: -20px;
-    margin-left: -20px;
     font-size: small;
-    background-color: black;
   }
 
 </style>

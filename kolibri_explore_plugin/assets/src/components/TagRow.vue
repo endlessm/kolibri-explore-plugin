@@ -32,18 +32,14 @@
         :key="node.id"
         :style="getButtonStyle(index)"
       >
-        <b-button
-          :disabled="isButtonDisabled(index)"
-          variant="outline-light"
-          class="demo-button mx-1 mx-lg-3 mx-md-2 shadow-lg"
-          :style="{
-            width: `${buttonWidth}px`,
-            height: `${buttonHeight}px`,
-            backgroundImageFoo: `url(${placeholder})`
-          }"
-        >
-          {{ node.title }}
-        </b-button>
+        <router-link :to="contentLink(node.id)">
+          <b-button
+            :disabled="isButtonDisabled(index)"
+            variant="outline-light"
+            class="demo-button mx-1 mx-lg-3 mx-md-2 shadow-lg"
+            :style="getNodeStyles(node)"
+          />
+        </router-link>
       </b-button-group>
     </b-button-toolbar>
   </b-container>
@@ -54,12 +50,15 @@
 <script>
 
   import debounce from 'lodash/debounce';
+  import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
+  import { PageNames } from '../constants';
   import placeholder from '../assets/placeholder.png';
 
   export default {
     name: 'TagRow',
     props: {
       label: String,
+      nodes: Array,
     },
     data() {
       return {
@@ -73,18 +72,6 @@
         offset: 0,
         animating: false,
         animateTo: 0, // -1 left, 1 right
-        nodes: [
-          { title: '1', id: '1' },
-          { title: '2', id: '2' },
-          { title: '3', id: '3' },
-          { title: '4', id: '4' },
-          { title: '5', id: '5' },
-          { title: '6', id: '6' },
-          { title: '7', id: '7' },
-          { title: '8', id: '8' },
-          { title: '9', id: '9' },
-          { title: '10', id: '10' },
-        ],
       };
     },
     computed: {
@@ -140,6 +127,18 @@
           return this.nodes.slice(this.offset - 1, this.offset + this.cardsPerRow + 1); // FIXME slice, offset
         }
         return this.nodes.slice(this.offset, this.offset + this.cardsPerRow + 2); // FIXME slice, offset
+      },
+      getNodeStyles(node) {
+        var background = this.placeholder;
+        if (node.files) {
+          background = getContentNodeThumbnail(node) || this.placeholder;
+        }
+
+        return {
+          width: `${this.buttonWidth}px`,
+          height: `${this.buttonHeight}px`,
+          backgroundImage: `url(${background})`,
+        };
       },
       goNext() {
         const { toolbar } = this.$refs;
@@ -211,6 +210,12 @@
         this.buttonWidth =
           (this.containerWidth - this.cardsPerRow * this.margin) / this.cardsPerRow;
         this.buttonHeight = this.buttonWidth / 1.7804; // aprox 600 / 337
+      },
+      contentLink(content_id) {
+        return {
+          name: PageNames.TOPICS_CONTENT,
+          params: { id: content_id },
+        };
       },
     },
   };
