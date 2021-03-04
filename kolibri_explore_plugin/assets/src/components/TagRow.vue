@@ -36,7 +36,7 @@
           <b-button
             :disabled="isButtonDisabled(index)"
             variant="outline-light"
-            class="demo-button mx-1 mx-lg-3 mx-md-2 shadow-lg"
+            class="demo-button mx-1 mx-lg-3 mx-md-2 shadow"
             :style="getNodeStyles(node)"
           />
         </router-link>
