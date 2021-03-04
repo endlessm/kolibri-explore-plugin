@@ -32,12 +32,14 @@
         :key="node.id"
         :style="getButtonStyle(index)"
       >
-        <b-button
-          :disabled="isButtonDisabled(index)"
-          variant="outline-light"
-          class="demo-button mx-1 mx-lg-3 mx-md-2 shadow-lg"
-          :style="getNodeStyles(node)"
-        />
+        <router-link :to="contentLink(node.id)">
+          <b-button
+            :disabled="isButtonDisabled(index)"
+            variant="outline-light"
+            class="demo-button mx-1 mx-lg-3 mx-md-2 shadow-lg"
+            :style="getNodeStyles(node)"
+          />
+        </router-link>
       </b-button-group>
     </b-button-toolbar>
   </b-container>
@@ -49,6 +51,7 @@
 
   import debounce from 'lodash/debounce';
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
+  import { PageNames } from '../constants';
   import placeholder from '../assets/placeholder.png';
 
   export default {
@@ -207,6 +210,12 @@
         this.buttonWidth =
           (this.containerWidth - this.cardsPerRow * this.margin) / this.cardsPerRow;
         this.buttonHeight = this.buttonWidth / 1.7804; // aprox 600 / 337
+      },
+      contentLink(content_id) {
+        return {
+          name: PageNames.TOPICS_CONTENT,
+          params: { id: content_id },
+        };
       },
     },
   };
