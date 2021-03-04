@@ -7,8 +7,9 @@
     />
 
     <Header @searchClick="filter" />
-
-    <Carousel />
+    <b-container fluid>
+      <Carousel />
+    </b-container>
 
     <ContentProvidersRow />
 

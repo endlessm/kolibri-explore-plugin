@@ -4,9 +4,8 @@
     ref="mainWrapper"
     class="main-wrapper"
   >
-    <b-container
+    <div
       v-if="!loading"
-      fluid
       class="explore-main-content"
     >
       <div class="explore-buttons">
@@ -20,7 +19,7 @@
       </div>
 
       <slot></slot>
-    </b-container>
+    </div>
   </div>
 
 </template>
