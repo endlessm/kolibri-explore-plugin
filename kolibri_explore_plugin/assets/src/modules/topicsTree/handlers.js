@@ -144,12 +144,27 @@ export function showTopicsContent(store, id) {
         router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
         return;
       }
-      store.commit('topicsTree/SET_STATE', {
-        content: contentState(content, nextContent),
-        channel: currentChannel,
-      });
-      store.commit('CORE_SET_PAGE_LOADING', false);
-      store.commit('CORE_SET_ERROR', null);
+      const appName = getAppNameByID(content.channel_id);
+      if (appName) {
+        console.log(`ENCONTRADO ${appName}`);
+        const url = urls['kolibri:kolibri_explore_plugin:app_metadata']({ app: appName });
+        axios.get(url).then(({ data }) => {
+          store.commit('topicsTree/SET_STATE', {
+            content: contentState(content, nextContent),
+            channel: currentChannel,
+            appMetadata: _parseAppMetadata(data, appName),
+          });
+          store.commit('CORE_SET_PAGE_LOADING', false);
+          store.commit('CORE_SET_ERROR', null);
+        });
+      } else {
+        store.commit('topicsTree/SET_STATE', {
+          content: contentState(content, nextContent),
+          channel: currentChannel,
+        });
+        store.commit('CORE_SET_PAGE_LOADING', false);
+        store.commit('CORE_SET_ERROR', null);
+      }
     },
     error => {
       store.dispatch('handleApiError', error);
