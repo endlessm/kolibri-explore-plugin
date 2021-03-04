@@ -5,28 +5,35 @@
       {{ label }}:
     </h4>
     <b-button-toolbar ref="toolbar" v-b-hover="onHover" class="my-4">
-      <b-button
-        v-if="navButtonsVisible && hasPrevious && !animating"
-        :disabled="buttonsDisabled"
-        variant="outline"
-        pill
-        class="nav-button prev"
-        size="lg"
-        @click="goPrevious"
-      >
-        <b-icon-chevron-left />
-      </b-button>
-      <b-button
-        v-if="navButtonsVisible && hasNext && !animating"
-        :disabled="buttonsDisabled"
-        variant="outline"
-        pill
-        class="nav-button next"
-        size="lg"
-        @click="goNext"
-      >
-        <b-icon-chevron-right />
-      </b-button>
+      <span v-if="!animating">
+        <transition name="fade">
+          <b-button
+            v-if="navButtonsVisible && hasPrevious"
+            :disabled="buttonsDisabled"
+            variant="outline"
+            pill
+            class="nav-button prev"
+            size="lg"
+            @click="goPrevious"
+          >
+            <b-icon-chevron-left />
+          </b-button>
+        </transition>
+        <transition name="fade">
+          <b-button
+            v-if="navButtonsVisible && hasNext"
+            :disabled="buttonsDisabled"
+            variant="outline"
+            pill
+            class="nav-button next"
+            size="lg"
+            @click="goNext"
+          >
+            <b-icon-chevron-right />
+          </b-button>
+        </transition>
+      </span>
+
       <b-button-group
         v-for="(node, index) in getVisibleCards()"
         :key="node.id"
@@ -254,6 +261,16 @@
     &.next {
       right: -$nav-button-size;
     }
+  }
+
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s;
+  }
+
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
   }
 
   .btn-outline-light.disabled:hover {
