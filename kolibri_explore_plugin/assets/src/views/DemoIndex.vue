@@ -1,7 +1,7 @@
 <template>
 
   <div>
-    <h1>Test</h1>
+    <Header />
     <b-container fluid>
       <Carousel />
     </b-container>
@@ -23,6 +23,7 @@
 
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
+  import Header from '../components/Header';
   import Carousel from '../components/Carousel';
   import ContentProvidersRow from '../components/ContentProvidersRow';
   import TagRow from '../components/TagRow';
@@ -32,6 +33,7 @@
   export default {
     name: 'DemoIndex',
     components: {
+      Header,
       Carousel,
       ContentProvidersRow,
       TagRow,

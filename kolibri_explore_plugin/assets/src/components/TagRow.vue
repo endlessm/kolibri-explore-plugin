@@ -4,24 +4,29 @@
     <h4 class="mx-1 mx-lg-3 mx-md-2">
       {{ label }}:
     </h4>
-    <b-button-group class="mx-1 mx-lg-3 mx-md-2">
+    <b-button-toolbar ref="toolbar" class="my-4">
       <b-button
-        :disabled="!hasPrevious"
-        variant="outline-light"
+        v-if="hasPrevious"
+        :disabled="buttonsDisabled"
+        variant="dark"
+        pill
+        class="nav-button prev"
+        size="lg"
         @click="goPrevious"
       >
         <b-icon-chevron-left />
       </b-button>
       <b-button
-        :disabled="!hasNext"
-        variant="outline-light"
+        v-if="hasNext"
+        :disabled="buttonsDisabled"
+        variant="dark"
+        pill
+        class="nav-button next"
+        size="lg"
         @click="goNext"
       >
         <b-icon-chevron-right />
       </b-button>
-    </b-button-group>
-
-    <b-button-toolbar ref="toolbar" class="my-4">
       <b-button-group
         v-for="(node, index) in getVisibleCards()"
         :key="node.id"
@@ -66,6 +71,8 @@
         buttonHeight: 0,
         cardsPerRow: 5,
         offset: 0,
+        animating: false,
+        animateTo: 0, // -1 left, 1 right
         nodes: [
           { title: '1', id: '1' },
           { title: '2', id: '2' },
@@ -86,6 +93,9 @@
       },
       hasNext: function() {
         return this.offset + this.cardsPerRow < this.nodes.length;
+      },
+      buttonsDisabled: function() {
+        return this.animating;
       },
     },
     watch: {
@@ -132,19 +142,48 @@
         return this.nodes.slice(this.offset, this.offset + this.cardsPerRow + 2); // FIXME slice, offset
       },
       goNext() {
-        this.offset += 1;
+        this.animating = true;
+        this.animateTo = -1;
+        setTimeout(() => {
+          this.offset += 1;
+          this.animating = false;
+        }, 500);
       },
       goPrevious() {
-        this.offset -= 1;
+        this.animating = true;
+        this.animateTo = 1;
+        setTimeout(() => {
+          this.offset -= 1;
+          this.animating = false;
+        }, 500);
       },
       isButtonDisabled(index) {
         return (
-          (index === 0 && this.hasPrevious) || (index === this.cardsPerRow + 1 && this.hasNext)
+          (this.offset === 0 && index === this.cardsPerRow) ||
+          (index === 0 && this.hasPrevious) ||
+          (index === this.cardsPerRow + 1 && this.hasNext)
         );
       },
       getButtonStyle(index) {
-        if (index === 0 && this.hasPrevious) {
-          return { marginLeft: `-${this.buttonWidth + this.margin}px` };
+        if (index !== 0) {
+          return {};
+        }
+        const m = this.buttonWidth + this.margin;
+        if (this.animating) {
+          const step = 0.5; // FIXME animate from 0 to 1
+          const dx = m * step * this.animateTo;
+          if (this.hasPrevious) {
+            if (this.animateTo === -1) {
+              return { marginLeft: `-${m * 2 + dx}px` };
+            } else {
+              return { marginLeft: `-${m - dx}px` };
+            }
+          } else {
+            return { marginLeft: `-${m + dx}px` };
+          }
+        }
+        if (this.hasPrevious) {
+          return { marginLeft: `-${m}px` };
         }
         return {};
       },
@@ -184,7 +223,26 @@
   }
 
   .btn-toolbar {
+    position: relative;
     flex-wrap: nowrap;
+  }
+
+  $nav-button-size: 50px;
+
+  .nav-button {
+    position: absolute;
+    top: 50%;
+    z-index: 1000;
+    width: $nav-button-size;
+    height: $nav-button-size;
+    padding: 6px 0;
+    transform: translateY(-$nav-button-size/2);
+    &.prev {
+      left: -$nav-button-size;
+    }
+    &.next {
+      right: -$nav-button-size;
+    }
   }
 
   .demo-button {
