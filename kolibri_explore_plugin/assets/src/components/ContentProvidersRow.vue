@@ -2,15 +2,11 @@
 
   <b-container fluid>
     <b-button-toolbar ref="toolbar" class="my-4">
-      <b-button-group v-for="i in 5" :key="i">
+      <b-button-group v-for="node in nodes" :key="node.id">
         <b-button
           variant="outline-light"
           class="demo-button mx-1 mx-lg-3 mx-md-2 shadow-lg"
-          :style="{
-            width: `${buttonWidth}px`,
-            height: `${buttonHeight}px`,
-            backgroundImage: `url(${placeholder})`
-          }"
+          :style="getButtonStyle(node)"
         />
       </b-button-group>
     </b-button-toolbar>
@@ -22,19 +18,36 @@
 <script>
 
   import debounce from 'lodash/debounce';
-  import placeholder from '../assets/placeholder.png';
+  // import placeholder from '../assets/placeholder.png';
+  import sikanaImage from '../assets/sikana-cp.png';
+  import pbsImage from '../assets/pbs-kids-cp.png';
+  import oceanxImage from '../assets/preview-oceanx.png';
+  import tedxImage from '../assets/teded.png';
+  // import khanImage from '../assets/khan-academy.png';
+  import commonImage from '../assets/common.png';
 
   export default {
     name: 'ContentProvidersRow',
     data() {
       return {
-        placeholder,
         breakpoints: {},
         containerWidth: 0,
         buttonWidth: 0,
         buttonHeight: 0,
-        cardsPerRow: 5,
+        nodes: [
+          { thumbnail: sikanaImage, id: '1' },
+          { thumbnail: pbsImage, id: '2' },
+          { thumbnail: oceanxImage, id: '3' },
+          { thumbnail: tedxImage, id: '4' },
+          // { thumbnail: khanImage, id: '5' },
+          { thumbnail: commonImage, id: '6' },
+        ],
       };
+    },
+    computed: {
+      cardsPerRow: function() {
+        return this.nodes.length;
+      },
     },
     watch: {
       containerWidth: function() {
@@ -73,6 +86,13 @@
       this.onResize();
     },
     methods: {
+      getButtonStyle(node) {
+        return {
+          width: `${this.buttonWidth}px`,
+          height: `${this.buttonHeight}px`,
+          backgroundImage: `url(${node.thumbnail}), linear-gradient(to bottom, rgba(185, 185, 185, 0.8), rgba(255, 255, 255, 0.3))`,
+        };
+      },
       onResize() {
         this.containerWidth = this.$refs.toolbar.$el.clientWidth;
       },
