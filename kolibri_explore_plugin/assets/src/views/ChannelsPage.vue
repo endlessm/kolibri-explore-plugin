@@ -81,12 +81,17 @@
         const nodes = t.nodes.map(n => {
           return ContentNodeResource.fetchModel({ id: n });
         });
-        Promise.all(nodes).then(ns => {
-          ns.forEach(n => {
-            this.nodes[n.id] = n;
+        Promise.all(nodes)
+          .then(ns => {
+            ns.forEach(n => {
+              this.nodes[n.id] = n;
+            });
+            this.loading = false;
+          })
+          .catch(error => {
+            console.error(error.message);
+            this.loading = false;
           });
-          this.loading = false;
-        });
       });
     },
     methods: {
@@ -102,7 +107,7 @@
       },
       getNodes(tag) {
         return tag.nodes.map(n => {
-          return this.nodes[n] || { title: 'Not found', id: n.id };
+          return this.nodes[n] || { title: 'Not found', id: n };
         });
       },
     },
