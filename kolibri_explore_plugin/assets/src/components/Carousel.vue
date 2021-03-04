@@ -49,19 +49,19 @@
         default: () => [
           {
             image: sikanaImage,
-            content: '4adb51edf0e75de6be1c81be58e27a0d',
+            content: '3e464ee12f6a50a781cddf59147b48b1',
           },
           {
             image: pbsImage,
-            content: '4adb51edf0e75de6be1c81be58e27a0e',
+            content: '1306b5d7d1ce4b98b0039324f368ce6a',
           },
           {
             image: oceanxImage,
-            content: '4adb51edf0e75de6be1c81be58e27a0f',
+            content: '85b42a40745f4e2392ed62e72d4dad6e',
           },
           {
             image: commonImage,
-            content: '4adb51edf0e75de6be1c81be58e27a0g',
+            content: 'bcc6e12a0ddf4a17a8b600c6b880e3ed',
           },
         ],
       },
@@ -79,10 +79,10 @@
       },
     },
     methods: {
-      contentLink(content_id) {
+      contentLink(channel_id) {
         return {
-          name: PageNames.TOPICS_CONTENT,
-          params: { id: content_id },
+          name: PageNames.TOPICS_CHANNEL,
+          params: { channel_id },
         };
       },
     },
