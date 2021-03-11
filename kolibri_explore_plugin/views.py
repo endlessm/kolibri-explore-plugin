@@ -2,7 +2,6 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import io
 import os
 import zipfile
 
@@ -72,7 +71,10 @@ class AppViewDev(AppBase):
     @never_cache
     def get(self, request, app, path=""):
         response = requests.get(f"{self.BASE_APP}{path}", stream=True)
-        return FileResponse(io.BytesIO(response.content))
+        return HttpResponse(
+            response.content,
+            content_type=response.headers["Content-Type"],
+        )
 
 
 class AppFileView(AppBase):
