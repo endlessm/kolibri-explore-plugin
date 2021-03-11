@@ -1,170 +1,169 @@
-Bundle Apps
------------
+# Kolibri Explore Plugin
+
+This is an alternative to the Kolibri Learn plugin, intended for
+self-guided learners.
+
+## Usage
+
+Install a release from PyPi:
+
+```
+pip install kolibri-explore-plugin
+```
+
+Or build a `whl` file with the instructions below and install it:
+
+```
+pip install path/to/kolibri_explore_plugin-VERSION.whl
+```
+
+Then enable it in Kolibri, and disable the Learn plugin:
+
+```
+kolibri plugin enable kolibri_explore_plugin
+kolibri plugin disable kolibri.plugins.learn
+```
+
+Now in Kolibri you should be able to navigate to a Explore tab.
+
+## Setup
+
+Either if you want to build or develop the plugin, please follow these
+instructions.
+
+1. Install dependencies:
+
+```
+pip install -r requirements.txt --upgrade
+```
+
+2. Install node and yarn. Assuming you have nodeenv:
+
+```
+nodeenv -p --node=10.17.0
+npm install -g yarn@1.22.10
+```
+
+3. Install the Javascript dependencies:
+
+```
+yarn install
+```
+
+## Building
+### Bundling custom channel presentations
 
 All custom presentation app bundles should be added in the
-`kolibri_explore_plugin/apps` directory to have this fully working. The zip
-bundle should be named custom-channel-ui.zip and it should be placed inside the
-corresponding app folder.
+`kolibri_explore_plugin/apps` directory to have this fully
+working. The zip bundle should be named custom-channel-ui.zip and it
+should be placed inside the corresponding app folder.
 
-You can find the custom channel presentation vue applications in this repository:
-https://github.com/endlessm/kolibri-channel-custom-web-app
+You can find the custom channel presentation vue applications in this
+repository: https://github.com/endlessm/kolibri-channel-custom-web-app
 
-Getting started with development
---------------------------------
+### Creating the `.whl` file
 
-To get this plugin working with the same workflow described on
-[the kolibri dev doc](https://kolibri-dev.readthedocs.io/en/develop/getting_started.html#development-server),
-you can do the following:
-
-1. Clone this repo in your favourite projects folder
-2. Create a link in the kolibri project root:
+With all dependencies installed and all the zips in place, it's now
+possible to build using `make`:
 
 ```
-ln -s DOWNLOAD_FOLDER/kolibri_explore_plugin/kolibri_explore_plugin .
+make dist
 ```
 
-3. Enable this new plugin:
+**Note: Before calling `make dist` you need to bundle all custom
+channel presentations!**
 
-```
-    kolibri plugin enable kolibri_explore_plugin
-```
+An installable `.whl` file will be created in the `dist/` folder.
 
-4. Edit the `build_tools/build_plugins.txt` file to add this new plugin:
+## Development
+### Getting started with development
 
-```
-kolibri.core
-kolibri.plugins.*
-kolibri_explore_plugin
-```
-
-Now you can run the development server and if you edit the source plugin files,
-javascript or python, the kolibri web will be updated automatically.
-
-```
-yarn run devserver-hot
-```
-
-## A
-
-An alternative for development is to install the repository as an
-editable package, which creates a symlink:
+Instead of installing a build like in the Usage section above, install
+the repository as an editable package, which creates a symlink:
 
 ```
 pip install -e .
 ```
 
-And then run the Javascript in watch mode in a separate terminal:
+And then run the Javascript in watch mode:
 
 ```
 yarn dev
 ```
 
-This approach has advantages to the one above:
-- The development code is the same as the build.
-- No need to edit the plugins text file.
+Usually you will also be developing Kolibri, as described in
+[the Kolibri developer documentation](https://kolibri-dev.readthedocs.io/en/develop/getting_started.html).
 
-## Custom channel presentation proxy development
+So probably you have the following in another Terminal tab:
 
-Instead of bundle the custom channel presentation bundle inside the apps
-directory, it's possible to work with a proxy for development.
+```
+yarn run devserver-hot
+```
 
-1. Run the custom channel presentation development server without mock data:
+Which should pick the plugin. And you can edit both the plugin and
+Kolibri in live mode. Further, you can also edit a custom channel
+presentation in another Terminal tab following the section below.
+
+### Using real content while developing a custom channel presentation
+
+Instead of bundling the custom channel presentation inside the apps
+directory, it's possible to work with a proxy for development. Note
+that the proxy will be used for all the channels, not only for the app
+in question.
+
+1. Run the custom channel presentation development server without mock
+   data:
 
 ```
 $ cd kolibri-channel-custom-web-app/template-ui
 $ VUE_APP_USE_MOCK_DATA=false yarn serve
 ```
 
-2. Ensure to run the kolibri devserver with the `PROXY_CUSTOM_CHANNEL` environ
-   enabled:
+2. Run Kolibri with the `PROXY_CUSTOM_CHANNEL` environ enabled:
 
 ```
 PROXY_CUSTOM_CHANNEL=1 yarn run devserver-hot
 ```
 
-Every request to the custom-channel-ui.zip will be proxied to the devserver.
-Note that the devserver is serving just one custom channel app so every channel
-will show the same custom channel.
+Every request to the `custom-channel-ui.zip` will be proxied to the
+devserver.  The hot reloading should work here too!
 
-The hot reloading should work here too!
+### Configuring the precommit hook
 
-Deployment
-----------
-
-1. Clone this repo.
-2. Install dependencies with pipenv
+To run checks before any commit just run this command:
 
 ```
-    pipenv --python 3
-    pipenv shell
-    pip install -r requirements.txt --upgrade
+pre-commit install -f --install-hooks
 ```
 
-3. Install node.js and yarn
+There is a continuous integration tool that will run the same checks
+per pull request.
+
+### Making a release
+
+If you are releasing a new version, first please bump to either major,
+minor or patch. Eg:
 
 ```
-    nodeenv -p --node=10.15.3
-    npm install -g yarn
+make bumpversion part=patch
 ```
 
-3. Install plugin javascript dependencies and build
+That creates a new commit and a git tag. Please push them to the
+remote:
 
 ```
-    yarn install
+git push
+git push origin NEW_TAG
 ```
 
-4. Now that all dependencies are installed, it's possible to build using make
-
-If you are releasing a new version, please bump to either major, minor
-or patch. Eg:
+Then build:
 
 ```
-    make bumpversion part=patch
+make dist
 ```
 
-Then:
+And finally upload the built `.whl` file to PyPi:
 
 ```
-    make dist
-```
-
-After the `make dist` an installable `.whl` file will be created on `dist/`
-folder.
-
-5. Upload to PyPi:
-
-You can publish the generated `dist/kolibri_explore_plugin*.whl` to pypi
-just running:
-
-```
-    make release
-```
-
-Use
----
-
-Once the package is installed (from pypi or just installing the whl file), you
-can enable like a normal kolibri plugin:
-
-```
-    kolibri plugin enable kolibri_explore_plugin
-```
-
-If you have the plugin installed in the same pip env that you use for building
-again, the `make dist` will fail.
-
-To be able to rebuild again you should remove the python module, so before
-calling the `make dist` again, you should remove the `kolibri_explore_plugin`:
-
-```
-    pip uninstall kolibri_explore_plugin
-```
-
-Configure precommit hook
-------------------------
-
-To run lint before any commit just run this command:
-
-```
-    pre-commit install -f --install-hooks
+make release
 ```
