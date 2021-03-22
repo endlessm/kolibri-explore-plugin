@@ -1,10 +1,21 @@
-FROM python:3-buster
+FROM python:3.9-buster
 
 EXPOSE 8080
 WORKDIR /docker/
 
 ENV KOLIBRI_HOME=/kolibri-home
 
+ENV KOLIBRI_CACHE_BACKEND=memory
+ENV KOLIBRI_DATABASE_ENGINE=postgres
+ENV KOLIBRI_DATABASE_NAME=kolibri
+ENV KOLIBRI_DATABASE_PASSWORD=kolibri
+ENV KOLIBRI_DATABASE_USER=kolibri
+ENV KOLIBRI_DATABASE_HOST=postgres
+ENV KOLIBRI_DATABASE_PORT=5432
+ENV KOLIBRI_CHERRYPY_START=false
+
+RUN pip install uwsgi
+RUN pip install psycopg2-binary
 RUN pip install kolibri
 RUN pip install kolibri-explore-plugin
 
@@ -13,4 +24,7 @@ RUN kolibri plugin enable kolibri.plugins.app
 RUN kolibri plugin disable kolibri.plugins.learn
 RUN kolibri plugin enable kolibri_explore_plugin
 
-ENTRYPOINT [ "kolibri", "start", "--foreground" ]
+COPY uwsgi.ini /docker/uwsgi.ini
+COPY entrypoint.sh /docker/entrypoint.sh
+
+ENTRYPOINT [ "/docker/entrypoint.sh" ]
