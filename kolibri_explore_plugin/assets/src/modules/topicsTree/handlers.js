@@ -63,6 +63,15 @@ export function showTopicsTopic(store, { id, isRoot = false }) {
   });
 }
 
+function _getAppMetadata(appName) {
+  if (appName) {
+    const url = urls['kolibri:kolibri_explore_plugin:app_metadata']({ app: appName });
+    return axios.get(url);
+  } else {
+    return new Promise();
+  }
+}
+
 function _parseAppMetadata(data, appName) {
   if (!data) {
     return {};
@@ -85,20 +94,12 @@ export function showCustomContent(store, id) {
   store.commit('SET_EMPTY_LOGGING_STATE');
   store.commit('CORE_SET_PAGE_LOADING', true);
 
-  const promises = [store.dispatch('setChannelInfo')];
-
-  // Fetch app metadata:
   const appName = getAppNameByID(id);
-  if (appName) {
-    const url = urls['kolibri:kolibri_explore_plugin:app_metadata']({ app: appName });
-    const promise = axios.get(url);
-    promises.push(promise);
-  }
+  const promises = [_getAppMetadata(appName), store.dispatch('setChannelInfo')];
 
   ConditionalPromise.all(promises).only(
     samePageCheckGenerator(store),
-    // eslint-disable-next-line no-unused-vars
-    ([_, { data }]) => {
+    ([{ data }]) => {
       const currentChannel = store.getters.getChannelObject(id);
       if (!currentChannel) {
         router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
