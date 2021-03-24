@@ -20,14 +20,13 @@
   import commonExploreStrings from './commonExploreStrings';
   import ChannelsPage from './ChannelsPage';
   import CustomChannelsPage from './CustomChannelsPage';
-  import TopicsPage from './TopicsPage';
   import ContentPage from './ContentPage';
   import ContentUnavailablePage from './ContentUnavailablePage';
 
   const pageNameToComponentMap = {
     [PageNames.TOPICS_ROOT]: ChannelsPage,
     [PageNames.TOPICS_CHANNEL]: CustomChannelsPage,
-    [PageNames.TOPICS_TOPIC]: TopicsPage,
+    [PageNames.TOPICS_TOPIC]: CustomChannelsPage,
     [PageNames.TOPICS_CONTENT]: ContentPage,
     [PageNames.CONTENT_UNAVAILABLE]: ContentUnavailablePage,
   };

@@ -28,9 +28,13 @@
     computed: {
       rooturl() {
         const app = getAppNameByID(this.channel.id);
-        return urls['kolibri:kolibri_explore_plugin:app_custom_presentation']({ app: app });
+        const url = urls['kolibri:kolibri_explore_plugin:app_custom_presentation']({ app: app });
+        if (this.topic.id) {
+          return `${url}?topicId=${this.topic.id}`;
+        }
+        return url;
       },
-      ...mapState('topicsTree', ['channel']),
+      ...mapState('topicsTree', ['channel', 'topic']),
     },
     mounted() {
       window.addEventListener('message', event => {
