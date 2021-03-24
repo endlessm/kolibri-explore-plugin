@@ -1,16 +1,7 @@
 <template>
 
   <BaseComponent :back="pageName !== 'TOPICS_ROOT'">
-    <!--
-      Topics pages have a different heading style which
-      includes passing the breadcrumbs
-    -->
-    <div v-if="currentPageIsTopic">
-      <component :is="currentPage" />
-      <router-view />
-    </div>
-
-    <div v-else>
+    <div>
       <component :is="currentPage" v-if="currentPage" />
       <router-view />
     </div>
@@ -57,12 +48,6 @@
       ...mapState(['pageName']),
       currentPage() {
         return pageNameToComponentMap[this.pageName] || null;
-      },
-      currentPageIsTopic() {
-        return [
-          pageNameToComponentMap[PageNames.TOPICS_TOPIC],
-          pageNameToComponentMap[PageNames.TOPICS_CHANNEL],
-        ].includes(this.currentPage);
       },
     },
     watch: {
