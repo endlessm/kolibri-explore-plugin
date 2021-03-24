@@ -94,12 +94,11 @@ export function showCustomContent(store, id) {
   store.commit('SET_EMPTY_LOGGING_STATE');
   store.commit('CORE_SET_PAGE_LOADING', true);
 
-  const appName = getAppNameByID(id);
-  const promises = [_getAppMetadata(appName), store.dispatch('setChannelInfo')];
+  const promises = [store.dispatch('setChannelInfo')];
 
   ConditionalPromise.all(promises).only(
     samePageCheckGenerator(store),
-    ([{ data }]) => {
+    () => {
       const currentChannel = store.getters.getChannelObject(id);
       if (!currentChannel) {
         router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
@@ -107,8 +106,13 @@ export function showCustomContent(store, id) {
       }
       store.commit('topicsTree/SET_STATE', {
         channel: currentChannel,
-        appMetadata: _parseAppMetadata(data, appName),
       });
+
+      const appName = getAppNameByID(id);
+      _getAppMetadata(appName).then(({ data }) => {
+        store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
+      });
+
       store.commit('CORE_SET_PAGE_LOADING', false);
       store.commit('CORE_SET_ERROR', null);
     },
