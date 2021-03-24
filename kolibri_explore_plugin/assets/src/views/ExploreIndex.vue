@@ -26,8 +26,7 @@
 
   const pageNameToComponentMap = {
     [PageNames.TOPICS_ROOT]: ChannelsPage,
-    [PageNames.TOPICS_CUSTOM_CHANNEL]: CustomChannelsPage,
-    [PageNames.TOPICS_CHANNEL]: TopicsPage,
+    [PageNames.TOPICS_CHANNEL]: CustomChannelsPage,
     [PageNames.TOPICS_TOPIC]: TopicsPage,
     [PageNames.TOPICS_CONTENT]: ContentPage,
     [PageNames.CONTENT_UNAVAILABLE]: ContentUnavailablePage,

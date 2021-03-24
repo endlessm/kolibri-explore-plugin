@@ -84,7 +84,6 @@ function _parseAppMetadata(data, appName) {
 export function showCustomContent(store, id) {
   store.commit('SET_EMPTY_LOGGING_STATE');
   store.commit('CORE_SET_PAGE_LOADING', true);
-  store.commit('SET_PAGE_NAME', PageNames.TOPICS_CUSTOM_CHANNEL);
 
   const promises = [store.dispatch('setChannelInfo')];
 
