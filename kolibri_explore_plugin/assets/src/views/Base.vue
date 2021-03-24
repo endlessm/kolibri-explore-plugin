@@ -74,8 +74,7 @@
     },
     methods: {
       goBack() {
-        if (window.history.length > 1) this.$router.go(-1);
-        else this.$router.push('/');
+        this.$router.push('/');
       },
     },
   };
