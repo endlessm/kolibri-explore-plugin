@@ -27,10 +27,10 @@
     name: 'CustomChannelPresentationApp',
     computed: {
       rooturl() {
-        const app = getAppNameByID(this.content.channel_id);
+        const app = getAppNameByID(this.channel.id);
         return urls['kolibri:kolibri_explore_plugin:app_custom_presentation']({ app: app });
       },
-      ...mapState('topicsTree', { content: 'content' }),
+      ...mapState('topicsTree', ['channel']),
     },
     mounted() {
       window.addEventListener('message', event => {

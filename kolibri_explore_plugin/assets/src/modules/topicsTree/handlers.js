@@ -86,7 +86,7 @@ export function showCustomContent(store, id) {
   store.commit('CORE_SET_PAGE_LOADING', true);
   store.commit('SET_PAGE_NAME', PageNames.TOPICS_CUSTOM_CHANNEL);
 
-  const promises = [ContentNodeResource.fetchModel({ id }), store.dispatch('setChannelInfo')];
+  const promises = [store.dispatch('setChannelInfo')];
 
   // Fetch app metadata:
   const appName = getAppNameByID(id);
@@ -99,14 +99,13 @@ export function showCustomContent(store, id) {
   ConditionalPromise.all(promises).only(
     samePageCheckGenerator(store),
     // eslint-disable-next-line no-unused-vars
-    ([content, _, { data }]) => {
+    ([_, { data }]) => {
       const currentChannel = store.getters.getChannelObject(id);
       if (!currentChannel) {
         router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
         return;
       }
       store.commit('topicsTree/SET_STATE', {
-        content: contentState(content, content),
         channel: currentChannel,
         appMetadata: _parseAppMetadata(data, appName),
       });
