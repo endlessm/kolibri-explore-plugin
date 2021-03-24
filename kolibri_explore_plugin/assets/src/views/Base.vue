@@ -14,19 +14,19 @@
     <div v-if="!loading" class="explore-main-content">
       <div class="explore-buttons">
         <KIconButton
-          v-if="!back"
-          icon="menu"
-          size="large"
-          appearance="raised-button"
-          @click="navShown = !navShown"
-        />
-        <KIconButton
           v-if="back"
           class="right"
           icon="close"
           size="large"
           appearance="raised-button"
           @click="goBack()"
+        />
+        <KIconButton
+          v-else
+          icon="menu"
+          size="large"
+          appearance="raised-button"
+          @click="navShown = !navShown"
         />
       </div>
       <slot></slot>
