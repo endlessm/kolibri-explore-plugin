@@ -1,16 +1,7 @@
 <template>
 
   <BaseComponent :back="pageName !== 'TOPICS_ROOT'">
-    <!--
-      Topics pages have a different heading style which
-      includes passing the breadcrumbs
-    -->
-    <div v-if="currentPageIsTopic">
-      <component :is="currentPage" />
-      <router-view />
-    </div>
-
-    <div v-else>
+    <div>
       <component :is="currentPage" v-if="currentPage" />
       <router-view />
     </div>
@@ -29,15 +20,13 @@
   import commonExploreStrings from './commonExploreStrings';
   import ChannelsPage from './ChannelsPage';
   import CustomChannelsPage from './CustomChannelsPage';
-  import TopicsPage from './TopicsPage';
   import ContentPage from './ContentPage';
   import ContentUnavailablePage from './ContentUnavailablePage';
 
   const pageNameToComponentMap = {
     [PageNames.TOPICS_ROOT]: ChannelsPage,
-    [PageNames.TOPICS_CUSTOM_CHANNEL]: CustomChannelsPage,
-    [PageNames.TOPICS_CHANNEL]: TopicsPage,
-    [PageNames.TOPICS_TOPIC]: TopicsPage,
+    [PageNames.TOPICS_CHANNEL]: CustomChannelsPage,
+    [PageNames.TOPICS_TOPIC]: CustomChannelsPage,
     [PageNames.TOPICS_CONTENT]: ContentPage,
     [PageNames.CONTENT_UNAVAILABLE]: ContentUnavailablePage,
   };
@@ -57,12 +46,6 @@
       ...mapState(['pageName']),
       currentPage() {
         return pageNameToComponentMap[this.pageName] || null;
-      },
-      currentPageIsTopic() {
-        return [
-          pageNameToComponentMap[PageNames.TOPICS_TOPIC],
-          pageNameToComponentMap[PageNames.TOPICS_CHANNEL],
-        ].includes(this.currentPage);
       },
     },
     watch: {

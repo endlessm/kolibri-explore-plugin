@@ -1,4 +1,4 @@
-import { ContentNodeResource, ContentNodeProgressResource } from 'kolibri.resources';
+import { ContentNodeResource } from 'kolibri.resources';
 import samePageCheckGenerator from 'kolibri.utils.samePageCheckGenerator';
 import ConditionalPromise from 'kolibri.lib.conditionalPromise';
 import router from 'kolibri.coreVue.router';
@@ -6,25 +6,19 @@ import urls from 'kolibri.urls';
 import axios from 'axios';
 import { PageNames } from '../../constants';
 import { getAppNameByID } from '../../customApps';
-import { _collectionState, normalizeContentNode, contentState } from '../coreExplore/utils';
+import { normalizeContentNode, contentState } from '../coreExplore/utils';
 
 export function showTopicsTopic(store, { id, isRoot = false }) {
   return store.dispatch('loading').then(() => {
     store.commit('SET_PAGE_NAME', isRoot ? PageNames.TOPICS_CHANNEL : PageNames.TOPICS_TOPIC);
     const promises = [
       ContentNodeResource.fetchModel({ id, force: true }), // the topic
-      ContentNodeResource.fetchCollection({
-        getParams: {
-          parent: id,
-          user_kind: store.getters.getUserKind,
-        },
-      }), // the topic's children
       store.dispatch('setChannelInfo'),
     ];
 
     return ConditionalPromise.all(promises).only(
       samePageCheckGenerator(store),
-      ([topic, children]) => {
+      ([topic]) => {
         const currentChannel = store.getters.getChannelObject(topic.channel_id);
         if (!currentChannel) {
           router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
@@ -39,19 +33,12 @@ export function showTopicsTopic(store, { id, isRoot = false }) {
           isRoot,
           channel: currentChannel,
           topic: normalizeContentNode(topic),
-          contents: _collectionState(children),
         });
 
-        // Only load contentnode progress if the user is logged in
-        if (store.getters.isUserLoggedIn) {
-          if (children.length > 0) {
-            ContentNodeProgressResource.fetchCollection({
-              getParams: { parent: id },
-            }).then(progresses => {
-              store.commit('topicsTree/SET_NODE_PROGRESS', progresses);
-            });
-          }
-        }
+        const appName = getAppNameByID(topic.channel_id);
+        _getAppMetadata(appName).then(({ data }) => {
+          store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
+        });
 
         store.dispatch('notLoading');
         store.commit('CORE_SET_ERROR', null);
@@ -61,6 +48,15 @@ export function showTopicsTopic(store, { id, isRoot = false }) {
       }
     );
   });
+}
+
+function _getAppMetadata(appName) {
+  if (appName) {
+    const url = urls['kolibri:kolibri_explore_plugin:app_metadata']({ app: appName });
+    return axios.get(url);
+  } else {
+    return new Promise();
+  }
 }
 
 function _parseAppMetadata(data, appName) {
@@ -84,32 +80,26 @@ function _parseAppMetadata(data, appName) {
 export function showCustomContent(store, id) {
   store.commit('SET_EMPTY_LOGGING_STATE');
   store.commit('CORE_SET_PAGE_LOADING', true);
-  store.commit('SET_PAGE_NAME', PageNames.TOPICS_CUSTOM_CHANNEL);
 
-  const promises = [ContentNodeResource.fetchModel({ id }), store.dispatch('setChannelInfo')];
-
-  // Fetch app metadata:
-  const appName = getAppNameByID(id);
-  if (appName) {
-    const url = urls['kolibri:kolibri_explore_plugin:app_metadata']({ app: appName });
-    const promise = axios.get(url);
-    promises.push(promise);
-  }
+  const promises = [store.dispatch('setChannelInfo')];
 
   ConditionalPromise.all(promises).only(
     samePageCheckGenerator(store),
-    // eslint-disable-next-line no-unused-vars
-    ([content, _, { data }]) => {
+    () => {
       const currentChannel = store.getters.getChannelObject(id);
       if (!currentChannel) {
         router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
         return;
       }
       store.commit('topicsTree/SET_STATE', {
-        content: contentState(content, content),
         channel: currentChannel,
-        appMetadata: _parseAppMetadata(data, appName),
       });
+
+      const appName = getAppNameByID(id);
+      _getAppMetadata(appName).then(({ data }) => {
+        store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
+      });
+
       store.commit('CORE_SET_PAGE_LOADING', false);
       store.commit('CORE_SET_ERROR', null);
     },
@@ -148,6 +138,12 @@ export function showTopicsContent(store, id) {
         content: contentState(content, nextContent),
         channel: currentChannel,
       });
+
+      const appName = getAppNameByID(content.channel_id);
+      _getAppMetadata(appName).then(({ data }) => {
+        store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
+      });
+
       store.commit('CORE_SET_PAGE_LOADING', false);
       store.commit('CORE_SET_ERROR', null);
     },

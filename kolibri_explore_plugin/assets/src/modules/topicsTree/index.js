@@ -31,9 +31,9 @@ export default {
       state.isRoot = payload.isRoot || null;
       state.topic = payload.topic || {};
       state.recommended = payload.recommended || [];
-      if (payload.appMetadata) {
-        state.appMetadata = { ...defaultAppMetadata, ...payload.appMetadata };
-      }
+    },
+    SET_APP_METADATA(state, payload) {
+      state.appMetadata = { ...defaultAppMetadata, ...payload };
     },
     RESET_STATE(state) {
       Object.assign(state, defaultState());

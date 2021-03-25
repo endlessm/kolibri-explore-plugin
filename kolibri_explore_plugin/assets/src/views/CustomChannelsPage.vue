@@ -23,7 +23,7 @@
       CustomChannelPresentationApp,
     },
     computed: {
-      ...mapState('topicsTree', { channel: 'channel' }),
+      ...mapState('topicsTree', ['channel']),
     },
   };
 
