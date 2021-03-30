@@ -1,0 +1,64 @@
+name: Build docker
+on:
+  push:
+    branches:
+      - master
+  release:
+    types:
+      - created
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build Docker master Image
+        if: github.event_name != 'release'
+        run: docker build -f docker/Dockerfile-master -t eos-kolibri-explore docker/
+
+      - name: Build Docker stable Image
+        if: github.event_name == 'release'
+        run: docker build -f docker/Dockerfile -t eos-kolibri-explore docker/
+
+      - name: Save Docker Image
+        run: docker save eos-kolibri-explore > docker-image.tar
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: image
+          path: docker-image.tar
+
+  push:
+    name: Upload the Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: '${{ secrets.DOCKERHUB_USERNAME }}'
+          password: '${{ secrets.DOCKERHUB_TOKEN }}'
+
+      - name: Get Docker Image
+        uses: actions/download-artifact@v2
+        with:
+          name: image
+
+      - name: Load Docker Image
+        run: docker load < docker-image.tar
+
+      - name: Upload the image
+        if: github.event_name == 'release'
+        run: |
+          docker tag eos-kolibri-explore endlessm/eos-kolibri-explore:latest
+          docker push endlessm/eos-kolibri-explore:latest
+
+      - name: Upload the image
+        if: github.event_name != 'release'
+        run: |
+          docker tag eos-kolibri-explore endlessm/eos-kolibri-explore:master
+          docker push endlessm/eos-kolibri-explore:master
