@@ -1,9 +1,9 @@
-import { ContentNodeResource } from 'kolibri.resources';
 import samePageCheckGenerator from 'kolibri.utils.samePageCheckGenerator';
 import ConditionalPromise from 'kolibri.lib.conditionalPromise';
 import router from 'kolibri.coreVue.router';
 import urls from 'kolibri.urls';
 import axios from 'axios';
+import { ContentNodeResource } from '../../apiResources';
 import { PageNames } from '../../constants';
 import { getAppNameByID } from '../../customApps';
 import { normalizeContentNode, contentState } from '../coreExplore/utils';
