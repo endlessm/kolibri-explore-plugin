@@ -9,7 +9,7 @@ class CustomContentNodeViewset(ContentNodeViewset):
 
         def add_tag(item):
             node = ContentNode.objects.get(id=item["id"])
-            item["tags"] = list(tag.tag_name for tag in node.tags.all())
+            item["tags"] = [tag.tag_name for tag in node.tags.all()]
             return item
 
         return list(map(add_tag, items))
