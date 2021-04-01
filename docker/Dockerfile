@@ -17,14 +17,10 @@ ENV KOLIBRI_CHERRYPY_START=false
 RUN pip install uwsgi
 RUN pip install psycopg2-binary
 RUN pip install kolibri
-RUN pip install kolibri-explore-plugin
-
-# plugin enable
-RUN kolibri plugin enable kolibri.plugins.app
-RUN kolibri plugin disable kolibri.plugins.learn
-RUN kolibri plugin enable kolibri_explore_plugin
 
 COPY uwsgi.ini /docker/uwsgi.ini
 COPY entrypoint.sh /docker/entrypoint.sh
+
+RUN pip install kolibri-explore-plugin
 
 ENTRYPOINT [ "/docker/entrypoint.sh" ]
