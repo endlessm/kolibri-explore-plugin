@@ -14,10 +14,10 @@
 <script>
 
   import { mapState } from 'vuex';
-  import { ContentNodeResource } from 'kolibri.resources';
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
   import urls from 'kolibri.urls';
   import axios from 'axios';
+  import { ContentNodeResource } from '../apiResources.js';
 
   import { getAppNameByID } from '../customApps';
 
