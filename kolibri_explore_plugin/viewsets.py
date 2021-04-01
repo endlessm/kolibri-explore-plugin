@@ -12,7 +12,7 @@ class CustomContentNodeViewset(ContentNodeViewset):
             item["tags"] = [tag.tag_name for tag in node.tags.all()]
             return item
 
-        return list(map(add_tag, items))
+        return [add_tag(item) for item in items]
 
     def consolidate(self, items, queryset):
         new_items = super().consolidate(items, queryset)
