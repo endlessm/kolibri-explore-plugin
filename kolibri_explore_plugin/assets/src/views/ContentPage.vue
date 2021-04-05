@@ -41,6 +41,9 @@
           <p v-if="content.author">
             {{ $tr('author', { author: content.author }) }}
           </p>
+          <p v-if="content.tags">
+            {{ $tr('tags', { tags: content.tags }) }}
+          </p>
           <p v-if="licenseShortName">
             {{ $tr('license', { license: licenseShortName }) }}
 
@@ -261,6 +264,7 @@
     },
     $trs: {
       author: 'Author: {author}',
+      tags: 'Tags: {tags}',
       license: 'License: {license}',
       toggleLicenseDescription: 'Toggle license description',
       copyrightHolder: 'Copyright holder: {copyrightHolder}',
