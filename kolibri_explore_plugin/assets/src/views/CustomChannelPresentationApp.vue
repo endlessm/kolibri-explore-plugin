@@ -46,7 +46,8 @@
           return;
         }
         if (event.data.event === 'askChannelInformation') {
-          this.sendChannelInformation();
+          const options = JSON.parse(event.data.data);
+          this.sendChannelInformation(options);
         }
         if (event.data.event === 'goToContent') {
           this.goToContent(event.data.data);
@@ -57,28 +58,25 @@
       });
     },
     methods: {
-      sendChannelInformation() {
+      sendChannelInformation(options) {
         if (!this.$refs.iframe) {
           return;
         }
         const iframeWindow = this.$refs.iframe.contentWindow;
         const { channel } = this.$store.state.topicsTree;
 
-        ContentNodeResource.fetchCollection({
-          getParams: {
-            channel_id: channel.id,
-            user_kind: this.$store.getters.getUserKind,
-          },
+        ContentNodeResource.getContentByFilter({
+          parent: channel.id,
+          userKind: this.$store.getters.getUserKind,
+          filters: options.filters,
         }).then(nodes => {
-          Promise.all(nodes).then(node => {
-            const event = 'sendChannelInformation';
-            const message = {
-              event,
-              nameSpace,
-              data: { channel, nodes: node },
-            };
-            iframeWindow.postMessage(message, '*');
-          });
+          const event = 'sendChannelInformation';
+          const message = {
+            event,
+            nameSpace,
+            data: { channel, nodes },
+          };
+          iframeWindow.postMessage(message, '*');
         });
       },
 

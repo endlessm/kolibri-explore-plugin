@@ -36,4 +36,34 @@ export const ContentNodeResource = new Resource({
   fetchNextSteps(getParams) {
     return this.fetchDetailCollection('next_steps', Store.getters.currentUserId, getParams);
   },
+  // Custom filter implementation for the new filter API:
+  // https://www.notion.so/API-Specification-for-kolibri-object-6553f24706b34f13b28a0f1dffc70f8a
+  getContentByFilter(options) {
+    return this.fetchCollection({
+      getParams: {
+        channel_id: options.parent,
+        user_kind: options.userKind,
+      },
+    }).then(promises => {
+      return Promise.all(promises).then(nodes => {
+        if (!options.filters) {
+          return nodes;
+        }
+
+        let filtered = nodes;
+        // Filter by media type
+        const mediaType = options.filters['Media Type'];
+        if (mediaType && mediaType.length) {
+          filtered = filtered.filter(node => {
+            if (node.kind === 'topic') {
+              return true;
+            }
+
+            return mediaType.some(m => node.kind === m);
+          });
+        }
+        return filtered;
+      });
+    });
+  },
 });
