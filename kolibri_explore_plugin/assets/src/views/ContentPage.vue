@@ -4,6 +4,12 @@
     <div class="page-wrapper">
 
       <KPageContainer>
+        <KIconButton
+          icon="back"
+          size="large"
+          appearance="raised-button"
+          @click="goBack()"
+        />
 
         <PageHeader
           :title="content.title"
@@ -197,6 +203,11 @@
           backgroundImage: this.appMetadata.contentBackgroundImage,
           backgroundColor: this.appMetadata.contentBackgroundColor,
         };
+      },
+      goBack() {
+        if (window.history.length > 1) {
+          this.$router.go(-1);
+        }
       },
     },
     $trs: {
