@@ -32,43 +32,6 @@
         </template>
         <KCircularLoader v-else />
 
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <p dir="auto" v-html="description"></p>
-
-
-        <section class="metadata">
-          <!-- TODO: RTL - Do not interpolate strings -->
-          <p v-if="content.author">
-            {{ $tr('author', { author: content.author }) }}
-          </p>
-          <p v-if="content.tags">
-            {{ $tr('tags', { tags: content.tags }) }}
-          </p>
-          <p v-if="licenseShortName">
-            {{ $tr('license', { license: licenseShortName }) }}
-
-            <template v-if="licenseDescription">
-              <KIconButton
-                :icon="licenceDescriptionIsVisible ? 'chevronUp' : 'chevronDown'"
-                :ariaLabel="$tr('toggleLicenseDescription')"
-                size="small"
-                type="secondary"
-                @click="licenceDescriptionIsVisible = !licenceDescriptionIsVisible"
-              />
-              <div v-if="licenceDescriptionIsVisible" dir="auto" class="license-details">
-                <p class="license-details-name">
-                  {{ licenseLongName }}
-                </p>
-                <p>{{ licenseDescription }}</p>
-              </div>
-            </template>
-          </p>
-
-          <p v-if="content.license_owner">
-            {{ $tr('copyrightHolder', { copyrightHolder: content.license_owner }) }}
-          </p>
-        </section>
-
         <div>
 
           <DownloadButton
@@ -104,12 +67,6 @@
   import DownloadButton from 'kolibri.coreVue.components.DownloadButton';
   import { isEmbeddedWebView } from 'kolibri.utils.browserInfo';
   import { shareFile } from 'kolibri.utils.appCapabilities';
-  import markdownIt from 'markdown-it';
-  import {
-    licenseShortName,
-    licenseLongName,
-    licenseDescriptionForConsumer,
-  } from 'kolibri.utils.licenseTranslations';
   import { updateContentNodeProgress } from '../modules/coreExplore/utils';
   import PageHeader from './PageHeader';
   import commonExploreStrings from './commonExploreStrings';
@@ -132,7 +89,6 @@
     data() {
       return {
         wasIncomplete: false,
-        licenceDescriptionIsVisible: false,
         sessionReady: false,
       };
     },
@@ -166,13 +122,6 @@
         const supported_types = ['mp4', 'mp3', 'pdf', 'epub'];
         return shareFile && supported_types.includes(this.primaryFile.extension);
       },
-      description() {
-        if (this.content && this.content.description) {
-          const md = new markdownIt({ breaks: true });
-          return md.render(this.content.description);
-        }
-        return '';
-      },
       progress() {
         if (this.isUserLoggedIn) {
           // if there no attempts for this exercise, there is no progress
@@ -191,18 +140,6 @@
       },
       primaryFilename() {
         return `${this.primaryFile.checksum}.${this.primaryFile.extension}`;
-      },
-      licenseShortName() {
-        return licenseShortName(this.content.license_name);
-      },
-      licenseLongName() {
-        return licenseLongName(this.content.license_name);
-      },
-      licenseDescription() {
-        return licenseDescriptionForConsumer(
-          this.content.license_name,
-          this.content.license_description
-        );
       },
     },
     created() {
@@ -263,11 +200,6 @@
       },
     },
     $trs: {
-      author: 'Author: {author}',
-      tags: 'Tags: {tags}',
-      license: 'License: {license}',
-      toggleLicenseDescription: 'Toggle license description',
-      copyrightHolder: 'Copyright holder: {copyrightHolder}',
       shareMessage: '"{title}" (in "{topic}"), from {copyrightHolder}',
       documentTitle: '{ contentTitle } - { channelTitle }',
       shareFile: 'Share',
@@ -284,23 +216,10 @@
     z-index: 3;
   }
 
-  .metadata {
-    font-size: smaller;
-  }
-
   .download-button,
   .share-button {
     display: inline-block;
     margin: 16px 16px 0 0;
-  }
-
-  .license-details {
-    margin-bottom: 24px;
-    margin-left: 16px;
-  }
-
-  .license-details-name {
-    font-weight: bold;
   }
 
   .main-wrapper {
