@@ -18,6 +18,7 @@
   import urls from 'kolibri.urls';
   import axios from 'axios';
   import { ContentNodeResource } from '../apiResources.js';
+  import { showTopicsContentInLightbox } from '../modules/topicsTree/handlers';
 
   import { getAppNameByID } from '../customApps';
 
@@ -115,7 +116,7 @@
       },
 
       goToContent(id) {
-        this.$router.push({ name: 'TOPICS_CONTENT', params: { id } });
+        showTopicsContentInLightbox(this.$store, id);
       },
     },
   };
