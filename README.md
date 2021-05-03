@@ -111,15 +111,15 @@ directory, it's possible to work with a proxy for development. Note
 that the proxy will be used for all the channels, not only for the app
 in question.
 
-1. Run the custom channel presentation development server without mock
-   data:
+1. Run the custom channel presentation development server:
 
 ```
 $ cd kolibri-channel-custom-web-app/template-ui
-$ VUE_APP_USE_MOCK_DATA=false yarn serve
+$ yarn serve
 ```
 
-2. Run Kolibri with the `PROXY_CUSTOM_CHANNEL` environ enabled:
+2. Run Kolibri with the `PROXY_CUSTOM_CHANNEL` environment variable
+   enabled:
 
 ```
 PROXY_CUSTOM_CHANNEL=1 yarn run devserver-hot
