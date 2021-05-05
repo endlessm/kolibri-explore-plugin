@@ -38,6 +38,9 @@ export default {
     RESET_STATE(state) {
       Object.assign(state, defaultState());
     },
+    RESET_CONTENT(state) {
+      state.content = defaultState().content;
+    },
     SET_NODE_PROGRESS(state, progressArray) {
       progressArray.forEach(progress => {
         const contentNode = state.contents.find(node => node.id === progress.id);

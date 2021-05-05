@@ -152,3 +152,37 @@ export function showTopicsContent(store, id) {
     }
   );
 }
+
+export function showTopicsContentInLightbox(store, id) {
+  const promises = [
+    ContentNodeResource.fetchModel({ id }),
+    ContentNodeResource.fetchNextContent(id),
+    store.dispatch('setChannelInfo'),
+  ];
+  ConditionalPromise.all(promises).only(
+    samePageCheckGenerator(store),
+    ([content, nextContent]) => {
+      const currentChannel = store.getters.getChannelObject(content.channel_id);
+      if (!currentChannel) {
+        router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
+        return;
+      }
+      store.commit('topicsTree/SET_STATE', {
+        content: contentState(content, nextContent),
+        channel: currentChannel,
+      });
+
+      const appName = getAppNameByID(content.channel_id);
+      _getAppMetadata(appName).then(({ data }) => {
+        store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
+      });
+    },
+    error => {
+      store.dispatch('handleApiError', error);
+    }
+  );
+}
+
+export function hideTopicsContentFromLightbox(store) {
+  store.commit('topicsTree/RESET_CONTENT');
+}
