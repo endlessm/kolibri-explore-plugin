@@ -35,23 +35,6 @@
     </template>
     <KCircularLoader v-else />
 
-    <div>
-
-      <DownloadButton
-        v-if="canDownload"
-        :files="downloadableFiles"
-        class="download-button"
-      />
-
-      <KButton
-        v-if="canShare"
-        :text="$tr('shareFile')"
-        class="share-button"
-        @click="launchIntent()"
-      />
-
-    </div>
-
     <slot name="below_content">
     </slot>
 
@@ -64,9 +47,6 @@
 
   import { mapState, mapGetters, mapActions } from 'vuex';
   import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
-  import DownloadButton from 'kolibri.coreVue.components.DownloadButton';
-  import { isEmbeddedWebView } from 'kolibri.utils.browserInfo';
-  import { shareFile } from 'kolibri.utils.appCapabilities';
   import { updateContentNodeProgress } from '../modules/coreExplore/utils';
   import PageHeader from './PageHeader';
   import commonExploreStrings from './commonExploreStrings';
@@ -75,7 +55,6 @@
     name: 'ContentLightbox',
     components: {
       PageHeader,
-      DownloadButton,
     },
     mixins: [commonExploreStrings],
     data() {
@@ -85,7 +64,7 @@
       };
     },
     computed: {
-      ...mapGetters(['isUserLoggedIn', 'facilityConfig', 'currentUserId']),
+      ...mapGetters(['isUserLoggedIn', 'currentUserId']),
       ...mapState('topicsTree', ['content']),
       ...mapState('topicsTree', {
         contentId: state => state.content.content_id,
@@ -100,20 +79,6 @@
         extraFields: state => state.core.logging.summary.extra_fields,
         fullName: state => state.core.session.full_name,
       }),
-      canDownload() {
-        if (this.facilityConfig.show_download_button_in_learn && this.content) {
-          return (
-            this.downloadableFiles.length &&
-            this.content.kind !== ContentNodeKinds.EXERCISE &&
-            !isEmbeddedWebView
-          );
-        }
-        return false;
-      },
-      canShare() {
-        const supported_types = ['mp4', 'mp3', 'pdf', 'epub'];
-        return shareFile && supported_types.includes(this.primaryFile.extension);
-      },
       progress() {
         if (this.isUserLoggedIn) {
           // if there no attempts for this exercise, there is no progress
@@ -123,15 +88,6 @@
           return this.summaryProgress;
         }
         return this.sessionProgress;
-      },
-      downloadableFiles() {
-        return this.content.files.filter(file => !file.preset.endsWith('thumbnail'));
-      },
-      primaryFile() {
-        return this.content.files.filter(file => !file.preset.supplementary)[0];
-      },
-      primaryFilename() {
-        return `${this.primaryFile.checksum}.${this.primaryFile.extension}`;
       },
     },
     created() {
@@ -174,20 +130,6 @@
       updateContentState(contentState, forceSave = true) {
         this.updateContentNodeState({ contentState, forceSave });
       },
-      launchIntent() {
-        return shareFile({
-          filename: this.primaryFilename,
-          message: this.$tr('shareMessage', {
-            title: this.content.title,
-            topic: this.content.breadcrumbs.slice(-1)[0].title,
-            copyrightHolder: this.content.license_owner,
-          }),
-        });
-      },
-    },
-    $trs: {
-      shareMessage: '"{title}" (in "{topic}"), from {copyrightHolder}',
-      shareFile: 'Share',
     },
   };
 
@@ -199,12 +141,6 @@
   .content-renderer {
     // Needs to be one less than the ScrollingHeader's z-index of 4
     z-index: 3;
-  }
-
-  .download-button,
-  .share-button {
-    display: inline-block;
-    margin: 16px 16px 0 0;
   }
 
 </style>
