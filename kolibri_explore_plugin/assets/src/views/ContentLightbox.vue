@@ -1,28 +1,32 @@
 <template>
 
-  <div class="content-lightbox">
-    <nav>
-      <UiToolbar
-        ref="toolbar"
-        :showIcon="true"
-      >
-        <template #icon>
-          <KIconButton
-            icon="close"
-            @click="$emit('close')"
-          />
-        </template>
+  <div class="lightbox-overlay" :style="getStyle()">
+    <div class="lightbox">
+      <div class="content-lightbox">
+        <nav>
+          <UiToolbar
+            ref="toolbar"
+            :showIcon="true"
+          >
+            <template #icon>
+              <KIconButton
+                icon="close"
+                @click="$emit('close')"
+              />
+            </template>
 
-        <div>
-          {{ content.title }}
-        </div>
-      </UiToolbar>
-    </nav>
+            <div>
+              {{ content.title }}
+            </div>
+          </UiToolbar>
+        </nav>
 
-    <main>
-      <ContentItem :contentNode="content" />
-      <slot name="below_content"></slot>
-    </main>
+        <main>
+          <ContentItem :content="content" />
+          <slot name="below_content"></slot>
+        </main>
+      </div>
+    </div>
   </div>
 
 </template>
@@ -42,8 +46,22 @@
       UiToolbar,
     },
     mixins: [commonExploreStrings],
+    props: {
+      content: {
+        type: Object,
+        required: true,
+      },
+    },
     computed: {
-      ...mapState('topicsTree', ['content']),
+      ...mapState('topicsTree', ['appMetadata']),
+    },
+    methods: {
+      getStyle() {
+        return {
+          backgroundImage: this.appMetadata.contentBackgroundImage,
+          backgroundColor: this.appMetadata.contentBackgroundColor,
+        };
+      },
     },
   };
 
@@ -51,8 +69,28 @@
 
 
 <style lang="scss" scoped>
+  .lightbox-overlay {
+    /* Overlay everything */
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 
-  /* Borrowed from ContentModal in kolibri */
+    /* Above the sidenav */
+    z-index: 16;
+
+    /* With a semi transparent background */
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .lightbox {
+    /* Center in overlay */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 
   .content-lightbox {
     z-index: inherit;
