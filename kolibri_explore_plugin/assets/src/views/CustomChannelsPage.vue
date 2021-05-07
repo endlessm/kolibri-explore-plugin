@@ -57,9 +57,13 @@
     bottom: 0;
     left: 0;
 
+    /* Above the sidenav */
+    z-index: 16;
+
     /* With a semi transparent background */
     background: rgba(0, 0, 0, 0.5);
   }
+
   .lightbox {
     /* Center in overlay */
     position: absolute;
