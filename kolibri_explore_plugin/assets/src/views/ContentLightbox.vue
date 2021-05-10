@@ -1,6 +1,6 @@
 <template>
 
-  <div class="lightbox-overlay" :style="getStyle()">
+  <div ref="overlay" class="lightbox-overlay" @click="onOverlayClick($event)">
     <div class="content-lightbox" :style="getStyle()">
       <nav>
         <div class="lightbox-title">
@@ -53,6 +53,11 @@
           backgroundColor: this.appMetadata.contentBackgroundColor,
           color: this.appMetadata.contentForegroundColor,
         };
+      },
+      onOverlayClick(event) {
+        if (event.target == this.$refs.overlay) {
+          this.$emit('close');
+        }
       },
     },
   };
