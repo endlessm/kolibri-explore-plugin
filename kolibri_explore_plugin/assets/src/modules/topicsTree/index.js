@@ -1,7 +1,8 @@
 import Vue from 'kolibri.lib.vue';
 
 const defaultAppMetadata = {
-  contentBackgroundColor: '#3a3a3a',
+  contentBackgroundColor: '#1b1b1b',
+  contentForegroundColor: '#adb5bd',
   contentBackgroundImage: 'none',
 };
 
