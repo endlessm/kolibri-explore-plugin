@@ -2,7 +2,12 @@
 
   <div class="main-wrapper" :style="getStyle()">
     <div class="page-wrapper">
-      <ContentLightbox @close="onClose()" />
+      <PageHeader
+        :title="content.title"
+        :contentType="content.kind"
+        dir="auto"
+      />
+      <ContentItem :content="content" />
     </div>
   </div>
 
@@ -12,7 +17,8 @@
 <script>
 
   import { mapState } from 'vuex';
-  import ContentLightbox from './ContentLightbox';
+  import ContentItem from './ContentItem';
+  import PageHeader from './PageHeader';
 
   export default {
     name: 'ContentPage',
@@ -25,27 +31,11 @@
       };
     },
     components: {
-      ContentLightbox,
+      ContentItem,
+      PageHeader,
     },
     computed: {
-      ...mapState('topicsTree', ['content', 'appMetadata']),
-      ...mapState('topicsTree', {
-        contentId: state => state.content.content_id,
-        channelId: state => state.content.channel_id,
-      }),
-    },
-    created() {
-      return this.initSessionAction({
-        channelId: this.channelId,
-        contentId: this.contentId,
-        contentKind: this.content.kind,
-      }).then(() => {
-        this.sessionReady = true;
-        this.setWasIncomplete();
-      });
-    },
-    beforeDestroy() {
-      this.stopTracking();
+      ...mapState('topicsTree', ['channel', 'content', 'appMetadata']),
     },
     methods: {
       getStyle() {
@@ -53,11 +43,6 @@
           backgroundImage: this.appMetadata.contentBackgroundImage,
           backgroundColor: this.appMetadata.contentBackgroundColor,
         };
-      },
-      onClose() {
-        if (window.history.length > 1) {
-          this.$router.go(-1);
-        }
       },
     },
     $trs: {

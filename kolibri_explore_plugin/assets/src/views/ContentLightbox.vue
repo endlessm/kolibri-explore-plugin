@@ -1,28 +1,25 @@
 <template>
 
-  <div class="content-lightbox">
-    <nav>
-      <UiToolbar
-        ref="toolbar"
-        :showIcon="true"
-      >
-        <template #icon>
-          <KIconButton
-            icon="close"
-            @click="$emit('close')"
-          />
-        </template>
-
-        <div>
+  <div ref="overlay" class="lightbox-overlay" @click="onOverlayClick($event)">
+    <div class="content-lightbox" :style="getStyle()">
+      <nav>
+        <div class="lightbox-title">
           {{ content.title }}
         </div>
-      </UiToolbar>
-    </nav>
+        <div class="lightbox-action">
+          <KIconButton
+            icon="close"
+            :color="appMetadata.contentForegroundColor"
+            @click="$emit('close')"
+          />
+        </div>
+      </nav>
 
-    <main>
-      <ContentItem :contentNode="content" />
-      <slot name="below_content"></slot>
-    </main>
+      <main>
+        <ContentItem :content="content" />
+        <slot name="below_content"></slot>
+      </main>
+    </div>
   </div>
 
 </template>
@@ -31,7 +28,6 @@
 <script>
 
   import { mapState } from 'vuex';
-  import UiToolbar from 'kolibri.coreVue.components.UiToolbar';
   import ContentItem from './ContentItem';
   import commonExploreStrings from './commonExploreStrings';
 
@@ -39,11 +35,30 @@
     name: 'ContentLightbox',
     components: {
       ContentItem,
-      UiToolbar,
     },
     mixins: [commonExploreStrings],
+    props: {
+      content: {
+        type: Object,
+        required: true,
+      },
+    },
     computed: {
-      ...mapState('topicsTree', ['content']),
+      ...mapState('topicsTree', ['appMetadata']),
+    },
+    methods: {
+      getStyle() {
+        return {
+          backgroundImage: this.appMetadata.contentBackgroundImage,
+          backgroundColor: this.appMetadata.contentBackgroundColor,
+          color: this.appMetadata.contentForegroundColor,
+        };
+      },
+      onOverlayClick(event) {
+        if (event.target == this.$refs.overlay) {
+          this.$emit('close');
+        }
+      },
     },
   };
 
@@ -52,30 +67,57 @@
 
 <style lang="scss" scoped>
 
-  /* Borrowed from ContentModal in kolibri */
+  .lightbox-overlay {
+    /* Overlay everything */
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    /* Above the sidenav */
+    z-index: 16;
+
+    /* With a semi transparent background */
+    background: rgba(0, 0, 0, 0.6);
+  }
 
   .content-lightbox {
-    z-index: inherit;
-    width: 80%;
-    max-height: calc(100vh - 80px);
-    margin: 40px auto;
+    /* Center in overlay */
+    position: relative;
+    top: 50%;
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+    max-height: calc(100vh - 2rem);
+    margin: 0 auto;
+    border-radius: 8px;
+    transform: translate(0, -50%);
+  }
+
+  nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0.5rem 0;
+
+    .lightbox-title {
+      flex-grow: 1;
+      padding: 0 0.25rem;
+      margin: 0 1rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .lightbox-action {
+      flex-shrink: 0;
+      margin: 0 0.5rem;
+    }
+  }
+
+  main {
+    margin: 0 1rem 1rem;
     overflow: hidden;
-    background: white;
-    border-radius: 4px;
-
-    /deep/ .ui-toolbar {
-      .ui-toolbar__nav-icon {
-        margin-right: 0.5rem;
-      }
-
-      .ui-toolbar__body {
-        margin-right: 1rem;
-      }
-    }
-
-    main {
-      padding: 1rem;
-    }
   }
 
   @media (max-width: 960px) {

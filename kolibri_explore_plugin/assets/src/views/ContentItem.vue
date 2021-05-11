@@ -4,11 +4,11 @@
     <template v-if="sessionReady">
       <KContentRenderer
         class="content-renderer"
-        :kind="contentNode.kind"
-        :lang="contentNode.lang"
-        :files="contentNode.files"
-        :options="contentNode.options"
-        :available="contentNode.available"
+        :kind="content.kind"
+        :lang="content.lang"
+        :files="content.files"
+        :options="content.options"
+        :available="content.available"
         :extraFields="extraFields"
         :progress="summaryProgress"
         :userId="currentUserId"
@@ -40,7 +40,7 @@
     components: {},
     mixins: [commonExploreStrings],
     props: {
-      contentNode: {
+      content: {
         type: Object,
         required: true,
       },
@@ -64,7 +64,7 @@
       progress() {
         if (this.isUserLoggedIn) {
           // if there no attempts for this exercise, there is no progress
-          if (this.contentNode.kind === ContentNodeKinds.EXERCISE && this.masteryAttempts === 0) {
+          if (this.content.kind === ContentNodeKinds.EXERCISE && this.masteryAttempts === 0) {
             return null;
           }
           return this.summaryProgress;
@@ -74,9 +74,9 @@
     },
     created() {
       return this.initSessionAction({
-        channelId: this.contentNode.channel_id,
-        contentId: this.contentNode.content_id,
-        contentKind: this.contentNode.kind,
+        channelId: this.content.channel_id,
+        contentId: this.content.content_id,
+        contentKind: this.content.kind,
       }).then(() => {
         this.sessionReady = true;
         this.setWasIncomplete();
@@ -100,8 +100,8 @@
       updateProgress(progressPercent, forceSave = false) {
         this.updateProgressAction({ progressPercent, forceSave }).then(updatedProgressPercent =>
           updateContentNodeProgress(
-            this.contentNode.channel_id,
-            this.contentNode.id,
+            this.content.channel_id,
+            this.content.id,
             updatedProgressPercent
           )
         );
@@ -110,8 +110,8 @@
       addProgress(progressPercent, forceSave = false) {
         this.addProgressAction({ progressPercent, forceSave }).then(updatedProgressPercent =>
           updateContentNodeProgress(
-            this.contentNode.channel_id,
-            this.contentNode.id,
+            this.content.channel_id,
+            this.content.id,
             updatedProgressPercent
           )
         );
