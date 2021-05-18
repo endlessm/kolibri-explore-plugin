@@ -17,11 +17,11 @@ repos:
 - repo: local
   hooks:
   - id: lint-frontend
-    name: Linting of JS, Vue, SCSS and CSS files
+    name: Linting of JS, Vue, SCSS and CSS files on the frontend
     description: This hook handles all frontend linting for Kolibri
     entry: yarn run lint-frontend:format
     language: system
-    files: \.(js|vue|scss|css)$
+    files: ^kolibri_explore_plugin/assets/.*\.(js|vue|scss|css)$
 
 - repo: https://github.com/psf/black
   rev: 20.8b1
