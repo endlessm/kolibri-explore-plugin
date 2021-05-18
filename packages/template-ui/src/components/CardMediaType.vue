@@ -1,8 +1,11 @@
 <template>
-  <b-button pill variant="dark" class="card-media-type m-2"
-    v-on:click="goToContent(node)"
+  <b-button
+    pill
+    variant="dark"
+    class="card-media-type m-2"
+    @click="goToContent(node)"
   >
-    <span class="icon align-middle">
+    <span class="align-middle icon">
       <b-icon :icon="icon" aria-hidden="true" />
     </span>
     <span class="align-middle">
@@ -16,11 +19,9 @@ import { mapGetters } from 'vuex';
 import { goToContent } from 'kolibri-api';
 
 export default {
-  props: ['node'],
-  data() {
-    return {
-      isHovered: false,
-    };
+  name: 'CardMediaType',
+  props: {
+    node: Object,
   },
   computed: {
     ...mapGetters({

@@ -1,8 +1,8 @@
 <template>
   <b-link
-    :to="getNodeUrl(node)"
-    class="text-reset text-decoration-none"
     v-b-hover="handleHover"
+    :to="getNodeUrl(node)"
+    class="text-decoration-none text-reset"
   >
     <slot></slot>
   </b-link>
@@ -12,13 +12,11 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  props: ['node'],
-  emits: ['isHovered'],
-  data() {
-    return {
-      thumbnail: null,
-    };
+  name: 'ContentLink',
+  props: {
+    node: Object,
   },
+  emits: ['isHovered'],
   computed: {
     ...mapGetters(['getNodeUrl']),
   },

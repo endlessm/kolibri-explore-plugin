@@ -1,27 +1,28 @@
 <template>
   <div class="card-content">
-    <p class="text-uppercase text-info mb-1 text-truncate">
+    <p class="mb-1 text-info text-truncate text-uppercase">
       <span v-if="typeTag">{{ typeTag }}</span>
       <span v-if="typeTag && gradeOrLevelTag"> • </span>
       <span v-if="gradeOrLevelTag">{{ gradeOrLevelTag }}</span>
     </p>
-    <h5 class="title mb-1">
-      <v-clamp
+    <h5 class="mb-1 title">
+      <VClamp
         autoresize
-        :max-lines="titleLines"
+        :maxLines="titleLines"
       >
         {{ node.title }}
-      </v-clamp>
+      </VClamp>
     </h5>
-    <p class="subtitle text-muted mb-1 text-truncate">
+    <p class="mb-1 subtitle text-muted text-truncate">
       {{ getCardSubtitle(node) }}
     </p>
     <div class="tags">
       <b-badge
-        pill variant="primary"
-        class="mr-1 mb-1"
         v-for="tag in subjectTags"
         :key="tag"
+        pill
+        variant="primary"
+        class="mb-1 mr-1"
       >
         {{ tag }}
       </b-badge>
@@ -35,15 +36,16 @@ import { mapGetters } from 'vuex';
 import { StructuredTags } from '@/constants';
 
 export default {
+  name: 'CardBody',
+  components: {
+    VClamp,
+  },
   props: {
     node: Object,
     titleLines: {
       type: Number,
       default: 3,
     },
-  },
-  components: {
-    VClamp,
   },
   computed: {
     ...mapGetters(['getCardSubtitle']),

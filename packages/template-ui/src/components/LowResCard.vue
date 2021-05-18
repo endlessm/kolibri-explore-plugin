@@ -1,6 +1,6 @@
 <template>
   <b-card
-    border-variant="light"
+    borderVariant="light"
     class="my-2"
   >
     <ContentLink :node="node">
@@ -20,8 +20,11 @@
 import cardMixin from '@/components/mixins/cardMixin';
 
 export default {
-  props: ['node'],
+  name: 'LowResCard',
   mixins: [cardMixin],
+  props: {
+    node: Object,
+  },
 };
 </script>
 

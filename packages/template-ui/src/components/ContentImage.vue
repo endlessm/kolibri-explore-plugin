@@ -5,7 +5,7 @@
     <b-icon
       icon="play-fill"
       variant="light"
-      class="p-3 rounded-circle position-absolute"
+      class="p-3 position-absolute rounded-circle"
       style=""
     />
     <b-img
@@ -21,8 +21,11 @@
 import cardMixin from '@/components/mixins/cardMixin';
 
 export default {
-  props: ['node'],
+  name: 'ContentImage',
   mixins: [cardMixin],
+  props: {
+    node: Object,
+  },
 };
 </script>
 

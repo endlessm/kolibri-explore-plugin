@@ -2,7 +2,7 @@
   <div
     :style="{ backgroundImage: backgroundImageURL }"
   >
-    <slot />
+    <slot></slot>
     <SectionsSearchRow />
     <Carousel />
     <FilterContent />
@@ -13,8 +13,8 @@
 
     <template v-else>
       <CardGrid
-        :nodes="contentNodes"
         v-if="contentNodes"
+        :nodes="contentNodes"
       />
       <div
         v-for="section in filteredSections"
@@ -22,8 +22,8 @@
       >
         <CardGrid
           v-if="filterNodes(section.children).length"
-          :nodes="filterNodes(section.children)"
           :id="section.id"
+          :nodes="filterNodes(section.children)"
         >
           <b-row>
             <SectionTitle :section="section" />
@@ -41,7 +41,7 @@ import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'Home',
   computed: {
-    ...mapState(['channel', 'nodes', 'section']),
+    ...mapState(['section']),
     ...mapGetters({
       mainSections: 'mainSections',
       getAssetURL: 'getAssetURL',

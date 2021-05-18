@@ -1,10 +1,10 @@
 <template>
-  <b-container class="my-4" v-if="availableFilters.length">
+  <b-container v-if="availableFilters.length" class="my-4">
     <span class="mr-4">Filter By</span>
     <b-dropdown
-      class="mr-2"
       v-for="filter in availableFilters"
       :key="filter.name"
+      class="mr-2"
       :text="filter.prettyName"
       :variant="filter.variant"
     >
@@ -16,21 +16,23 @@
         >
           <b-form-checkbox
             :checked="isSelected(filter, option)"
-            @change="onOptionClick({filter, option, checked: arguments[0]})"
+            @change="onOptionClick({ filter, option, checked: arguments[0] })"
           >
             {{ option }}
           </b-form-checkbox>
         </b-dropdown-form>
-        <b-dropdown-divider></b-dropdown-divider>
+        <b-dropdown-divider />
         <b-dropdown-form>
-          <b-button variant="link" @click="clearFilter({filter})">Clear</b-button>
+          <b-button variant="link" @click="clearFilter({ filter })">
+            Clear
+          </b-button>
         </b-dropdown-form>
       </b-dropdown-group>
     </b-dropdown>
     <b-button
+      v-if="!isEmpty"
       variant="link"
       @click="clearFilter({})"
-      v-if="!isEmpty"
     >
       clear filters
     </b-button>
@@ -41,6 +43,7 @@
 import { mapState, mapGetters, mapMutations } from 'vuex';
 
 export default {
+  name: 'FilterContent',
   computed: {
     ...mapState(['filters', 'section']),
     ...mapGetters({
@@ -61,14 +64,14 @@ export default {
       )).filter((f) => f.options.length > 1);
     },
   },
+  mounted() {
+    this.clearFilter({});
+  },
   methods: {
     ...mapMutations({
       onOptionClick: 'filters/setFilterQuery',
       clearFilter: 'filters/clearFilterQuery',
     }),
-  },
-  mounted() {
-    this.clearFilter({});
   },
 };
 </script>

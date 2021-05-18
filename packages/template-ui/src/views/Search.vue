@@ -2,7 +2,7 @@
   <div
     :style="{ backgroundImage: backgroundImageURL }"
   >
-    <slot />
+    <slot></slot>
     <div class="search-row">
       <b-container class="py-4">
         <b-input-group>
@@ -17,9 +17,9 @@
             </b-button>
           </template>
           <b-form-input
-            placeholder="What do you want to learn about?"
-            v-model="query"
             ref="searchInput"
+            v-model="query"
+            placeholder="What do you want to learn about?"
           />
         </b-input-group>
       </b-container>
@@ -28,8 +28,10 @@
     <b-container
       v-if="notFound"
     >
-     <h3>We can't find any content that matches your search.</h3>
-     <p class="lead">You can try to use fewer words or browse by topics.</p>
+      <h3>We can't find any content that matches your search.</h3>
+      <p class="lead">
+        You can try to use fewer words or browse by topics.
+      </p>
     </b-container>
 
     <CardGrid

@@ -10,7 +10,10 @@ import { mapState } from 'vuex';
 import { MediaQuality } from '@/constants';
 
 export default {
-  props: ['node'],
+  name: 'Card',
+  props: {
+    node: Object,
+  },
   computed: {
     ...mapState(['mediaQuality']),
     cardVariant() {

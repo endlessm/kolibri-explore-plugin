@@ -1,22 +1,25 @@
 <template>
-  <b-jumbotron fluid
+  <b-jumbotron
+    fluid
     :style="{ backgroundImage: headerImageURL }"
     class="mb-0"
   >
     <template v-slot:default>
       <Breadcrumb :node="section" />
-      <div class="d-flex justify-content-between align-items-start mt-3">
-      <h1>{{ section.title }}</h1>
-      <b-img
-        class="rounded-lg"
-        :width="headerLogoWidth"
-        v-if="displayLogoInHeader && channel.thumbnail"
-        :src="channel.thumbnail"
-      />
+      <div class="align-items-start d-flex justify-content-between mt-3">
+        <h1>{{ section.title }}</h1>
+        <b-img
+          v-if="displayLogoInHeader && channel.thumbnail"
+          class="rounded-lg"
+          :width="headerLogoWidth"
+          :src="channel.thumbnail"
+        />
       </div>
       <b-row>
         <b-col md="6" sm="12">
-          <div class="lead text-muted mb-2">{{ headerDescription }}</div>
+          <div class="lead mb-2 text-muted">
+            {{ headerDescription }}
+          </div>
         </b-col>
       </b-row>
     </template>
@@ -30,6 +33,7 @@ import { headerLogoWidth } from '@/styles.scss';
 import { getSlug } from '@/utils';
 
 export default {
+  name: 'Header',
   data() {
     return {
       headerLogoWidth,

@@ -2,22 +2,22 @@
   <div class="position-relative">
     <b-button
       v-if="hasMultipleSlides"
-      @click="previous()"
       variant="outline-primary"
       class="previous rounded-circle"
-      :class="{invisible: isFirstSlide}"
+      :class="{ invisible: isFirstSlide }"
       aria-controls="carousel"
+      @click="previous()"
     >
       <span aria-hidden="true"><b-icon-chevron-left /></span>
       <span class="sr-only">Previous slide</span>
     </b-button>
     <b-button
       v-if="hasMultipleSlides"
-      @click="next()"
       variant="outline-primary"
       class="next rounded-circle"
-      :class="{invisible: isLastSlide}"
+      :class="{ invisible: isLastSlide }"
       aria-controls="carousel"
+      @click="next()"
     >
       <span aria-hidden="true"><b-icon-chevron-right /></span>
       <span class="sr-only">Next slide</span>
@@ -43,10 +43,10 @@
             />
             <!-- eslint-disable vue/no-use-v-if-with-v-for -->
             <b-card
-              class="invisible"
-              v-if="index === slides.length - 1"
               v-for="n in emptyCardsNumber"
+              v-if="index === slides.length - 1"
               :key="n"
+              class="invisible"
             />
           </b-card-group>
         </template>
@@ -60,9 +60,9 @@ import _ from 'underscore';
 import { mapGetters } from 'vuex';
 
 export default {
+  name: 'SlidableCardGrid',
   props: {
     nodes: Array,
-    id: String,
     itemsPerPage: {
       type: Number,
       default: 8,

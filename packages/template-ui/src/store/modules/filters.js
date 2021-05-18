@@ -54,7 +54,7 @@ try {
   if (data.filters) {
     storeData = data.filters;
   }
-} catch {
+} catch (e) {
   storeData = {};
 }
 

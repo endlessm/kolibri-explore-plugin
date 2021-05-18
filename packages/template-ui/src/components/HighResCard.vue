@@ -1,7 +1,7 @@
 <template>
   <b-card
-    :img-src="thumbnail"
-    :img-alt="node.title"
+    :imgSrc="thumbnail"
+    :imgAlt="node.title"
     :class="{
       shadow: isHovered,
     }"
@@ -22,8 +22,11 @@
 import cardMixin from '@/components/mixins/cardMixin';
 
 export default {
-  props: ['node'],
+  name: 'HighResCard',
   mixins: [cardMixin],
+  props: {
+    node: Object,
+  },
   data() {
     return {
       isHovered: false,

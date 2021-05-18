@@ -9,7 +9,7 @@ let storeData;
 try {
   // eslint-disable-next-line global-require, import/no-unresolved
   storeData = require('@/overrides/options.json');
-} catch {
+} catch (e) {
   storeData = {};
 }
 

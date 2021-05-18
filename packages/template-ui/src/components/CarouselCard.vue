@@ -8,7 +8,7 @@
               <CardMediaType :node="node" />
             </div>
             <b-card-text>
-              <CardBody :node="node" :title-lines="5" />
+              <CardBody :node="node" :titleLines="5" />
             </b-card-text>
           </template>
         </b-card>
@@ -21,8 +21,11 @@
 import cardMixin from '@/components/mixins/cardMixin';
 
 export default {
-  props: ['node'],
+  name: 'CarouselCard',
   mixins: [cardMixin],
+  props: {
+    node: Object,
+  },
   computed: {
     backgroundStyle() {
       return {

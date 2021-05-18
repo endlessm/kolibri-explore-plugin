@@ -1,10 +1,10 @@
 <template>
-  <b-row :no-gutters="isHighQualityMedia">
+  <b-row :noGutters="isHighQualityMedia">
     <b-col
-      :cols="cardColumns.cols"
-      :md="cardColumns.md"
       v-for="node in nodes"
       :key="node.id"
+      :cols="cardColumns.cols"
+      :md="cardColumns.md"
     >
       <Card :node="node" />
     </b-col>
@@ -16,7 +16,9 @@ import { mapGetters, mapState } from 'vuex';
 
 export default {
   name: 'GridPage',
-  props: ['nodes'],
+  props: {
+    nodes: Array,
+  },
   computed: {
     ...mapState(['cardColumns']),
     ...mapGetters(['isHighQualityMedia']),

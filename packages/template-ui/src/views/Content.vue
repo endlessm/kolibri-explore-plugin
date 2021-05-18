@@ -1,5 +1,6 @@
 <template>
-  <b-jumbotron fluid
+  <b-jumbotron
+    fluid
     :style="{ backgroundImage: headerImageURL }"
   >
     <template v-slot:default>
@@ -7,20 +8,24 @@
       <b-row class="mt-3">
         <b-col md="6" sm="12">
           <h3>{{ content.title }}</h3>
-          <p class="mb-2">{{ getCardSubtitle(content) }}</p>
-          <div class="mb-2" v-html="content.description" />
+          <p class="mb-2">
+            {{ getCardSubtitle(content) }}
+          </p>
+          <!-- eslint-disable vue/no-v-html -->
+          <div class="mb-2" v-html="content.description"></div>
           <b-badge
-            pill variant="primary"
-            class="mr-1 mb-1"
             v-for="tag in subjectTags"
             :key="tag"
+            pill
+            variant="primary"
+            class="mb-1 mr-1"
           >
             {{ tag }}
           </b-badge>
         </b-col>
         <b-col md="6" sm="12">
           <b-link
-            v-on:click="goToContent(content)"
+            @click="goToContent(content)"
           >
             <ContentImage :node="content" />
           </b-link>
@@ -38,9 +43,10 @@ import { getSlug } from '@/utils';
 import { StructuredTags } from '@/constants';
 
 export default {
+  name: 'Content',
   computed: {
     ...mapState(['content', 'section']),
-    ...mapGetters(['headerDescription', 'getAssetURL', 'getCardSubtitle']),
+    ...mapGetters(['getAssetURL', 'getCardSubtitle']),
     ...mapGetters({ getStructuredTags: 'filters/getStructuredTags' }),
     subjectTags() {
       return this.getStructuredTags(this.content, StructuredTags.SUBJECT);

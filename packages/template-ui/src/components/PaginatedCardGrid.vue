@@ -5,8 +5,8 @@
     <b-pagination
       v-if="nodes.length > itemsPerPage"
       v-model="currentPage"
-      :total-rows="nodes.length"
-      :per-page="itemsPerPage"
+      :totalRows="nodes.length"
+      :perPage="itemsPerPage"
       align="center"
     />
   </span>
@@ -18,7 +18,6 @@ export default {
   name: 'PaginatedCardGrid',
   props: {
     nodes: Array,
-    id: String,
     itemsPerPage: {
       type: Number,
       default: 8,

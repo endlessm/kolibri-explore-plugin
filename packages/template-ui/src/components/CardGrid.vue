@@ -1,11 +1,11 @@
 <template>
-  <b-container class="section-container my-5">
+  <b-container class="my-5 section-container">
     <slot></slot>
 
     <component
       :is="displayVariant"
-      :nodes="nodes"
       :id="id"
+      :nodes="nodes"
       :itemsPerPage="itemsPerPage"
     />
   </b-container>

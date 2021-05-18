@@ -1,13 +1,15 @@
 <template>
   <div
     id="footer"
-    class="mt-auto bg-secondary"
+    class="bg-secondary mt-auto"
     :style="{ backgroundImage: footerImageURL }"
   >
     <b-container>
-      <b-card class="border-0 bg-transparent text-light text-center">
+      <b-card class="bg-transparent border-0 text-center text-light">
         <h3>About {{ channel.title }}</h3>
-        <p class="font-weight-bold">{{ channel.description }}</p>
+        <p class="font-weight-bold">
+          {{ channel.description }}
+        </p>
       </b-card>
     </b-container>
   </div>

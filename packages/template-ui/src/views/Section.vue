@@ -2,37 +2,37 @@
   <div
     :style="{ backgroundImage: backgroundImageURL }"
   >
-  <slot />
-  <FilterContent />
+    <slot></slot>
+    <FilterContent />
 
-  <div v-if="isFilterResultEmpty">
-    <EmptyResultsMessage />
-  </div>
+    <div v-if="isFilterResultEmpty">
+      <EmptyResultsMessage />
+    </div>
 
-  <template v-else>
+    <template v-else>
 
-  <div v-if="isInlineLevel">
-  <CardGrid
-    v-for="subsection in filteredSections(section)"
-    :key="subsection.id"
-    :nodes="filteredSections(subsection)"
-    :id="subsection.id"
-  >
-    <b-row>
-      <SectionTitle :section="subsection" />
-    </b-row>
-  </CardGrid>
-  </div>
-  <div v-else>
-  <CardGrid
-    :key="section.id"
-    :nodes="filteredSections(section)"
-    :id="section.id"
-    variant="paginated"
-  />
-  </div>
+      <div v-if="isInlineLevel">
+        <CardGrid
+          v-for="subsection in filteredSections(section)"
+          :id="subsection.id"
+          :key="subsection.id"
+          :nodes="filteredSections(subsection)"
+        >
+          <b-row>
+            <SectionTitle :section="subsection" />
+          </b-row>
+        </CardGrid>
+      </div>
+      <div v-else>
+        <CardGrid
+          :id="section.id"
+          :key="section.id"
+          :nodes="filteredSections(section)"
+          variant="paginated"
+        />
+      </div>
 
-  </template>
+    </template>
 
   </div>
 </template>

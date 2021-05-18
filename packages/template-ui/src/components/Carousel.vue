@@ -1,19 +1,18 @@
 <template>
-<b-container class="mb-4">
-  <b-carousel
-    fade
-    v-model="slide"
-    :interval="CAROUSEL_INTERVAL"
-    class="shadow-lg"
-  >
-    <CarouselCard
-      v-for="node in carouselNodes"
-      :key="'item-' + node.id"
-      :node="node"
+  <b-container class="mb-4">
+    <b-carousel
+      v-model="slide"
+      fade
+      :interval="CAROUSEL_INTERVAL"
+      class="shadow-lg"
     >
-    </CarouselCard>
-  </b-carousel>
-</b-container>
+      <CarouselCard
+        v-for="node in carouselNodes"
+        :key="'item-' + node.id"
+        :node="node"
+      />
+    </b-carousel>
+  </b-container>
 </template>
 
 <script>

@@ -1,12 +1,12 @@
 <template>
-    <b-card
-      class="my-2 rounded-lg"
-      :class="{
-        shadow: !isHovered,
-        'shadow-lg': isHovered,
-      }"
-    >
-  <ContentLink :node="node" @isHovered="(hovered) => isHovered = hovered">
+  <b-card
+    class="my-2 rounded-lg"
+    :class="{
+      shadow: !isHovered,
+      'shadow-lg': isHovered,
+    }"
+  >
+    <ContentLink :node="node" @isHovered="(hovered) => isHovered = hovered">
       <div class="card-img" :style="cardStyle">
         <span class="sr-only">{{ node.title }}</span>
       </div>
@@ -14,16 +14,19 @@
       <b-card-text>
         <CardBody :node="node" />
       </b-card-text>
-  </ContentLink>
-    </b-card>
+    </ContentLink>
+  </b-card>
 </template>
 
 <script>
 import cardMixin from '@/components/mixins/cardMixin';
 
 export default {
-  props: ['node'],
+  name: 'RegularCard',
   mixins: [cardMixin],
+  props: {
+    node: Object,
+  },
   data() {
     return {
       isHovered: false,

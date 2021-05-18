@@ -44,6 +44,13 @@ export default {
       }
     },
   },
+  created() {
+    if (process.env.VUE_APP_USE_MOCK_DATA === 'true') {
+      this.gotChannelInformation(mockData);
+    } else {
+      askChannelInformation(this.gotChannelInformation);
+    }
+  },
   methods: {
     ...mapMutations(['setContentNavigation', 'setSectionNavigation', 'setHomeNavigation']),
     gotChannelInformation(data) {
@@ -56,13 +63,6 @@ export default {
         this.$router.push(`/${topicId}`);
       }
     },
-  },
-  created() {
-    if (process.env.VUE_APP_USE_MOCK_DATA === 'true') {
-      this.gotChannelInformation(mockData);
-    } else {
-      askChannelInformation(this.gotChannelInformation);
-    }
   },
 };
 </script>

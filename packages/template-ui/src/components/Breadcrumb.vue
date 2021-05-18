@@ -16,7 +16,10 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  props: ['node'],
+  name: 'Breadcrumb',
+  props: {
+    node: Object,
+  },
   computed: {
     ...mapGetters(['getNodeUrl']),
   },
