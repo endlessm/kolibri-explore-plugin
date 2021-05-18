@@ -1,0 +1,13 @@
+$primary: #F41971;
+$secondary: #FFE000;
+$body-bg: #60efdd;
+
+$theme-colors: (
+  "custom-color": #900
+);
+
+$enable-rounded: false;
+$enable-transitions: false;
+
+@import '../node_modules/bootstrap/scss/bootstrap';
+@import '../node_modules/bootstrap-vue/src/index.scss';

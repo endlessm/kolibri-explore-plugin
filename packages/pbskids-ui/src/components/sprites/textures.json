@@ -1,0 +1,129 @@
+{"frames": {
+
+"asteroid-one.png":
+{
+	"frame": {"x":295,"y":782,"w":253,"h":239},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":253,"h":239},
+	"sourceSize": {"w":253,"h":239},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"asteroid-three.png":
+{
+	"frame": {"x":2,"y":563,"w":291,"h":285},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":291,"h":285},
+	"sourceSize": {"w":291,"h":285},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"asteroid-two.png":
+{
+	"frame": {"x":2,"y":850,"w":154,"h":163},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":154,"h":163},
+	"sourceSize": {"w":154,"h":163},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"blank.png":
+{
+	"frame": {"x":868,"y":782,"w":137,"h":141},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":137,"h":141},
+	"sourceSize": {"w":137,"h":141},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"comet-head.png":
+{
+	"frame": {"x":893,"y":925,"w":76,"h":51},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":76,"h":51},
+	"sourceSize": {"w":76,"h":51},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"comet-tail.png":
+{
+	"frame": {"x":611,"y":959,"w":196,"h":51},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":196,"h":51},
+	"sourceSize": {"w":196,"h":51},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"planet-1.png":
+{
+	"frame": {"x":550,"y":959,"w":59,"h":59},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":59,"h":59},
+	"sourceSize": {"w":59,"h":59},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"planet-2.png":
+{
+	"frame": {"x":809,"y":928,"w":82,"h":80},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":82,"h":80},
+	"sourceSize": {"w":82,"h":80},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"planet-3.png":
+{
+	"frame": {"x":723,"y":782,"w":143,"h":144},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":143,"h":144},
+	"sourceSize": {"w":143,"h":144},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"rocket-bg.png":
+{
+	"frame": {"x":295,"y":563,"w":711,"h":217},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":711,"h":217},
+	"sourceSize": {"w":711,"h":217},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"rocket-poof.png":
+{
+	"frame": {"x":550,"y":782,"w":171,"h":175},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":171,"h":175},
+	"sourceSize": {"w":171,"h":175},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"rocket.png":
+{
+	"frame": {"x":2,"y":2,"w":946,"h":559},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":946,"h":559},
+	"sourceSize": {"w":946,"h":559},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"satelite.png":
+{
+	"frame": {"x":158,"y":850,"w":122,"h":163},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":122,"h":163},
+	"sourceSize": {"w":122,"h":163},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "textures.png",
+	"format": "RGBA8888",
+	"size": {"w":1008,"h":1023},
+	"scale": "1.9",
+	"smartupdate": "$TexturePacker:SmartUpdate:1f6521609a32c75e7eb2a981e1ee4ea1:60aa69ec8de054ea407a80a7e2c75f4b:cf827d152df04949dfee256cd0c8efd8$"
+}
+}

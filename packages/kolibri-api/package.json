@@ -1,0 +1,12 @@
+{
+  "name": "kolibri-api",
+  "version": "0.1.0",
+  "description": "Communicates with Kolibri for channel presentation.",
+  "main": "index.js",
+  "license": "AGPL-3.0",
+  "scripts": {
+    "build": "echo",
+    "lint": "echo",
+    "zip": "echo"
+  }
+}
