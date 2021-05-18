@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && yarn run zip",
     "lint": "vue-cli-service lint",
-    "zip": "../scripts/bundle_zip.py"
+    "zip": "../../scripts/bundle_zip.py"
   },
   "dependencies": {
     "@pixi/app": "^5.3.3",
