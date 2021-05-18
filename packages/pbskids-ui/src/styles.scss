@@ -9,5 +9,5 @@ $theme-colors: (
 $enable-rounded: false;
 $enable-transitions: false;
 
-@import '../node_modules/bootstrap/scss/bootstrap';
-@import '../node_modules/bootstrap-vue/src/index.scss';
+@import 'bootstrap/scss/bootstrap';
+@import 'bootstrap-vue/src/index.scss';

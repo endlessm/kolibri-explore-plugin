@@ -10,8 +10,8 @@ $header-logo-width: 128;
 }
 
 @import '@/overrides/styles.scss';
-@import '../node_modules/bootstrap/scss/bootstrap';
-@import '../node_modules/bootstrap-vue/src/index.scss';
+@import 'bootstrap/scss/bootstrap';
+@import 'bootstrap-vue/src/index.scss';
 
 @function card-body-height($title-lines) {
   $type-line-height: $font-size-base * $line-height-base;
