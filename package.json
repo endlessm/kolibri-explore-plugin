@@ -1,4 +1,7 @@
 {
+  "name": "eos-discovery",
+  "description": "Monorepo with kolibri's Discovery page and custom channel presentations.",
+  "private": true,
   "scripts": {
     "build": "kolibri-tools build prod --plugins kolibri_explore_plugin",
     "clean": "kolibri-tools build clean --plugins kolibri_explore_plugin",
@@ -6,17 +9,15 @@
     "lint-frontend": "kolibri-tools lint -p 'kolibri_explore_plugin/assets/**/*.{js,vue,scss,less,css}'",
     "lint-frontend:format": "yarn run lint-frontend --write"
   },
-  "name": "kolibri-explore-render-plugin",
-  "description": "Explore Plugin for Kolibri",
-  "private": true,
-  "dependencies": {
-    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system"
-  },
+  "workspaces": [
+    "kolibri_explore_plugin/assets",
+    "packages/*"
+  ],
   "devDependencies": {
-    "kolibri-tools": "0.14.5-dev.4"
+    "lerna": "^4.0.0"
   },
   "engines": {
     "node": "10.x",
-    "npm": ">= 3"
+    "yarn": "1.x"
   }
 }
