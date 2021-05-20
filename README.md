@@ -28,27 +28,14 @@ Now in Kolibri you should be able to navigate to a Explore tab.
 
 ## Setup
 
-Either if you want to build or develop the plugin, please follow these
-instructions.
-
-1. Install dependencies:
+Either if you want to build or develop the plugin, please run:
 
 ```
-pip install -r requirements.txt --upgrade
+./scripts/bootstrap.sh
 ```
 
-2. Install node and yarn. Assuming you have nodeenv:
-
-```
-nodeenv -p --node=10.17.0
-npm install -g yarn@1.22.10
-```
-
-3. Install the Javascript dependencies:
-
-```
-yarn install
-```
+Just like kolibri, we use a Python virtual environment along with Node
+to obtain the exact same dependencies.
 
 ## Building
 ### Bundling custom channel presentations
@@ -111,10 +98,11 @@ directory, it's possible to work with a proxy for development. Note
 that the proxy will be used for all the channels, not only for the app
 in question.
 
-1. Run the custom channel presentation development server:
+1. Run the custom channel presentation development server. For
+   instance to run the template:
 
 ```
-$ cd kolibri-channel-custom-web-app/template-ui
+$ cd packages/template-ui
 $ yarn serve
 ```
 
@@ -122,7 +110,8 @@ $ yarn serve
    enabled:
 
 ```
-PROXY_CUSTOM_CHANNEL=1 yarn run devserver-hot
+$ cd /PATH/TO/kolibri
+$ PROXY_CUSTOM_CHANNEL=1 yarn run devserver-hot
 ```
 
 Every request to the `custom-channel-ui.zip` will be proxied to the

@@ -164,7 +164,7 @@
     right: $margin;
   }
 
-  /deep/.card-thumbnail-wrapper {
+  ::v-deep.card-thumbnail-wrapper {
     max-width: 100%;
   }
 

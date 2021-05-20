@@ -1,0 +1,12 @@
+{
+  "name": "discovery-page",
+  "description": "A replacement for kolibri's Learn tab.",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system"
+  },
+  "devDependencies": {
+    "kolibri-tools": "0.14.5-dev.4"
+  }
+}

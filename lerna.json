@@ -1,0 +1,9 @@
+{
+  "packages": [
+    "kolibri_explore_plugin/assets",
+    "packages/*"
+  ],
+  "version": "independent",
+  "npmClient": "yarn",
+  "useWorkspaces": true
+}
