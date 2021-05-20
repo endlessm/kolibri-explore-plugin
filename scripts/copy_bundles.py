@@ -19,18 +19,18 @@ def validate_dir_path(path):
         raise NotADirectoryError(path)
 
 
-def get_workspaces_info():
+def get_packages_info():
     result = subprocess.run(
-        ["yarn", "workspaces", "--json", "info"], stdout=subprocess.PIPE
+        ["yarn", "-s", "lerna", "list", "--json", "--loglevel", "error"],
+        stdout=subprocess.PIPE,
     )
     output = result.stdout.decode("utf-8")
-    data = json.loads(output)["data"]
-    return json.loads(data)
+    return json.loads(output)
 
 
 def get_workspaces():
-    info = get_workspaces_info()
-    return list(filter(lambda x: x not in SKIP_WORKSPACES, info.keys()))
+    info = get_packages_info()
+    return [i["name"] for i in info if i["name"] not in SKIP_WORKSPACES]
 
 
 def workspace_to_appname(workspace):
@@ -41,7 +41,7 @@ def workspace_to_appname(workspace):
 def copy_bundle_zip(
     workspace, dest_path, app_name=None, zip_name=DEFAULT_ZIP_FILENAME
 ):
-    bundle_zip_path = os.path.join(workspace, zip_name)
+    bundle_zip_path = os.path.join("packages", workspace, zip_name)
     if not os.path.exists(bundle_zip_path):
         print(f"Skipping {workspace}, zip not found.")
         return
