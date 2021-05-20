@@ -98,10 +98,11 @@ directory, it's possible to work with a proxy for development. Note
 that the proxy will be used for all the channels, not only for the app
 in question.
 
-1. Run the custom channel presentation development server:
+1. Run the custom channel presentation development server. For
+   instance to run the template:
 
 ```
-$ cd kolibri-channel-custom-web-app/template-ui
+$ cd packages/template-ui
 $ yarn serve
 ```
 
@@ -109,7 +110,8 @@ $ yarn serve
    enabled:
 
 ```
-PROXY_CUSTOM_CHANNEL=1 yarn run devserver-hot
+$ cd /PATH/TO/kolibri
+$ PROXY_CUSTOM_CHANNEL=1 yarn run devserver-hot
 ```
 
 Every request to the `custom-channel-ui.zip` will be proxied to the
