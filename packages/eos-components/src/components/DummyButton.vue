@@ -1,7 +1,7 @@
 <template>
-  <button @click="count++">
+  <b-button variant="primary" pill @click="count++">
     I was clicked {{ count }} times.
-  </button>
+  </b-button>
 </template>
 
 <script>
