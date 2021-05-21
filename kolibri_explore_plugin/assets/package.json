@@ -4,6 +4,7 @@
   "private": true,
   "version": "1.0.0",
   "dependencies": {
+    "eos-components": "^0.1.0",
     "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system"
   },
   "devDependencies": {
