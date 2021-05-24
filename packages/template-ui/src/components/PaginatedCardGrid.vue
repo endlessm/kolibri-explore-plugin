@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 
 export default {
   name: 'PaginatedCardGrid',
@@ -29,11 +30,23 @@ export default {
     };
   },
   computed: {
+    ...mapState(['filters']),
+    filterQuery() {
+      return this.filters.query;
+    },
     pageNodes() {
       const { currentPage, itemsPerPage, nodes } = this;
       const start = (currentPage - 1) * itemsPerPage;
       const end = start + itemsPerPage;
       return nodes.slice(start, end);
+    },
+  },
+  watch: {
+    filterQuery() {
+      // Change to first page if the filter changes. This is needed because the
+      // number of cards to show will change and the previous pagination can be
+      // wrong.
+      this.currentPage = 1;
     },
   },
 };
