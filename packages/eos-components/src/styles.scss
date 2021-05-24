@@ -1,0 +1,23 @@
+// Bootstrap variables:
+$primary: #F15A22;
+$border-radius-lg: 1rem;
+
+// Template variables:
+$header-logo-width: 128;
+
+:export {
+  headerLogoWidth: $header-logo-width;
+}
+
+@function card-body-height($title-lines) {
+  $type-line-height: $font-size-base * $line-height-base;
+  $title-line-height: $title-lines * ($h5-font-size * $headings-line-height);
+  $subtitle-line-height: $font-size-base * $line-height-base;
+  $tags-line-height: $font-size-base * $line-height-base;
+
+  $margins: map-get($spacers, 1) * 4;
+
+  @return ($type-line-height + $title-line-height +
+           $subtitle-line-height + $tags-line-height +
+           $margins);
+}

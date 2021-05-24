@@ -73,6 +73,6 @@
 
 <style lang="scss" scoped>
 
-  @import './explore';
+  @import '../styles';
 
 </style>
