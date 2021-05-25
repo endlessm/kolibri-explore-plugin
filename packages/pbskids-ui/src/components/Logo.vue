@@ -1,12 +1,12 @@
 <template>
   <transition
-    class="d-none d-md-block d-xl-none"
+    class="d-md-block d-none d-xl-none"
     :css="false"
     appear
     @enter="enter"
     @leave="leave"
   >
-      <img ref="el" :src="logo" v-b-hover="hover" @click="click"/>
+    <img ref="el" v-b-hover="hover" :src="logo" @click="click">
   </transition>
 </template>
 
@@ -18,6 +18,7 @@ import popSound from '@/components/pop.flac';
 import pbskidsSound from '@/sounds/pbsKids.mp3';
 
 export default {
+  name: 'Logo',
   data() {
     return {
       logo,

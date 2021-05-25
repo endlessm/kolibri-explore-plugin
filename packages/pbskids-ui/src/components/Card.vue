@@ -1,9 +1,9 @@
 <template>
   <b-card
-    :img-src="thumbnail"
-    :img-alt="node.title"
+    :imgSrc="thumbnail"
+    :imgAlt="node.title"
     class="p-2"
-    no-body
+    noBody
   />
 </template>
 
@@ -11,6 +11,7 @@
 import { getThumbnail } from 'kolibri-api';
 
 export default {
+  name: 'Card',
   props: ['node'],
   data() {
     return {
@@ -18,6 +19,9 @@ export default {
     };
   },
   computed: {
+  },
+  created() {
+    this.getThumbnail();
   },
   methods: {
     async getThumbnail() {
@@ -29,9 +33,6 @@ export default {
       this.thumbnail = thumbnail;
       // return;
     },
-  },
-  created() {
-    this.getThumbnail();
   },
 };
 </script>
