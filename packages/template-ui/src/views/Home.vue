@@ -4,33 +4,41 @@
   >
     <slot></slot>
     <SectionsSearchRow />
-    <Carousel />
-    <FilterContent />
 
-    <div v-if="isFilterResultEmpty">
-      <EmptyResultsMessage />
+    <div v-if="loading">
+      <CarouselPlaceholder />
+      <CardGridPlaceholder />
     </div>
 
-    <template v-else>
-      <CardGrid
-        v-if="contentNodes"
-        :nodes="contentNodes"
-      />
-      <div
-        v-for="section in filteredSections"
-        :key="section.id"
-      >
-        <CardGrid
-          v-if="filterNodes(section.children).length"
-          :id="section.id"
-          :nodes="filterNodes(section.children)"
-        >
-          <b-row>
-            <SectionTitle :section="section" />
-          </b-row>
-        </CardGrid>
+    <div v-else>
+      <Carousel />
+      <FilterContent />
+
+      <div v-if="isFilterResultEmpty">
+        <EmptyResultsMessage />
       </div>
-    </template>
+
+      <template v-else>
+        <CardGrid
+          v-if="contentNodes"
+          :nodes="contentNodes"
+        />
+        <div
+          v-for="section in filteredSections"
+          :key="section.id"
+        >
+          <CardGrid
+            v-if="filterNodes(section.children).length"
+            :id="section.id"
+            :nodes="filterNodes(section.children)"
+          >
+            <b-row>
+              <SectionTitle :section="section" />
+            </b-row>
+          </CardGrid>
+        </div>
+      </template>
+    </div>
 
   </div>
 </template>
@@ -41,7 +49,7 @@ import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'Home',
   computed: {
-    ...mapState(['section']),
+    ...mapState(['section', 'loading']),
     ...mapGetters({
       mainSections: 'mainSections',
       getAssetURL: 'getAssetURL',
