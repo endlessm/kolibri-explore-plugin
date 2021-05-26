@@ -7,7 +7,12 @@
     }"
     overlay
   >
-    <PlayButton :node="node" @click="goToContent(node)" />
+    <PlayButton
+      v-if="node.kind !== 'topic'"
+      :node="node"
+      :label="label"
+      @click="goToContent(node)"
+    />
     <ContentLink :node="node" :label="label" @isHovered="(hovered) => isHovered = hovered">
       <b-card-text class="card-img-overlay">
         <div class="body-wrapper">

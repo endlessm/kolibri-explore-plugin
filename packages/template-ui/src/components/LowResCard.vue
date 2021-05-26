@@ -8,7 +8,12 @@
         :src="thumbnail"
         :alt="node.title"
       />
-      <PlayButton :node="node" :label="label" @click="goToContent(node)" />
+      <PlayButton
+        v-if="node.kind !== 'topic'"
+        :node="node"
+        :label="label"
+        @click="goToContent(node)"
+      />
       <b-card-text>
         <CardBody :node="node" />
       </b-card-text>
