@@ -1,11 +1,9 @@
 <template>
 
-  <BaseComponent :back="pageName !== 'TOPICS_ROOT'">
-    <div>
-      <component :is="currentPage" v-if="currentPage" />
-      <router-view />
-    </div>
-  </BaseComponent>
+  <div>
+    <component :is="currentPage" v-if="currentPage" />
+    <router-view />
+  </div>
 
 </template>
 
@@ -16,7 +14,6 @@
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
   import { PageNames } from '../constants';
-  import BaseComponent from './Base';
   import commonExploreStrings from './commonExploreStrings';
   import ChannelsPage from './ChannelsPage';
   import CustomChannelsPage from './CustomChannelsPage';
@@ -33,9 +30,6 @@
 
   export default {
     name: 'ExploreIndex',
-    components: {
-      BaseComponent,
-    },
     mixins: [commonCoreStrings, commonExploreStrings, responsiveWindowMixin],
     data() {
       return {
