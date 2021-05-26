@@ -3,7 +3,7 @@
     <b-card-header class="pb-2">
       <div
         v-if="channel.thumbnail"
-        class="mr-2 thumbnail"
+        class="mr-2 shadow-sm thumbnail"
         :style="thumbnailStyles">
       </div>
       <div class="title">
@@ -35,9 +35,10 @@
       },
       thumbnailStyles() {
         return {
-          background: `url(${this.channel.thumbnail})`,
-          backgroundSize: 'cover',
+          background: `url(${this.channel.thumbnail}) white`,
+          backgroundSize: '80% auto',
           backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat',
         };
       },
     },
@@ -75,8 +76,8 @@
   }
 
   .thumbnail {
-    height: $thumb-size;
-    width: $thumb-size;
+    min-height: $thumb-size;
+    min-width: $thumb-size;
     border-radius: $border-radius-lg !important;
   }
 </style>
