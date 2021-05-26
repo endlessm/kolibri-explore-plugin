@@ -1,8 +1,8 @@
 <template>
   <b-button
     pill
-    variant="dark"
-    class="card-media-type m-2"
+    variant="light"
+    :class="`card-media-type m-2 ${node.kind}`"
     @click="$emit('click')"
   >
     <span class="align-middle icon">
@@ -53,11 +53,28 @@ export default {
 <style lang="scss" scoped>
 @import '../styles.scss';
 
+$background-alpha: 0.8;
+
 .card-media-type {
   position: absolute;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.5) !important;
+  border: none;
+  &.audio {
+    background-color: rgba($audio-color, $background-alpha);
+  }
+  &.document {
+    background-color: rgba($document-color, $background-alpha);
+  }
+  &.exercise {
+    background-color: rgba($exercise-color, $background-alpha);
+  }
+  &.html5 {
+    background-color: rgba($html5-color, $background-alpha);
+  }
+  &.video {
+    background-color: rgba($video-color, $background-alpha);
+  }
 }
 .icon {
   font-size: $font-size-lg;
