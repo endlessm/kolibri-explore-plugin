@@ -1,41 +1,29 @@
 <template>
 
-  <div class="channels">
-    <PageHeader
-      :title="coreString('channelsLabel')"
-      class="visuallyhidden"
-    />
-
-    <div class="searchbar">
-      <label class="visuallyhidden" for="searchfield">{{ coreString('searchLabel') }}</label>
-      <input
-        id="searchfield"
-        ref="searchInput"
-        v-model.trim="searchQuery"
-        type="search"
-        class="search-input"
-        dir="auto"
-        :placeholder="coreString('searchLabel')"
-        @focus="searchFocus = true"
-        @blur="searchFocus = false"
-      >
-
-      <KIconButton
-        icon="search"
-        :appearance="searchAppareance()"
-        @click="filter"
+  <b-container class="channels mb-3 mt-3">
+    <b-card-group
+      v-for="(row, index) in rows"
+      :key="`row-${index}`"
+      class="mt-3"
+      deck
+    >
+      <ChannelCard
+        v-for="channel in row"
+        :key="channel.id"
+        :channel="channel"
+        @click.native="goToChannel(channel.id)"
       />
-    </div>
 
-    <div class="channelsgrid">
-      <ChannelCardGroupGrid
-        v-if="filteredChannels.length"
-        class="grid"
-        :contents="filteredChannels"
-        :genContentLink="genChannelLink"
+      <!-- eslint-disable vue/no-use-v-if-with-v-for -->
+      <b-card
+        v-for="n in emptyCardsNumber"
+        v-if="index === rows.length - 1"
+        :key="n"
+        class="invisible"
       />
-    </div>
-  </div>
+    </b-card-group>
+
+  </b-container>
 
 </template>
 
@@ -44,53 +32,38 @@
 
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
-  import KIconButton from 'kolibri-design-system/lib/buttons-and-links/KIconButton';
+  import { ChannelCard } from 'eos-components';
+  import _ from 'underscore';
   import { PageNames } from '../constants';
-  import PageHeader from './PageHeader';
-  import ChannelCardGroupGrid from './ChannelCardGroupGrid';
 
   export default {
     name: 'ChannelsPage',
-    metaInfo() {
-      return {
-        title: this.$tr('documentTitle'),
-      };
-    },
     components: {
-      KIconButton,
-      PageHeader,
-      ChannelCardGroupGrid,
+      ChannelCard,
     },
     mixins: [commonCoreStrings],
-    data() {
-      return {
-        searchQuery: '',
-        searchFocus: false,
-      };
+    props: {
+      columns: {
+        type: Number,
+        default: 3,
+      },
     },
     computed: {
       ...mapState('topicsRoot', { channels: 'rootNodes' }),
-      filteredChannels() {
-        const re = new RegExp(`.*${this.searchQuery}.*`, 'i');
-        return this.channels.filter(c => c.title.match(re));
+      rows() {
+        return _.chunk(this.channels, this.columns);
+      },
+      emptyCardsNumber() {
+        return this.rows.length % this.columns;
       },
     },
     methods: {
-      genChannelLink(channel_id) {
-        return {
+      goToChannel(channelId) {
+        this.$router.push({
           name: PageNames.TOPICS_CHANNEL,
-          params: { channel_id },
-        };
+          params: { channel_id: channelId },
+        });
       },
-      filter() {
-        console.log('search!');
-      },
-      searchAppareance() {
-        return this.searchFocus ? 'raised-button' : 'flat-button';
-      },
-    },
-    $trs: {
-      documentTitle: 'All channels',
     },
   };
 
@@ -99,38 +72,6 @@
 
 <style lang="scss" scoped>
 
-  .channels {
-    width: 100%;
-    min-height: 100vh;
-    padding: 20px;
-    color: white;
-    background-color: #3a3a3a;
-
-    .channelsgrid {
-      padding-top: 40px;
-      clear: both;
-    }
-
-    .searchbar {
-      width: 100%;
-      text-align: right;
-
-      .search-input {
-        background-color: transparent;
-        border: 0;
-        border-bottom: 1px solid white;
-        opacity: 0.5;
-        transition: all 1s ease;
-
-        &:focus {
-          opacity: 1;
-        }
-      }
-
-      button {
-        transition: all 1s ease;
-      }
-    }
-  }
+  @import '../styles';
 
 </style>
