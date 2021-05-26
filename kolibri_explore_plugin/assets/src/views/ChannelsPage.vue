@@ -1,27 +1,21 @@
 <template>
 
-  <b-container class="channels mb-3 mt-3">
-    <b-card-group
-      v-for="(row, index) in rows"
-      :key="`row-${index}`"
-      class="mt-3"
-      deck
-    >
-      <ChannelCard
-        v-for="channel in row"
-        :key="channel.id"
-        :channel="channel"
-        @click.native="goToChannel(channel.id)"
-      />
+  <b-container class="channels pb-3 pt-3">
+    <!-- Cards without thumbnail -->
+    <ChannelCardGroup
+      :rows="rows.withThumbnail"
+      :hasThumbnail="true"
+      :columns="columns"
+      @card-click="goToChannel"
+    />
 
-      <!-- eslint-disable vue/no-use-v-if-with-v-for -->
-      <b-card
-        v-for="n in emptyCardsNumber"
-        v-if="index === rows.length - 1"
-        :key="n"
-        class="invisible"
-      />
-    </b-card-group>
+    <!-- Cards without thumbnail -->
+    <ChannelCardGroup
+      :rows="rows.withoutThumbnail"
+      :hasThumbnail="false"
+      :columns="columns"
+      @card-click="goToChannel"
+    />
 
   </b-container>
 
@@ -32,14 +26,14 @@
 
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
-  import { ChannelCard } from 'eos-components';
+  import { ChannelCardGroup } from 'eos-components';
   import _ from 'underscore';
   import { PageNames } from '../constants';
 
   export default {
     name: 'ChannelsPage',
     components: {
-      ChannelCard,
+      ChannelCardGroup,
     },
     mixins: [commonCoreStrings],
     props: {
@@ -50,11 +44,15 @@
     },
     computed: {
       ...mapState('topicsRoot', { channels: 'rootNodes' }),
+      // TODO: filter this correctly, right now we're showing the first 6
+      // items with thumbnail and the rest without
       rows() {
-        return _.chunk(this.channels, this.columns);
-      },
-      emptyCardsNumber() {
-        return this.rows.length % this.columns;
+        let channels = this.channels.slice(0, 6);
+        const withThumbnail = _.chunk(channels, this.columns);
+        channels = this.channels.slice(6);
+        const withoutThumbnail = _.chunk(channels, this.columns);
+
+        return { withThumbnail, withoutThumbnail };
       },
     },
     methods: {

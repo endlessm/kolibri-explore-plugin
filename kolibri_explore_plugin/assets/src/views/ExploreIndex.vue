@@ -69,4 +69,8 @@
 
   @import '../styles';
 
+  div {
+    background-color: white;
+  }
+
 </style>
