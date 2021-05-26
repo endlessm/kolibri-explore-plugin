@@ -1,5 +1,5 @@
 <template>
-  <canvas id="background" ref="view"/>
+  <canvas id="background" ref="view"></canvas>
 </template>
 
 <script>
@@ -29,6 +29,22 @@ export default {
     };
   },
   computed: {
+  },
+  mounted() {
+    const { view } = this.$refs;
+    this.app = new PIXI.Application({
+      transparent: true,
+      view,
+    });
+    this.app.ticker.stop();
+    this.app.loader
+      .add('image', textureImage)
+      .add('displacement', displacementImage)
+      .load(this.setup);
+    this.app.renderer.resize(window.innerWidth, 245);
+    window.addEventListener('resize', () => {
+      this.app.renderer.resize(window.innerWidth, 245);
+    });
   },
   methods: {
     addSprite(x, y, seek = 0) {
@@ -110,22 +126,6 @@ export default {
       });
       this.sheet.parse(this.onSheetParsed);
     },
-  },
-  mounted() {
-    const { view } = this.$refs;
-    this.app = new PIXI.Application({
-      transparent: true,
-      view,
-    });
-    this.app.ticker.stop();
-    this.app.loader
-      .add('image', textureImage)
-      .add('displacement', displacementImage)
-      .load(this.setup);
-    this.app.renderer.resize(window.innerWidth, 245);
-    window.addEventListener('resize', () => {
-      this.app.renderer.resize(window.innerWidth, 245);
-    });
   },
 };
 </script>

@@ -55,7 +55,7 @@
         };
       },
       onOverlayClick(event) {
-        if (event.target == this.$refs.overlay) {
+        if (event.target === this.$refs.overlay) {
           this.$emit('close');
         }
       },

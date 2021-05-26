@@ -8,6 +8,32 @@ import { PageNames } from '../../constants';
 import { getAppNameByID } from '../../customApps';
 import { normalizeContentNode, contentState } from '../coreExplore/utils';
 
+function _getAppMetadata(appName) {
+  if (appName) {
+    const url = urls['kolibri:kolibri_explore_plugin:app_metadata']({ app: appName });
+    return axios.get(url);
+  }
+  return new Promise();
+}
+
+function _parseAppMetadata(data, appName) {
+  if (!data) {
+    return {};
+  }
+
+  const newData = { ...data };
+
+  if (data.contentBackgroundImage) {
+    const backgroundUrl = urls['kolibri:kolibri_explore_plugin:app_file']({
+      app: appName,
+      filename: data.contentBackgroundImage,
+    });
+    newData.contentBackgroundImage = `url(${backgroundUrl})`;
+  }
+
+  return newData;
+}
+
 export function showTopicsTopic(store, { id, isRoot = false }) {
   return store.dispatch('loading').then(() => {
     store.commit('SET_PAGE_NAME', isRoot ? PageNames.TOPICS_CHANNEL : PageNames.TOPICS_TOPIC);
@@ -48,33 +74,6 @@ export function showTopicsTopic(store, { id, isRoot = false }) {
       }
     );
   });
-}
-
-function _getAppMetadata(appName) {
-  if (appName) {
-    const url = urls['kolibri:kolibri_explore_plugin:app_metadata']({ app: appName });
-    return axios.get(url);
-  } else {
-    return new Promise();
-  }
-}
-
-function _parseAppMetadata(data, appName) {
-  if (!data) {
-    return {};
-  }
-
-  const newData = { ...data };
-
-  if (data.contentBackgroundImage) {
-    const backgroundUrl = urls['kolibri:kolibri_explore_plugin:app_file']({
-      app: appName,
-      filename: data.contentBackgroundImage,
-    });
-    newData.contentBackgroundImage = `url(${backgroundUrl})`;
-  }
-
-  return newData;
 }
 
 export function showCustomContent(store, id) {

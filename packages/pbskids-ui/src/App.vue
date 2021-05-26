@@ -1,26 +1,26 @@
 <template>
   <div id="app">
-  <div id="header">
-    <Background id="background"/>
-    <img id="navLeft" :src="navLeft"/>
-    <img id="navRight" :src="navRight"/>
-    <Logo id="logo"/>
-  </div>
-<b-container id="navbar" class="d-flex align-items-center justify-content-center">
-  <b-button
-    v-for="section in mainSections"
-    :key="'button-' + section.id"
-    :data-slug="sectionSlug(section.title)"
-    @mouseenter="playButtonSound(sectionSlug(section.title))"
-    @click="currentSection = section"
-    :variant="currentSection === section ? 'primary' : 'secondary'"
-  >
-    {{ section.title.split(" ")[0] }}
-    <br/>
-    {{ section.title.split(" ")[1] }}
-  </b-button>
-</b-container>
-    <router-view/>
+    <div id="header">
+      <Background id="background" />
+      <img id="navLeft" :src="navLeft">
+      <img id="navRight" :src="navRight">
+      <Logo id="logo" />
+    </div>
+    <b-container id="navbar" class="align-items-center d-flex justify-content-center">
+      <b-button
+        v-for="section in mainSections"
+        :key="'button-' + section.id"
+        :data-slug="sectionSlug(section.title)"
+        :variant="currentSection === section ? 'primary' : 'secondary'"
+        @mouseenter="playButtonSound(sectionSlug(section.title))"
+        @click="currentSection = section"
+      >
+        {{ section.title.split(" ")[0] }}
+        <br>
+        {{ section.title.split(" ")[1] }}
+      </b-button>
+    </b-container>
+    <router-view />
   </div>
 </template>
 
@@ -66,9 +66,6 @@ export default {
     };
   },
   computed: {
-    contentNodes() {
-      return this.nodes.filter((n) => n.kind !== 'topic');
-    },
     nodesTree() {
       return arrayToTree(this.nodes, { parentProperty: 'parent' });
     },
@@ -78,6 +75,13 @@ export default {
       }
       return [];
     },
+  },
+  created() {
+    if (process.env.VUE_APP_USE_MOCK_DATA === 'true') {
+      this.gotChannelInformation(mockData);
+    } else {
+      askChannelInformation(this.gotChannelInformation);
+    }
   },
   methods: {
     gotChannelInformation(data) {
@@ -96,13 +100,6 @@ export default {
     playButtonSound(slug) {
       this.sounds[slug].play();
     },
-  },
-  created() {
-    if (process.env.VUE_APP_USE_MOCK_DATA === 'true') {
-      this.gotChannelInformation(mockData);
-    } else {
-      askChannelInformation(this.gotChannelInformation);
-    }
   },
 };
 </script>

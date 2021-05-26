@@ -1,41 +1,41 @@
 <template>
-<div id="home" class="bg-secondary pt-3">
+  <div id="home" class="bg-secondary pt-3">
 
-<b-container>
-    <transition-group
-      name="thumbs"
-      tag="b-row"
-      class="mb-5"
-      :css="false"
-      appear
-      @appear="appear"
-      @enter="enter"
-      foo-before-enter=""
-      foo-after-enter=""
-      @leave="leave"
-    >
-    <b-col
-      cols="6"
-      md="4"
-      class="mb-4"
-      v-for="(node, index) in currentSection.children"
-      :key="node.id"
-      :data-index="index"
-    >
-  <b-link
-    v-on:click="goToContent(node)"
-    @mouseenter="onMouseEnter"
-    @mouseleave="onMouseLeave"
-  >
-    <Card
-      :node="node"
-    />
-  </b-link>
-    </b-col>
-    </transition-group>
-</b-container>
+    <b-container>
+      <transition-group
+        name="thumbs"
+        tag="b-row"
+        class="mb-5"
+        :css="false"
+        appear
+        fooBeforeEnter=""
+        fooAfterEnter=""
+        @appear="appear"
+        @enter="enter"
+        @leave="leave"
+      >
+        <b-col
+          v-for="(node, index) in currentSection.children"
+          :key="node.id"
+          cols="6"
+          md="4"
+          class="mb-4"
+          :data-index="index"
+        >
+          <b-link
+            @click="goToContent(node)"
+            @mouseenter="onMouseEnter"
+            @mouseleave="onMouseLeave"
+          >
+            <Card
+              :node="node"
+            />
+          </b-link>
+        </b-col>
+      </transition-group>
+    </b-container>
 
-</div>
+  </div>
 </template>
 
 <script>
@@ -48,6 +48,7 @@ import swooshSound from '@/components/swoosh.wav';
 import popSound from '@/components/pop.flac';
 
 export default {
+  name: 'Home',
   components: {
     Card,
   },
