@@ -52,8 +52,6 @@
 
 <style lang="scss" scoped>
   @import '../styles';
-  @import 'bootstrap/scss/bootstrap';
-  @import 'bootstrap-vue/src/index';
 
   .card-row {
     margin-top: $card-deck-margin * 2;
