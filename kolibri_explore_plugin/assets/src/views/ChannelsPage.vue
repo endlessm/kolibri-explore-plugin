@@ -54,7 +54,13 @@
         return _.chunk(this.channels, this.columns);
       },
       emptyCardsNumber() {
-        return this.rows.length % this.columns;
+        const rest = this.channels.length % this.columns;
+
+        if (rest) {
+          return this.columns - rest;
+        }
+
+        return 0;
       },
     },
     methods: {
