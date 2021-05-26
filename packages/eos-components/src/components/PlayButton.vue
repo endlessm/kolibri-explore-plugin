@@ -5,8 +5,8 @@
     :class="`card-media-type m-2 ${node.kind}`"
     @click="$emit('click')"
   >
-    <span class="align-middle icon">
-      <b-icon :icon="icon" aria-hidden="true" />
+    <span class="align-middle">
+      <img :src="icon" aria-hidden="true">
     </span>
     <span class="align-middle">
       {{ mediaInfo }}
@@ -16,6 +16,11 @@
 
 <script>
 import { MediaTypeVerbs } from '../constants';
+import AudioIcon from '../assets/audio.svg';
+import DocumentIcon from '../assets/document.svg';
+import ExerciseIcon from '../assets/exercise.svg';
+import Html5Icon from '../assets/html5.svg';
+import VideoIcon from '../assets/video.svg';
 
 export default {
   name: 'PlayButton',
@@ -26,18 +31,17 @@ export default {
   computed: {
     icon() {
       switch (this.node.kind) {
-        case 'video':
-          return 'play-fill';
         case 'audio':
-          return 'music-note';
-        case 'exercise':
-          return 'clipboard-check';
-        case 'html5':
-          return 'box';
+          return AudioIcon;
         case 'document':
-          return 'file-earmark-text';
+          return DocumentIcon;
+        case 'exercise':
+          return ExerciseIcon;
+        case 'html5':
+          return Html5Icon;
+        case 'video':
         default:
-          return 'file-earmark';
+          return VideoIcon;
       }
     },
     mediaInfo() {
@@ -75,9 +79,6 @@ $background-alpha: 0.8;
   &.video {
     background-color: rgba($video-color, $background-alpha);
   }
-}
-.icon {
-  font-size: $font-size-lg;
 }
 
 </style>
