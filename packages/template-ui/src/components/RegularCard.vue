@@ -10,7 +10,7 @@
       <div class="card-img" :style="cardStyle">
         <span class="sr-only">{{ node.title }}</span>
       </div>
-      <CardMediaType :node="node" />
+      <PlayButton :node="node" :label="label" @click="goToContent(node)" />
       <b-card-text>
         <CardBody :node="node" />
       </b-card-text>
@@ -20,6 +20,7 @@
 
 <script>
 import cardMixin from '@/components/mixins/cardMixin';
+import { goToContent } from 'kolibri-api';
 
 export default {
   name: 'RegularCard',
@@ -38,6 +39,9 @@ export default {
         backgroundImage: `url("${this.thumbnail}")`,
       };
     },
+  },
+  methods: {
+    goToContent,
   },
 };
 </script>

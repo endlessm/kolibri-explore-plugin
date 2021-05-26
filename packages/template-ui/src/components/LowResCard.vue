@@ -8,7 +8,7 @@
         :src="thumbnail"
         :alt="node.title"
       />
-      <CardMediaType :node="node" />
+      <PlayButton :node="node" :label="label" @click="goToContent(node)" />
       <b-card-text>
         <CardBody :node="node" />
       </b-card-text>
@@ -18,12 +18,16 @@
 
 <script>
 import cardMixin from '@/components/mixins/cardMixin';
+import { goToContent } from 'kolibri-api';
 
 export default {
   name: 'LowResCard',
   mixins: [cardMixin],
   props: {
     node: Object,
+  },
+  methods: {
+    goToContent,
   },
 };
 </script>

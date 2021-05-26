@@ -3,7 +3,7 @@
     pill
     variant="dark"
     class="card-media-type m-2"
-    @click="goToContent(node)"
+    @click="$emit('click')"
   >
     <span class="align-middle icon">
       <b-icon :icon="icon" aria-hidden="true" />
@@ -15,18 +15,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { goToContent } from 'kolibri-api';
 
 export default {
-  name: 'CardMediaType',
+  name: 'PlayButton',
   props: {
     node: Object,
+    label: String,
   },
   computed: {
-    ...mapGetters({
-      getFirstStructuredTag: 'filters/getFirstStructuredTag',
-    }),
     icon() {
       switch (this.node.kind) {
         case 'video':
@@ -44,23 +40,12 @@ export default {
       }
     },
     mediaInfo() {
+      if (this.label) {
+        return this.label;
+      }
       switch (this.node.kind) {
-        case 'video': {
-          const duration = this.getFirstStructuredTag(this.node, 'duration');
-          if (!duration) {
-            return 'video';
-          }
-
-          let minutes = Math.floor(duration / 60);
-          if (minutes > 60) {
-            const hours = Math.floor(minutes / 60);
-            minutes %= 60;
-            return `${hours}h ${minutes}`;
-          }
-
-          const seconds = duration % 60;
-          return `${minutes}m ${seconds}`;
-        }
+        case 'video':
+          return 'video';
         case 'html5':
           return 'App';
         default:
@@ -68,14 +53,11 @@ export default {
       }
     },
   },
-  methods: {
-    goToContent,
-  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles.scss';
+@import '../styles.scss';
 
 .card-media-type {
   position: absolute;
