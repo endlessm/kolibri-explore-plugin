@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { MediaTypeVerbs } from '../constants';
 
 export default {
   name: 'PlayButton',
@@ -43,14 +44,7 @@ export default {
       if (this.label) {
         return this.label;
       }
-      switch (this.node.kind) {
-        case 'video':
-          return 'video';
-        case 'html5':
-          return 'App';
-        default:
-          return this.node.kind;
-      }
+      return MediaTypeVerbs[this.node.kind];
     },
   },
 };
