@@ -16,8 +16,8 @@
 
       <!-- eslint-disable vue/no-use-v-if-with-v-for -->
       <b-card
-        v-if="index === rows.length - 1"
         v-for="n in (columns - row.length)"
+        v-if="index === rows.length - 1"
         :key="n"
         class="invisible"
       />
