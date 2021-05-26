@@ -44,7 +44,7 @@
     },
     computed: {
       ...mapState('topicsRoot', { channels: 'rootNodes' }),
-      // TODO: filter this correctly, right now we're showing the first 6
+      // FIXME: filter this correctly, right now we're showing the first 6
       // items with thumbnail and the rest without
       rows() {
         let channels = this.channels.slice(0, 6);
