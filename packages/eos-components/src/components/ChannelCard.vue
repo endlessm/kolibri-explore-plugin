@@ -1,10 +1,20 @@
 <template>
   <b-card>
-    <b-card-header class="pb-2">
+    <div
+      v-if="hasThumbnail"
+      class="bigThumbnail"
+      :style="bigThumbnailStyles"
+    >
+    </div>
+    <b-card-header
+      class="pb-2"
+      :class="{ withThumbnail: hasThumbnail }"
+    >
       <div
         v-if="channel.thumbnail"
         class="mr-2 shadow-sm thumbnail"
-        :style="thumbnailStyles">
+        :style="thumbnailStyles"
+      >
       </div>
       <div class="title">
         {{ channel.title }}
@@ -24,7 +34,7 @@
         type: Object,
         required: true,
       },
-      thumbnail: {
+      hasThumbnail: {
         type: Boolean,
         default: false,
       },
@@ -41,6 +51,14 @@
           backgroundRepeat: 'no-repeat',
         };
       },
+      bigThumbnailStyles() {
+        return {
+          background: `url(${this.channel.thumbnail}) white`,
+          backgroundSize: '100% auto',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        };
+      },
     },
   }
 </script>
@@ -50,12 +68,13 @@
   @import 'bootstrap/scss/bootstrap';
   @import 'bootstrap-vue/src/index';
 
-  $thumb-size: 72px;
+  $thumb-size: 48px;
 
   .card {
     cursor: pointer;
     border-radius: $border-radius-lg !important;
     background-color: #EFF0F3 !important;
+    border: 0 !important;
     transition: all 0.3s ease;
   }
 
@@ -79,5 +98,22 @@
     min-height: $thumb-size;
     min-width: $thumb-size;
     border-radius: $border-radius-lg !important;
+  }
+
+  $card-image-ar: 3 / 4;
+  .bigThumbnail {
+    padding-top: percentage($card-image-ar);
+    border-radius: $border-radius-lg !important;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.25);
+  }
+
+  .withThumbnail {
+    margin-top: percentage($card-image-ar);
+    padding-top: $card-spacer-y * 2;
   }
 </style>
