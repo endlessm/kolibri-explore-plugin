@@ -54,6 +54,7 @@ const initialState = {
   channel: {},
   nodes: [],
   tree: {},
+  loading: true,
 
   // Navigation state:
   content: {},
@@ -90,6 +91,7 @@ const store = new Vuex.Store({
       state.channel = payload.channel;
       state.nodes = payload.nodes;
       state.tree = getNodesTree(payload.nodes);
+      state.loading = false;
     },
     setContentNavigation(state, payload) {
       state.content = state.nodes.find((n) => n.id === payload.contentId);

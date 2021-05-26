@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-const dynamicLoadComponents = (requireContext) => {
+function dynamicLoadComponents(requireContext) {
   requireContext.keys().forEach((fileName) => {
     // Remove './' prefix and '.vue' suffix from file name:
     const componentName = fileName.slice(2, -4);
@@ -21,7 +21,15 @@ export default function () {
     // There aren't component overrides. Nothing to do.
   }
 
+  try {
+    dynamicLoadComponents(require.context(
+      './components', false, /.vue$/,
+    ));
+  } catch (e) {
+    // This component doesn't exists in the template
+  }
+
   dynamicLoadComponents(require.context(
-    './components', false, /.vue$/,
+    'eos-components/src/components', false, /.vue$/,
   ));
 }
