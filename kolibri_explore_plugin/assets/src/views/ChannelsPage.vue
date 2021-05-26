@@ -4,7 +4,7 @@
     <b-card-group
       v-for="(row, index) in rows"
       :key="`row-${index}`"
-      class="mt-3"
+      class="card-row"
       deck
     >
       <ChannelCard
@@ -73,5 +73,9 @@
 <style lang="scss" scoped>
 
   @import '../styles';
+
+  .card-row {
+    margin-top: $card-deck-margin * 2;
+  }
 
 </style>
