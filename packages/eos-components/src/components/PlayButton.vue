@@ -48,7 +48,7 @@ export default {
       if (this.label) {
         return this.label;
       }
-      return MediaTypeVerbs[this.node.kind];
+      return MediaTypeVerbs[this.node.kind].toUpperCase();
     },
   },
 };
