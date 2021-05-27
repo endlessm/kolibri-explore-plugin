@@ -16,7 +16,7 @@
     <ContentLink :node="node" :label="label" @isHovered="(hovered) => isHovered = hovered">
       <b-card-text class="card-img-overlay">
         <div class="body-wrapper">
-          <CardBody :node="node" />
+          <CardBody :node="node" :subtitle="subtitle" />
         </div>
       </b-card-text>
     </ContentLink>
@@ -32,6 +32,7 @@ export default {
   mixins: [cardMixin],
   props: {
     node: Object,
+    subtitle: String,
   },
   data() {
     return {

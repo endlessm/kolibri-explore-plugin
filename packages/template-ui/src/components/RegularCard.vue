@@ -6,7 +6,7 @@
       'shadow-lg': isHovered,
     }"
   >
-    <ContentLink :node="node" @isHovered="(hovered) => isHovered = hovered">
+    <ContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
       <div class="card-img" :style="cardStyle">
         <span class="sr-only">{{ node.title }}</span>
       </div>
@@ -17,7 +17,7 @@
         @click="goToContent(node)"
       />
       <b-card-text>
-        <CardBody :node="node" />
+        <CardBody :node="node" :subtitle="subtitle" />
       </b-card-text>
     </ContentLink>
   </b-card>
@@ -32,6 +32,8 @@ export default {
   mixins: [cardMixin],
   props: {
     node: Object,
+    subtitle: String,
+    url: String,
   },
   data() {
     return {

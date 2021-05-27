@@ -14,7 +14,7 @@
       </VClamp>
     </h5>
     <p class="mb-1 subtitle text-muted text-truncate">
-      {{ getCardSubtitle(node) }}
+      {{ subtitle }}
     </p>
     <div class="tags">
       <b-badge
@@ -46,9 +46,9 @@ export default {
       type: Number,
       default: 3,
     },
+    subtitle: String,
   },
   computed: {
-    ...mapGetters(['getCardSubtitle']),
     ...mapGetters({
       getStructuredTags: 'filters/getStructuredTags',
       getFirstStructuredTag: 'filters/getFirstStructuredTag',
