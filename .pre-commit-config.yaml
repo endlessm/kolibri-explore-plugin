@@ -23,11 +23,12 @@ repos:
     language: system
     files: ^kolibri_explore_plugin/assets/src/.*\.(js|vue|scss|css)$
   - id: lint-packages
-    name: Linting of JS, Vue, SCSS and CSS files on the packages
+    name: Linting of JS and Vue files on the packages
     description: This hook handles all packages linting
-    entry: yarn run lint-frontend
+    entry: yarn run lint-packages
+    pass_filenames: false
     language: system
-    files: ^packages/.*\.(js|vue|scss|css)$
+    files: ^packages/.*\.(js|vue)$
 
 - repo: https://github.com/psf/black
   rev: 20.8b1
