@@ -11,7 +11,6 @@
         <span class="sr-only">{{ node.title }}</span>
       </div>
       <PlayButton
-        v-if="node.kind !== 'topic'"
         :node="node"
         :label="label"
         @click="goToContent(node)"

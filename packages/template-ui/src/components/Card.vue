@@ -20,6 +20,9 @@ export default {
     ...mapState(['mediaQuality']),
     ...mapGetters(['getCardSubtitle', 'getNodeUrl']),
     cardVariant() {
+      if (this.node.kind === 'topic') {
+        return 'TopicCard';
+      }
       switch (this.mediaQuality) {
         case MediaQuality.HIGH:
           return 'HighResCard';

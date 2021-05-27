@@ -9,7 +9,6 @@
         :alt="node.title"
       />
       <PlayButton
-        v-if="node.kind !== 'topic'"
         :node="node"
         :label="label"
         @click="goToContent(node)"
