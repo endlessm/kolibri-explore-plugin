@@ -9,7 +9,7 @@
         <div class="lightbox-action">
           <KIconButton
             icon="close"
-            :color="appMetadata.contentForegroundColor"
+            color="#adb5bd"
             @click="$emit('close')"
           />
         </div>
@@ -27,7 +27,6 @@
 
 <script>
 
-  import { mapState } from 'vuex';
   import ContentItem from './ContentItem';
   import commonExploreStrings from './commonExploreStrings';
 
@@ -43,15 +42,12 @@
         required: true,
       },
     },
-    computed: {
-      ...mapState('topicsTree', ['appMetadata']),
-    },
     methods: {
       getStyle() {
         return {
-          backgroundImage: this.appMetadata.contentBackgroundImage,
-          backgroundColor: this.appMetadata.contentBackgroundColor,
-          color: this.appMetadata.contentForegroundColor,
+          // FIXME: Use the theme when migrating the lightbox to Bootstrap:
+          backgroundColor: '#1b1b1b',
+          color: '#adb5bd',
         };
       },
       onOverlayClick(event) {
