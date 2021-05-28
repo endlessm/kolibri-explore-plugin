@@ -64,7 +64,7 @@ export default {
 
 .card-body {
   // This 8 is an estimation:
-  min-height: card-body-height(8);
+  height: card-body-height(8);
   display: flex;
   flex-direction: column;
   justify-content: space-between;

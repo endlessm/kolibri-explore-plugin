@@ -73,7 +73,7 @@ export default {
 @import '@/styles.scss';
 
 .card-content {
-  min-height: card-body-height(3);
+  height: card-body-height(3);
   display: flex;
   flex-direction: column;
   justify-content: space-between;

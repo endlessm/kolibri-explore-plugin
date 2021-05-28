@@ -16,11 +16,12 @@
               <b-icon-x />
             </b-button>
           </template>
-          <b-form-input
+          <input
             ref="searchInput"
             v-model="query"
+            class="form-control"
             placeholder="What do you want to learn about?"
-          />
+          >
         </b-input-group>
       </b-container>
     </div>
