@@ -9,6 +9,12 @@ export default {
   },
   computed: {
     ...mapGetters(['getAsset']),
+    ...mapGetters({
+      getDuration: 'filters/getDuration',
+    }),
+    label() {
+      return this.getDuration(this.node);
+    },
   },
   methods: {
     async getThumbnail() {

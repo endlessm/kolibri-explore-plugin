@@ -2,11 +2,9 @@
   <div
     class="position-relative"
   >
-    <b-icon
-      icon="play-fill"
-      variant="light"
-      class="p-3 position-absolute rounded-circle"
-      style=""
+    <PlayButton
+      :node="node"
+      class="play-button position-absolute"
     />
     <b-img
       fluid
@@ -32,15 +30,11 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles.scss';
 
-$play-icon-size: 80px;
-
-.b-icon {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  width: $play-icon-size;
-  height: $play-icon-size;
-  background-color: rgba($dark, 0.8) !important;
+.play-button {
+  top: 50% !important;
+  left: 50% !important;
+  position: absolute !important;
+  transform: translate(-50%,-50%) !important;
 }
 
 </style>

@@ -194,6 +194,21 @@ export default {
       }
       return tags[0];
     },
+    getDuration: (_state, getters) => (node) => {
+      const duration = getters.getFirstStructuredTag(node, 'duration');
+      if (!duration) {
+        return null;
+      }
+      let minutes = Math.floor(duration / 60);
+      if (minutes > 60) {
+        const hours = Math.floor(minutes / 60);
+        minutes %= 60;
+        return `${hours}h ${minutes}`;
+      }
+
+      const seconds = duration % 60;
+      return `${minutes}m ${seconds}`;
+    },
   },
   mutations: {
     setFilterQuery(state, payload) {

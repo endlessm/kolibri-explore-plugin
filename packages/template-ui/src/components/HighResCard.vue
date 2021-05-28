@@ -7,8 +7,13 @@
     }"
     overlay
   >
-    <CardMediaType :node="node" />
-    <ContentLink :node="node" @isHovered="(hovered) => isHovered = hovered">
+    <PlayButton
+      v-if="node.kind !== 'topic'"
+      :node="node"
+      :label="label"
+      @click="goToContent(node)"
+    />
+    <ContentLink :node="node" :label="label" @isHovered="(hovered) => isHovered = hovered">
       <b-card-text class="card-img-overlay">
         <div class="body-wrapper">
           <CardBody :node="node" />
@@ -20,6 +25,7 @@
 
 <script>
 import cardMixin from '@/components/mixins/cardMixin';
+import { goToContent } from 'kolibri-api';
 
 export default {
   name: 'HighResCard',
@@ -31,6 +37,9 @@ export default {
     return {
       isHovered: false,
     };
+  },
+  methods: {
+    goToContent,
   },
 };
 </script>
