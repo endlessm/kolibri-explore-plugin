@@ -16,8 +16,8 @@
 
       <!-- eslint-disable vue/no-use-v-if-with-v-for -->
       <b-card
-        v-if="index === rows.length - 1"
         v-for="n in (columns - row.length)"
+        v-if="index === rows.length - 1"
         :key="n"
         class="invisible"
       />
@@ -52,8 +52,6 @@
 
 <style lang="scss" scoped>
   @import '../styles';
-  @import 'bootstrap/scss/bootstrap';
-  @import 'bootstrap-vue/src/index';
 
   .card-row {
     margin-top: $card-deck-margin * 2;

@@ -3,11 +3,12 @@
   "description": "Monorepo with kolibri's Discovery page and custom channel presentations.",
   "private": true,
   "scripts": {
-    "build": "yarn build:plugin && yarn lerna run build && yarn deploy:apps",
+    "build": "lerna run build && yarn deploy:apps && yarn build:plugin",
     "build:plugin": "kolibri-tools build prod --plugins kolibri_explore_plugin",
     "deploy:apps": "./scripts/copy_bundles.py kolibri_explore_plugin/apps/",
     "clean": "kolibri-tools build clean --plugins kolibri_explore_plugin",
     "dev": "kolibri-tools build dev --plugins kolibri_explore_plugin --port 4000",
+    "lint-packages": "lerna run lint",
     "lint-frontend": "kolibri-tools lint -p 'kolibri_explore_plugin/assets/**/*.{js,vue,scss,less,css}'",
     "lint-frontend:format": "yarn run lint-frontend --write"
   },

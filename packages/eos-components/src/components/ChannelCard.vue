@@ -65,8 +65,6 @@
 
 <style lang="scss" scoped>
   @import '../styles';
-  @import 'bootstrap/scss/bootstrap';
-  @import 'bootstrap-vue/src/index';
 
   $thumb-size: 48px;
 

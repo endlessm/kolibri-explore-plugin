@@ -17,7 +17,7 @@
     "core-js": "^3.6.5",
     "eos-components": "^0.1.0",
     "kolibri-api": "0.1.0",
-    "underscore": "^1.11.0",
+    "underscore": "^1.13.1",
     "vue": "^2.6.11",
     "vue-clamp": "^0.3.1",
     "vue-router": "^3.2.0",

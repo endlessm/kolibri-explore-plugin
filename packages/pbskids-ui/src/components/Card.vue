@@ -12,7 +12,9 @@ import { getThumbnail } from 'kolibri-api';
 
 export default {
   name: 'Card',
-  props: ['node'],
+  props: {
+    node: Object,
+  },
   data() {
     return {
       thumbnail: null,
