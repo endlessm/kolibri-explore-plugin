@@ -1,6 +1,21 @@
 <template>
 
   <div>
+    <b-navbar class="header">
+      <b-container>
+        <b-navbar-brand href="#">
+          <img :src="logo">
+          Endless Discovery
+        </b-navbar-brand>
+        <b-navbar-nav class="ml-auto">
+          <b-button pill>
+            <b-icon-search />
+            Search
+          </b-button>
+        </b-navbar-nav>
+      </b-container>
+    </b-navbar>
+
     <div class="main">
       <b-container class="channels pb-5 pt-3">
         <!-- Cards without thumbnail -->
@@ -61,6 +76,7 @@
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import { ChannelCardGroup } from 'eos-components';
   import _ from 'underscore';
+  import EndlessLogo from 'eos-components/src/assets/EndlessLogo.svg';
   import { PageNames } from '../constants';
 
   export default {
@@ -87,6 +103,9 @@
 
         return { withThumbnail, withoutThumbnail };
       },
+      logo() {
+        return EndlessLogo;
+      },
     },
     methods: {
       goToChannel(channelId) {
@@ -112,6 +131,15 @@
   .footer {
     padding: 5rem 0;
     background: linear-gradient(to bottom, rgba($black, 0.075) 0, rgba($black, 0) 5px) $gray-300;
+  }
+
+  .header {
+    background: $gray-300;
+    border-bottom: 1px solid $gray-400;
+  }
+
+  .header > .container {
+    padding: $card-spacer-x;
   }
 
 </style>
