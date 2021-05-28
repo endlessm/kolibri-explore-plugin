@@ -9,13 +9,12 @@
         :alt="node.title"
       />
       <PlayButton
-        v-if="node.kind !== 'topic'"
         :node="node"
         :label="label"
         @click="goToContent(node)"
       />
       <b-card-text>
-        <CardBody :node="node" />
+        <CardBody :node="node" :subtitle="subtitle" />
       </b-card-text>
     </ContentLink>
   </b-card>
@@ -30,6 +29,7 @@ export default {
   mixins: [cardMixin],
   props: {
     node: Object,
+    subtitle: String,
   },
   methods: {
     goToContent,
