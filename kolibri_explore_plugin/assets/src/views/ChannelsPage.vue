@@ -1,20 +1,18 @@
 <template>
 
   <div>
-    <b-navbar class="header">
-      <b-container>
-        <b-navbar-brand href="#">
-          <img :src="logo">
-          Endless Discovery
-        </b-navbar-brand>
-        <b-navbar-nav class="ml-auto">
-          <b-button pill>
-            <b-icon-search />
-            Search
-          </b-button>
-        </b-navbar-nav>
-      </b-container>
-    </b-navbar>
+    <Header class="header" @click-logo="goToTop">
+      <b-navbar-brand>
+        Endless Discovery
+      </b-navbar-brand>
+
+      <template v-slot:right>
+        <b-button pill>
+          <b-icon-search />
+          Search
+        </b-button>
+      </template>
+    </Header>
 
     <div class="main">
       <b-container class="channels pb-5 pt-3">
@@ -74,15 +72,15 @@
 
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
-  import { ChannelCardGroup } from 'eos-components';
+  import { ChannelCardGroup, Header } from 'eos-components';
   import _ from 'underscore';
-  import EndlessLogo from 'eos-components/src/assets/EndlessLogo.svg';
   import { PageNames } from '../constants';
 
   export default {
     name: 'ChannelsPage',
     components: {
       ChannelCardGroup,
+      Header,
     },
     mixins: [commonCoreStrings],
     props: {
@@ -103,9 +101,6 @@
 
         return { withThumbnail, withoutThumbnail };
       },
-      logo() {
-        return EndlessLogo;
-      },
     },
     methods: {
       goToChannel(channelId) {
@@ -113,6 +108,9 @@
           name: PageNames.TOPICS_CHANNEL,
           params: { channel_id: channelId },
         });
+      },
+      goToTop() {
+        window.scrollTo(0, 0);
       },
     },
   };
@@ -134,12 +132,7 @@
   }
 
   .header {
-    background: $gray-300;
-    border-bottom: 1px solid $gray-400;
-  }
-
-  .header > .container {
-    padding: $card-spacer-x;
+    background: white;
   }
 
 </style>
