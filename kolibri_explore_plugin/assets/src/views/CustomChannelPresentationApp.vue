@@ -17,6 +17,7 @@
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
   import urls from 'kolibri.urls';
   import axios from 'axios';
+  import { PageNames } from '../constants';
   import { ContentNodeResource } from '../apiResources.js';
   import { showTopicsContentInLightbox } from '../modules/topicsTree/handlers';
 
@@ -48,6 +49,9 @@
         }
         if (event.data.event === 'askChannelInformation') {
           this.sendChannelInformation();
+        }
+        if (event.data.event === 'goToChannelList') {
+          this.goToChannelList();
         }
         if (event.data.event === 'goToContent') {
           this.goToContent(event.data.data);
@@ -112,6 +116,12 @@
             };
             iframeWindow.postMessage(message, '*');
           });
+        });
+      },
+
+      goToChannelList() {
+        this.$router.push({
+          name: PageNames.ROOT,
         });
       },
 

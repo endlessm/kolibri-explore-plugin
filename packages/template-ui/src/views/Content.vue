@@ -1,38 +1,40 @@
 <template>
-  <b-jumbotron
-    fluid
-    :style="{ backgroundImage: headerImageURL }"
-  >
-    <template v-slot:default>
-      <Breadcrumb :node="content" />
-      <b-row class="mt-3">
-        <b-col md="6" sm="12">
-          <h3>{{ content.title }}</h3>
-          <p class="mb-2">
-            {{ getCardSubtitle(content) }}
-          </p>
-          <!-- eslint-disable vue/no-v-html -->
-          <div class="mb-2" v-html="content.description"></div>
-          <b-badge
-            v-for="tag in subjectTags"
-            :key="tag"
-            pill
-            variant="primary"
-            class="mb-1 mr-1"
-          >
-            {{ tag }}
-          </b-badge>
-        </b-col>
-        <b-col md="6" sm="12">
-          <b-link
-            @click="goToContent(content)"
-          >
-            <ContentImage :node="content" />
-          </b-link>
-        </b-col>
-      </b-row>
-    </template>
-  </b-jumbotron>
+  <div>
+    <ChannelNavBar />
+    <b-jumbotron
+      fluid
+      :style="{ backgroundImage: headerImageURL }"
+    >
+      <template v-slot:default>
+        <b-row class="mt-3">
+          <b-col md="6" sm="12">
+            <h3>{{ content.title }}</h3>
+            <p class="mb-2">
+              {{ getCardSubtitle(content) }}
+            </p>
+            <!-- eslint-disable vue/no-v-html -->
+            <div class="mb-2" v-html="content.description"></div>
+            <b-badge
+              v-for="tag in subjectTags"
+              :key="tag"
+              pill
+              variant="primary"
+              class="mb-1 mr-1"
+            >
+              {{ tag }}
+            </b-badge>
+          </b-col>
+          <b-col md="6" sm="12">
+            <b-link
+              @click="goToContent(content)"
+            >
+              <ContentImage :node="content" />
+            </b-link>
+          </b-col>
+        </b-row>
+      </template>
+    </b-jumbotron>
+  </div>
 </template>
 
 <script>
@@ -80,6 +82,7 @@ export default {
 .jumbotron {
   background-color: $body-bg;
   background-size: cover;
+  background-position-y: -$navbar-height;
 }
 
 </style>

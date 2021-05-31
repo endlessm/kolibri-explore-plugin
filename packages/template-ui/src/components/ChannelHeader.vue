@@ -5,7 +5,6 @@
     class="mb-0"
   >
     <template v-slot:default>
-      <Breadcrumb :node="section" />
       <div class="align-items-start d-flex justify-content-between mt-3">
         <h1>{{ section.title }}</h1>
         <b-img
@@ -27,39 +26,15 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
-import dynamicRequireAsset from '@/dynamicRequireAsset';
-import { headerLogoWidth } from '@/styles.scss';
-import { getSlug } from '@/utils';
+import { mapGetters } from 'vuex';
+
+import headerMixin from '@/components/mixins/headerMixin';
 
 export default {
-  name: 'Header',
-  data() {
-    return {
-      headerLogoWidth,
-    };
-  },
+  name: 'ChannelHeader',
+  mixins: [headerMixin],
   computed: {
-    ...mapState(['channel', 'section', 'displayLogoInHeader']),
-    ...mapGetters(['headerDescription', 'getAssetURL']),
-    sectionImageURL() {
-      if (!this.section || !this.section.title) {
-        return null;
-      }
-      const sectionSlug = this.getSlug(this.section.title);
-      const headerSectionFilename = `header-${sectionSlug}.jpg`;
-      const headerSectionAsset = dynamicRequireAsset(headerSectionFilename);
-      if (headerSectionAsset) {
-        return `url(${headerSectionAsset})`;
-      }
-      return null;
-    },
-    headerImageURL() {
-      return this.sectionImageURL || this.getAssetURL('headerImage');
-    },
-  },
-  methods: {
-    getSlug,
+    ...mapGetters(['headerDescription']),
   },
 };
 </script>
@@ -74,6 +49,7 @@ $header-color: rgba($success, 0.5);
 .jumbotron {
   background-color: $header-color;
   background-size: cover;
+  background-position-y: -$navbar-height;
 }
 
 img {

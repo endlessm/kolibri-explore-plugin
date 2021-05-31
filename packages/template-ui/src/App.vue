@@ -3,7 +3,8 @@
     <!-- Wrapper needed to fix flexbox footer positioning on IE11 -->
     <div class="flex-shrink-0">
       <router-view>
-        <Header />
+        <ChannelNavBar />
+        <ChannelHeader />
       </router-view>
     </div>
     <Footer />
@@ -67,7 +68,6 @@ export default {
       const topicId = params.get('topicId');
       if (topicId) {
         this.$router.push(`/t/${topicId}`);
-        return;
       }
     },
   },
