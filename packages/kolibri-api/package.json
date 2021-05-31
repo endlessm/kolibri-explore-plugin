@@ -3,5 +3,8 @@
   "version": "0.1.0",
   "description": "Communicates with Kolibri for channel presentation.",
   "main": "index.js",
-  "license": "AGPL-3.0"
+  "license": "AGPL-3.0",
+  "scripts": {
+    "lint": "eslint index.js"
+  }
 }

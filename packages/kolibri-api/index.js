@@ -1,6 +1,6 @@
 // Communication with Kolibri frontend:
 
-export async function getThumbnail(node) {
+export function getThumbnail(node) {
   return new Promise((resolve) => {
     window.addEventListener('message', function waitThumb(event) {
       if (event.data.event && event.data.nameSpace === 'hashi'
