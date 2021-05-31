@@ -82,7 +82,7 @@ export default {
 .jumbotron {
   background-color: $body-bg;
   background-size: cover;
-  background-position-y: -$navbar-height;
+  padding-top: $navbar-height;
 }
 
 </style>

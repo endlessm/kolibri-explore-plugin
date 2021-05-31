@@ -45,8 +45,6 @@ $header-color: rgba($success, 0.5);
   background-color: $header-color !important;
   background-size: cover !important;
   background-repeat: no-repeat !important;
-  /** Set fixed size to match the ChannelHeader background **/
-  height: $navbar-height;
 }
 
 img {
