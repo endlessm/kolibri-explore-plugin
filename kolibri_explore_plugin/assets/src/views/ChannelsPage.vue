@@ -1,23 +1,69 @@
 <template>
 
-  <b-container class="channels pb-3 pt-3">
-    <!-- Cards without thumbnail -->
-    <ChannelCardGroup
-      :rows="rows.withThumbnail"
-      :hasThumbnail="true"
-      :columns="columns"
-      @card-click="goToChannel"
-    />
+  <div>
+    <Header class="header" @click-logo="goToTop">
+      <b-navbar-brand>
+        Endless Discovery
+      </b-navbar-brand>
 
-    <!-- Cards without thumbnail -->
-    <ChannelCardGroup
-      :rows="rows.withoutThumbnail"
-      :hasThumbnail="false"
-      :columns="columns"
-      @card-click="goToChannel"
-    />
+      <template v-slot:right>
+        <b-button pill>
+          <b-icon-search />
+          Search
+        </b-button>
+      </template>
+    </Header>
 
-  </b-container>
+    <div class="main">
+      <b-container class="channels pb-5 pt-3">
+        <!-- Cards without thumbnail -->
+        <ChannelCardGroup
+          :rows="rows.withThumbnail"
+          :hasThumbnail="true"
+          :columns="columns"
+          @card-click="goToChannel"
+        />
+
+        <!-- Cards without thumbnail -->
+        <ChannelCardGroup
+          :rows="rows.withoutThumbnail"
+          :hasThumbnail="false"
+          :columns="columns"
+          @card-click="goToChannel"
+        />
+      </b-container>
+    </div>
+
+    <div class="footer">
+      <b-container>
+        <b-row>
+          <b-col cols="7">
+            <h3 class="text-muted">
+              <strong>The Endless Key Discovery</strong> — content to help you do
+              your homework and discover curiosity you didn't even know you had,
+              even without internet.
+            </h3>
+          </b-col>
+          <b-col cols="1" />
+          <b-col>
+            <p class="text-muted">
+              The Endless Key initiative is brought to you by the Endless OS
+              Foundation in partnership with Common Sense and Learning
+              Equality
+            </p>
+            <b-button
+              pill
+              variant="outline-secondary"
+              target="_blank"
+              href="https://www.endlessos.org/key"
+            >
+              Learn more <b-icon-chevron-right />
+            </b-button>
+          </b-col>
+        </b-row>
+      </b-container>
+    </div>
+  </div>
 
 </template>
 
@@ -26,7 +72,7 @@
 
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
-  import { ChannelCardGroup } from 'eos-components';
+  import { ChannelCardGroup, Header } from 'eos-components';
   import _ from 'underscore';
   import { PageNames } from '../constants';
 
@@ -34,6 +80,7 @@
     name: 'ChannelsPage',
     components: {
       ChannelCardGroup,
+      Header,
     },
     mixins: [commonCoreStrings],
     props: {
@@ -62,6 +109,9 @@
           params: { channel_id: channelId },
         });
       },
+      goToTop() {
+        window.scrollTo(0, 0);
+      },
     },
   };
 
@@ -71,5 +121,18 @@
 <style lang="scss" scoped>
 
   @import '../styles';
+
+  .main {
+    background-color: white;
+  }
+
+  .footer {
+    padding: 5rem 0;
+    background: linear-gradient(to bottom, rgba($black, 0.075) 0, rgba($black, 0) 5px) $gray-300;
+  }
+
+  .header {
+    background: white;
+  }
 
 </style>
