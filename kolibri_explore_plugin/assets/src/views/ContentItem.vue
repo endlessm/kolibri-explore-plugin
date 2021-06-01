@@ -3,6 +3,7 @@
   <div>
     <template v-if="sessionReady">
       <KContentRenderer
+        v-if="!content.assessment"
         class="content-renderer"
         :kind="content.kind"
         :lang="content.lang"
@@ -20,6 +21,29 @@
         @addProgress="addProgress"
         @updateContentState="updateContentState"
       />
+
+      <AssessmentWrapper
+        v-else
+        :id="content.id"
+        class="content-renderer"
+        :kind="content.kind"
+        :files="content.files"
+        :lang="content.lang"
+        :randomize="content.randomize"
+        :masteryModel="content.masteryModel"
+        :assessmentIds="content.assessmentIds"
+        :channelId="channelId"
+        :available="content.available"
+        :extraFields="extraFields"
+        :progress="summaryProgress"
+        :userId="currentUserId"
+        :userFullName="fullName"
+        :timeSpent="summaryTimeSpent"
+        @startTracking="startTracking"
+        @stopTracking="stopTracking"
+        @updateProgress="updateExerciseProgress"
+        @updateContentState="updateContentState"
+      />
     </template>
     <KCircularLoader v-else />
 
@@ -33,11 +57,14 @@
   import { mapState, mapGetters, mapActions } from 'vuex';
   import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
   import { updateContentNodeProgress } from '../modules/coreExplore/utils';
+  import AssessmentWrapper from './AssessmentWrapper';
   import commonExploreStrings from './commonExploreStrings';
 
   export default {
     name: 'ContentItem',
-    components: {},
+    components: {
+      AssessmentWrapper,
+    },
     mixins: [commonExploreStrings],
     props: {
       content: {
@@ -116,6 +143,9 @@
           )
         );
         this.$emit('addProgress', progressPercent);
+      },
+      updateExerciseProgress(progressPercent) {
+        this.$emit('updateProgress', progressPercent);
       },
       updateContentState(contentState, forceSave = true) {
         this.updateContentNodeState({ contentState, forceSave });
