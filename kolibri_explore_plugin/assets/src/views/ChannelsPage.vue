@@ -1,6 +1,6 @@
 <template>
 
-  <div>
+  <div class="channels-page">
     <Header class="header" @click-logo="goToTop">
       <b-navbar-brand>
         Endless Discovery
@@ -133,6 +133,10 @@
 
   .header {
     background: white;
+  }
+
+  .channels-page {
+    padding-top: $navbar-height;
   }
 
 </style>

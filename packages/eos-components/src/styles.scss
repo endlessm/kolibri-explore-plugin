@@ -45,3 +45,7 @@ $ph-animation-duration:   0.8s !default;
 
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-vue/src/index';
+
+$navbar-height: $navbar-brand-height +
+                $navbar-brand-padding-y * 2 +
+                $navbar-padding-y * 2;

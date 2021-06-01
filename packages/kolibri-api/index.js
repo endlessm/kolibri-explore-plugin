@@ -23,6 +23,19 @@ export function getThumbnail(node) {
   });
 }
 
+export function goToChannelList() {
+  console.log('Go to channel list');
+  const nameSpace = 'customChannelPresentation';
+  const event = 'goToChannelList';
+  const data = {};
+  const message = {
+    event,
+    data,
+    nameSpace,
+  };
+  window.parent.postMessage(message, '*');
+}
+
 export function goToContent(node) {
   console.log(`Go to: ${node.title}`);
   const nameSpace = 'customChannelPresentation';
