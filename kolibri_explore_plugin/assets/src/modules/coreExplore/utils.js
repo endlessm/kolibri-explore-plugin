@@ -1,5 +1,6 @@
 import { ContentNodeProgressResource } from 'kolibri.resources';
 import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
+import { assessmentMetaDataState } from 'kolibri.coreVue.vuex.mappers';
 import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 import tail from 'lodash/tail';
 
@@ -19,6 +20,7 @@ export function contentState(node, next_content = []) {
   return {
     next_content,
     ...normalizeContentNode(node),
+    ...assessmentMetaDataState(node),
   };
 }
 
