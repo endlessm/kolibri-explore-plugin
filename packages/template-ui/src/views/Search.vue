@@ -54,7 +54,7 @@ export default {
       return this.getAssetURL('homeBackgroundImage');
     },
     notFound() {
-      return !this.searching && !this.resultNodes.length && this.query !== '';
+      return !this.searching && !this.resultNodes.length && this.cleanedQuery !== '';
     },
     cleanedQuery() {
       return escapeRegExp(this.query.trim());
