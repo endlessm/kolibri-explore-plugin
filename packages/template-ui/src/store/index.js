@@ -210,6 +210,11 @@ const store = new Vuex.Store({
           if (regexp.test(node.author)) {
             score += 5;
           }
+          Object.values(node.structuredTags).forEach((tags) => {
+            if (tags.some((t) => regexp.test(t))) {
+              score += 5;
+            }
+          });
           if (regexp.test(node.description)) {
             score += 1;
           }
