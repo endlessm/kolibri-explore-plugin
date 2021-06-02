@@ -1,8 +1,6 @@
 import { recursiveExistsNodes, flattenNodes } from '@/utils';
-import { StructuredTags } from '@/constants';
+import { StructuredTags, StructuredTagsRegExp } from '@/constants';
 import _ from 'underscore';
-
-const StructuredTagsRegExp = new RegExp('(.*)=(.*)');
 
 // ['foo', 'foo', 'bar'] => { 'foo': 2, 'bar': 1 }
 function weightOptions(options) {
@@ -30,21 +28,9 @@ function getTagOptions(node) {
     .filter((t) => !t.match(StructuredTagsRegExp));
 }
 
-function getStructuredTags(node, matchKey) {
-  if (!node.tags) {
-    return [];
-  }
-  const tagValues = node.tags
-    .filter((t) => t.match(StructuredTagsRegExp))
-    .map((t) => t.match(StructuredTagsRegExp))
-    .filter(([, key]) => key === matchKey)
-    .map(([,, value]) => value);
-  return tagValues;
-}
-
 function getStructuredTagOptions(node, matchKey) {
   return flattenNodes(node)
-    .flatMap((n) => getStructuredTags(n, matchKey));
+    .flatMap((n) => n.structuredTags[matchKey]);
 }
 
 let storeData;
@@ -160,7 +146,7 @@ export default {
         if (options && options.length) {
           filtered = filtered.filter((node) => (
             options.some((o) => recursiveExistsNodes(node,
-              (n) => getStructuredTags(n, matchKey).includes(o)))
+              (n) => matchKey in n.structuredTags && n.structuredTags[matchKey].includes(o)))
           ));
         }
       });
@@ -186,9 +172,12 @@ export default {
           return filter.options;
       }
     },
-    getStructuredTags: () => (node, matchKey) => (getStructuredTags(node, matchKey)),
-    getFirstStructuredTag: (_state, getters) => (node, matchKey) => {
-      const tags = getters.getStructuredTags(node, matchKey);
+    getStructuredTags: () => (node, matchKey) => (node.structuredTags[matchKey]),
+    getFirstStructuredTag: () => (node, matchKey) => {
+      if (!(matchKey in node.structuredTags)) {
+        return null;
+      }
+      const tags = node.structuredTags[matchKey];
       if (!tags.length) {
         return null;
       }

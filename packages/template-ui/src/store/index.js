@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { getNodesTree } from '@/utils';
 import dynamicRequireAsset from '@/dynamicRequireAsset';
-import { MediaQuality, SEARCH_MAX_RESULTS } from '@/constants';
+import { MediaQuality, SEARCH_MAX_RESULTS, StructuredTags, StructuredTagsRegExp } from '@/constants';
 import filters from './modules/filters';
 
 let storeData;
@@ -14,6 +14,30 @@ try {
 }
 
 Vue.use(Vuex);
+
+function getStructuredTags(node, matchKey) {
+  if (!node.tags) {
+    return [];
+  }
+  const tagValues = node.tags
+    .filter((t) => t.match(StructuredTagsRegExp))
+    .map((t) => t.match(StructuredTagsRegExp))
+    .filter(([, key]) => key === matchKey)
+    .map(([,, value]) => value);
+  return tagValues;
+}
+
+function parseNodes(nodes) {
+  return nodes.map((n) => {
+    // Add structured tags to the node metadata:
+    n.structuredTags = {};
+    Object.values(StructuredTags).forEach((matchKey) => {
+      const tags = getStructuredTags(n, matchKey);
+      n.structuredTags[matchKey] = tags;
+    });
+    return n;
+  });
+}
 
 function getLeaves(node) {
   if (!node.children) {
@@ -89,7 +113,7 @@ const store = new Vuex.Store({
   mutations: {
     setChannelInformation(state, payload) {
       state.channel = payload.channel;
-      state.nodes = payload.nodes;
+      state.nodes = parseNodes(payload.nodes);
       state.tree = getNodesTree(payload.nodes);
       state.loading = false;
     },
