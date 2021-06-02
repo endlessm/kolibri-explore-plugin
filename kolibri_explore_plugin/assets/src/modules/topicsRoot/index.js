@@ -2,6 +2,7 @@ export default {
   namespaced: true,
   state: {
     rootNodes: [],
+    searchResult: {},
   },
   mutations: {
     SET_STATE(state, payload) {
@@ -9,6 +10,9 @@ export default {
     },
     RESET_STATE(state) {
       state.rootNodes = [];
+    },
+    SET_SEARCH_RESULT(state, payload) {
+      state.searchResult = payload;
     },
   },
 };

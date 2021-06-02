@@ -19,6 +19,13 @@ export default [
     },
   },
   {
+    name: PageNames.SEARCH,
+    path: '/search',
+    handler: () => {
+      store.commit('SET_PAGE_NAME', PageNames.SEARCH);
+    },
+  },
+  {
     name: PageNames.TOPICS_ROOT,
     path: '/topics',
     handler: () => {

@@ -7,7 +7,7 @@
       </b-navbar-brand>
 
       <template v-slot:right>
-        <b-button pill>
+        <b-button pill @click="goToSearch">
           <b-icon-search />
           Search
         </b-button>
@@ -111,6 +111,11 @@
       },
       goToTop() {
         window.scrollTo(0, 0);
+      },
+      goToSearch() {
+        this.$router.push({
+          name: PageNames.SEARCH,
+        });
       },
     },
   };
