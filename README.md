@@ -51,13 +51,13 @@ repository: https://github.com/endlessm/kolibri-channel-custom-web-app
 ### Creating the `.whl` file
 
 With all dependencies installed and all the zips in place, it's now
-possible to build using `make`:
+possible to build for distribution running:
 
 ```
-make dist
+yarn build-dist
 ```
 
-**Note: Before calling `make dist` you need to bundle all custom
+**Note: Before calling `yarn build-dist` you need to bundle all custom
 channel presentations!**
 
 An installable `.whl` file will be created in the `dist/` folder.
@@ -134,7 +134,7 @@ If you are releasing a new version, first please bump to either major,
 minor or patch. Eg:
 
 ```
-make bumpversion part=patch
+yarn bump-version patch
 ```
 
 That creates a new commit and a git tag. Please push them to the
@@ -148,11 +148,11 @@ git push origin NEW_TAG
 Then build:
 
 ```
-make dist
+yarn build-dist
 ```
 
 And finally upload the built `.whl` file to PyPi:
 
 ```
-make release
+yarn release
 ```
