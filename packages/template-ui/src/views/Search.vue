@@ -3,7 +3,7 @@
     class="root"
     :style="{ backgroundImage: backgroundImageURL }"
   >
-    <SearchBar v-model="query" closeLinkTo="/" />
+    <SearchBar v-model="query" @clear-input="() => this.query = ''" />
 
     <b-container
       v-if="notFound"

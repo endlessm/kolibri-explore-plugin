@@ -8,7 +8,7 @@
           </b-input-group-text>
         </template>
         <template #append>
-          <b-button pill variant="link" :to="closeLinkTo">
+          <b-button pill variant="link" @click="clearSearchInput">
             <b-icon-x />
           </b-button>
         </template>
@@ -30,10 +30,6 @@
   export default {
     name: 'SearchBar',
     props: {
-      closeLinkTo: {
-        type: String,
-        default: '/',
-      },
       value: {
         type: String,
         required: true,
@@ -54,6 +50,9 @@
       focusSearchInput() {
         this.$refs.searchInput.focus();
       },
+      clearSearchInput() {
+        this.$emit('clear-input');
+      }
     },
   };
 </script>
