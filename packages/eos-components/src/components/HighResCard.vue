@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import cardMixin from '@/components/mixins/cardMixin';
 import { goToContent } from 'kolibri-api';
+import cardMixin from './mixins/cardMixin.js';
 
 export default {
   name: 'HighResCard',
@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles.scss';
+@import '../styles.scss';
 
 .card {
   transition: all ease .4s;

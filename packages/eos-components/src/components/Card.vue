@@ -2,23 +2,22 @@
   <component
     :is="cardVariant"
     :node="node"
-    :subtitle="getCardSubtitle(node)"
+    :subtitle="subtitle"
     :url="getNodeUrl(node)"
   />
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
-import { MediaQuality } from '@/constants';
+import { MediaQuality } from '../constants';
+import { getNodeUrl, getCardSubtitle } from './utils';
 
 export default {
   name: 'Card',
   props: {
     node: Object,
+    mediaQuality: String,
   },
   computed: {
-    ...mapState(['mediaQuality']),
-    ...mapGetters(['getCardSubtitle', 'getNodeUrl']),
     cardVariant() {
       if (this.node.kind === 'topic') {
         return 'TopicCard';
@@ -33,6 +32,19 @@ export default {
           return 'RegularCard';
       }
     },
+    subtitle() {
+      let fallback = '';
+      if (this.$store) {
+        const { state } = this.$store;
+        if (state.channel) {
+          fallback = state.channel.title;
+        }
+      }
+      return getCardSubtitle(this.node, fallback);
+    }
+  },
+  methods: {
+    getNodeUrl,
   },
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <b-link
-      :to="getNodeUrl(section)"
+      :to="nodeUrl"
       class="text-decoration-none text-reset"
     >
       <h3>
@@ -12,7 +12,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { utils } from 'eos-components';
+import { mapState } from 'vuex';
 
 export default {
   name: 'SectionTitle',
@@ -20,7 +21,10 @@ export default {
     section: Object,
   },
   computed: {
-    ...mapGetters(['getNodeUrl']),
+    ...mapState(['channel']),
+    nodeUrl() {
+      return utils.getNodeUrl(this.section, this.channel.id);
+    },
   },
 };
 </script>

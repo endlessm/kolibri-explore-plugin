@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import cardMixin from '@/components/mixins/cardMixin';
+import { cardMixin } from 'eos-components';
 
 export default {
   name: 'ContentImage',

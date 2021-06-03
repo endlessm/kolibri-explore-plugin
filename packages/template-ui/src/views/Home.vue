@@ -22,6 +22,8 @@
         <CardGrid
           v-if="contentNodes"
           :nodes="contentNodes"
+          :mediaQuality="mediaQuality"
+          :cardColumns="cardColumns"
         />
         <div
           v-for="section in filteredSections"
@@ -31,6 +33,8 @@
             v-if="filterNodes(section.children).length"
             :id="section.id"
             :nodes="filterNodes(section.children)"
+            :mediaQuality="mediaQuality"
+            :cardColumns="cardColumns"
           >
             <b-row>
               <SectionTitle :section="section" />
@@ -49,7 +53,7 @@ import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'Home',
   computed: {
-    ...mapState(['section', 'loading']),
+    ...mapState(['section', 'loading', 'cardColumns', 'mediaQuality']),
     ...mapGetters({
       mainSections: 'mainSections',
       getAssetURL: 'getAssetURL',

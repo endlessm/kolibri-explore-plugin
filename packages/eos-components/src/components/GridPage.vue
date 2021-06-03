@@ -6,22 +6,25 @@
       :cols="cardColumns.cols"
       :md="cardColumns.md"
     >
-      <Card :node="node" />
+      <Card :node="node" :mediaQuality="mediaQuality" />
     </b-col>
   </b-row>
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { MediaQuality } from '../constants';
 
 export default {
   name: 'GridPage',
   props: {
     nodes: Array,
+    mediaQuality: String,
+    cardColumns: Object,
   },
   computed: {
-    ...mapState(['cardColumns']),
-    ...mapGetters(['isHighQualityMedia']),
+    isHighQualityMedia() {
+      return this.mediaQuality === MediaQuality.HIGH;
+    },
   },
 };
 </script>

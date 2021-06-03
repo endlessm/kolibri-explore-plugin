@@ -22,7 +22,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { utils } from 'eos-components';
+import { mapState } from 'vuex';
 
 export default {
   name: 'Breadcrumb',
@@ -30,14 +31,17 @@ export default {
     node: Object,
   },
   computed: {
-    ...mapGetters(['getNodeUrl']),
+    ...mapState(['channel']),
     notAtHome() {
       return this.$route.name !== 'Home';
     },
   },
   methods: {
     getTopicUrl(n) {
-      return this.getNodeUrl({ id: n.id, kind: 'topic' });
+      return utils.getNodeUrl({ id: n.id, kind: 'topic' }, this.channel.id);
+    },
+    getNodeUrl(n) {
+      return utils.getNodeUrl(n, this.channel.id);
     },
   },
 };

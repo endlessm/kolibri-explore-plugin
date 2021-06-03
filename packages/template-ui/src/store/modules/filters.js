@@ -1,6 +1,7 @@
 import { recursiveExistsNodes, flattenNodes } from '@/utils';
-import { StructuredTags, StructuredTagsRegExp } from '@/constants';
 import _ from 'underscore';
+
+import { constants } from 'eos-components';
 
 // ['foo', 'foo', 'bar'] => { 'foo': 2, 'bar': 1 }
 function weightOptions(options) {
@@ -25,7 +26,7 @@ function getTagOptions(node) {
   return flattenNodes(node)
     .flatMap((n) => (n.tags ? n.tags : []))
     .filter((t) => t !== '')
-    .filter((t) => !t.match(StructuredTagsRegExp));
+    .filter((t) => !t.match(constants.StructuredTagsRegExp));
 }
 
 function getStructuredTagOptions(node, matchKey) {
@@ -62,7 +63,7 @@ const MediaFilterName = 'media type';
 const AuthorFilterName = 'author';
 const TagFilterName = 'common keywords';
 
-const structuredTagsMetadata = Object.values(StructuredTags)
+const structuredTagsMetadata = Object.values(constants.StructuredTags)
   .map((t) => ({ name: t }));
 
 // Filter taxonomy, that can be overriden
@@ -141,7 +142,7 @@ export default {
         ));
       }
       // Filter by structured tags
-      Object.values(StructuredTags).forEach((matchKey) => {
+      Object.values(constants.StructuredTags).forEach((matchKey) => {
         const options = query[matchKey];
         if (options && options.length) {
           filtered = filtered.filter((node) => (
@@ -154,7 +155,7 @@ export default {
       return filtered;
     },
     possibleOptions: () => (filter, root) => {
-      if (Object.values(StructuredTags).includes(filter.name)) {
+      if (Object.values(constants.StructuredTags).includes(filter.name)) {
         const getOptionsFunc = _.partial(getStructuredTagOptions, _, filter.name);
         return sortOptionsByWeight(root, getOptionsFunc);
       }
@@ -171,32 +172,6 @@ export default {
         default:
           return filter.options;
       }
-    },
-    getStructuredTags: () => (node, matchKey) => (node.structuredTags[matchKey]),
-    getFirstStructuredTag: () => (node, matchKey) => {
-      if (!(matchKey in node.structuredTags)) {
-        return null;
-      }
-      const tags = node.structuredTags[matchKey];
-      if (!tags.length) {
-        return null;
-      }
-      return tags[0];
-    },
-    getDuration: (_state, getters) => (node) => {
-      const duration = getters.getFirstStructuredTag(node, 'duration');
-      if (!duration) {
-        return null;
-      }
-      let minutes = Math.floor(duration / 60);
-      if (minutes > 60) {
-        const hours = Math.floor(minutes / 60);
-        minutes %= 60;
-        return `${hours}h ${minutes}`;
-      }
-
-      const seconds = duration % 60;
-      return `${minutes}m ${seconds}`;
     },
   },
   mutations: {

@@ -2,7 +2,9 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { getNodesTree } from '@/utils';
 import dynamicRequireAsset from '@/dynamicRequireAsset';
-import { MediaQuality, SEARCH_MAX_RESULTS, StructuredTags, StructuredTagsRegExp } from '@/constants';
+import { SEARCH_MAX_RESULTS } from '@/constants';
+import { utils , constants as ComponentConstants } from 'eos-components';
+
 import filters from './modules/filters';
 
 let storeData;
@@ -14,39 +16,6 @@ try {
 }
 
 Vue.use(Vuex);
-
-function getStructuredTags(node, matchKey) {
-  if (!node.tags) {
-    return [];
-  }
-  const tagValues = node.tags
-    .filter((t) => t.match(StructuredTagsRegExp))
-    .map((t) => t.match(StructuredTagsRegExp))
-    .filter(([, key]) => key === matchKey)
-    .map(([,, value]) => value);
-  return tagValues;
-}
-
-function parseNodes(nodes) {
-  return nodes.map((n) => {
-    // Add structured tags to the node metadata:
-    n.structuredTags = {};
-    Object.values(StructuredTags).forEach((matchKey) => {
-      const tags = getStructuredTags(n, matchKey);
-      n.structuredTags[matchKey] = tags;
-    });
-    return n;
-  });
-}
-
-function getLeaves(node) {
-  if (!node.children) {
-    return [node];
-  }
-  return node.children
-    .map(getLeaves)
-    .reduce((accumulator, currentValue) => accumulator.concat(currentValue), []);
-}
 
 function findNodeById(node, nodeId) {
   if (node.id === nodeId) {
@@ -62,16 +31,6 @@ function findNodeById(node, nodeId) {
   });
   return result;
 }
-
-const defaultKindLabel = 'items';
-
-// See https://github.com/learningequality/le-utils/blob/master/le_utils/constants/content_kinds.py
-const labelPerKind = {
-  video: 'videos',
-  audio: 'audios',
-  document: 'documents',
-  html5: 'applications',
-};
 
 const initialState = {
   // Channel and nodes, as they come from kolibri:
@@ -104,7 +63,7 @@ const initialState = {
   carouselNodeIds: [], // if empty we'll pick nodes randomly
   carouselSlideNumber: 3, // Only used if picking randomly, defaults to 3
 
-  mediaQuality: MediaQuality.REGULAR,
+  mediaQuality: ComponentConstants.MediaQuality.REGULAR,
   displayLogoInHeader: true,
 };
 
@@ -113,7 +72,7 @@ const store = new Vuex.Store({
   mutations: {
     setChannelInformation(state, payload) {
       state.channel = payload.channel;
-      state.nodes = parseNodes(payload.nodes);
+      state.nodes = utils.parseNodes(payload.nodes);
       state.tree = getNodesTree(payload.nodes);
       state.loading = false;
     },
@@ -151,35 +110,6 @@ const store = new Vuex.Store({
       }
       return state.section.description;
     },
-    getNodeUrl: (state) => (node) => {
-      if (node.id === state.channel.id) {
-        return '/';
-      }
-      if (node.kind === 'topic') {
-        return `/t/${node.id}`;
-      }
-      return `/c/${node.id}`;
-    },
-    getTopicCardSubtitle: () => (node) => {
-      const leaves = getLeaves(node);
-      const leavesKinds = leaves.map((leaf) => leaf.kind);
-      const uniqueLeavesKinds = new Set(leavesKinds);
-      let kindsLabel;
-      if (uniqueLeavesKinds.size > 1) {
-        kindsLabel = defaultKindLabel;
-      } else {
-        const kind = uniqueLeavesKinds.values().next().value;
-        kindsLabel = labelPerKind[kind] || defaultKindLabel;
-      }
-      return `${leaves.length} ${kindsLabel}`;
-    },
-    getCardSubtitle: (state, getters) => (node) => {
-      if (node.kind === 'topic') {
-        return getters.getTopicCardSubtitle(node);
-      }
-      const byLine = node.author || node.license_owner || state.channel.title;
-      return `by ${byLine}`;
-    },
     getAsset: (state) => (name) => dynamicRequireAsset(state.assetFilenames[name]),
     getAssetURL: (_state, getters) => (name) => {
       const asset = getters.getAsset(name);
@@ -194,7 +124,6 @@ const store = new Vuex.Store({
       }
       return null;
     },
-    isHighQualityMedia: (state) => state.mediaQuality === MediaQuality.HIGH,
     searchNodes: (state) => (query) => {
       // Trim whitespace and ignore case:
       const regexp = new RegExp(query, 'i');

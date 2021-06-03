@@ -17,12 +17,16 @@
     <CardGrid
       v-if="!resultNodes.length"
       :nodes="mainSections"
+      :mediaQuality="mediaQuality"
+      :cardColumns="cardColumns"
     >
       <h3>Explore topics</h3>
     </CardGrid>
     <CardGrid
       v-else
       :nodes="resultNodes"
+      :mediaQuality="mediaQuality"
+      :cardColumns="cardColumns"
       variant="paginated"
     >
       <h3>Results</h3>
@@ -32,7 +36,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 // Escapes the RegExp special characters in string.
 function escapeRegExp(string) {
@@ -50,6 +54,7 @@ export default {
   },
   computed: {
     ...mapGetters(['mainSections', 'getAssetURL', 'searchNodes']),
+    ...mapState(['cardColumns', 'mediaQuality']),
     backgroundImageURL() {
       return this.getAssetURL('homeBackgroundImage');
     },

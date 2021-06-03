@@ -1,12 +1,20 @@
 <template>
   <span>
-    <GridPage :nodes="nodes.slice(0, itemsPerPage)" />
+    <GridPage
+      :nodes="nodes.slice(0, itemsPerPage)"
+      :cardColumns="cardColumns"
+      :mediaQuality="mediaQuality"
+    />
 
     <b-collapse
       :id="'collapse-' + id"
       :class="{ 'mt-2': !isHighQualityMedia }"
     >
-      <GridPage :nodes="nodes.slice(itemsPerPage)" />
+      <GridPage
+        :nodes="nodes.slice(itemsPerPage)"
+        :cardColumns="cardColumns"
+        :mediaQuality="mediaQuality"
+      />
     </b-collapse>
 
     <b-row v-if="nodes.length > itemsPerPage" alignH="center">
@@ -21,27 +29,31 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { MediaQuality } from '../constants';
 
 export default {
   name: 'CollapsibleCardGrid',
   props: {
     nodes: Array,
     id: String,
+    mediaQuality: String,
+    cardColumns: Object,
     itemsPerPage: {
       type: Number,
       default: 8,
     },
   },
   computed: {
-    ...mapGetters(['isHighQualityMedia']),
+    isHighQualityMedia() {
+      return this.mediaQuality === MediaQuality.HIGH;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 
-@import "@/styles.scss";
+@import "../styles.scss";
 
 .collapsed > .when-open,
 .not-collapsed > .when-closed {
