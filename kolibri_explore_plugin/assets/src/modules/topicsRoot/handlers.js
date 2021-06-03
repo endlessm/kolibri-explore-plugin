@@ -1,6 +1,6 @@
 import urls from 'kolibri.urls';
-import { ChannelResource, ContentNodeSearchResource } from 'kolibri.resources';
-import { ContentNodeResource } from '../../apiResources';
+import { ChannelResource } from 'kolibri.resources';
+import { ContentNodeResource, ContentNodeSearchResource } from '../../apiResources';
 import { PageNames } from '../../constants';
 import { CustomChannelApps } from '../../customApps';
 import { _collectionState } from '../coreExplore/utils';

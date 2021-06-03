@@ -37,3 +37,8 @@ export const ContentNodeResource = new Resource({
     return this.fetchDetailCollection('next_steps', Store.getters.currentUserId, getParams);
   },
 });
+
+export const ContentNodeSearchResource = new Resource({
+  name: 'customcontentnodesearch',
+  namespace: 'kolibri_explore_plugin',
+});

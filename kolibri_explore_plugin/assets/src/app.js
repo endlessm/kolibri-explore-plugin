@@ -12,6 +12,19 @@ Vue.use(IconsPlugin);
 
 Vue.config.productionTip = false;
 
+/** Dynamic load of all eos-components **/
+const requireContext = require.context('eos-components/src/components', false, /.vue$/);
+
+requireContext.keys().forEach(fileName => {
+  // Remove './' prefix and '.vue' suffix from file name:
+  const componentName = fileName.slice(2, -4);
+  if (componentName in Vue.options.components) {
+    return;
+  }
+  const component = requireContext(fileName).default;
+  Vue.component(componentName, component);
+});
+
 /* eslint-disable class-methods-use-this */
 class ExploreModule extends KolibriApp {
   get stateSetters() {

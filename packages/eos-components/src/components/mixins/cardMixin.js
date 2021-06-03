@@ -1,5 +1,6 @@
 import { getThumbnail } from 'kolibri-api';
 import { getFirstStructuredTag } from '../utils';
+import { StructuredTags } from '../../constants';
 
 export default {
   data() {
@@ -48,7 +49,7 @@ export default {
       return null;
     },
     getDuration() {
-      const duration = getFirstStructuredTag(this.node, 'duration');
+      const duration = getFirstStructuredTag(this.node, StructuredTags.DURATION);
       if (!duration) {
         return null;
       }

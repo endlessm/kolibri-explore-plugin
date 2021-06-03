@@ -7,11 +7,12 @@
       </b-navbar-brand>
     </Header>
 
-    <div class="h-100 main">
+    <div class="main">
       <SearchBar
         v-model="query"
         :debounce="800"
         :loading="loading"
+        @clear-input="clearInput"
       />
       <b-container class="pb-5 pt-3">
         <h5 v-if="!hasResults && !loading" class="text-center">
@@ -29,6 +30,24 @@
           />
         </div>
       </b-container>
+
+      <div v-if="resultCards">
+        <div v-for="(nodes, channelId) in resultCards" :key="channelId">
+          <CardGrid
+            id="root"
+            :nodes="nodes"
+            :mediaQuality="mediaQuality"
+            :cardColumns="cardColumns"
+          >
+            <div>
+              <hr>
+              <h4 class="text-muted">
+                {{ channelTitle(channelId) }}
+              </h4>
+            </div>
+          </CardGrid>
+        </div>
+      </div>
     </div>
 
     <div v-if="recommended" class="flex-shrink-0 mt-auto recommended">
@@ -52,24 +71,23 @@
 <script>
 
   import _ from 'underscore';
-
   import { mapMutations, mapState } from 'vuex';
+  import { utils, constants } from 'eos-components';
+  import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 
-  import { Header, ChannelCardGroup, SearchBar } from 'eos-components';
   import { PageNames } from '../constants';
-
   import { searchChannels } from '../modules/topicsRoot/handlers';
 
   export default {
     name: 'SearchPage',
-    components: {
-      ChannelCardGroup,
-      Header,
-      SearchBar,
-    },
     data() {
       return {
         query: '',
+        cardColumns: {
+          cols: 6,
+          md: 3,
+        },
+        mediaQuality: constants.MediaQuality.REGULAR,
       };
     },
     computed: {
@@ -106,6 +124,26 @@
 
         return _.chunk(this.searchResult.channels, 3);
       },
+      resultCards() {
+        const { results } = this.searchResult;
+        if (!results || !results.length) {
+          return null;
+        }
+
+        // Add tags to nodes
+        const nodes = utils.parseNodes(results);
+
+        // Add thumbnails to nodes
+        nodes.forEach(node => {
+          const thumbnailUrl = getContentNodeThumbnail(node);
+          node.thumbnail = thumbnailUrl;
+        });
+
+        // Group by channel
+        const grouped = _.groupBy(nodes, n => n.channel_id);
+
+        return grouped;
+      },
     },
     watch: {
       cleanedQuery() {
@@ -136,8 +174,14 @@
           return;
         }
 
-        // TODO: show loading
         searchChannels(this.$store, { search: query });
+      },
+      clearInput() {
+        this.query = '';
+      },
+      channelTitle(channelId) {
+        const channel = this.searchResult.channels.find(c => c.id === channelId);
+        return channel ? channel.title : channelId;
       },
     },
   };

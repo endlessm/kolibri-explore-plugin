@@ -133,4 +133,9 @@ $button-size: 3rem;
   right: -($button-size + $spacer);
 }
 
+.carousel {
+  overflow: auto;
+  overflow-x: hidden;
+}
+
 </style>
