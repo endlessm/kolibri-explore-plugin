@@ -45,6 +45,10 @@ export function parseNodes(nodes) {
 /** Card information **/
 
 export function getNodeUrl(node, channelId) {
+  if (node.nodeUrl) {
+    return node.nodeUrl;
+  }
+
   if (node.id === channelId) {
     return '/';
   }

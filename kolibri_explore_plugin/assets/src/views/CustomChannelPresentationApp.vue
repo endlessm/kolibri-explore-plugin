@@ -31,12 +31,13 @@
       rooturl() {
         const app = getAppNameByID(this.channel.id);
         const url = urls['kolibri:kolibri_explore_plugin:app_custom_presentation']({ app: app });
-        if (this.topic.id) {
-          return `${url}?topicId=${this.topic.id}`;
+        if (this.customAppContent.id) {
+          const { kind, id } = this.customAppContent;
+          return `${url}?${kind}Id=${id}`;
         }
         return url;
       },
-      ...mapState('topicsTree', ['channel', 'topic']),
+      ...mapState('topicsTree', ['channel', 'customAppContent']),
     },
     mounted() {
       window.addEventListener('message', event => {

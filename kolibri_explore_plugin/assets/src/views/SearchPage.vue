@@ -142,10 +142,16 @@
         // Add tags to nodes
         const nodes = utils.parseNodes(results);
 
-        // Add thumbnails to nodes
+        // Add thumbnails and links to nodes
         nodes.forEach(node => {
           const thumbnailUrl = getContentNodeThumbnail(node);
           node.thumbnail = thumbnailUrl;
+          const base = `/topics/${node.channel_id}`;
+          if (node.kind === 'topic') {
+            node.nodeUrl = `${base}/t/${node.id}`;
+          } else {
+            node.nodeUrl = `${base}/c/${node.id}`;
+          }
         });
 
         // Group by channel

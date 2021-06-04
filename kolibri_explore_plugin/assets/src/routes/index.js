@@ -1,10 +1,6 @@
 import store from 'kolibri.coreVue.vuex.store';
 import router from 'kolibri.coreVue.router';
-import {
-  showTopicsTopic,
-  showTopicsChannel,
-  showTopicsContent,
-} from '../modules/topicsTree/handlers';
+import { showTopicsChannel } from '../modules/topicsTree/handlers';
 import { showChannels } from '../modules/topicsRoot/handlers';
 import { PageNames } from '../constants';
 
@@ -42,24 +38,29 @@ export default [
     },
   },
   {
-    name: PageNames.TOPICS_CHANNEL,
-    path: '/topics/:channel_id',
-    handler: toRoute => {
-      showTopicsChannel(store, toRoute.params.channel_id);
-    },
-  },
-  {
     name: PageNames.TOPICS_TOPIC,
-    path: '/topics/t/:id',
+    path: '/topics/:channel_id/t/:id',
     handler: toRoute => {
-      showTopicsTopic(store, { id: toRoute.params.id });
+      const { channel_id, id } = toRoute.params;
+      store.commit('topicsTree/SET_CUSTOM_APP_CONTENT', { id, kind: 'topic' });
+      showTopicsChannel(store, channel_id);
     },
   },
   {
     name: PageNames.TOPICS_CONTENT,
-    path: '/topics/c/:id',
+    path: '/topics/:channel_id/c/:id',
     handler: toRoute => {
-      showTopicsContent(store, toRoute.params.id);
+      const { channel_id, id } = toRoute.params;
+      store.commit('topicsTree/SET_CUSTOM_APP_CONTENT', { id, kind: 'content' });
+      showTopicsChannel(store, channel_id);
+    },
+  },
+  {
+    name: PageNames.TOPICS_CHANNEL,
+    path: '/topics/:channel_id',
+    handler: toRoute => {
+      store.commit('topicsTree/SET_CUSTOM_APP_CONTENT', {});
+      showTopicsChannel(store, toRoute.params.channel_id);
     },
   },
   {
