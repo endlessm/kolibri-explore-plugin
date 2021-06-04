@@ -1,9 +1,9 @@
 <template>
   <div
+    class="root"
     :style="{ backgroundImage: backgroundImageURL }"
   >
-    <slot></slot>
-    <SearchBar v-model="query" closeLinkTo="/" />
+    <SearchBar v-model="query" @clear-input="() => this.query = ''" />
 
     <b-container
       v-if="notFound"
@@ -79,3 +79,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import '@/styles.scss';
+
+.root {
+  margin-top: $navbar-height;
+}
+
+</style>

@@ -8,14 +8,14 @@
           </b-input-group-text>
         </template>
         <template #append>
-          <b-button pill variant="link" :to="closeLinkTo">
-            <b-icon-x />
+          <b-button v-if="value" pill variant="light" @click="clearSearchInput">
+            <b-icon-x-circle />
           </b-button>
         </template>
         <input
           ref="searchInput"
           class="form-control"
-          placeholder="What do you want to learn about?"
+          placeholder="Search"
           :value="value"
           @input="updateValue($event.target.value)"
         >
@@ -30,10 +30,6 @@
   export default {
     name: 'SearchBar',
     props: {
-      closeLinkTo: {
-        type: String,
-        default: '/',
-      },
       value: {
         type: String,
         required: true,
@@ -54,6 +50,9 @@
       focusSearchInput() {
         this.$refs.searchInput.focus();
       },
+      clearSearchInput() {
+        this.$emit('clear-input');
+      }
     },
   };
 </script>
@@ -73,10 +72,11 @@
 
 .input-group-text {
   border: none;
+  background-color: transparent;
 }
 
 .search-row {
-  background-color: $gray-200;
+  background-color: $white;
   margin-bottom: $jumbotron-padding;
   box-shadow: $btn-active-box-shadow;
 }
