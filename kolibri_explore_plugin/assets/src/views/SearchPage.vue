@@ -41,9 +41,18 @@
           >
             <div>
               <hr>
-              <h4 class="text-muted">
-                {{ channelTitle(channelId) }}
-              </h4>
+              <b-row>
+                <b-col>
+                  <h4 class="text-muted">
+                    {{ channelTitle(channelId) }}
+                  </h4>
+                </b-col>
+                <b-col class="text-primary text-right">
+                  <b-link @click="goToChannel(channelId)">
+                    go to channel <b-icon-arrow-right />
+                  </b-link>
+                </b-col>
+              </b-row>
             </div>
           </CardGrid>
         </div>
