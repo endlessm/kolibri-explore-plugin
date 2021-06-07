@@ -32,8 +32,8 @@
 
 <script>
 import VClamp from 'vue-clamp';
-import { mapGetters } from 'vuex';
-import { StructuredTags } from '@/constants';
+import { StructuredTags } from '../constants';
+import { getFirstStructuredTag } from './utils';
 
 export default {
   name: 'CardBody',
@@ -49,20 +49,16 @@ export default {
     subtitle: String,
   },
   computed: {
-    ...mapGetters({
-      getStructuredTags: 'filters/getStructuredTags',
-      getFirstStructuredTag: 'filters/getFirstStructuredTag',
-    }),
     subjectTags() {
-      return this.getStructuredTags(this.node, StructuredTags.SUBJECT);
+      return this.node.structuredTags[StructuredTags.SUBJECT];
     },
     typeTag() {
-      return this.getFirstStructuredTag(this.node, StructuredTags.TYPE);
+      return getFirstStructuredTag(this.node, StructuredTags.TYPE);
     },
     gradeOrLevelTag() {
       return (
-        this.getFirstStructuredTag(this.node, StructuredTags.GRADE)
-        || this.getFirstStructuredTag(this.node, StructuredTags.LEVEL)
+        getFirstStructuredTag(this.node, StructuredTags.GRADE)
+        || getFirstStructuredTag(this.node, StructuredTags.LEVEL)
       );
     },
   },
@@ -70,7 +66,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles.scss';
+@import '../styles.scss';
 
 .card-content {
   height: card-body-height(3);

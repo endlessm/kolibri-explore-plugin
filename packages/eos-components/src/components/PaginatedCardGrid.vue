@@ -1,6 +1,6 @@
 <template>
   <span>
-    <GridPage :nodes="pageNodes" />
+    <GridPage :nodes="pageNodes" :cardColumns="cardColumns" :mediaQuality="mediaQuality" />
 
     <b-pagination
       v-if="nodes.length > itemsPerPage"
@@ -13,12 +13,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 
 export default {
   name: 'PaginatedCardGrid',
   props: {
     nodes: Array,
+    mediaQuality: String,
+    cardColumns: Object,
     itemsPerPage: {
       type: Number,
       default: 8,
@@ -30,10 +31,6 @@ export default {
     };
   },
   computed: {
-    ...mapState(['filters']),
-    filterQuery() {
-      return this.filters.query;
-    },
     pageNodes() {
       const { currentPage, itemsPerPage, nodes } = this;
       const start = (currentPage - 1) * itemsPerPage;
@@ -42,12 +39,21 @@ export default {
     },
   },
   watch: {
-    filterQuery() {
-      // Change to first page if the filter changes. This is needed because the
-      // number of cards to show will change and the previous pagination can be
-      // wrong.
-      this.currentPage = 1;
+    '$store.state.filters.query': {
+      deep: true,
+      handler() {
+        // Change to first page if the filter changes. This is needed because the
+        // number of cards to show will change and the previous pagination can be
+        // wrong.
+        this.currentPage = 1;
+      },
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+
+  @import '../styles.scss';
+
+</style>

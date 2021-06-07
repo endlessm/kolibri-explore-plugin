@@ -7,7 +7,7 @@
       </b-navbar-brand>
 
       <template v-slot:right>
-        <b-button pill>
+        <b-button pill @click="goToSearch">
           <b-icon-search />
           Search
         </b-button>
@@ -72,16 +72,11 @@
 
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
-  import { ChannelCardGroup, Header } from 'eos-components';
   import _ from 'underscore';
   import { PageNames } from '../constants';
 
   export default {
     name: 'ChannelsPage',
-    components: {
-      ChannelCardGroup,
-      Header,
-    },
     mixins: [commonCoreStrings],
     props: {
       columns: {
@@ -111,6 +106,11 @@
       },
       goToTop() {
         window.scrollTo(0, 0);
+      },
+      goToSearch() {
+        this.$router.push({
+          name: PageNames.SEARCH,
+        });
       },
     },
   };

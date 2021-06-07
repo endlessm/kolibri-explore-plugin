@@ -17,6 +17,8 @@
           :id="subsection.id"
           :key="subsection.id"
           :nodes="filteredSections(subsection)"
+          :mediaQuality="mediaQuality"
+          :cardColumns="cardColumns"
         >
           <b-row>
             <SectionTitle :section="subsection" />
@@ -28,6 +30,8 @@
           :id="section.id"
           :key="section.id"
           :nodes="filteredSections(section)"
+          :mediaQuality="mediaQuality"
+          :cardColumns="cardColumns"
           variant="paginated"
         />
       </div>
@@ -43,7 +47,7 @@ import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'Section',
   computed: {
-    ...mapState(['section']),
+    ...mapState(['section', 'cardColumns', 'mediaQuality']),
     ...mapGetters({
       isInlineLevel: 'isInlineLevel',
       getAssetURL: 'getAssetURL',

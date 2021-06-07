@@ -1,5 +1,6 @@
 import urls from 'kolibri.urls';
-import { ContentNodeResource } from '../../apiResources';
+import { ChannelResource } from 'kolibri.resources';
+import { ContentNodeResource, ContentNodeSearchResource } from '../../apiResources';
 import { PageNames } from '../../constants';
 import { CustomChannelApps } from '../../customApps';
 import { _collectionState } from '../coreExplore/utils';
@@ -103,4 +104,22 @@ export function showFilteredChannels(store) {
       return error;
     }
   );
+}
+
+export function searchChannels(store, params) {
+  store.commit('CORE_SET_PAGE_LOADING', true);
+  store.commit('topicsRoot/SET_SEARCH_RESULT', {});
+  return ContentNodeSearchResource.fetchCollection({
+    getParams: params,
+  }).then(results => {
+    const { channel_ids } = results;
+    const promises = channel_ids.map(id => ChannelResource.fetchModel({ id }));
+    Promise.all(promises).then(collection => {
+      const channels = collection
+        .map(c => ({ ...c, title: c.name, order: channel_ids.indexOf(c.id) }))
+        .sort((a, b) => a.order - b.order);
+      store.commit('topicsRoot/SET_SEARCH_RESULT', { ...results, channels: channels });
+      store.commit('CORE_SET_PAGE_LOADING', false);
+    });
+  });
 }

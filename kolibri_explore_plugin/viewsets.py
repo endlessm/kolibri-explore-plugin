@@ -1,3 +1,4 @@
+from kolibri.core.content.api import ContentNodeSearchViewset
 from kolibri.core.content.api import ContentNodeViewset
 from kolibri.core.content.models import ContentTag
 
@@ -26,3 +27,9 @@ class CustomContentNodeViewset(ContentNodeViewset):
     def consolidate(self, items, queryset):
         new_items = super().consolidate(items, queryset)
         return self._consolidate(new_items, queryset)
+
+
+class CustomContentNodeSearchViewset(
+    CustomContentNodeViewset, ContentNodeSearchViewset
+):
+    pass

@@ -41,7 +41,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '@/styles.scss';
+  @import '../styles.scss';
   @import 'placeholder-loading/src/scss/placeholder-loading.scss';
 
   .ph-item {

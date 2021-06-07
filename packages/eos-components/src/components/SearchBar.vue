@@ -4,7 +4,8 @@
       <b-input-group>
         <template #prepend>
           <b-input-group-text>
-            <b-icon-search />
+            <b-spinner v-if="loading" small label="Spinning" />
+            <b-icon-search v-else />
           </b-input-group-text>
         </template>
         <template #append>
@@ -16,6 +17,7 @@
           ref="searchInput"
           class="form-control"
           placeholder="Search"
+          :disabled="loading"
           :value="value"
           @input="updateValue($event.target.value)"
         >
@@ -34,9 +36,17 @@
         type: String,
         required: true,
       },
+      debounce: {
+        type: Number,
+        default: 500,
+      },
+      loading: {
+        type: Boolean,
+        default: false,
+      },
     },
     created() {
-      this.updateValue = _.debounce(this.inputUpdated, 500);
+      this.updateValue = _.debounce(this.inputUpdated, this.debounce);
     },
     mounted() {
       this.$nextTick(() => {

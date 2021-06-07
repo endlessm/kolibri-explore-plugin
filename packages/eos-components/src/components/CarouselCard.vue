@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import cardMixin from '@/components/mixins/cardMixin';
 import { goToContent } from 'kolibri-api';
+import cardMixin from './mixins/cardMixin';
 
 export default {
   name: 'CarouselCard',
@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles.scss';
+@import '../styles.scss';
 
 .badge {
   font-size: $font-size-base;

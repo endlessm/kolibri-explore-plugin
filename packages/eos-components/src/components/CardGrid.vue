@@ -7,6 +7,8 @@
       :id="id"
       :nodes="nodes"
       :itemsPerPage="itemsPerPage"
+      :mediaQuality="mediaQuality"
+      :cardColumns="cardColumns"
     />
   </b-container>
 </template>
@@ -18,6 +20,8 @@ export default {
   props: {
     nodes: Array,
     id: String,
+    mediaQuality: String,
+    cardColumns: Object,
     variant: {
       type: String,
       default: 'slidable',
@@ -46,3 +50,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+
+  @import '../styles.scss';
+
+</style>

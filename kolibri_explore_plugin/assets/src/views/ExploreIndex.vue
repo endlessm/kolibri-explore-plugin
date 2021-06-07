@@ -19,6 +19,7 @@
   import CustomChannelsPage from './CustomChannelsPage';
   import ContentPage from './ContentPage';
   import ContentUnavailablePage from './ContentUnavailablePage';
+  import SearchPage from './SearchPage';
 
   const pageNameToComponentMap = {
     [PageNames.TOPICS_ROOT]: ChannelsPage,
@@ -26,6 +27,7 @@
     [PageNames.TOPICS_TOPIC]: CustomChannelsPage,
     [PageNames.TOPICS_CONTENT]: ContentPage,
     [PageNames.CONTENT_UNAVAILABLE]: ContentUnavailablePage,
+    [PageNames.SEARCH]: SearchPage,
   };
 
   export default {
@@ -65,8 +67,12 @@
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 
-  @import '../styles';
+  /** Non scoped styles to be able to modify body css to fix the footer to the bottom **/
+  body,
+  body > div {
+    height: 100%;
+  }
 
 </style>

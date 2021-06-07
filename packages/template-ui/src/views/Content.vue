@@ -10,7 +10,7 @@
           <b-col md="6" sm="12">
             <h3>{{ content.title }}</h3>
             <p class="mb-2">
-              {{ getCardSubtitle(content) }}
+              {{ subtitle }}
             </p>
             <!-- eslint-disable vue/no-v-html -->
             <div class="mb-2" v-html="content.description"></div>
@@ -42,16 +42,15 @@ import { mapState, mapGetters } from 'vuex';
 import { goToContent } from 'kolibri-api';
 import dynamicRequireAsset from '@/dynamicRequireAsset';
 import { getSlug } from '@/utils';
-import { StructuredTags } from '@/constants';
+import { constants, utils } from 'eos-components';
 
 export default {
   name: 'Content',
   computed: {
-    ...mapState(['content', 'section']),
-    ...mapGetters(['getAssetURL', 'getCardSubtitle']),
-    ...mapGetters({ getStructuredTags: 'filters/getStructuredTags' }),
+    ...mapState(['content', 'section', 'channel']),
+    ...mapGetters(['getAssetURL']),
     subjectTags() {
-      return this.getStructuredTags(this.content, StructuredTags.SUBJECT);
+      return this.content.structuredTags[constants.StructuredTags.SUBJECT];
     },
     sectionImageURL() {
       if (!this.section || !this.section.title) {
@@ -67,6 +66,9 @@ export default {
     },
     headerImageURL() {
       return this.sectionImageURL || this.getAssetURL('headerImage');
+    },
+    subtitle() {
+      return utils.getCardSubtitle(this.content, this.channel.title);
     },
   },
   methods: {

@@ -10,6 +10,8 @@ function defaultState() {
   return {
     channel: {},
     content: {},
+    // used to link directly to content in custom presentation
+    customAppContent: {},
     // used in TOPICS_TOPIC, TOPICS_CHANNEL
     contents: [],
     isRoot: null,
@@ -49,6 +51,9 @@ export default {
           Vue.set(contentNode, 'progress', progress.progress_fraction);
         }
       });
+    },
+    SET_CUSTOM_APP_CONTENT(state, payload) {
+      state.customAppContent = payload;
     },
   },
 };

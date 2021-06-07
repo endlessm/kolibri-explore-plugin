@@ -40,6 +40,7 @@
               v-for="node in slideNodes"
               :key="node.id"
               :node="node"
+              :mediaQuality="mediaQuality"
             />
             <!-- eslint-disable vue/no-use-v-if-with-v-for -->
             <b-card
@@ -57,12 +58,13 @@
 
 <script>
 import _ from 'underscore';
-import { mapGetters } from 'vuex';
+import { MediaQuality } from '../constants';
 
 export default {
   name: 'SlidableCardGrid',
   props: {
     nodes: Array,
+    mediaQuality: String,
     itemsPerPage: {
       type: Number,
       default: 8,
@@ -74,7 +76,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['isHighQualityMedia']),
     itemsPerSlide() {
       // FIXME divide by 4 if small screen
       return Math.ceil(this.itemsPerPage / 2);
@@ -94,6 +95,9 @@ export default {
     isLastSlide() {
       return this.slide === this.slides.length - 1;
     },
+    isHighQualityMedia() {
+      return this.mediaQuality === MediaQuality.HIGH;
+    },
   },
   methods: {
     previous() {
@@ -107,7 +111,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles.scss";
+@import "../styles.scss";
 
 $button-size: 3rem;
 
@@ -127,6 +131,11 @@ $button-size: 3rem;
 
 .btn.next {
   right: -($button-size + $spacer);
+}
+
+.carousel {
+  overflow: auto;
+  overflow-x: hidden;
 }
 
 </style>

@@ -6,6 +6,7 @@ export const PageNames = {
   TOPICS_TOPIC: 'TOPICS_TOPIC',
   TOPICS_CONTENT: 'TOPICS_CONTENT',
   CONTENT_UNAVAILABLE: 'CONTENT_UNAVAILABLE',
+  SEARCH: 'SEARCH',
 };
 
 // switch between modes
