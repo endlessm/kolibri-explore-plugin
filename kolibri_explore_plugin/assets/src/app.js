@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import router from 'kolibri.coreVue.router';
 import KolibriApp from 'kolibri_app';
+import eosComponents from 'eos-components';
 import RootVue from './views/ExploreIndex';
 import routes from './routes';
 import { setFacilitiesAndConfig } from './modules/coreExplore/actions';
@@ -12,18 +13,7 @@ Vue.use(IconsPlugin);
 
 Vue.config.productionTip = false;
 
-/** Dynamic load of all eos-components **/
-const requireContext = require.context('eos-components/src/components', false, /.vue$/);
-
-requireContext.keys().forEach(fileName => {
-  // Remove './' prefix and '.vue' suffix from file name:
-  const componentName = fileName.slice(2, -4);
-  if (componentName in Vue.options.components) {
-    return;
-  }
-  const component = requireContext(fileName).default;
-  Vue.component(componentName, component);
-});
+Vue.use(eosComponents);
 
 /* eslint-disable class-methods-use-this */
 class ExploreModule extends KolibriApp {

@@ -72,16 +72,11 @@
 
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
-  import { ChannelCardGroup, Header } from 'eos-components';
   import _ from 'underscore';
   import { PageNames } from '../constants';
 
   export default {
     name: 'ChannelsPage',
-    components: {
-      ChannelCardGroup,
-      Header,
-    },
     mixins: [commonCoreStrings],
     props: {
       columns: {
