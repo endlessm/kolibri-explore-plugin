@@ -7,6 +7,22 @@
       </b-navbar-brand>
 
       <template v-slot:right>
+        <b-nav-text>
+          <strong class="text-muted">Exploration ideas</strong>
+        </b-nav-text>
+
+        <div class="main-buttons">
+          <b-button
+            v-for="term in searchTerms"
+            :key="term"
+            pill
+            variant="primary"
+            @click="goToTerm(term)"
+          >
+            {{ term }}
+          </b-button>
+        </div>
+
         <b-button pill @click="goToSearch">
           <b-icon-search />
           Search
@@ -84,6 +100,11 @@
         default: 3,
       },
     },
+    data() {
+      return {
+        searchTerms: ['STEM', 'Games', 'Fitness', 'Cooking', 'Arts'],
+      };
+    },
     computed: {
       ...mapState('topicsRoot', { channels: 'rootNodes' }),
       // FIXME: filter this correctly, right now we're showing the first 6
@@ -112,6 +133,12 @@
           name: PageNames.SEARCH,
         });
       },
+      goToTerm(term) {
+        this.$router.push({
+          name: PageNames.SEARCH,
+          params: { query: term },
+        });
+      },
     },
   };
 
@@ -137,6 +164,14 @@
 
   .channels-page {
     padding-top: $navbar-height;
+  }
+
+  ::v-deep .main-buttons button {
+    margin-right: $spacer;
+  }
+
+  ::v-deep .main-buttons {
+    margin-left: $spacer;
   }
 
 </style>

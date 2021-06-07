@@ -16,8 +16,9 @@ export default [
   },
   {
     name: PageNames.SEARCH,
-    path: '/search',
-    handler: () => {
+    path: '/search/:query?',
+    handler: toRoute => {
+      store.commit('SET_SEARCH_TERM', toRoute.params.query);
       store.commit('SET_PAGE_NAME', PageNames.SEARCH);
     },
   },

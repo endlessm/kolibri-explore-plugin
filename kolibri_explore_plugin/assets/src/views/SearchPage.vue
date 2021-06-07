@@ -103,6 +103,7 @@
       ...mapState('topicsRoot', { searchResult: 'searchResult', channels: 'rootNodes' }),
       ...mapState({
         loading: state => state.core.loading,
+        searchTerm: 'searchTerm',
       }),
       recommended() {
         if (!this.channels || !this.channels.length) {
@@ -166,6 +167,7 @@
       },
     },
     mounted() {
+      this.query = this.searchTerm;
       this.setSearchResult({});
     },
     methods: {
