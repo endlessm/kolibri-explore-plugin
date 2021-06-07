@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="node.ancestors"
+    v-if="node.ancestors && node.ancestors.length"
   >
     <b-link
       v-for="a in node.ancestors"
@@ -8,6 +8,15 @@
       :to="getTopicUrl(a)"
     >
       <span><b-icon-arrow-left /> {{ a.title }} </span>
+    </b-link>
+  </div>
+  <div
+    v-else-if="notAtHome"
+  >
+    <b-link
+      :to="getNodeUrl(node)"
+    >
+      <span><b-icon-arrow-left /> {{ node.title }} </span>
     </b-link>
   </div>
 </template>
@@ -22,6 +31,9 @@ export default {
   },
   computed: {
     ...mapGetters(['getNodeUrl']),
+    notAtHome() {
+      return this.$route.name !== 'Home';
+    },
   },
   methods: {
     getTopicUrl(n) {
