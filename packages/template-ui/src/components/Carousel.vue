@@ -1,8 +1,9 @@
 <template>
-  <b-container class="mb-4">
+  <b-container class="mb-5">
     <b-carousel
       v-model="slide"
       fade
+      indicators
       :interval="CAROUSEL_INTERVAL"
       class="shadow-lg"
     >
@@ -62,4 +63,22 @@ export default {
 .carousel {
   border-radius: $border-radius-lg;
 }
+
+::v-deep .carousel-indicators {
+  bottom: -($spacer * 3);
+}
+
+::v-deep .carousel-indicators li {
+  background-color: $gray-700;
+  border-radius: $border-radius-sm !important;
+  background-clip: border-box;
+  border-top: 0px;
+  border-bottom: 0px;
+}
+
+::v-deep .carousel-indicators li.active {
+  width: $carousel-indicator-width * 2;
+  background-color: $gray-900;
+}
+
 </style>
