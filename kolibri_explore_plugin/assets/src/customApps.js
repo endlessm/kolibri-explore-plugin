@@ -1,3 +1,5 @@
+import urls from 'kolibri.urls';
+
 // List of channel ids and the app name with the corresponding
 // custom-channel-presentation zip bundle
 export const CustomChannelApps = {
@@ -8,4 +10,38 @@ export const CustomChannelApps = {
 
 export function getAppNameByID(id) {
   return CustomChannelApps[id] || 'default';
+}
+
+// This should match a file existing on static/thumbnails/NAME.jpg
+export const ThumbApps = [
+  'music',
+  'ted-ed-lessons',
+  'common-sense-student-resources',
+  'carreer-girls',
+  'cspathshala',
+  'touchable-earth',
+  'oceanx',
+  'phet-interactive-simulations',
+  'khan-academy',
+  'open-stax',
+  'pbs-kids',
+  'healthy-living',
+];
+
+export function getBigThumbnail(channel) {
+  if (!channel.title) {
+    return null;
+  }
+
+  const normalName = channel.title
+    .toLowerCase()
+    .replaceAll(/\(.*\)/g, '')
+    .trim()
+    .replaceAll(' ', '-');
+
+  if (ThumbApps.includes(normalName)) {
+    return urls.static(`thumbnails/${normalName}.jpg`);
+  }
+
+  return null;
 }

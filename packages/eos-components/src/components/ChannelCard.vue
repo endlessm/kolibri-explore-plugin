@@ -34,9 +34,9 @@
         type: Object,
         required: true,
       },
-      hasThumbnail: {
-        type: Boolean,
-        default: false,
+      thumbnail: {
+        type: String,
+        default: '',
       },
     },
     computed: {
@@ -53,11 +53,14 @@
       },
       bigThumbnailStyles() {
         return {
-          background: `url(${this.channel.thumbnail}) white`,
+          background: `url(${this.thumbnail}) white`,
           backgroundSize: '100% auto',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
         };
+      },
+      hasThumbnail() {
+        return this.thumbnail;
       },
     },
   }
@@ -98,7 +101,7 @@
     border-radius: $border-radius-lg !important;
   }
 
-  $card-image-ar: 3 / 4;
+  $card-image-ar: 376 / 600;
   .bigThumbnail {
     padding-top: percentage($card-image-ar);
     border-radius: $border-radius-lg !important;
