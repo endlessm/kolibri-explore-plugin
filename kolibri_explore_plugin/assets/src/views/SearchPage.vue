@@ -66,7 +66,6 @@
         </h4>
         <ChannelCardGroup
           :rows="recommended"
-          :hasThumbnail="true"
           :columns="3"
           @card-click="goToChannel"
         />

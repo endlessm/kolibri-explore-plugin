@@ -32,10 +32,10 @@
 
     <div class="main">
       <b-container class="channels pb-5 pt-3">
-        <!-- Cards without thumbnail -->
+        <!-- Cards with thumbnail -->
         <ChannelCardGroup
           :rows="rows.withThumbnail"
-          :hasThumbnail="true"
+          :getThumbnail="getBigThumbnail"
           :columns="columns"
           @card-click="goToChannel"
         />
@@ -43,7 +43,6 @@
         <!-- Cards without thumbnail -->
         <ChannelCardGroup
           :rows="rows.withoutThumbnail"
-          :hasThumbnail="false"
           :columns="columns"
           @card-click="goToChannel"
         />
@@ -90,6 +89,7 @@
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import _ from 'underscore';
   import { PageNames } from '../constants';
+  import { getBigThumbnail } from '../customApps';
 
   export default {
     name: 'ChannelsPage',
@@ -110,11 +110,20 @@
       // FIXME: filter this correctly, right now we're showing the first 6
       // items with thumbnail and the rest without
       rows() {
-        let channels = this.channels.slice(0, 6);
-        const withThumbnail = _.chunk(channels, this.columns);
-        channels = this.channels.slice(6);
-        const withoutThumbnail = _.chunk(channels, this.columns);
+        let withThumbnail = [];
+        let withoutThumbnail = [];
 
+        this.channels.forEach(channel => {
+          const thumb = getBigThumbnail(channel);
+          if (thumb) {
+            withThumbnail.push(channel);
+          } else {
+            withoutThumbnail.push(channel);
+          }
+        });
+
+        withThumbnail = _.chunk(withThumbnail, this.columns);
+        withoutThumbnail = _.chunk(withoutThumbnail, this.columns);
         return { withThumbnail, withoutThumbnail };
       },
     },
@@ -138,6 +147,9 @@
           name: PageNames.SEARCH,
           params: { query: term },
         });
+      },
+      getBigThumbnail(channel) {
+        return getBigThumbnail(channel);
       },
     },
   };
