@@ -59,7 +59,21 @@ const ContentNodeKinds = [
   'slideshow',
 ];
 
-const MediaFilterName = 'media type';
+function contentKindToVerb(value) {
+  return constants.MediaTypeVerbs[value] || value;
+}
+
+function verbToContentKind(verb) {
+  let contentKind = verb;
+  _.each(constants.MediaTypeVerbs, (value, key) => {
+    if (value === verb) {
+      contentKind = key;
+    }
+  });
+  return contentKind;
+}
+
+const MediaFilterName = 'Learning activity';
 const AuthorFilterName = 'author';
 const TagFilterName = 'common keywords';
 
@@ -123,8 +137,9 @@ export default {
       // Filter by media type
       const mediaType = query[MediaFilterName];
       if (mediaType && mediaType.length) {
+        const contentKinds = mediaType.map((m) => verbToContentKind(m));
         filtered = filtered.filter((node) => (
-          mediaType.some((m) => recursiveExistsNodes(node, (n) => n.kind === m))
+          contentKinds.some((m) => recursiveExistsNodes(node, (n) => n.kind === m))
         ));
       }
       // Filter by author
@@ -161,7 +176,9 @@ export default {
       }
       switch (filter.name) {
         case MediaFilterName:
-          return filter.options.filter((m) => recursiveExistsNodes(root, (n) => n.kind === m));
+          return filter.options
+            .filter((m) => recursiveExistsNodes(root, (n) => n.kind === m))
+            .map((k) => contentKindToVerb(k));
         case AuthorFilterName:
           return sortOptionsByWeight(root, getAuthorOptions);
         case TagFilterName: {
