@@ -1,8 +1,8 @@
 <template>
   <b-link
     v-b-hover="handleHover"
-    :to="url"
     class="text-decoration-none text-reset"
+    @click="onClick"
   >
     <slot></slot>
   </b-link>
@@ -18,6 +18,9 @@ export default {
   methods: {
     handleHover(hovered) {
       this.$emit('isHovered', hovered);
+    },
+    onClick() {
+      this.$router.push(this.url);
     },
   },
 };
