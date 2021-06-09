@@ -3,7 +3,7 @@
     pill
     variant="light"
     :class="`card-media-type m-2 ${node.kind}`"
-    @click="$emit('click')"
+    @click.stop="$emit('click')"
   >
     <span class="align-middle">
       <img :src="icon" aria-hidden="true">
