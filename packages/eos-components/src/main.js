@@ -6,6 +6,7 @@ import CarouselCard from './components/CarouselCard.vue';
 import CarouselPlaceholder from './components/CarouselPlaceholder.vue';
 import ChannelCard from './components/ChannelCard.vue';
 import ChannelCardGroup from './components/ChannelCardGroup.vue';
+import ChannelLogo from './components/ChannelLogo.vue';
 import CollapsibleCardGrid from './components/CollapsibleCardGrid.vue';
 import ContentLink from './components/ContentLink.vue';
 import DummyButton from './components/DummyButton.vue';
@@ -34,6 +35,7 @@ const components = {
   CarouselPlaceholder,
   ChannelCard,
   ChannelCardGroup,
+  ChannelLogo,
   CollapsibleCardGrid,
   ContentLink,
   DummyButton,
