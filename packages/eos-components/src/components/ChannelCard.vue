@@ -1,5 +1,5 @@
 <template>
-  <b-card>
+  <b-card :class="variant">
     <div
       v-if="hasThumbnail"
       class="bigThumbnail"
@@ -33,6 +33,13 @@
         type: String,
         default: '',
       },
+      variant: {
+        type: String,
+        default: 'basicCard',
+        validator: (value) => {
+          return ['basicCard', 'infoCard'].indexOf(value) !== -1;
+        },
+      },
     },
     computed: {
       description() {
@@ -56,7 +63,16 @@
 <style lang="scss" scoped>
   @import '../styles';
 
-  .card {
+  .infoCard {
+    background-color: transparent !important;
+    border: 0 !important;
+  }
+
+  .infoCard .card-body {
+    padding: 0 !important;
+  }
+
+  .basicCard {
     cursor: pointer;
     border-radius: $border-radius-lg !important;
     background-color: #EFF0F3 !important;
@@ -64,7 +80,7 @@
     transition: all 0.3s ease;
   }
 
-  .card:hover {
+  .basicCard:hover {
     box-shadow: $box-shadow;
   }
 
@@ -73,6 +89,7 @@
     padding: 0;
     font-weight: bold;
     display: flex;
+    align-items: center;
   }
 
   .card-text {

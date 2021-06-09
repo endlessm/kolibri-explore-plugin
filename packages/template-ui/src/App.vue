@@ -7,7 +7,7 @@
         <ChannelHeader />
       </router-view>
     </div>
-    <Footer />
+    <ChannelFooter />
   </div>
 </template>
 
