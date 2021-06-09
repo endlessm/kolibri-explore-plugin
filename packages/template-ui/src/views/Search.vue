@@ -3,7 +3,7 @@
     class="root"
     :style="{ backgroundImage: backgroundImageURL }"
   >
-    <SearchBar v-model="query" @clear-input="() => this.query = ''" />
+    <SearchBar v-model="query" @clear-input="onClearInput" />
 
     <b-container
       v-if="notFound"
@@ -80,6 +80,9 @@ export default {
     search() {
       this.resultNodes = this.searchNodes(this.cleanedQuery);
       this.searching = false;
+    },
+    onClearInput() {
+      this.query = '';
     },
   },
 };
