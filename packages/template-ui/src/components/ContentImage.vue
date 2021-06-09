@@ -8,10 +8,9 @@
       @click="goToContent(node)"
     />
     <b-img
-      fluid
       :src="thumbnail"
       :alt="node.title"
-      class="rounded w-100"
+      class="d-block mx-auto rounded"
     />
   </div>
 </template>
