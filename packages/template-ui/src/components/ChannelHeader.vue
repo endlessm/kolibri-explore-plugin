@@ -7,12 +7,7 @@
     <template v-slot:default>
       <div class="align-items-start d-flex justify-content-between mt-3">
         <h1>{{ section.title }}</h1>
-        <b-img
-          v-if="displayLogoInHeader && channel.thumbnail"
-          class="rounded-lg"
-          :width="headerLogoWidth"
-          :src="channel.thumbnail"
-        />
+        <ChannelLogo :channel="channel" size="lg" />
       </div>
       <b-row>
         <b-col md="6" sm="12">

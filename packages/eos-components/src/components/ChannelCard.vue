@@ -10,12 +10,7 @@
       class="pb-2"
       :class="{ withThumbnail: hasThumbnail }"
     >
-      <div
-        v-if="channel.thumbnail"
-        class="mr-2 shadow-sm thumbnail"
-        :style="thumbnailStyles"
-      >
-      </div>
+      <ChannelLogo class="mr-2" :channel="channel" size="md" />
       <div class="title">
         {{ channel.title }}
       </div>
@@ -43,14 +38,6 @@
       description() {
         return this.channel.tagline || this.channel.description;
       },
-      thumbnailStyles() {
-        return {
-          background: `url(${this.channel.thumbnail}) white`,
-          backgroundSize: '80% auto',
-          backgroundPosition: 'center center',
-          backgroundRepeat: 'no-repeat',
-        };
-      },
       bigThumbnailStyles() {
         return {
           background: `url(${this.thumbnail}) white`,
@@ -69,8 +56,6 @@
 <style lang="scss" scoped>
   @import '../styles';
 
-  $thumb-size: 48px;
-
   .card {
     cursor: pointer;
     border-radius: $border-radius-lg !important;
@@ -87,18 +72,11 @@
     background-color: transparent;
     padding: 0;
     font-weight: bold;
-    min-height: $thumb-size;
     display: flex;
   }
 
   .card-text {
     font-size: $font-size-sm;
-  }
-
-  .thumbnail {
-    min-height: $thumb-size;
-    min-width: $thumb-size;
-    border-radius: $border-radius-lg !important;
   }
 
   $card-image-ar: 376 / 600;
