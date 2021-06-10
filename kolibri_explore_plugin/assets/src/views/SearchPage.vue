@@ -166,7 +166,7 @@
       },
     },
     mounted() {
-      this.query = this.searchTerm;
+      this.query = this.searchTerm || '';
       this.setSearchResult({});
     },
     methods: {
