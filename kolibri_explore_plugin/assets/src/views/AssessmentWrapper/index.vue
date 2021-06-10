@@ -529,7 +529,19 @@ oriented data synchronization.
 
 <style lang="scss" scoped>
 
-  @import '~kolibri-design-system/lib/styles/definitions';
+  /*
+    Copied from: '~kolibri-design-system/lib/styles/definitions'
+
+    Use of this mixin can help prompt the browser to use the GPU for certain DOM elements.
+    This can help with certain CSS animations and other transitions.
+
+    For details, see https://www.smashingmagazine.com/2016/12/gpu-animation-doing-it-right/
+  */
+  %enable-gpu-acceleration {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 10000px;
+  }
 
   .attempts-container {
     height: 111px;

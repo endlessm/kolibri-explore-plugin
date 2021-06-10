@@ -82,7 +82,8 @@
 
 <style lang="scss" scoped>
 
-  @import '~kolibri-design-system/lib/styles/definitions';
+  // Copied from: '~kolibri-design-system/lib/styles/definitions'
+  $core-time: 0.25s;
 
   svg {
     height: 30px;
