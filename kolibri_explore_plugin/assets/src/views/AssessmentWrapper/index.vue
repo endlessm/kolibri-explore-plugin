@@ -10,14 +10,15 @@ oriented data synchronization.
 <template v-if="ready">
 
   <div>
-    <UiAlert v-if="itemError" :dismissible="false" type="error">
+    <b-alert v-if="itemError" variant="danger">
       {{ $tr('itemError') }}
-      <KButton
-        appearance="basic-link"
-        :text="$tr('tryDifferentQuestion')"
+      <b-button
+        variant="link"
         @click="nextQuestion"
-      />
-    </UiAlert>
+      >
+        {{ $tr('tryDifferentQuestion') }}
+      </b-button>
+    </b-alert>
     <div>
       <KContentRenderer
         ref="contentRenderer"
@@ -42,17 +43,14 @@ oriented data synchronization.
       />
     </div>
 
-    <BottomAppBar
+    <div
       class="attempts-container"
       :class="{ 'mobile': windowIsSmall }"
     >
-      <div class="overall-status" :style="{ color: $themeTokens.text }">
-        <KIcon
-          icon="mastered"
-          :color="success ? $themeTokens.mastered : $themePalette.grey.v_200"
-        />
+      <div class="overall-status">
+        <b-icon-star-fill :variant="success ? 'primary' : none" />
         <div class="overall-status-text">
-          <span v-if="success" class="completed" :style="{ color: $themeTokens.annotation }">
+          <span v-if="success" class="completed">
             {{ coreString('completedLabel') }}
           </span>
           <span>
@@ -64,22 +62,24 @@ oriented data synchronization.
         <div class="row">
           <div class="left">
             <transition mode="out-in">
-              <KButton
+              <b-button
                 v-if="!complete"
-                appearance="raised-button"
-                :text="$tr('check')"
-                :primary="true"
+                variant="primary"
+                pill
                 :class="{ shaking: shake }"
                 :disabled="checkingAnswer"
                 @click="checkAnswer"
-              />
-              <KButton
+              >
+                {{ $tr('check') }}
+              </b-button>
+              <b-button
                 v-else
-                appearance="raised-button"
-                :text="$tr('next')"
-                :primary="true"
+                variant="primary"
+                pill
                 @click="nextQuestion"
-              />
+              >
+                {{ $tr('next') }}
+              </b-button>
             </transition>
           </div>
 
@@ -95,7 +95,7 @@ oriented data synchronization.
           </div>
         </div>
       </div>
-    </BottomAppBar>
+    </div>
   </div>
 
 </template>
@@ -108,9 +108,7 @@ oriented data synchronization.
   import { InteractionTypes, MasteryModelGenerators } from 'kolibri.coreVue.vuex.constants';
   import shuffled from 'kolibri.utils.shuffled';
   import { now } from 'kolibri.utils.serverClock';
-  import UiAlert from 'kolibri-design-system/lib/keen/UiAlert';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
-  import BottomAppBar from 'kolibri.coreVue.components.BottomAppBar';
   import { updateContentNodeProgress } from '../../modules/coreExplore/utils';
   import ExerciseAttempts from './ExerciseAttempts';
 
@@ -118,8 +116,6 @@ oriented data synchronization.
     name: 'AssessmentWrapper',
     components: {
       ExerciseAttempts,
-      UiAlert,
-      BottomAppBar,
     },
     mixins: [commonCoreStrings, responsiveWindowMixin],
     props: {
@@ -529,6 +525,8 @@ oriented data synchronization.
 
 <style lang="scss" scoped>
 
+  @import '../../styles';
+
   /*
     Copied from: '~kolibri-design-system/lib/styles/definitions'
 
@@ -545,6 +543,7 @@ oriented data synchronization.
 
   .attempts-container {
     height: 111px;
+    color: $white;
     text-align: left;
   }
 
@@ -559,10 +558,6 @@ oriented data synchronization.
   .overall-status-text {
     display: inline-block;
     margin-left: 4px;
-  }
-
-  .completed {
-    font-size: 12px;
   }
 
   .table {
