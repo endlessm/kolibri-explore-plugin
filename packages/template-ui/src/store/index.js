@@ -65,6 +65,7 @@ const initialState = {
 
   mediaQuality: ComponentConstants.MediaQuality.REGULAR,
   displayLogoInHeader: true,
+  isEndlessApp: false,
 };
 
 const store = new Vuex.Store({
