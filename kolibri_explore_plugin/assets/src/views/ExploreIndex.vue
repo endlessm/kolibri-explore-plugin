@@ -69,6 +69,21 @@
 
 <style lang="scss">
 
+  @import '../styles';
+
+  .partial-fonts-loaded body,
+  .partial-fonts-loaded button,
+  .partial-fonts-loaded input,
+  .partial-fonts-loaded select,
+  .partial-fonts-loaded textarea,
+  .full-fonts-loaded body,
+  .full-fonts-loaded button,
+  .full-fonts-loaded input,
+  .full-fonts-loaded select,
+  .full-fonts-loaded textarea {
+    font-family: $font-family-sans-serif;
+  }
+
   /** Non scoped styles to be able to modify body css to fix the footer to the bottom **/
   body,
   body > div {
