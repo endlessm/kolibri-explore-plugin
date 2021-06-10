@@ -1,8 +1,13 @@
+@import "~@fontsource/lato/index.css";
+@import "~@fontsource/poppins/index.css";
+
 // Bootstrap variables:
 $primary: #F15A22;
 $border-radius-lg: 1rem;
 $gray-200: #e9ecef;
 $body-bg: $gray-200;
+$font-family-sans-serif: "Lato", sans-serif;
+$headings-font-family: "Poppins", sans-serif;
 
 // Template variables:
 $header-logo-width: 128;
