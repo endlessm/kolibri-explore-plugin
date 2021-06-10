@@ -75,10 +75,6 @@
     display: flex;
   }
 
-  .card-text {
-    font-size: $font-size-sm;
-  }
-
   $card-image-ar: 376 / 600;
   .bigThumbnail {
     padding-top: percentage($card-image-ar);
