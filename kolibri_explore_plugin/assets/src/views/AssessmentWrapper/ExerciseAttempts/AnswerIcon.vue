@@ -4,7 +4,7 @@
     <div ref="icon" class="icon">
       <span
         v-if="answer === 'right'"
-        v-b-tooltip:lightbox.hover.right
+        v-b-tooltip.hover.right
         class="text-success"
         :title="tooltipText"
       >
@@ -12,21 +12,21 @@
       </span>
       <span
         v-else-if="answer === 'wrong'"
-        v-b-tooltip:lightbox.hover.right
+        v-b-tooltip.hover.right
         :title="tooltipText"
       >
         <b-icon-x />
       </span>
       <span
         v-else-if="answer === 'hint'"
-        v-b-tooltip:lightbox.hover.right
+        v-b-tooltip.hover.right
         :title="tooltipText"
       >
         <b-icon-info-circle-fill />
       </span>
       <span
         v-else-if="answer === 'rectified'"
-        v-b-tooltip:lightbox.hover.right
+        v-b-tooltip.hover.right
         :title="tooltipText"
       >
         <b-icon-record-fill />
