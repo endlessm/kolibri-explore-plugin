@@ -14,9 +14,7 @@
       <Carousel />
       <FilterContent />
 
-      <EmptyResultsMessage v-if="isFilterResultEmpty" />
-
-      <template v-else>
+      <div v-if="isFilterEmpty">
         <CardGrid
           v-if="contentNodes"
           :nodes="contentNodes"
@@ -24,13 +22,12 @@
           :cardColumns="cardColumns"
         />
         <div
-          v-for="section in filteredSections"
+          v-for="section in mainSections"
           :key="section.id"
         >
           <CardGrid
-            v-if="filterNodes(section.children).length"
             :id="section.id"
-            :nodes="filterNodes(section.children)"
+            :nodes="section.children"
             :mediaQuality="mediaQuality"
             :cardColumns="cardColumns"
           >
@@ -39,9 +36,13 @@
             </b-row>
           </CardGrid>
         </div>
-      </template>
-    </div>
+      </div>
 
+      <div v-else>
+        <FilterResult :node="section" />
+      </div>
+
+    </div>
   </div>
 </template>
 
@@ -55,7 +56,7 @@ export default {
     ...mapGetters({
       mainSections: 'mainSections',
       getAssetURL: 'getAssetURL',
-      filterNodes: 'filters/filterNodes',
+      isFilterEmpty: 'filters/isEmpty',
     }),
     backgroundImageURL() {
       return this.getAssetURL('homeBackgroundImage');
@@ -64,18 +65,7 @@ export default {
       if (!this.section || !this.section.children) {
         return null;
       }
-      const children = this.section.children.filter((n) => n.kind !== 'topic') || null;
-      return this.filterNodes(children);
-    },
-    filteredSections() {
-      return this.filterNodes(this.mainSections);
-    },
-    isFilterResultEmpty() {
-      const isContentNodeEmpty = this.contentNodes === null || this.contentNodes.length === 0;
-      const anySectionNode = this.filteredSections.some(
-        (s) => (this.filterNodes(s.children).length),
-      );
-      return isContentNodeEmpty && !anySectionNode;
+      return this.section.children.filter((n) => n.kind !== 'topic') || null;
     },
   },
 };
