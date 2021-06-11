@@ -1,6 +1,6 @@
 <template>
 
-  <div class="channels-page">
+  <div class="channels-page d-flex flex-column h-100">
     <Header class="header" @click-logo="goToTop">
       <b-navbar-brand>
         Endless Discovery
@@ -30,7 +30,7 @@
       </template>
     </Header>
 
-    <div class="main">
+    <div class="flex-fill main">
       <b-container class="channels pb-5 pt-3">
         <!-- Cards with thumbnail -->
         <ChannelCardGroup
@@ -49,7 +49,7 @@
       </b-container>
     </div>
 
-    <Footer>
+    <Footer class="flex-shrink-0 mt-auto">
       <template #left>
         <h3 class="text-muted">
           <strong>The Endless Key Discovery</strong> — content to help you do
@@ -103,8 +103,6 @@
     },
     computed: {
       ...mapState('topicsRoot', { channels: 'rootNodes' }),
-      // FIXME: filter this correctly, right now we're showing the first 6
-      // items with thumbnail and the rest without
       rows() {
         let withThumbnail = [];
         let withoutThumbnail = [];
