@@ -5,14 +5,12 @@
   >
     <SearchBar v-model="query" @clear-input="onClearInput" />
 
-    <b-container
-      v-if="notFound"
-    >
-      <h3>We can't find any content that matches your search.</h3>
+    <EmptyResultsMessage v-if="notFound">
+      <h1>Sorry, we can't find any content that matches your search.</h1>
       <p class="lead">
         You can try to use fewer words or browse by topics.
       </p>
-    </b-container>
+    </EmptyResultsMessage>
 
     <CardGrid
       v-if="!resultNodes.length"
