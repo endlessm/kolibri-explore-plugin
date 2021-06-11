@@ -84,8 +84,9 @@
     top: 50%;
     display: flex;
     flex-direction: column;
-    width: 85%;
-    max-height: calc(100vh - #{4 * $spacer});
+    width: 100%;
+    max-width: 100vh;
+    max-height: 100vh;
     margin: 0 auto;
     background-color: $dark;
     border-radius: $border-radius-lg;
@@ -115,17 +116,10 @@
     overflow: hidden;
   }
 
-  @media (max-width: map-get($grid-breakpoints, lg)) {
-    .content-lightbox {
-      width: 90%;
-    }
-  }
-
   @media (max-width: map-get($grid-breakpoints, md)) {
     .content-lightbox {
-      width: 100%;
-      height: 100vh;
-      max-height: 100vh;
+      max-width: 100vw;
+      height: 100%;
       margin: 0;
       border-radius: 0;
     }
