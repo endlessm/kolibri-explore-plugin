@@ -7,7 +7,6 @@
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.21.2",
     "eos-components": "^0.1.0",
-    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system",
     "underscore": "^1.13.1"
   },
   "devDependencies": {

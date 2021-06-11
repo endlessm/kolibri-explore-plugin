@@ -10973,20 +10973,6 @@ knuth-shuffle-seeded@^1.0.6:
     svgo "^1.3.2"
     tippy.js "^4.2.1"
 
-"kolibri-design-system@https://github.com/learningequality/kolibri-design-system":
-  version "0.2.2-beta-2"
-  resolved "https://github.com/learningequality/kolibri-design-system#d98a9dbae7b8c49a9228e97f07f70ed059b7855d"
-  dependencies:
-    aphrodite "https://github.com/learningequality/aphrodite/"
-    autosize "^3.0.21"
-    css-element-queries "^1.2.0"
-    fuzzysearch "^1.0.3"
-    keen-ui "^1.3.0"
-    lodash "^4.17.15"
-    popper.js "^1.14.6"
-    purecss "^0.6.2"
-    tippy.js "^4.2.1"
-
 kolibri-tools@0.14.5-dev.4:
   version "0.14.5-dev.4"
   resolved "https://registry.yarnpkg.com/kolibri-tools/-/kolibri-tools-0.14.5-dev.4.tgz#2ee8930b8dfb3048b8dfba2a643c2c4b11437025"
