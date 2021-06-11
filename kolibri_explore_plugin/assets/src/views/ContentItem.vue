@@ -45,7 +45,9 @@
         @updateContentState="updateContentState"
       />
     </template>
-    <KCircularLoader v-else />
+    <div v-else class="text-center">
+      <b-spinner />
+    </div>
 
   </div>
 

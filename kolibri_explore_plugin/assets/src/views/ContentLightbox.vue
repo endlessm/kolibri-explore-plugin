@@ -7,11 +7,9 @@
           {{ content.title }}
         </div>
         <div class="lightbox-action">
-          <KIconButton
-            icon="close"
-            color="#adb5bd"
-            @click="$emit('close')"
-          />
+          <button type="button" class="close" aria-label="Close" @click="$emit('close')">
+            <b-icon-x />
+          </button>
         </div>
       </nav>
 
@@ -62,6 +60,15 @@
 
 
 <style lang="scss" scoped>
+
+  @import '../styles';
+
+  .close {
+    color: $white;
+    &:hover {
+      color: $white;
+    }
+  }
 
   .lightbox-overlay {
     /* Overlay everything */
