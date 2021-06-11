@@ -7,7 +7,7 @@
       </b-navbar-brand>
     </Header>
 
-    <div class="main">
+    <div class="flex-fill main">
       <SearchBar
         v-model="query"
         :debounce="800"
