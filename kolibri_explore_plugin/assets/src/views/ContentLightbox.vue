@@ -1,7 +1,7 @@
 <template>
 
   <div ref="overlay" class="lightbox-overlay" @click="onOverlayClick($event)">
-    <div id="lightbox" class="content-lightbox" :style="getStyle()">
+    <div id="lightbox" class="content-lightbox">
       <nav>
         <div class="lightbox-title">
           {{ content.title }}
@@ -41,13 +41,6 @@
       },
     },
     methods: {
-      getStyle() {
-        return {
-          // FIXME: Use the theme when migrating the lightbox to Bootstrap:
-          backgroundColor: '#1b1b1b',
-          color: '#adb5bd',
-        };
-      },
       onOverlayClick(event) {
         if (event.target === this.$refs.overlay) {
           this.$emit('close');
@@ -94,6 +87,8 @@
     width: 85%;
     max-height: calc(100vh - 2rem);
     margin: 0 auto;
+    color: $white;
+    background-color: $dark;
     border-radius: 8px;
     transform: translate(0, -50%);
   }
