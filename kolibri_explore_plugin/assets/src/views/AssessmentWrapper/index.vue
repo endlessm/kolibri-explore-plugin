@@ -609,8 +609,8 @@ oriented data synchronization.
   }
 
   .current-status {
-    height: 18px;
     margin: 0;
+    color: $white;
   }
 
 </style>
