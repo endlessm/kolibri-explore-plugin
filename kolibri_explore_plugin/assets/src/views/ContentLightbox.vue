@@ -1,7 +1,7 @@
 <template>
 
   <div ref="overlay" class="lightbox-overlay" @click="onOverlayClick($event)">
-    <div class="content-lightbox" :style="getStyle()">
+    <div id="lightbox" class="content-lightbox" :style="getStyle()">
       <nav>
         <div class="lightbox-title">
           {{ content.title }}
