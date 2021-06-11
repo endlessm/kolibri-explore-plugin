@@ -5,9 +5,7 @@
     <slot></slot>
     <FilterContent />
 
-    <div v-if="isFilterResultEmpty">
-      <EmptyResultsMessage />
-    </div>
+    <EmptyResultsMessage v-if="isFilterResultEmpty" />
 
     <template v-else>
 
