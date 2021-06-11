@@ -8,7 +8,6 @@ from kolibri.core.auth.constants.user_kinds import LEARNER
 from kolibri.core.content.hooks import ContentNodeDisplayHook
 from kolibri.core.device.utils import is_landing_page
 from kolibri.core.device.utils import LANDING_PAGE_LEARN
-from kolibri.core.hooks import NavigationHook
 from kolibri.core.hooks import RoleBasedRedirectHook
 from kolibri.core.webpack import hooks as webpack_hooks
 from kolibri.plugins import KolibriPluginBase
@@ -36,11 +35,6 @@ class ExploreRedirect(RoleBasedRedirectHook):
     @property
     def url(self):
         return self.plugin_url(Explore, "explore")
-
-
-@register_hook
-class ExploreNavItem(NavigationHook):
-    bundle_id = "side_nav"
 
 
 @register_hook
