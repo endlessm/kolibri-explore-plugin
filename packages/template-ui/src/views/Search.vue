@@ -5,7 +5,7 @@
   >
     <SearchBar v-model="query" @clear-input="onClearInput" />
 
-    <EmptyResultsMessage v-if="notFound">
+    <EmptyResultsMessage v-if="notFound" :showTopics="false">
       <h1>Sorry, we can't find any content that matches your search.</h1>
       <p class="lead">
         You can try to use fewer words or browse by topics.
