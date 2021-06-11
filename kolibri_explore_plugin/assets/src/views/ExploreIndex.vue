@@ -17,7 +17,6 @@
   import commonExploreStrings from './commonExploreStrings';
   import ChannelsPage from './ChannelsPage';
   import CustomChannelsPage from './CustomChannelsPage';
-  import ContentPage from './ContentPage';
   import ContentUnavailablePage from './ContentUnavailablePage';
   import SearchPage from './SearchPage';
 
@@ -25,7 +24,6 @@
     [PageNames.TOPICS_ROOT]: ChannelsPage,
     [PageNames.TOPICS_CHANNEL]: CustomChannelsPage,
     [PageNames.TOPICS_TOPIC]: CustomChannelsPage,
-    [PageNames.TOPICS_CONTENT]: ContentPage,
     [PageNames.CONTENT_UNAVAILABLE]: ContentUnavailablePage,
     [PageNames.SEARCH]: SearchPage,
   };
