@@ -5,6 +5,7 @@
       :key="node.id"
       :cols="cardColumns.cols"
       :md="cardColumns.md"
+      :lg="cardColumns.lg"
     >
       <Card :node="node" :mediaQuality="mediaQuality" />
     </b-col>
