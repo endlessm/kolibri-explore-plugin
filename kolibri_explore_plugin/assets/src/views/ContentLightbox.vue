@@ -87,7 +87,6 @@
     width: 85%;
     max-height: calc(100vh - #{4 * $spacer});
     margin: 0 auto;
-    color: $white;
     background-color: $dark;
     border-radius: $border-radius-lg;
     transform: translate(0, -50%);
@@ -98,6 +97,7 @@
     flex-direction: row;
     align-items: center;
     margin: #{$spacer / 2} 0;
+    color: $white;
 
     .lightbox-title {
       flex-grow: 1;
