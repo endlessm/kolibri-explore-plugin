@@ -35,6 +35,7 @@
         <template #img>
           <b-card-group
             :deck="!isHighQualityMedia"
+            class="my-2"
           >
             <Card
               v-for="node in slideNodes"
