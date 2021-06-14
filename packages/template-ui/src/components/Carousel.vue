@@ -5,7 +5,7 @@
       fade
       indicators
       :interval="CAROUSEL_INTERVAL"
-      class="shadow-lg"
+      class="shadow"
     >
       <CarouselCard
         v-for="node in carouselNodes"

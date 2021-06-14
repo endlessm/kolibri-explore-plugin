@@ -80,7 +80,7 @@
     max-height: $size;
     max-width: $size;
     border-radius: 1rem;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.075);
+    box-shadow: $box-shadow-sm;
   }
 
   .md {
