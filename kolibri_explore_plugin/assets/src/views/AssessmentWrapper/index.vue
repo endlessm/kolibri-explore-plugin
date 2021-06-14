@@ -19,7 +19,7 @@ oriented data synchronization.
         {{ $tr('tryDifferentQuestion') }}
       </b-button>
     </b-alert>
-    <div>
+    <div class="bg-light px-2">
       <KContentRenderer
         ref="contentRenderer"
         :kind="kind"
@@ -58,7 +58,7 @@ oriented data synchronization.
           </span>
         </div>
       </div>
-      <div class="table">
+      <div class="m-2 table">
         <div class="row">
           <div class="left">
             <transition mode="out-in">
@@ -609,8 +609,8 @@ oriented data synchronization.
   }
 
   .current-status {
-    height: 18px;
     margin: 0;
+    color: $white;
   }
 
 </style>

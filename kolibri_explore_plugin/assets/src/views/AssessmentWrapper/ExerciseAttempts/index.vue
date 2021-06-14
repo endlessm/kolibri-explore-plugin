@@ -15,7 +15,6 @@
       v-for="i in numSpaces"
       :key="`placeholder-${i}`"
       class="placeholder"
-      :style="{ borderBottom: `2px solid ${$themeTokens.annotation}` }"
     >
     </div>
   </div>
@@ -93,6 +92,8 @@
 
 <style lang="scss" scoped>
 
+  @import '../../../styles';
+
   $size: 30px;
   $margin: 4px;
 
@@ -109,6 +110,7 @@
     width: $size;
     height: $size;
     margin: $margin;
+    border-bottom: 2px solid $white;
   }
 
   .attempt {

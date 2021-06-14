@@ -1,17 +1,15 @@
 <template>
 
   <div ref="overlay" class="lightbox-overlay" @click="onOverlayClick($event)">
-    <div class="content-lightbox" :style="getStyle()">
+    <div id="lightbox" class="content-lightbox">
       <nav>
         <div class="lightbox-title">
           {{ content.title }}
         </div>
         <div class="lightbox-action">
-          <KIconButton
-            icon="close"
-            color="#adb5bd"
-            @click="$emit('close')"
-          />
+          <button type="button" class="close" aria-label="Close" @click="$emit('close')">
+            <b-icon-x />
+          </button>
         </div>
       </nav>
 
@@ -43,13 +41,6 @@
       },
     },
     methods: {
-      getStyle() {
-        return {
-          // FIXME: Use the theme when migrating the lightbox to Bootstrap:
-          backgroundColor: '#1b1b1b',
-          color: '#adb5bd',
-        };
-      },
       onOverlayClick(event) {
         if (event.target === this.$refs.overlay) {
           this.$emit('close');
@@ -63,6 +54,15 @@
 
 <style lang="scss" scoped>
 
+  @import '../styles';
+
+  .close {
+    color: $white;
+    &:hover {
+      color: $white;
+    }
+  }
+
   .lightbox-overlay {
     /* Overlay everything */
     position: fixed;
@@ -75,7 +75,7 @@
     z-index: 16;
 
     /* With a semi transparent background */
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba($black, 0.6);
   }
 
   .content-lightbox {
@@ -85,9 +85,10 @@
     display: flex;
     flex-direction: column;
     width: 85%;
-    max-height: calc(100vh - 2rem);
+    max-height: calc(100vh - #{4 * $spacer});
     margin: 0 auto;
-    border-radius: 8px;
+    background-color: $dark;
+    border-radius: $border-radius-lg;
     transform: translate(0, -50%);
   }
 
@@ -95,34 +96,32 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin: 0.5rem 0;
+    margin: #{$spacer / 2} 0;
+    color: $white;
 
     .lightbox-title {
       flex-grow: 1;
-      padding: 0 0.25rem;
-      margin: 0 1rem;
-      font-size: 1.2rem;
-      font-weight: 600;
+      margin: 0 $spacer;
     }
 
     .lightbox-action {
       flex-shrink: 0;
-      margin: 0 0.5rem;
+      margin: 0 #{$spacer / 2};
     }
   }
 
   main {
-    margin: 0 1rem 1rem;
+    margin: 0 $spacer $spacer;
     overflow: hidden;
   }
 
-  @media (max-width: 960px) {
+  @media (max-width: map-get($grid-breakpoints, lg)) {
     .content-lightbox {
       width: 90%;
     }
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: map-get($grid-breakpoints, md)) {
     .content-lightbox {
       width: 100%;
       height: 100vh;
