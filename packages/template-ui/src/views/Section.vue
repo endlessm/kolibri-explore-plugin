@@ -5,16 +5,13 @@
     <slot></slot>
     <FilterContent />
 
-    <EmptyResultsMessage v-if="isFilterResultEmpty" />
-
-    <template v-else>
-
+    <div v-if="isFilterEmpty">
       <div v-if="isInlineLevel">
         <CardGrid
-          v-for="subsection in filteredSections(section)"
+          v-for="subsection in section.children"
           :id="subsection.id"
           :key="subsection.id"
-          :nodes="filteredSections(subsection)"
+          :nodes="subsection.children"
           :mediaQuality="mediaQuality"
           :cardColumns="cardColumns"
         >
@@ -27,14 +24,16 @@
         <CardGrid
           :id="section.id"
           :key="section.id"
-          :nodes="filteredSections(section)"
+          :nodes="section.children"
           :mediaQuality="mediaQuality"
           :cardColumns="cardColumns"
           variant="paginated"
         />
       </div>
-
-    </template>
+    </div>
+    <div v-else>
+      <FilterResult :node="section" />
+    </div>
 
   </div>
 </template>
@@ -49,21 +48,10 @@ export default {
     ...mapGetters({
       isInlineLevel: 'isInlineLevel',
       getAssetURL: 'getAssetURL',
-      filterNodes: 'filters/filterNodes',
+      isFilterEmpty: 'filters/isEmpty',
     }),
     backgroundImageURL() {
       return this.getAssetURL('sectionBackgroundImage');
-    },
-    isFilterResultEmpty() {
-      if (!this.section) {
-        return true;
-      }
-      return this.filteredSections(this.section).length === 0;
-    },
-  },
-  methods: {
-    filteredSections(section) {
-      return this.filterNodes(section.children);
     },
   },
 };

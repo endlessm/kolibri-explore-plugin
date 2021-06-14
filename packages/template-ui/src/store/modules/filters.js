@@ -18,6 +18,7 @@ function sortOptionsByWeight(root, getOptionsFunc) {
 
 function getAuthorOptions(node) {
   return flattenNodes(node)
+    .filter((n) => n.kind !== 'topic')
     .map((n) => n.author)
     .filter((n) => n !== '');
 }
@@ -25,12 +26,14 @@ function getAuthorOptions(node) {
 function getTagOptions(node) {
   return flattenNodes(node)
     .flatMap((n) => (n.tags ? n.tags : []))
+    .filter((n) => n.kind !== 'topic')
     .filter((t) => t !== '')
     .filter((t) => !t.match(constants.StructuredTagsRegExp));
 }
 
 function getStructuredTagOptions(node, matchKey) {
   return flattenNodes(node)
+    .filter((n) => n.kind !== 'topic')
     .flatMap((n) => n.structuredTags[matchKey]);
 }
 
@@ -130,9 +133,20 @@ export default {
       const selectedFilters = getters.getFilterOptions(filter);
       return selectedFilters.includes(option);
     },
-    filterNodes: (state) => (nodes) => {
+    filterNodes: (state, getters) => (nodes) => {
+      // Empty filter
+      if (getters.isEmpty) {
+        return nodes;
+      }
+
       const { query } = state;
-      let filtered = nodes;
+      let filtered = nodes || [];
+
+      // Get all leaf nodes
+      filtered = filtered
+        .map((n) => flattenNodes(n))
+        .reduce((accumulator, item) => accumulator.concat(item), [])
+        .filter((n) => n.kind !== 'topic');
 
       // Filter by media type
       const mediaType = query[MediaFilterName];
