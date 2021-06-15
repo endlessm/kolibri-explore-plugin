@@ -32,18 +32,28 @@
         </b-row>
       </template>
     </b-jumbotron>
+    <CardGrid
+      v-if="nextNodesInTopic.length"
+      :nodes="nextNodesInTopic"
+      :cardColumns="cardColumns"
+    >
+      <b-row>
+        <h3>Next in {{ section.title }}:</h3>
+      </b-row>
+    </CardGrid>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import { goToContent } from 'kolibri-api';
 import { constants, utils } from 'eos-components';
 
 export default {
   name: 'Content',
   computed: {
-    ...mapState(['content', 'channel']),
+    ...mapState(['content', 'section', 'cardColumns', 'channel']),
+    ...mapGetters(['nextNodesInTopic']),
     subjectTags() {
       return this.content.structuredTags[constants.StructuredTags.SUBJECT];
     },
