@@ -13,7 +13,7 @@
     "lint-frontend": "kolibri-tools lint -p 'kolibri_explore_plugin/assets/**/*.{js,vue,scss,less,css}'",
     "lint-frontend:format": "yarn run lint-frontend --write",
     "bump-version": "bump2version",
-    "release": "twine upload -s dist/*"
+    "release": "./scripts/check_can_relese.sh && twine upload -s dist/*"
   },
   "workspaces": [
     "kolibri_explore_plugin/assets",
