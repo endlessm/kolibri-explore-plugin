@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "lerna run build && yarn deploy:apps && yarn build:plugin",
-    "build:plugin": "kolibri-tools build prod --plugins kolibri_explore_plugin",
+    "build:plugin": "./scripts/set_override.py default && kolibri-tools build prod --plugins kolibri_explore_plugin",
     "build-dist": "./scripts/clean.sh && yarn clean && yarn build && python setup.py bdist_wheel --universal",
     "deploy:apps": "./scripts/copy_bundles.py kolibri_explore_plugin/apps/",
     "clean": "kolibri-tools build clean --plugins kolibri_explore_plugin",
