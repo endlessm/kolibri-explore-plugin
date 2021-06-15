@@ -56,7 +56,7 @@ $carousel-indicator-hit-area-height: 10px !default;
 $carousel-indicator-spacer:          3px !default;
 $carousel-indicator-transition:      all .6s ease !default;
 
-@import 'channel-overrides';
+@import "../../template-ui/src/overrides/styles.scss";
 
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-vue/src/index';
