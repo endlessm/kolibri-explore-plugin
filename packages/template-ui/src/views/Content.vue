@@ -1,6 +1,5 @@
 <template>
   <div>
-    <ChannelNavBar />
     <b-jumbotron
       fluid
     >
