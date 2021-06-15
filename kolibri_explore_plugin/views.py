@@ -24,6 +24,11 @@ from kolibri.core.decorators import cache_no_user_data
 class ExploreView(TemplateView):
     template_name = "explore/explore.html"
 
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        ctx["show_build_info"] = os.environ.get("SHOW_BUILD_INFO", "false")
+        return ctx
+
 
 class AppBase(View):
     @xframe_options_exempt

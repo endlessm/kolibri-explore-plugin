@@ -3,4 +3,5 @@
 
 {% block content %}
   {% webpack_asset 'kolibri_explore_plugin.app' %}
+  <script>window.showBuildInfo = {{ show_build_info }};</script>
 {% endblock %}
