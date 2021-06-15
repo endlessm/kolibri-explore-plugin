@@ -3,7 +3,6 @@
     <ChannelNavBar />
     <b-jumbotron
       fluid
-      :style="{ backgroundImage: headerImageURL }"
     >
       <template v-slot:default>
         <b-row class="mt-3">
@@ -38,41 +37,22 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import { goToContent } from 'kolibri-api';
-import dynamicRequireAsset from '@/dynamicRequireAsset';
-import { getSlug } from '@/utils';
 import { constants, utils } from 'eos-components';
 
 export default {
   name: 'Content',
   computed: {
-    ...mapState(['content', 'section', 'channel']),
-    ...mapGetters(['getAssetURL']),
+    ...mapState(['content', 'channel']),
     subjectTags() {
       return this.content.structuredTags[constants.StructuredTags.SUBJECT];
-    },
-    sectionImageURL() {
-      if (!this.section || !this.section.title) {
-        return null;
-      }
-      const sectionSlug = this.getSlug(this.section.title);
-      const headerSectionFilename = `header-${sectionSlug}.jpg`;
-      const headerSectionAsset = dynamicRequireAsset(headerSectionFilename);
-      if (headerSectionAsset) {
-        return `url(${headerSectionAsset})`;
-      }
-      return null;
-    },
-    headerImageURL() {
-      return this.sectionImageURL || this.getAssetURL('headerImage');
     },
     subtitle() {
       return utils.getCardSubtitle(this.content, this.channel.title);
     },
   },
   methods: {
-    getSlug,
     goToContent,
   },
 };
@@ -82,7 +62,7 @@ export default {
 @import '@/styles.scss';
 
 .jumbotron {
-  background-color: $body-bg;
+  background-color: $white;
   background-size: cover;
   padding-top: $navbar-height;
 }
