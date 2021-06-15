@@ -5,7 +5,7 @@
   "main": "src/main.js",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib src/main.js",
+    "build-lib": "vue-cli-service build --target lib src/main.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
