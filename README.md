@@ -156,3 +156,13 @@ And finally upload the built `.whl` file to PyPi:
 ```
 yarn release
 ```
+
+### How to display the build information
+
+To show the build information in the front page, as a tag in top right corner,
+you can set the environment variable, `SHOW_BUILD_INFO` to "true", for example,
+for the development kolibri server:
+
+```
+$ SHOW_BUILD_INFO=true yarn run devserver
+```

@@ -1,6 +1,7 @@
 <template>
 
   <div>
+    <DevTag v-if="showBuildInfo" />
     <component :is="currentPage" v-if="currentPage" />
     <router-view />
   </div>
@@ -19,6 +20,7 @@
   import CustomChannelsPage from './CustomChannelsPage';
   import ContentUnavailablePage from './ContentUnavailablePage';
   import SearchPage from './SearchPage';
+  import DevTag from './DevTag';
 
   const pageNameToComponentMap = {
     [PageNames.TOPICS_ROOT]: ChannelsPage,
@@ -30,6 +32,7 @@
 
   export default {
     name: 'ExploreIndex',
+    components: { DevTag },
     mixins: [commonCoreStrings, commonExploreStrings, responsiveWindowMixin],
     data() {
       return {
@@ -40,6 +43,9 @@
       ...mapState(['pageName']),
       currentPage() {
         return pageNameToComponentMap[this.pageName] || null;
+      },
+      showBuildInfo() {
+        return window.showBuildInfo;
       },
     },
     watch: {
