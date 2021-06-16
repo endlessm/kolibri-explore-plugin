@@ -121,10 +121,17 @@ export default {
     ),
     name: (_state, getters) => (filter) => {
       const selectedFilters = getters.getFilterOptions(filter);
-      if (selectedFilters.length === 1) {
-        return selectedFilters[0];
+      const count = selectedFilters.length;
+      if (count === 0) {
+        return filter.name;
       }
-      return filter.name;
+
+      const [first] = selectedFilters;
+      if (count === 1) {
+        return first;
+      }
+
+      return `${first} +${count - 1}`;
     },
     isFiltering: (_state, getters) => (filter) => (
       getters.getFilterOptions(filter).length > 0
