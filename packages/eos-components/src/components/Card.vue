@@ -9,7 +9,7 @@
 
 <script>
 import { MediaQuality } from '../constants';
-import { getNodeUrl, getCardSubtitle } from './utils';
+import { getNodeUrl, getCardSubtitle } from '../utils';
 
 export default {
   name: 'Card',

@@ -33,7 +33,7 @@
 <script>
 import VClamp from 'vue-clamp';
 import { StructuredTags } from '../constants';
-import { getFirstStructuredTag } from './utils';
+import { getFirstStructuredTag } from '../utils';
 
 export default {
   name: 'CardBody',

@@ -3,7 +3,7 @@ import {
   StructuredTags,
   DefaultKindLabel,
   LabelPerKind,
-} from '../constants';
+} from './constants';
 
 /** Structured tags **/
 
