@@ -126,6 +126,11 @@ const store = new Vuex.Store({
       }
       return null;
     },
+    nextNodesInTopic: (state) => {
+      const currentOrder = state.content.sort_order;
+      const parent = findNodeById(state.tree[0], state.section.id);
+      return parent.children.filter((node) => node.sort_order > currentOrder);
+    },
     searchNodes: (state) => (query) => {
       // Trim whitespace and ignore case:
       const regexp = new RegExp(query, 'i');
