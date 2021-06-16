@@ -32,7 +32,7 @@ export default {
     },
     itemsPerPage: {
       type: Number,
-      default: 8,
+      default: 16,
     },
   },
   computed: {

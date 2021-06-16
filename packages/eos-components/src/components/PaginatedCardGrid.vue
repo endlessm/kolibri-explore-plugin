@@ -22,7 +22,7 @@ export default {
     cardColumns: Object,
     itemsPerPage: {
       type: Number,
-      default: 8,
+      default: 16,
     },
   },
   data() {

@@ -35,6 +35,7 @@
         <template #img>
           <b-card-group
             :deck="!isHighQualityMedia"
+            class="my-2"
           >
             <Card
               v-for="node in slideNodes"
@@ -67,7 +68,7 @@ export default {
     mediaQuality: String,
     itemsPerPage: {
       type: Number,
-      default: 8,
+      default: 16,
     },
   },
   data() {
@@ -78,7 +79,7 @@ export default {
   computed: {
     itemsPerSlide() {
       // FIXME divide by 4 if small screen
-      return Math.ceil(this.itemsPerPage / 2);
+      return Math.ceil(this.itemsPerPage / 4);
     },
     slides() {
       return _.chunk(this.nodes, this.itemsPerSlide);

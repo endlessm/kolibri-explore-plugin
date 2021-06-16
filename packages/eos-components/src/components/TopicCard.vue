@@ -3,8 +3,8 @@
     noBody
     class="my-2 rounded-lg"
     :class="{
-      shadow: !isHovered,
-      'shadow-lg': isHovered,
+      'shadow-sm': !isHovered,
+      'shadow': isHovered,
     }"
   >
     <ContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
