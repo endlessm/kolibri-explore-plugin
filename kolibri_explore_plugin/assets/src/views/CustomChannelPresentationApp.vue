@@ -40,7 +40,13 @@
       ...mapState('topicsTree', ['channel', 'customAppContent']),
     },
     mounted() {
-      window.addEventListener('message', event => {
+      window.addEventListener('message', this.onMessage);
+    },
+    beforeDestroy() {
+      window.removeEventListener('message', this.onMessage);
+    },
+    methods: {
+      onMessage(event) {
         if (
           !event.data.event ||
           !event.data.nameSpace ||
@@ -60,9 +66,7 @@
         if (event.data.event === 'getThumbnail') {
           this.sendThumbnail(event.data.data);
         }
-      });
-    },
-    methods: {
+      },
       sendChannelInformation() {
         if (!this.$refs.iframe) {
           return;

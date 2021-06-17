@@ -43,7 +43,12 @@ export default {
       if (!getAsset) {
         return this.fallbackGetAsset(name);
       }
-      return getAsset(this.$store.state)(name);
+      const fn = getAsset(this.$store.state);
+      if (!fn) {
+        return this.fallbackGetAsset(name);
+      }
+
+      return fn(name);
     },
     fallbackGetAsset() {
       return null;

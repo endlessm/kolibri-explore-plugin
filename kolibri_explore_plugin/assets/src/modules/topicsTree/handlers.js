@@ -9,11 +9,8 @@ import { getAppNameByID } from '../../customApps';
 import { normalizeContentNode, contentState } from '../coreExplore/utils';
 
 function _getAppMetadata(appName) {
-  if (appName) {
-    const url = urls['kolibri:kolibri_explore_plugin:app_metadata']({ app: appName });
-    return axios.get(url);
-  }
-  return new Promise();
+  const url = urls['kolibri:kolibri_explore_plugin:app_metadata']({ app: appName });
+  return axios.get(url);
 }
 
 function _parseAppMetadata(data, appName) {
@@ -62,9 +59,15 @@ export function showTopicsTopic(store, { id, isRoot = false }) {
         });
 
         const appName = getAppNameByID(topic.channel_id);
-        _getAppMetadata(appName).then(({ data }) => {
-          store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
-        });
+        if (appName) {
+          _getAppMetadata(appName)
+            .then(({ data }) => {
+              store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
+            })
+            .catch(() => {
+              console.log(`no metadata ${appName}`);
+            });
+        }
 
         store.dispatch('notLoading');
         store.commit('CORE_SET_ERROR', null);
@@ -95,9 +98,15 @@ export function showCustomContent(store, id) {
       });
 
       const appName = getAppNameByID(id);
-      _getAppMetadata(appName).then(({ data }) => {
-        store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
-      });
+      if (appName) {
+        _getAppMetadata(appName)
+          .then(({ data }) => {
+            store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
+          })
+          .catch(() => {
+            console.log(`no metadata ${appName}`);
+          });
+      }
 
       store.commit('CORE_SET_PAGE_LOADING', false);
       store.commit('CORE_SET_ERROR', null);
@@ -139,9 +148,15 @@ export function showTopicsContent(store, id) {
       });
 
       const appName = getAppNameByID(content.channel_id);
-      _getAppMetadata(appName).then(({ data }) => {
-        store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
-      });
+      if (appName) {
+        _getAppMetadata(appName)
+          .then(({ data }) => {
+            store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
+          })
+          .catch(() => {
+            console.log(`no metadata ${appName}`);
+          });
+      }
 
       store.commit('CORE_SET_PAGE_LOADING', false);
       store.commit('CORE_SET_ERROR', null);
@@ -172,9 +187,15 @@ export function showTopicsContentInLightbox(store, id) {
       });
 
       const appName = getAppNameByID(content.channel_id);
-      _getAppMetadata(appName).then(({ data }) => {
-        store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
-      });
+      if (appName) {
+        _getAppMetadata(appName)
+          .then(({ data }) => {
+            store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
+          })
+          .catch(() => {
+            console.log(`no metadata ${appName}`);
+          });
+      }
     },
     error => {
       store.dispatch('handleApiError', error);
