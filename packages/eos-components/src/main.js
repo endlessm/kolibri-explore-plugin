@@ -24,7 +24,7 @@ import TopicCard from './components/TopicCard.vue';
 
 import cardMixin from './components/mixins/cardMixin.js';
 
-import utils from './components/utils.js';
+import utils from './utils.js';
 import constants from './constants.js';
 
 const components = {

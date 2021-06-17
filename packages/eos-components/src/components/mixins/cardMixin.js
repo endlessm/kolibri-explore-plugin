@@ -1,5 +1,5 @@
 import { getThumbnail } from 'kolibri-api';
-import { getFirstStructuredTag } from '../utils';
+import { getFirstStructuredTag } from '../../utils';
 import { StructuredTags } from '../../constants';
 
 export default {

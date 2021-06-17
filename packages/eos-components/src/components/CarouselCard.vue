@@ -1,5 +1,5 @@
 <template>
-  <ContentLink :node="node">
+  <ContentLink :url="url" :node="node">
     <b-carousel-slide>
       <template #img>
         <b-card>
@@ -19,6 +19,7 @@
 
 <script>
 import { goToContent } from 'kolibri-api';
+import { getNodeUrl } from '../utils';
 import cardMixin from './mixins/cardMixin';
 
 export default {
@@ -33,6 +34,9 @@ export default {
         backgroundImage: `url("${this.thumbnail}")`,
       };
     },
+    url() {
+      return getNodeUrl(this.node);
+    }
   },
   methods: {
     goToContent,
