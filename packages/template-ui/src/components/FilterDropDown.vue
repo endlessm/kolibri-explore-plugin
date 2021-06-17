@@ -26,8 +26,13 @@
       </div>
       <b-dropdown-divider class="my-1" />
       <b-dropdown-form class="flex-shrink-0">
-        <b-button variant="link" @click="clearFilter({ filter })">
-          Clear
+        <b-button
+          variant="link"
+          :disabled="clearDisabled(filter)"
+          @click="clearFilter({ filter })"
+        >
+          <b-icon-x-circle class="mr-1" />
+          clear all
         </b-button>
       </b-dropdown-form>
     </div>
@@ -45,6 +50,7 @@
     computed: {
       ...mapGetters({
         isSelected: 'filters/isSelected',
+        isFiltering: 'filters/isFiltering',
       }),
       boundary() {
         return document.body;
@@ -60,6 +66,9 @@
       },
       closeFilter() {
         this.$refs.dropdown.hide(true);
+      },
+      clearDisabled(filter) {
+        return !this.isFiltering(filter);
       },
     },
   };
