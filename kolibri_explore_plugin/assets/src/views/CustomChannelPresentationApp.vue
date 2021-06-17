@@ -140,8 +140,8 @@
   .custom-presentation-iframe {
     width: 100%;
     height: 100vh;
-    // Remove 5px for avoiding scrollbar.
-    margin-bottom: -5px;
+    // Remove this arbitrary value for avoiding scrollbar.
+    margin-bottom: -6px;
   }
 
 </style>
