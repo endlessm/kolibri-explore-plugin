@@ -1,6 +1,6 @@
 <template>
   <div
-    class="thumbnail"
+    class="bg-white thumbnail"
     :class="size"
     :style="thumbnailStyles"
   >
@@ -21,46 +21,12 @@
         },
       },
     },
-    data() {
-      return {
-        hasTransparentBg: false,
-      };
-    },
     computed: {
       thumbnailStyles() {
         const styles = {
-          backgroundColor: 'white',
           backgroundImage: `url(${this.channel.thumbnail})`,
-          backgroundSize: '100% auto',
-          backgroundPosition: 'center center',
-          backgroundRepeat: 'no-repeat',
         };
-
-        if (this.hasTransparentBg) {
-          styles.backgroundSize = '80% auto';
-        }
-
         return styles;
-      },
-    },
-    updated() {
-      this.calculateTransparency();
-    },
-    mounted() {
-      this.calculateTransparency();
-    },
-    methods: {
-      calculateTransparency() {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const img = new Image();
-        img.onload = () => {
-          ctx.drawImage(img, 0, 0);
-          const { data } = ctx.getImageData(0, 0, 1, 1);
-          const [,,, alpha] = data;
-          this.hasTransparentBg = (alpha === 0);
-        };
-        img.src = this.channel.thumbnail;
       },
     },
   }
@@ -71,6 +37,9 @@
 
   .thumbnail {
     transition: background 0.2s ease;
+    background-size: 100% auto;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   .sm {
