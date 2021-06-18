@@ -1,21 +1,51 @@
 @import "~@fontsource/lato/index.css";
 @import "~@fontsource/poppins/index.css";
 
-// Bootstrap variables:
+// Bootstrap theme variables:
 $primary: #F15A22;
+$secondary: #14BF96;
+$gray-300: #EFF0F3;
+$gray-400: #D8DDE1;
+$gray-500: #CED4DA;
+$gray-600: #6C757D;
+$gray-700: #12272A;
+$gray-800: #091415;
+
+$light: $gray-300;
+$dark: $gray-600;
+
+$orange: #FD7E14;
+$yellow: #F5BD2C;
+$teal: #20C997;
+$cyan: #0DCAF0;
+$lavender: #B57EDC;
+$pink: #F02D8E;
+
+$theme-colors: (
+  "bundle": $lavender,
+  "audio": $pink,
+  "document": $teal,
+  "exercise": $cyan,
+  "html5": $orange,
+  "video": $yellow
+);
+
+$btn-font-weight: 600;
+$headings-font-weight: 600;
+$display1-weight: 700;
+$display2-weight: 700;
+$display3-weight: 700;
+$display4-weight: 700;
+
 $border-radius-lg: 1rem;
-$gray-200: #e9ecef;
-$body-bg: $gray-200;
+$body-bg: $gray-300;
 $font-family-sans-serif: "Lato", sans-serif;
 $headings-font-family: "Poppins", sans-serif;
 
 // Template variables:
 $header-logo-width: 128;
-$audio-color: #dd448c;
-$document-color: #5fc59a;
-$exercise-color: #59c8ec;
-$html5-color: #edbe4e;
-$video-color: #ee8437;
+$hover-lightness: -25%;
+$background-alpha: -8%;
 
 :export {
   headerLogoWidth: $header-logo-width;
@@ -61,6 +91,30 @@ $carousel-indicator-transition:      all .6s ease !default;
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-vue/src/index';
 
+@import 'mixins';
+
+// Change button dark outline variant:
+.btn-outline-dark {
+  $value: theme-color("dark");
+  @include eos-button-outline-variant($value, $color-hover: $value, $border-color: $gray-500, $active-background: transparent, $active-border: $primary);
+}
+// Change buttons variant:
+@each $color, $value in $theme-colors {
+  .btn-#{$color} {
+    $hover-value: scale-color($value, $lightness: $hover-lightness);
+    @include button-variant(
+      $background: $value,
+      $border: $value,
+      $hover-background: $hover-value,
+      $active-background: $hover-value,
+      $active-border: $hover-value);
+  }
+}
+.btn-light {
+  color: $dark;
+}
+
+// Calculate navbar height:
 $navbar-height: $navbar-brand-height +
                 $navbar-brand-padding-y * 2 +
                 $navbar-padding-y * 2;

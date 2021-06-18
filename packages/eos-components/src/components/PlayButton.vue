@@ -1,7 +1,7 @@
 <template>
   <b-button
     pill
-    variant="light"
+    :variant="node.kind"
     :class="`card-media-type m-2 ${node.kind}`"
     @click.stop="$emit('click')"
   >
@@ -57,28 +57,11 @@ export default {
 <style lang="scss" scoped>
 @import '../styles.scss';
 
-$background-alpha: 0.8;
-
 .card-media-type {
   position: absolute;
   top: 0;
   left: 0;
   border: none !important;
-  &.audio, &.audio:hover {
-    background-color: rgba($audio-color, $background-alpha);
-  }
-  &.document, &.document:hover {
-    background-color: rgba($document-color, $background-alpha);
-  }
-  &.exercise, &.exercise:hover {
-    background-color: rgba($exercise-color, $background-alpha);
-  }
-  &.html5, &.html5:hover {
-    background-color: rgba($html5-color, $background-alpha);
-  }
-  &.video, &.video:hover {
-    background-color: rgba($video-color, $background-alpha);
-  }
 }
 
 </style>

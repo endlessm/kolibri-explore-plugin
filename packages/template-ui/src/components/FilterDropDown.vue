@@ -62,7 +62,7 @@
         clearFilter: 'filters/clearFilterQuery',
       }),
       buttonVariant(filter, option) {
-        return this.isSelected(filter, option) ? 'primary' : 'secondary';
+        return this.isSelected(filter, option) ? 'primary' : 'light';
       },
       closeFilter() {
         this.$refs.dropdown.hide(true);
@@ -79,6 +79,7 @@
 
   .filter-dropdown {
     max-height: 30rem;
+    background-color: $white;
   }
 
   @include media-breakpoint-up(md) {
