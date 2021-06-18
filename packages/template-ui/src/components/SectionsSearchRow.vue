@@ -7,7 +7,7 @@
       >
         <b-button
           pill
-          variant="light"
+          variant="outline-dark"
           to="/search"
         >
           <b-icon-search />

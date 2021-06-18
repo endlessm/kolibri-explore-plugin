@@ -58,7 +58,7 @@ export default {
         {
           ...f,
           prettyName: this.name(f),
-          variant: this.isFiltering(f) ? 'primary' : 'outline-secondary',
+          variant: this.isFiltering(f) ? 'primary' : 'outline-dark',
           options: this.possibleOptions(f, this.section),
         }
       )).filter((f) => f.options.length > 1);
