@@ -1,6 +1,6 @@
 <template>
 
-  <div class="d-flex flex-column h-100 search-page">
+  <div class="d-flex flex-column min-vh-100 search-page">
     <Header class="header" @click-logo="goBack">
       <b-navbar-brand href="#/topics">
         Back to Discovery

@@ -14,14 +14,13 @@
 <script>
 
   import { mapState } from 'vuex';
-  import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
   import urls from 'kolibri.urls';
+
   import axios from 'axios';
+  import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
+  import { getAppNameByID } from '../customApps';
   import { PageNames } from '../constants';
   import { ContentNodeResource } from '../apiResources.js';
-  import { showTopicsContentInLightbox } from '../modules/topicsTree/handlers';
-
-  import { getAppNameByID } from '../customApps';
 
   const nameSpace = 'hashi';
 
@@ -38,6 +37,9 @@
         return url;
       },
       ...mapState('topicsTree', ['channel', 'customAppContent']),
+      iframeWindow() {
+        return this.$refs.iframe.contentWindow;
+      },
     },
     mounted() {
       window.addEventListener('message', this.onMessage);
@@ -60,23 +62,18 @@
         if (event.data.event === 'goToChannelList') {
           this.goToChannelList();
         }
-        if (event.data.event === 'goToContent') {
-          this.goToContent(event.data.data);
-        }
         if (event.data.event === 'getThumbnail') {
           this.sendThumbnail(event.data.data);
         }
       },
       sendChannelInformation() {
-        if (!this.$refs.iframe) {
+        if (!this.iframeWindow) {
           return;
         }
-        const iframeWindow = this.$refs.iframe.contentWindow;
-        const { channel } = this.$store.state.topicsTree;
 
         ContentNodeResource.fetchCollection({
           getParams: {
-            channel_id: channel.id,
+            channel_id: this.channel.id,
             user_kind: this.$store.getters.getUserKind,
           },
         }).then(nodes => {
@@ -85,15 +82,18 @@
             const message = {
               event,
               nameSpace,
-              data: { channel, nodes: node },
+              data: { channel: this.channel, nodes: node },
             };
-            iframeWindow.postMessage(message, '*');
+            this.iframeWindow.postMessage(message, '*');
           });
         });
       },
 
       sendThumbnail(id) {
-        const iframeWindow = this.$refs.iframe.contentWindow;
+        if (!this.iframeWindow) {
+          return;
+        }
+
         const event = 'sendThumbnail';
         ContentNodeResource.fetchModel({ id }).then(node => {
           const thumbnailUrl = getContentNodeThumbnail(node);
@@ -103,7 +103,7 @@
               nameSpace,
               data: { id, thumbnail: null },
             };
-            iframeWindow.postMessage(message, '*');
+            this.iframeWindow.postMessage(message, '*');
             return;
           }
           const promise = axios
@@ -119,7 +119,7 @@
               nameSpace,
               data: { id, thumbnail },
             };
-            iframeWindow.postMessage(message, '*');
+            this.iframeWindow.postMessage(message, '*');
           });
         });
       },
@@ -128,10 +128,6 @@
         this.$router.push({
           name: PageNames.ROOT,
         });
-      },
-
-      goToContent(id) {
-        showTopicsContentInLightbox(this.$store, id);
       },
     },
   };
