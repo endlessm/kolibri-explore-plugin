@@ -1,6 +1,7 @@
 <template>
 
   <div>
+    <ContentModal />
     <DevTag v-if="showBuildInfo" />
     <component :is="currentPage" v-if="currentPage" />
     <router-view />
@@ -17,22 +18,23 @@
   import { PageNames } from '../constants';
   import commonExploreStrings from './commonExploreStrings';
   import ChannelsPage from './ChannelsPage';
-  import CustomChannelsPage from './CustomChannelsPage';
+  import CustomChannelPresentationApp from './CustomChannelPresentationApp';
   import ContentUnavailablePage from './ContentUnavailablePage';
   import SearchPage from './SearchPage';
   import DevTag from './DevTag';
+  import ContentModal from './ContentModal';
 
   const pageNameToComponentMap = {
     [PageNames.TOPICS_ROOT]: ChannelsPage,
-    [PageNames.TOPICS_CHANNEL]: CustomChannelsPage,
-    [PageNames.TOPICS_TOPIC]: CustomChannelsPage,
+    [PageNames.TOPICS_CHANNEL]: CustomChannelPresentationApp,
+    [PageNames.TOPICS_TOPIC]: CustomChannelPresentationApp,
     [PageNames.CONTENT_UNAVAILABLE]: ContentUnavailablePage,
     [PageNames.SEARCH]: SearchPage,
   };
 
   export default {
     name: 'ExploreIndex',
-    components: { DevTag },
+    components: { ContentModal, DevTag },
     mixins: [commonCoreStrings, commonExploreStrings, responsiveWindowMixin],
     data() {
       return {
@@ -89,9 +91,19 @@
   }
 
   /** Non scoped styles to be able to modify body css to fix the footer to the bottom **/
+  html {
+    height: 100%;
+  }
+
   body,
   body > div {
-    height: 100%;
+    min-height: 100vh;
+  }
+
+  // Remove the padding added by the modal
+  // https://stackoverflow.com/questions/32862394/bootstrap-modals-keep-adding-padding-right-to-body-after-closed
+  body.modal-open {
+    padding-right: 0 !important;
   }
 
 </style>

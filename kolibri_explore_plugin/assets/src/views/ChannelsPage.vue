@@ -1,6 +1,6 @@
 <template>
 
-  <div class="channels-page d-flex flex-column h-100">
+  <div class="channels-page d-flex flex-column min-vh-100">
     <Header class="header" @click-logo="goToTop">
       <b-navbar-brand>
         Endless Discovery

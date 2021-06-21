@@ -1,11 +1,12 @@
 <template>
-  <b-link
+  <span
     v-b-hover="handleHover"
+    role="button"
     class="text-decoration-none text-reset"
-    @click="onClick"
+    @click.stop="onClick"
   >
     <slot></slot>
-  </b-link>
+  </span>
 </template>
 
 <script>
