@@ -10,7 +10,7 @@ then
     exit 1
 fi
 
-TAG_HASH=$(git ls-remote https://github.com/endlessm/kolibri-explore-plugin.git $TAG | cut -f1)
+TAG_HASH=$(git ls-remote https://github.com/endlessm/kolibri-explore-plugin.git $TAG^{} | cut -f1)
 if [[ -z $TAG_HASH || $TAG_HASH != $MASTER_HASH ]]
 then
     echo "The tag is not updated or it's not the latest commit in master"
