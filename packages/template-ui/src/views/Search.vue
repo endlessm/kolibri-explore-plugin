@@ -9,7 +9,7 @@
       <h1 class="text-secondary">
         Sorry, we can't find any content that matches your search.
       </h1>
-      <h5>
+      <h5 class="text-muted">
         You can try to use fewer words or browse by topics.
       </h5>
     </EmptyResultsMessage>

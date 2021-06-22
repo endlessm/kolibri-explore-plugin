@@ -7,7 +7,7 @@
             <h1 class="text-secondary">
               There are no results containing all your filter options.
             </h1>
-            <h5>
+            <h5 class="text-muted">
               You can try different filter options, clear your filters or explore
               the topics below.
             </h5>
