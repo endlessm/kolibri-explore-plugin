@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="d-flex flex-column h-100">
     <!-- Wrapper needed to fix flexbox footer positioning on IE11 -->
-    <div class="flex-shrink-0">
+    <div class="flex-fill flex-shrink-0">
       <ChannelNavBar />
       <router-view>
         <ChannelHeader />
@@ -77,18 +77,18 @@ export default {
 <style lang="scss">
 @import '@/styles.scss';
 
-html,
-body {
+html {
   height: 100%;
 }
-
 /* Always show the vertical scrollbar */
 body {
   overflow-y: scroll;
+  min-height: 100vh;
 }
 
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
 }
 </style>
