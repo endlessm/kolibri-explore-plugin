@@ -89,18 +89,13 @@
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import _ from 'underscore';
+  import { responsiveMixin } from 'eos-components';
   import { PageNames } from '../constants';
   import { getBigThumbnail } from '../customApps';
 
   export default {
     name: 'ChannelsPage',
-    mixins: [commonCoreStrings],
-    props: {
-      columns: {
-        type: Number,
-        default: 3,
-      },
-    },
+    mixins: [commonCoreStrings, responsiveMixin],
     data() {
       return {
         searchTerms: ['STEM', 'Games', 'Fitness', 'Cooking', 'Arts'],
@@ -125,6 +120,17 @@
         withThumbnail = _.chunk(withThumbnail, this.columns);
         withoutThumbnail = _.chunk(withoutThumbnail, this.columns);
         return { withThumbnail, withoutThumbnail };
+      },
+      columns() {
+        if (this.xs) {
+          return 1;
+        }
+
+        if (this.sm || this.md) {
+          return 2;
+        }
+
+        return 3;
       },
     },
     methods: {

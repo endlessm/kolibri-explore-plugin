@@ -60,9 +60,11 @@
 <script>
 import _ from 'underscore';
 import { MediaQuality } from '../constants';
+import responsiveMixin from './mixins/responsiveMixin';
 
 export default {
   name: 'SlidableCardGrid',
+  mixins: [responsiveMixin],
   props: {
     nodes: Array,
     mediaQuality: String,
@@ -78,7 +80,13 @@ export default {
   },
   computed: {
     itemsPerSlide() {
-      // FIXME divide by 4 if small screen
+      if (this.xs) {
+        return Math.ceil(this.itemsPerPage / 16);
+      }
+      if (this.sm || this.md) {
+        return Math.ceil(this.itemsPerPage / 8);
+      }
+
       return Math.ceil(this.itemsPerPage / 4);
     },
     slides() {

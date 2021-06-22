@@ -23,6 +23,7 @@ import SlidableCardGrid from './components/SlidableCardGrid.vue';
 import TopicCard from './components/TopicCard.vue';
 
 import cardMixin from './components/mixins/cardMixin.js';
+import responsiveMixin from './components/mixins/responsiveMixin.js';
 
 import utils from './utils.js';
 import constants from './constants.js';
@@ -64,6 +65,7 @@ const plugin = {
 export {
   components,
   cardMixin,
+  responsiveMixin,
   utils,
   constants,
   plugin as default,

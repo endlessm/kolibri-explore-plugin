@@ -64,3 +64,11 @@ $carousel-indicator-transition:      all .6s ease !default;
 $navbar-height: $navbar-brand-height +
                 $navbar-brand-padding-y * 2 +
                 $navbar-padding-y * 2;
+
+:export {
+  xs: map-get($grid-breakpoints, "xs");
+  sm: map-get($grid-breakpoints, "sm");
+  md: map-get($grid-breakpoints, "md");
+  lg: map-get($grid-breakpoints, "lg");
+  xl: map-get($grid-breakpoints, "xl");
+}

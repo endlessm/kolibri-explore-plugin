@@ -25,7 +25,7 @@
           <ChannelCardGroup
             :rows="resultChannels"
             :hasThumbnail="false"
-            :columns="3"
+            :columns="columns"
             @card-click="goToChannel"
           />
         </div>
@@ -66,7 +66,7 @@
         </h4>
         <ChannelCardGroup
           :rows="recommended"
-          :columns="3"
+          :columns="columns"
           @card-click="goToChannel"
         />
       </b-container>
@@ -80,7 +80,7 @@
 
   import _ from 'underscore';
   import { mapMutations, mapState } from 'vuex';
-  import { utils, constants } from 'eos-components';
+  import { utils, constants, responsiveMixin } from 'eos-components';
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 
   import { PageNames } from '../constants';
@@ -88,6 +88,7 @@
 
   export default {
     name: 'SearchPage',
+    mixins: [responsiveMixin],
     data() {
       return {
         query: '',
@@ -113,7 +114,7 @@
         // FIXME: Placeholder recommended channels, randomly selected
         const channels = [];
         const allChannels = [...this.channels];
-        while (channels.length < 3 && allChannels.length > 0) {
+        while (channels.length < this.columns && allChannels.length > 0) {
           const index = _.random(0, allChannels.length - 1);
           const [channel] = allChannels.splice(index, 1);
           channels.push(channel);
@@ -132,7 +133,7 @@
           return null;
         }
 
-        return _.chunk(this.searchResult.channels, 3);
+        return _.chunk(this.searchResult.channels, this.columns);
       },
       resultCards() {
         const { results } = this.searchResult;
@@ -159,6 +160,17 @@
         const grouped = _.groupBy(nodes, n => n.channel_id);
 
         return grouped;
+      },
+      columns() {
+        if (this.xs) {
+          return 1;
+        }
+
+        if (this.sm || this.md) {
+          return 2;
+        }
+
+        return 3;
       },
     },
     watch: {
