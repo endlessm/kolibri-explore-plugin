@@ -37,9 +37,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles.scss';
 
-// FIXME this will be the secondary color instead of a custom color derived from the success color.
-// Waiting for the change in Figma.
-$header-color: rgba($success, 0.5);
+$header-color: rgba($secondary, 0.5);
 
 .header {
   background-color: $header-color !important;
