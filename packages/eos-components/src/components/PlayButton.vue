@@ -2,7 +2,8 @@
   <b-button
     pill
     :variant="node.kind"
-    :class="`card-media-type m-2 ${node.kind}`"
+    class="card-media-type d-flex d-flex-nowrap m-2"
+    :class="node.kind"
     @click.stop="$emit('click')"
   >
     <span class="align-middle">
