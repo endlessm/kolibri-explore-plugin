@@ -63,7 +63,7 @@
   }
 
   .lg {
-    $size: 128px;
+    $size: 96px;
     min-height: $size;
     min-width: $size;
     max-height: $size;
@@ -73,7 +73,7 @@
   }
 
   .xl {
-    $size: 248px;
+    $size: 128px;
     min-height: $size;
     min-width: $size;
     max-height: $size;
