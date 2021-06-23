@@ -1,58 +1,39 @@
 <template>
-  <div
-    :style="{ backgroundImage: backgroundImageURL }"
+  <component
+    :is="sectionVariant"
   >
     <slot></slot>
-    <FilterContent />
-
-    <div v-if="isFilterEmpty">
-      <div v-if="isInlineLevel">
-        <CardGrid
-          v-for="subsection in section.children"
-          :id="subsection.id"
-          :key="subsection.id"
-          :nodes="subsection.children"
-          :mediaQuality="mediaQuality"
-          :cardColumns="cardColumns"
-        >
-          <b-row>
-            <SectionTitle :section="subsection" />
-          </b-row>
-        </CardGrid>
-      </div>
-      <div v-else>
-        <CardGrid
-          :id="section.id"
-          :key="section.id"
-          :nodes="section.children"
-          :mediaQuality="mediaQuality"
-          :cardColumns="cardColumns"
-          variant="paginated"
-        />
-      </div>
-    </div>
-    <div v-else>
-      <FilterResult :node="section" />
-    </div>
-
-  </div>
+  </component>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import ListSection from '@/views/ListSection';
+import BundleSection from '@/views/BundleSection';
 
 export default {
   name: 'Section',
+  components: {
+    ListSection,
+    BundleSection,
+  },
   computed: {
-    ...mapState(['section', 'cardColumns', 'mediaQuality']),
+    ...mapState(['section']),
     ...mapGetters({
-      isInlineLevel: 'isInlineLevel',
-      getAssetURL: 'getAssetURL',
-      isFilterEmpty: 'filters/isEmpty',
+      isSimpleBundle: 'isSimpleBundle',
+      showAsBundle: 'showAsBundle',
     }),
-    backgroundImageURL() {
-      return this.getAssetURL('sectionBackgroundImage');
+    sectionVariant() {
+      if (this.showAsBundle(this.section) && this.isSimpleBundle) {
+        return 'BundleSection'
+      } else {
+        return 'ListSection'
+      }
     },
+  },
+  methods: {
+    ...mapGetters({
+    }),
   },
 };
 </script>

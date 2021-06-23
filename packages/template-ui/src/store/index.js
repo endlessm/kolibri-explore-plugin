@@ -67,6 +67,7 @@ const initialState = {
   mediaQuality: ComponentConstants.MediaQuality.REGULAR,
   displayLogoInHeader: true,
   isEndlessApp: false,
+  bundleKind: null,
 };
 
 const store = new Vuex.Store({
@@ -118,6 +119,14 @@ const store = new Vuex.Store({
       return asset ? `url(${asset})` : null;
     },
     isInlineLevel: (state) => state.section.children.every((n) => n.kind === 'topic'),
+    isSimpleBundle: (state) => state.bundleKind === 'simple',
+    showAsBundle: (state) => (node) => {
+      if (state.bundleKind === null || node.kind !== 'topic') {
+        return false;
+      }
+      const hasChildTopics = node.children.some((n) => n.kind === 'topic');
+      return !hasChildTopics;
+    },
     getLevel: () => (node) => node.ancestors.length,
     getParentNode: (state) => (node) => {
       if (node.ancestors.length) {
