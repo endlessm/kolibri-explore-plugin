@@ -2,10 +2,18 @@ import { getThumbnail } from 'kolibri-api';
 import { getFirstStructuredTag } from '../../utils';
 import { StructuredTags } from '../../constants';
 
+import AppThumb from '../../assets/thumbnails/app.jpg';
+import AudioThumb from '../../assets/thumbnails/audio.jpg';
+import BundleThumb from '../../assets/thumbnails/bundle.jpg';
+import DocumentThumb from '../../assets/thumbnails/document.jpg';
+import ExerciseThumb from '../../assets/thumbnails/exercise.jpg';
+import VideoThumb from '../../assets/thumbnails/video.jpg';
+
 export default {
   data() {
     return {
       thumbnail: null,
+      thumbnailWidth: null,
     };
   },
   computed: {
@@ -51,7 +59,20 @@ export default {
       return fn(name);
     },
     fallbackGetAsset() {
-      return null;
+      switch (this.node.kind) {
+        case 'audio':
+          return AudioThumb;
+        case 'document':
+          return DocumentThumb;
+        case 'exercise':
+          return ExerciseThumb;
+        case 'video':
+          return VideoThumb;
+        case 'html5':
+          return AppThumb;
+        default:
+          return BundleThumb;
+      }
     },
     getDuration() {
       const duration = getFirstStructuredTag(this.node, StructuredTags.DURATION);
@@ -67,6 +88,15 @@ export default {
 
       const seconds = duration % 60;
       return `${minutes}m ${seconds}`;
+    },
+  },
+  watch: {
+    thumbnail(value) {
+      const img = new Image();
+      img.onload = () => {
+        this.thumbnailWidth = img.width;
+      };
+      img.src = value;
     },
   },
   created() {
