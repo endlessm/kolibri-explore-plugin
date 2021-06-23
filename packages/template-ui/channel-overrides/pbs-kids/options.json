@@ -1,3 +1,4 @@
 {
-  "displayLogoInHeader": false
+  "displayLogoInHeader": false,
+  "bundleKind": "simple"
 }
