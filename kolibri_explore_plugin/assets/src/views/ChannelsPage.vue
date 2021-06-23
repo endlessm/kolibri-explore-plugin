@@ -23,7 +23,7 @@
           </b-button>
         </div>
 
-        <b-button pill @click="goToSearch">
+        <b-button pill variant="outline-dark" @click="goToSearch">
           <b-icon-search />
           Search
         </b-button>

@@ -6,10 +6,12 @@
     <SearchBar v-model="query" @clear-input="onClearInput" />
 
     <EmptyResultsMessage v-if="notFound" :showTopics="false">
-      <h1>Sorry, we can't find any content that matches your search.</h1>
-      <p class="lead">
+      <h1 class="text-secondary">
+        Sorry, we can't find any content that matches your search.
+      </h1>
+      <h5 class="text-muted">
         You can try to use fewer words or browse by topics.
-      </p>
+      </h5>
     </EmptyResultsMessage>
 
     <CardGrid

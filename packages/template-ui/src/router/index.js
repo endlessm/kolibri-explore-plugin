@@ -4,10 +4,16 @@ import Home from '@/views/Home.vue';
 import Search from '@/views/Search.vue';
 import Section from '@/views/Section.vue';
 import Content from '@/views/Content.vue';
+import Test from '@/views/Test.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
+  {
+    path: '/test',
+    name: 'Test',
+    component: Test,
+  },
   {
     path: '/',
     name: 'Home',

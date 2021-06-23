@@ -9,9 +9,9 @@
           </b-input-group-text>
         </template>
         <template #append>
-          <b-button v-if="value" pill variant="light" @click="clearSearchInput">
-            <b-icon-x-circle />
-          </b-button>
+          <span v-if="value" @click="clearSearchInput">
+            <b-icon-x />
+          </span>
         </template>
         <input
           ref="searchInput"
