@@ -2,15 +2,11 @@
 
   <div class="channels-page d-flex flex-column min-vh-100">
     <Header class="header" @click-logo="goToTop">
-      <b-navbar-brand>
+      <b-nav-text class="btn pl-0">
         Endless Discovery
-      </b-navbar-brand>
+      </b-nav-text>
 
       <template v-slot:right>
-        <b-nav-text>
-          <strong class="text-muted">Exploration ideas</strong>
-        </b-nav-text>
-
         <div class="main-buttons">
           <b-button
             v-for="term in searchTerms"
