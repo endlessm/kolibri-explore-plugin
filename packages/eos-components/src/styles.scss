@@ -42,7 +42,11 @@ $body-bg: $gray-300;
 $font-family-sans-serif: "Lato", sans-serif;
 $headings-font-family: "Poppins", sans-serif;
 
-$breadcrumb-font-size: 14px;
+$btn-font-family: $headings-font-family;
+$btn-font-size: 0.875rem;
+$btn-padding-x: 1rem;
+$btn-padding-y: 0.5rem;
+$breadcrumb-font-size: 0.875rem;
 $breadcrumb-divider: quote("<");
 $breadcrumb-divider-color: rgba($gray-700, 0.5);
 $breadcrumb-active-color: rgba($gray-700, 0.5);
@@ -124,6 +128,9 @@ $carousel-indicator-transition:      all .6s ease !default;
 .breadcrumb {
   font-family: $headings-font-family;
   font-weight: $headings-font-weight;
+}
+.badge {
+  font-family: $headings-font-family;
 }
 
 .breadcrumb-item a {

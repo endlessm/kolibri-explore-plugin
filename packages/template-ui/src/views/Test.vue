@@ -64,19 +64,6 @@
     <hr>
 
     <h3>Buttons:</h3>
-    <b-button pill variant="primary" class="mb-1 mr-1">
-      Primary
-    </b-button>
-    <b-button pill class="mb-1 mr-1">
-      Secondary
-    </b-button>
-    <b-button pill variant="outline-dark" class="mb-1 mr-1">
-      Outline
-    </b-button>
-    <b-button pill variant="light" class="mb-1 mr-1">
-      Normal
-    </b-button>
-    <hr>
     <b-button pill size="sm" variant="primary" class="mb-1 mr-1">
       Primary
     </b-button>
@@ -87,6 +74,19 @@
       Outline
     </b-button>
     <b-button pill size="sm" variant="light" class="mb-1 mr-1">
+      Normal
+    </b-button>
+    <hr>
+    <b-button pill variant="primary" class="mb-1 mr-1">
+      Primary
+    </b-button>
+    <b-button pill class="mb-1 mr-1">
+      Secondary
+    </b-button>
+    <b-button pill variant="outline-dark" class="mb-1 mr-1">
+      Outline
+    </b-button>
+    <b-button pill variant="light" class="mb-1 mr-1">
       Normal
     </b-button>
     <hr>
@@ -119,6 +119,11 @@
     <b-button pill variant="video" class="mb-1 mr-1">
       Video
     </b-button>
+
+    <hr>
+
+    <h3>Badges:</h3>
+    <span class="badge badge-light badge-pill">Light</span>
 
     <hr>
 
