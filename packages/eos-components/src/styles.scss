@@ -42,6 +42,12 @@ $body-bg: $gray-300;
 $font-family-sans-serif: "Lato", sans-serif;
 $headings-font-family: "Poppins", sans-serif;
 
+$breadcrumb-font-size: 14px;
+$breadcrumb-divider: quote("<");
+$breadcrumb-divider-color: rgba($gray-700, 0.5);
+$breadcrumb-active-color: rgba($gray-700, 0.5);
+$breadcrumb-bg: $secondary !default;
+
 // Template variables:
 $header-logo-width: 128;
 $hover-lightness: -25%;
@@ -112,6 +118,16 @@ $carousel-indicator-transition:      all .6s ease !default;
 }
 .btn-light {
   color: $dark;
+}
+
+// Change breadcrumbs:
+.breadcrumb {
+  font-family: $headings-font-family;
+  font-weight: $headings-font-weight;
+}
+
+.breadcrumb-item a {
+  color: $gray-700;
 }
 
 // Calculate navbar height:

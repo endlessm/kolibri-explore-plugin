@@ -1,24 +1,39 @@
 <template>
-  <div
-    v-if="node.ancestors && node.ancestors.length"
+  <b-navbar-nav
+    v-if="(node.ancestors && node.ancestors.length) || notAtHome"
+    class="mt-3"
+    aria-label="breadcrumb"
   >
-    <b-link
-      v-for="a in node.ancestors"
-      :key="a.id"
-      :to="getTopicUrl(a)"
+    <ChannelLogo class="mt-1" :channel="channel" size="sm" />
+    <ol
+      v-if="node.ancestors && node.ancestors.length"
+      class="bg-transparent breadcrumb px-2"
     >
-      <span><b-icon-arrow-left /> {{ a.title }} </span>
-    </b-link>
-  </div>
-  <div
-    v-else-if="notAtHome"
-  >
-    <b-link
-      :to="getNodeUrl(node)"
+      <li
+        v-for="a in node.ancestors"
+        :key="a.id"
+        class="breadcrumb-item"
+      >
+        <b-link
+          :to="getTopicUrl(a)"
+        >
+          {{ a.title }}
+        </b-link>
+      </li>
+    </ol>
+    <ol
+      v-else-if="notAtHome"
+      class="bg-transparent breadcrumb px-2"
     >
-      <span><b-icon-arrow-left /> {{ node.title }} </span>
-    </b-link>
-  </div>
+      <li class="breadcrumb-item">
+        <b-link
+          :to="getNodeUrl(node)"
+        >
+          {{ node.title }}
+        </b-link>
+      </li>
+    </ol>
+  </b-navbar-nav>
 </template>
 
 <script>
@@ -46,3 +61,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import '@/styles.scss';
+
+// .breadcrumb {
+//  background-color: transparent;
+// }
+
+</style>
