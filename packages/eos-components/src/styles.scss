@@ -124,6 +124,9 @@ $carousel-indicator-transition:      all .6s ease !default;
   color: $dark;
 }
 
+// Change header color:
+$header-color: scale-color($secondary, $lightness: 50%);
+
 // Change breadcrumbs:
 .breadcrumb {
   font-family: $headings-font-family;
