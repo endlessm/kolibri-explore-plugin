@@ -46,8 +46,6 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles.scss';
 
-$header-color: rgba($secondary, 0.5);
-
 .jumbotron {
   background-color: $header-color;
   background-size: cover;

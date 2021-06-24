@@ -37,10 +37,8 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles.scss';
 
-$header-color: rgba($secondary, 0.5);
-
 .header {
-  background-color: $header-color !important;
+  background-color: $header-color;
   background-size: cover !important;
   background-repeat: no-repeat !important;
 }

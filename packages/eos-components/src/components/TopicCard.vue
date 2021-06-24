@@ -9,6 +9,14 @@
   >
     <ContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
       <b-card-body>
+        <b-img
+          fluidGrow
+          :src="thumbnail"
+          class="mb-3"
+          v-bind="thumbnailProps"
+          rounded
+          :alt="node.title"
+        />
         <b-card-title>
           <VClamp
             autoresize
@@ -25,22 +33,26 @@
             {{ node.description }}
           </VClamp>
         </b-card-text>
-        <b-card-sub-title class="text-truncate">
-          {{ subtitle }}
-        </b-card-sub-title>
       </b-card-body>
+      <b-card-footer class="text-truncate">
+        <b-icon-files class="mr-2" />
+        {{ subtitle }}
+      </b-card-footer>
     </ContentLink>
   </b-card>
 </template>
 
 <script>
 import VClamp from 'vue-clamp';
+import { ThumbnailSize } from '../constants';
+import cardMixin from './mixins/cardMixin.js';
 
 export default {
   name: 'TopicCard',
   components: {
     VClamp,
   },
+  mixins: [cardMixin],
   props: {
     node: Object,
     subtitle: String,
@@ -49,6 +61,7 @@ export default {
   data() {
     return {
       isHovered: false,
+      thumbnailProps: { width: ThumbnailSize.width, height: ThumbnailSize.height },
     };
   },
 };
@@ -58,11 +71,13 @@ export default {
 @import '../styles.scss';
 
 .card {
-  background-color: $primary;
-  transition: all ease .4s;
+  @include transition($btn-transition);
 }
 
 .card-body {
+  border-top-left-radius: $border-radius-lg;
+  border-top-right-radius: $border-radius-lg;
+  background-color: $primary;
   // This 8 is an estimation:
   height: card-body-height(8);
   display: flex;
@@ -76,10 +91,6 @@ export default {
 
 .card-text {
   flex-grow: 3;
-}
-
-.card-subtitle {
-  color: $black !important;
 }
 
 </style>
