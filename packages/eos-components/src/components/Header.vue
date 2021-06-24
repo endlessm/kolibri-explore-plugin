@@ -1,6 +1,6 @@
 <template>
   <b-navbar class="header" fixed="top">
-    <b-container>
+    <b-container class="px-3">
       <img class="logo" :src="logo" @click="$emit('click-logo')">
       <slot></slot>
 
