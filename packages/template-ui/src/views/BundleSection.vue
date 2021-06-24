@@ -13,7 +13,7 @@
             v-for="tag in subjectTags"
             :key="tag"
             pill
-            variant="primary"
+            variant="light"
             class="mb-1 mr-1"
           >
             {{ tag }}
