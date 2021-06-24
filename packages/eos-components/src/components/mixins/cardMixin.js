@@ -98,6 +98,9 @@ export default {
       };
       img.src = value;
     },
+    node() {
+      this.getThumbnail();
+    },
   },
   created() {
     if (this.node) {
