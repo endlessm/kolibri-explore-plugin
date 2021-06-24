@@ -12,7 +12,7 @@ export const MediaQuality = {
   HIGH: 'high',
 };
 
-export const DefaultKindLabel = 'items';
+export const DefaultKindLabel = 'resources';
 
 // See https://github.com/learningequality/le-utils/blob/master/le_utils/constants/content_kinds.py
 export const LabelPerKind = {

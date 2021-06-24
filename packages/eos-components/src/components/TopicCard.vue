@@ -25,10 +25,11 @@
             {{ node.description }}
           </VClamp>
         </b-card-text>
-        <b-card-sub-title class="text-truncate">
-          {{ subtitle }}
-        </b-card-sub-title>
       </b-card-body>
+      <b-card-footer class="text-truncate">
+        <b-icon-files class="mr-2" />
+        {{ subtitle }}
+      </b-card-footer>
     </ContentLink>
   </b-card>
 </template>
@@ -58,11 +59,13 @@ export default {
 @import '../styles.scss';
 
 .card {
-  background-color: $primary;
-  transition: all ease .4s;
+  @include transition($btn-transition);
 }
 
 .card-body {
+  border-top-left-radius: $border-radius-lg;
+  border-top-right-radius: $border-radius-lg;
+  background-color: $primary;
   // This 8 is an estimation:
   height: card-body-height(8);
   display: flex;
@@ -76,10 +79,6 @@ export default {
 
 .card-text {
   flex-grow: 3;
-}
-
-.card-subtitle {
-  color: $black !important;
 }
 
 </style>
