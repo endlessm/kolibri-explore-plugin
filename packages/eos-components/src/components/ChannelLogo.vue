@@ -58,7 +58,7 @@
     min-width: $size;
     max-height: $size;
     max-width: $size;
-    border-radius: 1rem;
+    border-radius: $border-radius-sm;
     box-shadow: $box-shadow-sm;
   }
 
@@ -68,7 +68,7 @@
     min-width: $size;
     max-height: $size;
     max-width: $size;
-    border-radius: 1.5rem;
+    border-radius: $border-radius-lg;
     box-shadow: $box-shadow;
   }
 
@@ -78,7 +78,7 @@
     min-width: $size;
     max-height: $size;
     max-width: $size;
-    border-radius: 2rem;
+    border-radius: $border-radius-lg;
     box-shadow: $box-shadow;
   }
 </style>
