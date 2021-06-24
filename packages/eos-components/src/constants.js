@@ -33,6 +33,11 @@ export const StructuredTags = {
 
 export const StructuredTagsRegExp = new RegExp('(.*)=(.*)');
 
+export const ThumbnailSize = {
+  width: 128,
+  height: 128,
+}
+
 export default {
   DefaultKindLabel,
   LabelPerKind,
@@ -40,4 +45,5 @@ export default {
   MediaTypeVerbs,
   StructuredTags,
   StructuredTagsRegExp,
+  ThumbnailSize,
 };

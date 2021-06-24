@@ -9,6 +9,14 @@
   >
     <ContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
       <b-card-body>
+        <b-img
+          fluidGrow
+          :src="thumbnail"
+          class="mb-3"
+          v-bind="thumbnailProps"
+          rounded
+          :alt="node.title"
+        />
         <b-card-title>
           <VClamp
             autoresize
@@ -36,12 +44,15 @@
 
 <script>
 import VClamp from 'vue-clamp';
+import { ThumbnailSize } from '../constants';
+import cardMixin from './mixins/cardMixin.js';
 
 export default {
   name: 'TopicCard',
   components: {
     VClamp,
   },
+  mixins: [cardMixin],
   props: {
     node: Object,
     subtitle: String,
@@ -50,6 +61,7 @@ export default {
   data() {
     return {
       isHovered: false,
+      thumbnailProps: { width: ThumbnailSize.width, height: ThumbnailSize.height },
     };
   },
 };
