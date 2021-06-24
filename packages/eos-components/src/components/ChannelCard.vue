@@ -7,13 +7,13 @@
     >
     </div>
     <b-card-header
-      class="pb-2"
+      class="pb-3"
       :class="{ withThumbnail: hasThumbnail }"
     >
-      <ChannelLogo class="mr-2" :channel="channel" size="md" />
-      <div class="title">
+      <ChannelLogo class="mr-3" :channel="channel" size="md" />
+      <h6>
         {{ channel.title }}
-      </div>
+      </h6>
     </b-card-header>
     <b-card-text class="pt-2 text-muted">
       {{ description }}
