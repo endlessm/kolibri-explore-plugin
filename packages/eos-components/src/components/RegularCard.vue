@@ -1,5 +1,6 @@
 <template>
   <b-card
+    noBody
     class="my-2 rounded-lg"
     :class="{
       'shadow-sm': !isHovered,
@@ -7,17 +8,19 @@
     }"
   >
     <ContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
-      <div class="card-img" :style="cardStyle">
-        <span class="sr-only">{{ node.title }}</span>
-      </div>
-      <PlayButton
-        :node="node"
-        :label="label"
-        @click="goToContent(node)"
-      />
-      <b-card-text>
-        <CardBody :node="node" :subtitle="subtitle" />
-      </b-card-text>
+      <b-card-body>
+        <div class="card-img" :style="cardStyle">
+          <span class="sr-only">{{ node.title }}</span>
+        </div>
+        <b-card-text>
+          <CardBody :node="node" :subtitle="subtitle" />
+          <PlayButton
+            :node="node"
+            :label="label"
+            @click="goToContent(node)"
+          />
+        </b-card-text>
+      </b-card-body>
     </ContentLink>
   </b-card>
 </template>

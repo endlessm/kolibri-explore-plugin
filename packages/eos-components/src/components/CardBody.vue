@@ -1,10 +1,5 @@
 <template>
   <div class="card-content">
-    <p class="mb-1 text-info text-truncate text-uppercase">
-      <span v-if="typeTag">{{ typeTag }}</span>
-      <span v-if="typeTag && gradeOrLevelTag"> • </span>
-      <span v-if="gradeOrLevelTag">{{ gradeOrLevelTag }}</span>
-    </p>
     <h5 class="mb-1 title">
       <VClamp
         autoresize
@@ -16,9 +11,9 @@
     <p class="mb-1 subtitle text-muted text-truncate">
       {{ subtitle }}
     </p>
-    <div class="tags">
+    <div v-if="tags.length" class="mb-1 tags text-truncate">
       <b-badge
-        v-for="tag in subjectTags"
+        v-for="tag in tags"
         :key="tag"
         pill
         variant="light"
@@ -61,6 +56,9 @@ export default {
         || getFirstStructuredTag(this.node, StructuredTags.LEVEL)
       );
     },
+    tags() {
+      return [...this.subjectTags, this.typeTag, this.gradeOrLevelTag];
+    },
   },
 };
 </script>
@@ -69,7 +67,8 @@ export default {
 @import '../styles.scss';
 
 .card-content {
-  height: card-body-height(3);
+  // FIXME this is aproximate, the function has regressed:
+  height: card-body-height(2);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
