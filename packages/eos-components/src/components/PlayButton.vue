@@ -2,7 +2,7 @@
   <b-button
     pill
     :variant="node.kind"
-    class="card-media-type d-flex d-flex-nowrap m-2"
+    class="card-media-type d-flex d-flex-nowrap"
     :class="node.kind"
     @click.stop="$emit('click')"
   >
@@ -54,15 +54,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import '../styles.scss';
-
-.card-media-type {
-  position: absolute;
-  top: 0;
-  left: 0;
-  border: none !important;
-}
-
-</style>
