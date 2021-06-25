@@ -12,11 +12,14 @@
 
     <div v-else>
       <Carousel />
+      <b-container>
+        <hr>
+      </b-container>
       <FilterContent />
 
       <div v-if="isFilterEmpty">
         <CardGrid
-          v-if="contentNodes"
+          v-if="contentNodes.length"
           :nodes="contentNodes"
           :mediaQuality="mediaQuality"
           :cardColumns="cardColumns"

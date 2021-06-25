@@ -1,5 +1,5 @@
 <template>
-  <b-container class="my-5 section-container">
+  <b-container class="mb-5 section-container">
     <slot></slot>
 
     <component
