@@ -7,12 +7,14 @@
       </b-nav-text>
 
       <template v-slot:right>
-        <div class="main-buttons">
+        <div class="main-buttons mr-3 mt-1">
           <b-button
             v-for="term in searchTerms"
             :key="term"
             pill
+            size="sm"
             variant="primary"
+            class="ml-2"
             @click="goToTerm(term)"
           >
             {{ term }}
@@ -173,14 +175,6 @@
 
   .channels-page {
     padding-top: $navbar-height;
-  }
-
-  ::v-deep .main-buttons button {
-    margin-right: $spacer;
-  }
-
-  ::v-deep .main-buttons {
-    margin-left: $spacer;
   }
 
   .placeholder {

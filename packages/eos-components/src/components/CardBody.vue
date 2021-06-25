@@ -1,6 +1,6 @@
 <template>
   <div class="card-content">
-    <h5 class="mb-1 title">
+    <h5 class="mb-0 title">
       <VClamp
         autoresize
         :maxLines="titleLines"
@@ -11,13 +11,13 @@
     <p class="mb-1 subtitle text-muted text-truncate">
       {{ subtitle }}
     </p>
-    <div v-if="tags.length" class="mb-1 tags text-truncate">
+    <div v-if="tags.length" class="mb-3 tags text-truncate">
       <b-badge
         v-for="tag in tags"
         :key="tag"
         pill
         variant="light"
-        class="mb-1 mr-1"
+        class="mr-1"
       >
         {{ tag }}
       </b-badge>

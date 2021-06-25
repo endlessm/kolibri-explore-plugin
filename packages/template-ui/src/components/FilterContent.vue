@@ -1,5 +1,5 @@
 <template>
-  <b-container v-if="availableFilters.length" class="my-4">
+  <b-container v-if="availableFilters.length" class="my-5">
     <span class="mr-4">Filter By</span>
 
     <FilterDropDown

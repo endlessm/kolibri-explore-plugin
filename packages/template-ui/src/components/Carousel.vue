@@ -5,7 +5,7 @@
       fade
       indicators
       :interval="CAROUSEL_INTERVAL"
-      class="shadow"
+      class="bg-secondary rounded-lg shadow"
     >
       <CarouselCard
         v-for="node in carouselNodes"
@@ -57,15 +57,8 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles.scss';
 
-.carousel-item {
-  background: $secondary !important;
-}
-.carousel {
-  border-radius: $border-radius-lg;
-}
-
 ::v-deep .carousel-indicators {
-  bottom: -($spacer * 3);
+  bottom: -($spacer * 2.5);
 }
 
 ::v-deep .carousel-indicators li {

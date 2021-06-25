@@ -1,5 +1,5 @@
 <template>
-  <b-navbar class="header" fixed="top">
+  <b-navbar v-scroll="onScroll" class="header" :class="{ shadow: hasScrolled }" fixed="top">
     <b-container class="px-3">
       <img class="logo" :src="logo" @click="$emit('click-logo')">
       <slot></slot>
@@ -12,13 +12,31 @@
 </template>
 
 <script>
+  import _ from 'underscore';
   import EndlessLogo from '../assets/EndlessLogo.svg';
 
   export default {
     name: 'Header',
+    data() {
+      return {
+        hasScrolled: false,
+      };
+    },
     computed: {
       logo() {
         return EndlessLogo;
+      },
+    },
+    created() {
+      this.debouncedScroll = _.debounce(this.onScroll, 100);
+      window.addEventListener('scroll', this.debouncedScroll);
+    },
+    destroyed() {
+      window.removeEventListener('scroll', this.debouncedScroll);
+    },
+    methods: {
+      onScroll() {
+        this.hasScrolled = window.scrollY !== 0;
       },
     },
   }
@@ -31,6 +49,7 @@
   .header {
     background: white;
     height: $navbar-height;
+    @include transition($btn-transition);
   }
 
   .header > .container {
