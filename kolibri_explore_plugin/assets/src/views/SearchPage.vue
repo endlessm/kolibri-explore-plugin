@@ -2,9 +2,9 @@
 
   <div class="d-flex flex-column min-vh-100 search-page">
     <Header class="header" @click-logo="goBack">
-      <b-navbar-brand href="#/topics">
+      <b-nav-text class="btn pl-0" @click="goBack">
         Back to Discovery
-      </b-navbar-brand>
+      </b-nav-text>
     </Header>
 
     <div class="flex-fill main">
