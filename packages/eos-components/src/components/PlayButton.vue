@@ -1,56 +1,76 @@
 <template>
   <b-button
     pill
-    :variant="node.kind"
-    class="card-media-type d-flex d-flex-nowrap"
-    :class="node.kind"
+    :variant="kind"
+    class="pl-2"
     @click.stop="$emit('click')"
   >
-    <span class="align-middle">
-      <img :src="icon" aria-hidden="true">
-    </span>
-    <span class="align-middle">
+    <component
+      :is="icon"
+    />
+    <span class="play-button-text">
       {{ mediaInfo }}
     </span>
   </b-button>
 </template>
 
 <script>
+import MusicNoteOutlineIcon from 'vue-material-design-icons/MusicNoteOutline.vue';
+import BookOutlineIcon from 'vue-material-design-icons/BookOutline.vue';
+import ClipboardTextOutlineIcon from 'vue-material-design-icons/ClipboardTextOutline.vue';
+import ShapeOutlineIcon from 'vue-material-design-icons/ShapeOutline.vue';
+import PlayBoxMultipleOutlineIcon from 'vue-material-design-icons/PlayBoxMultipleOutline.vue';
+import PlayOutlineIcon from 'vue-material-design-icons/PlayOutline.vue';
 import { MediaTypeVerbs } from '../constants';
-import AudioIcon from '../assets/audio.svg';
-import DocumentIcon from '../assets/document.svg';
-import ExerciseIcon from '../assets/exercise.svg';
-import Html5Icon from '../assets/html5.svg';
-import VideoIcon from '../assets/video.svg';
 
 export default {
   name: 'PlayButton',
+  components: {
+    MusicNoteOutlineIcon,
+    BookOutlineIcon,
+    ClipboardTextOutlineIcon,
+    ShapeOutlineIcon,
+    PlayBoxMultipleOutlineIcon,
+    PlayOutlineIcon,
+  },
   props: {
-    node: Object,
+    kind: String,
     label: String,
   },
   computed: {
     icon() {
-      switch (this.node.kind) {
+      switch (this.kind) {
         case 'audio':
-          return AudioIcon;
+          return 'MusicNoteOutlineIcon';
         case 'document':
-          return DocumentIcon;
+          return 'BookOutlineIcon';
         case 'exercise':
-          return ExerciseIcon;
+          return 'ClipboardTextOutlineIcon';
         case 'html5':
-          return Html5Icon;
+          return 'ShapeOutlineIcon';
+        case 'bundle':
+          return 'PlayBoxMultipleOutlineIcon';
         case 'video':
         default:
-          return VideoIcon;
+          return 'PlayOutlineIcon';
       }
     },
     mediaInfo() {
       if (this.label) {
         return this.label;
       }
-      return MediaTypeVerbs[this.node.kind].toUpperCase();
+      return MediaTypeVerbs[this.kind].toUpperCase();
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import '../styles.scss';
+
+.play-button-text {
+  // Align the text with the material design icons:
+  line-height: 24px;
+}
+
+</style>

@@ -23,7 +23,7 @@
                   </p>
                   <PlayButton
                     class="ml-auto"
-                    :node="node"
+                    :kind="node.kind"
                     @click="goToContent(node)"
                   />
                 </div>

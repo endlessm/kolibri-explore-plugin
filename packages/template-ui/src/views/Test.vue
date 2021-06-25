@@ -104,21 +104,12 @@
     </b-button>
     <hr>
     <h3>Media Buttons:</h3>
-    <b-button pill variant="audio" class="mb-1 mr-1">
-      Audio
-    </b-button>
-    <b-button pill variant="document" class="mb-1 mr-1">
-      Document
-    </b-button>
-    <b-button pill variant="exercise" class="mb-1 mr-1">
-      Exercise
-    </b-button>
-    <b-button pill variant="html5" class="mb-1 mr-1">
-      HTML5
-    </b-button>
-    <b-button pill variant="video" class="mb-1 mr-1">
-      Video
-    </b-button>
+    <PlayButton kind="video" class="mb-1 mr-1" />
+    <PlayButton kind="html5" class="mb-1 mr-1" />
+    <PlayButton kind="exercise" class="mb-1 mr-1" />
+    <PlayButton kind="document" class="mb-1 mr-1" />
+    <PlayButton kind="bundle" class="mb-1 mr-1" />
+    <PlayButton kind="audio" class="mb-1 mr-1" />
 
     <hr>
 
