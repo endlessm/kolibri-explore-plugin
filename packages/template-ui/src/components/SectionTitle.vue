@@ -4,9 +4,9 @@
       :to="nodeUrl"
       class="text-decoration-none text-reset"
     >
-      <h3>
+      <h5>
         <span class="text-primary title">{{ section.title }} <b-icon-arrow-right /></span>
-      </h3>
+      </h5>
     </b-link>
   </b-container>
 </template>
