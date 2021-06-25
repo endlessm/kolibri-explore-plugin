@@ -137,6 +137,7 @@ $header-color: scale-color($secondary, $lightness: 50%);
 }
 .badge {
   font-family: $headings-font-family;
+  color: $text-muted;
 }
 
 .breadcrumb-item a {
