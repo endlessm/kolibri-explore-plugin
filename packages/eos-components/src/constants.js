@@ -1,4 +1,5 @@
 export const MediaTypeVerbs = {
+  'bundle': 'Discover',
   'video': 'Watch',
   'audio': 'Listen',
   'document': 'Read',

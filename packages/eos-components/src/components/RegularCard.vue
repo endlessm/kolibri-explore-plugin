@@ -15,7 +15,7 @@
         <b-card-text>
           <CardBody :node="node" :subtitle="subtitle" />
           <PlayButton
-            :node="node"
+            :kind="node.kind"
             :label="label"
             @click="goToContent(node)"
           />

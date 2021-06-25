@@ -3,7 +3,7 @@
     class="position-relative"
   >
     <PlayButton
-      :node="node"
+      :kind="node.kind"
       class="play-button position-absolute"
       @click="goToContent(node)"
     />

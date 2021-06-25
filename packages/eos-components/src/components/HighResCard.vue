@@ -8,7 +8,7 @@
     overlay
   >
     <PlayButton
-      :node="node"
+      :kind="node.kind"
       :label="label"
       @click="goToContent(node)"
     />
