@@ -37,3 +37,19 @@
     }
   }
 }
+
+// Allows reusing the same style in the header and in the navbar:
+@mixin navbar-background($header-height) {
+  background-color: $header-color;
+  background-attachment: fixed;
+  background-position: top center;
+  background-repeat: no-repeat;
+
+  @include media-breakpoint-down(xxl) {
+    background-size: auto $header-height;
+  }
+
+  @include media-breakpoint-up(xxl) {
+    background-size: 100% auto;
+  }
+}

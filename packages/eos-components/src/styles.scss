@@ -30,6 +30,15 @@ $theme-colors: (
   "video": $orange
 );
 
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 2560px
+) !default;
+
 $btn-font-weight: 600;
 $headings-font-weight: 600;
 $display1-weight: 700;
@@ -57,6 +66,7 @@ $breadcrumb-bg: $secondary !default;
 
 // Template variables:
 $header-logo-width: 128;
+$header-height: 300px; // FIXME to be defined exactly in https://phabricator.endlessm.com/T32150
 $hover-lightness: -25%;
 $background-alpha: -8%;
 
@@ -155,4 +165,5 @@ $navbar-height: $navbar-brand-height +
   md: map-get($grid-breakpoints, "md");
   lg: map-get($grid-breakpoints, "lg");
   xl: map-get($grid-breakpoints, "xl");
+  xxl: map-get($grid-breakpoints, "xxl");
 }
