@@ -66,6 +66,9 @@ const initialState = {
 
   mediaQuality: ComponentConstants.MediaQuality.REGULAR,
   displayLogoInHeader: true,
+  hasSectionsSearch: true,
+  hasCarousel: true,
+  hasFilters: true,
   isEndlessApp: false,
   bundleKind: null,
 };
