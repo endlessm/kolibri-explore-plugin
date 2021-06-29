@@ -9,15 +9,6 @@
           </p>
           <!-- eslint-disable vue/no-v-html -->
           <div class="mb-2" v-html="section.description"></div>
-          <b-badge
-            v-for="tag in subjectTags"
-            :key="tag"
-            pill
-            variant="light"
-            class="mb-1 mr-1"
-          >
-            {{ tag }}
-          </b-badge>
         </b-col>
         <b-col md="6" sm="12">
           <div
