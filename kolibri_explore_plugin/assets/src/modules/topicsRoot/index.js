@@ -3,6 +3,7 @@ export default {
   state: {
     rootNodes: [],
     searchResult: {},
+    carouselNodes: [],
   },
   mutations: {
     SET_STATE(state, payload) {
@@ -13,6 +14,9 @@ export default {
     },
     SET_SEARCH_RESULT(state, payload) {
       state.searchResult = payload;
+    },
+    SET_CAROUSEL_NODES(state, payload) {
+      state.carouselNodes = payload;
     },
   },
 };

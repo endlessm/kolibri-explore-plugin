@@ -1,7 +1,9 @@
+import _ from 'underscore';
 import urls from 'kolibri.urls';
 import { ChannelResource } from 'kolibri.resources';
+import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 import { ContentNodeResource, ContentNodeSearchResource } from '../../apiResources';
-import { PageNames } from '../../constants';
+import { CarouselItems, PageNames } from '../../constants';
 import { CustomChannelApps } from '../../customApps';
 import { _collectionState } from '../coreExplore/utils';
 
@@ -50,6 +52,31 @@ function _filterCustomApp(channel) {
   return !!CustomChannelApps[channel.id];
 }
 
+function _fetchCarouselNodes(store) {
+  const { rootNodes } = store.state.topicsRoot;
+
+  // FIXME: Currently fetching random popular content, we can have a fixed list
+  // of content id to look for.
+  return ContentNodeResource.fetchPopular({
+    user_kind: store.getters.getUserKind,
+  })
+    .then(nodes => _.sample(nodes, CarouselItems))
+    .then(nodes => {
+      nodes.forEach(node => {
+        const thumbnailUrl = getContentNodeThumbnail(node);
+        node.thumbnail = thumbnailUrl;
+        node.channel = rootNodes.find(c => c.id === node.channel_id);
+        const base = `/topics/${node.channel_id}`;
+        if (node.kind === 'topic') {
+          node.nodeUrl = `${base}/t/${node.id}`;
+        } else {
+          node.nodeUrl = `${base}/c/${node.id}`;
+        }
+      });
+      return nodes;
+    });
+}
+
 export function showChannels(store) {
   store.commit('CORE_SET_PAGE_LOADING', true);
   store.commit('SET_PAGE_NAME', PageNames.TOPICS_ROOT);
@@ -66,6 +93,10 @@ export function showChannels(store) {
         .then(collection => _findNodes(channels, collection))
         .then(rootNodes => {
           store.commit('topicsRoot/SET_STATE', { rootNodes });
+          return _fetchCarouselNodes(store);
+        })
+        .then(carouselNodes => {
+          store.commit('topicsRoot/SET_CAROUSEL_NODES', carouselNodes);
           store.commit('CORE_SET_PAGE_LOADING', false);
           store.commit('CORE_SET_ERROR', null);
         });

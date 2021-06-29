@@ -41,7 +41,10 @@ export const ThumbnailSize = {
   height: 128,
 }
 
+export const CarouselInterval = 10000;
+
 export default {
+  CarouselInterval,
   DefaultKindLabel,
   FilterTagsBadList,
   LabelPerKind,

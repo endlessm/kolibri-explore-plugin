@@ -18,7 +18,11 @@
                   </VClamp>
                 </h4>
                 <div class="d-flex justify-content-between">
-                  <p class="align-self-center mb-1 subtitle text-muted text-truncate">
+                  <div v-if="showChannelIcon" class="align-items-center d-flex">
+                    <ChannelLogo class="mr-2" :channel="node.channel" size="sm" />
+                    <span class="text-muted">{{ node.channel.title }}</span>
+                  </div>
+                  <p v-else class="align-self-center mb-1 subtitle text-muted text-truncate">
                     {{ subtitle }}
                   </p>
                   <PlayButton
@@ -50,6 +54,10 @@ export default {
   mixins: [cardMixin],
   props: {
     node: Object,
+    showChannelIcon: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     backgroundStyle() {

@@ -29,12 +29,16 @@
     </Header>
 
     <div class="flex-fill main">
-      <b-container class="channels pb-5 pt-3">
+      <div v-if="core.loading" class="placeholder">
+        <CarouselPlaceholder />
+        <CardGridPlaceholder :elements="columns" />
+      </div>
 
-        <div v-if="core.loading" class="placeholder">
-          <CardGridPlaceholder :elements="columns" class="" />
-        </div>
 
+      <!-- Carousel -->
+      <Carousel class="pt-3" :nodes="carouselNodes" :showChannelIcon="true" />
+
+      <b-container class="channels pb-5">
         <!-- Cards with thumbnail -->
         <ChannelCardGroup
           :rows="rows.withThumbnail"
@@ -100,7 +104,7 @@
       };
     },
     computed: {
-      ...mapState('topicsRoot', { channels: 'rootNodes' }),
+      ...mapState('topicsRoot', { channels: 'rootNodes', carouselNodes: 'carouselNodes' }),
       ...mapState(['core']),
       rows() {
         let withThumbnail = [];
