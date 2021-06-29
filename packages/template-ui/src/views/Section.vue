@@ -25,10 +25,9 @@ export default {
     }),
     sectionVariant() {
       if (this.showAsBundle(this.section) && this.isSimpleBundle) {
-        return 'BundleSection'
-      } else {
-        return 'ListSection'
+        return 'BundleSection';
       }
+      return 'ListSection';
     },
   },
   methods: {
