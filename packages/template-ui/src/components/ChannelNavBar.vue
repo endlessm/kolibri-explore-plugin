@@ -4,7 +4,7 @@
     :style="{ backgroundImage: headerImageURL }"
     @click-logo="goToChannelList"
   >
-    <Breadcrumb :node="node" />
+    <Breadcrumb v-if="notAtHome" :node="node" />
   </Header>
 </template>
 
@@ -24,6 +24,9 @@ export default {
       }
 
       return this.section;
+    },
+    notAtHome() {
+      return this.$route.name !== 'Home';
     },
   },
   methods: {
