@@ -30,14 +30,22 @@ export function getStructuredTags(node, matchKey) {
   return tagValues;
 }
 
-export function parseNodes(nodes) {
-  return nodes.map((n) => {
+function addStructuredTag(n) {
     // Add structured tags to the node metadata:
     n.structuredTags = {};
     Object.values(StructuredTags).forEach((matchKey) => {
       const tags = getStructuredTags(n, matchKey);
       n.structuredTags[matchKey] = tags;
     });
+    return n;
+};
+
+export function parseNodes(nodes, isBundle=false) {
+  return nodes.map(addStructuredTag).map((n) => {
+    // Use the parent URL in leaf nodes if the channel is a bundle:
+    if (isBundle && n.kind !== 'topic' && n.parent) {
+      n.nodeUrl = `/t/${n.parent}`;
+    }
     return n;
   });
 };

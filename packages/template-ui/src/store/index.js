@@ -75,7 +75,7 @@ const store = new Vuex.Store({
   mutations: {
     setChannelInformation(state, payload) {
       state.channel = payload.channel;
-      state.nodes = utils.parseNodes(payload.nodes);
+      state.nodes = utils.parseNodes(payload.nodes, state.bundleKind !== null);
       state.tree = getNodesTree(payload.nodes);
       state.loading = false;
     },
