@@ -3,6 +3,7 @@
     :is="cardVariant"
     :node="node"
     :subtitle="subtitle"
+    :isBundle="isBundle"
     :url="getNodeUrl(node)"
   />
 </template>
@@ -41,7 +42,16 @@ export default {
         }
       }
       return getCardSubtitle(this.node, fallback);
-    }
+    },
+    isBundle() {
+      if (this.$store) {
+        const { getters } = this.$store;
+        if (getters.isSimpleBundle && getters.showAsBundle(this.node)) {
+          return true;
+        }
+      }
+      return false;
+    },
   },
   methods: {
     getNodeUrl,
