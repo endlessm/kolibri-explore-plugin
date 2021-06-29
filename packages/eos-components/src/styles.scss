@@ -14,20 +14,20 @@ $gray-800: #091415;
 $light: $gray-300;
 $dark: $gray-600;
 
-$orange: #FD7E14;
+$orange: #FF9741;
 $yellow: #F5BD2C;
-$teal: #20C997;
-$cyan: #0DCAF0;
-$lavender: #B57EDC;
-$pink: #F02D8E;
+$teal: #33EFB8;
+$cyan: #35E9EF;
+$lavender: #CEA2EC;
+$pink: #F97DA1;
 
 $theme-colors: (
   "bundle": $lavender,
   "audio": $pink,
   "document": $teal,
   "exercise": $cyan,
-  "html5": $orange,
-  "video": $yellow
+  "html5": $yellow,
+  "video": $orange
 );
 
 $btn-font-weight: 600;
