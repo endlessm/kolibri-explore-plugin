@@ -81,6 +81,7 @@ const AuthorFilterName = 'author';
 const TagFilterName = 'common keywords';
 
 const structuredTagsMetadata = Object.values(constants.StructuredTags)
+  .filter((t) => !constants.FilterTagsBadList.includes(t))
   .map((t) => ({ name: t }));
 
 // Filter taxonomy, that can be overriden

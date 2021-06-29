@@ -32,6 +32,8 @@ export const StructuredTags = {
   DURATION: 'duration',
 };
 
+export const FilterTagsBadList = ['duration'];
+
 export const StructuredTagsRegExp = new RegExp('(.*)=(.*)');
 
 export const ThumbnailSize = {
@@ -41,6 +43,7 @@ export const ThumbnailSize = {
 
 export default {
   DefaultKindLabel,
+  FilterTagsBadList,
   LabelPerKind,
   MediaQuality,
   MediaTypeVerbs,
