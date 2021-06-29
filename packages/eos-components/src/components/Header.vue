@@ -1,5 +1,5 @@
 <template>
-  <b-navbar v-scroll="onScroll" class="header" :class="{ shadow: hasScrolled }" fixed="top">
+  <b-navbar class="header" :class="{ shadow: hasScrolled }" fixed="top">
     <b-container class="px-3">
       <img class="logo" :src="logo" @click="$emit('click-logo')">
       <slot></slot>
