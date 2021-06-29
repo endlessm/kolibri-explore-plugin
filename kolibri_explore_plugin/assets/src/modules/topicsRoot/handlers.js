@@ -53,6 +53,8 @@ function _filterCustomApp(channel) {
 }
 
 function _fetchCarouselNodes(store) {
+  const { rootNodes } = store.state.topicsRoot;
+
   // FIXME: Currently fetching random popular content, we can have a fixed list
   // of content id to look for.
   return ContentNodeResource.fetchPopular({
@@ -63,6 +65,7 @@ function _fetchCarouselNodes(store) {
       nodes.forEach(node => {
         const thumbnailUrl = getContentNodeThumbnail(node);
         node.thumbnail = thumbnailUrl;
+        node.channel = rootNodes.find(c => c.id === node.channel_id);
         const base = `/topics/${node.channel_id}`;
         if (node.kind === 'topic') {
           node.nodeUrl = `${base}/t/${node.id}`;

@@ -10,6 +10,7 @@
       <CarouselCard
         v-for="node in nodes"
         :key="'item-' + node.id"
+        :showChannelIcon="showChannelIcon"
         :node="node"
       />
     </b-carousel>
@@ -24,6 +25,10 @@ export default {
   name: 'Carousel',
   props: {
     nodes: Array,
+    showChannelIcon: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {

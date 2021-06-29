@@ -36,7 +36,7 @@
 
 
       <!-- Carousel -->
-      <Carousel class="pt-3" :nodes="carouselNodes" />
+      <Carousel class="pt-3" :nodes="carouselNodes" :showChannelIcon="true" />
 
       <b-container class="channels pb-5">
         <!-- Cards with thumbnail -->
