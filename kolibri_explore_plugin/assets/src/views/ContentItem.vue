@@ -156,3 +156,16 @@
   };
 
 </script>
+
+
+<style lang="scss" scoped>
+
+  @import '../styles';
+
+  // Fix icon offset in the Kolibri plugins:
+  .content-renderer::v-deep .button img,
+  .content-renderer::v-deep .button svg {
+    vertical-align: baseline;
+  }
+
+</style>
