@@ -8,7 +8,7 @@
     }"
   >
     <ContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
-      <b-card-body>
+      <b-card-body :class="{ 'bg-primary': !isBundle, 'bg-bundle': isBundle }">
         <b-img
           fluidGrow
           :src="thumbnail"
@@ -56,6 +56,10 @@ export default {
   props: {
     node: Object,
     subtitle: String,
+    isBundle: {
+      type: Boolean,
+      default: false,
+    },
     url: String,
   },
   data() {
@@ -77,7 +81,6 @@ export default {
 .card-body {
   border-top-left-radius: $border-radius-lg;
   border-top-right-radius: $border-radius-lg;
-  background-color: $primary;
   // This 8 is an estimation:
   height: card-body-height(8);
   display: flex;
