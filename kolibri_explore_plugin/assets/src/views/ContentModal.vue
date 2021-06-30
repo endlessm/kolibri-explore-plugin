@@ -3,9 +3,8 @@
   <b-modal
     id="content-modal"
     v-model="showingModal"
-    size="xl"
+    :size="size"
     centered
-    scrollable
     busy
     :title="content.title"
     headerCloseVariant="light"
@@ -19,6 +18,7 @@
 <script>
 
   import { mapState } from 'vuex';
+  import { responsiveMixin } from 'eos-components';
   import {
     hideTopicsContentFromLightbox,
     showTopicsContentInLightbox,
@@ -35,6 +35,7 @@
     components: {
       ContentItem,
     },
+    mixins: [responsiveMixin],
     data() {
       return {
         showingModal: false,
@@ -42,6 +43,12 @@
     },
     computed: {
       ...mapState('topicsTree', ['content', 'channel']),
+      size() {
+        if (this.xl) {
+          return 'xl';
+        }
+        return 'lg';
+      },
     },
     watch: {
       content() {
