@@ -90,6 +90,11 @@
 
   @import '../styles';
 
+  // This is overriding the Kolibri media player plugin:
+  ::v-deep .content-renderer {
+    border: 0;
+  }
+
   ::v-deep .modal-footer {
     display: none;
   }
