@@ -3,19 +3,19 @@
     :style="{ backgroundImage: backgroundImageURL }"
   >
     <slot></slot>
-    <SectionsSearchRow />
+    <SectionsSearchRow v-if="hasSectionsSearch" />
 
-    <div v-if="loading">
-      <CarouselPlaceholder />
+    <template v-if="loading">
+      <CarouselPlaceholder v-if="hasCarousel" />
       <CardGridPlaceholder />
-    </div>
+    </template>
 
-    <div v-else>
-      <Carousel :nodes="carouselNodes" />
-      <b-container>
+    <template v-else>
+      <Carousel v-if="hasCarousel" :nodes="carouselNodes" />
+      <b-container v-if="hasCarousel">
         <hr>
       </b-container>
-      <FilterContent />
+      <FilterContent v-if="hasFilters" />
 
       <div v-if="isFilterEmpty">
         <CardGrid
@@ -45,7 +45,7 @@
         <FilterResult :node="section" />
       </div>
 
-    </div>
+    </template>
   </div>
 </template>
 
@@ -64,6 +64,9 @@ export default {
       'loading',
       'cardColumns',
       'mediaQuality',
+      'hasSectionsSearch',
+      'hasCarousel',
+      'hasFilters',
     ]),
     ...mapGetters({
       mainSections: 'mainSections',

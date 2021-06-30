@@ -1,5 +1,5 @@
 <template>
-  <b-container class="align-items-center d-flex py-4">
+  <b-container class="align-items-center d-flex my-4">
     <MainSections />
     <b-button-toolbar class="align-self-end ml-auto" keyNav aria-label="Search">
       <b-button-group

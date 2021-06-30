@@ -1,4 +1,7 @@
 {
   "displayLogoInHeader": false,
+  "hasSectionsSearch": false,
+  "hasCarousel": false,
+  "hasFilters": false,
   "bundleKind": "simple"
 }
