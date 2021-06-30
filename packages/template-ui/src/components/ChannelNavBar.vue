@@ -41,9 +41,7 @@ export default {
 @import '@/styles.scss';
 
 .header {
-  background-color: $header-color;
-  background-size: cover !important;
-  background-repeat: no-repeat !important;
+  @include navbar-background($header-height);
 }
 
 img {

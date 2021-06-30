@@ -47,10 +47,10 @@ export default {
 @import '@/styles.scss';
 
 .jumbotron {
-  background-color: $header-color;
-  background-size: cover;
-  background-position: top center;
+  @include navbar-background($header-height);
   padding-top: $navbar-height;
+  height: $header-height;
+  padding-bottom: $navbar-height;
 }
 
 img {
