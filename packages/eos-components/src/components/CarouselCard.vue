@@ -98,11 +98,15 @@ export default {
 }
 .card {
   border-radius: $border-radius-lg;
-  padding-left: min(400px, 50%);
   position: relative;
   background-color: $gray-700;
   color: $white;
   border: none;
+
+  padding-left: $carousel-image-width;
+  @include media-breakpoint-up(lg) {
+    padding-left: $carousel-image-lg-width;
+  }
 }
 .img {
   border-top-left-radius: $border-radius-lg;
@@ -111,10 +115,14 @@ export default {
   left: 0;
   bottom: 0;
   top: 0;
-  width: min(400px, 50%);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+
+  width: $carousel-image-width;
+  @include media-breakpoint-up(lg) {
+    width: $carousel-image-lg-width;
+  }
 }
 
 .card-content h2 {
