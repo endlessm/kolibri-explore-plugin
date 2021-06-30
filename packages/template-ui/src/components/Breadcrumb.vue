@@ -3,7 +3,12 @@
     class="mt-3"
     aria-label="breadcrumb"
   >
-    <ChannelLogo class="d-none d-sm-block mt-1" :channel="channel" size="sm" />
+    <b-link
+      class="d-none d-sm-block mt-1"
+      to="/"
+    >
+      <ChannelLogo :channel="channel" size="sm" />
+    </b-link>
     <ol
       v-if="node.ancestors && node.ancestors.length"
       class="bg-transparent breadcrumb px-2"
