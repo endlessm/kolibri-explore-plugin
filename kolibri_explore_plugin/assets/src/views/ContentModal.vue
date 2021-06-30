@@ -8,14 +8,7 @@
     scrollable
     busy
     :title="content.title"
-    headerBgVariant="dark"
-    headerTextVariant="light"
-    bodyBgVariant="dark"
-    bodyTextVariant="light"
-    footerBgVariant="dark"
-    footerTextVariant="light"
-    headerBorderVariant="dark"
-    footerBorderVariant="dark"
+    headerCloseVariant="light"
   >
     <ContentItem class="text-dark" :content="content" />
   </b-modal>

@@ -21,6 +21,14 @@ $cyan: #35E9EF;
 $lavender: #CEA2EC;
 $pink: #F97DA1;
 
+// This is not a $gray-* by design:
+$lightbox-background: #0F0F0F;
+
+$modal-content-color: $light;
+$modal-content-bg: $lightbox-background;
+$modal-content-border-width: 0;
+$modal-backdrop-opacity: 0.8;
+
 $theme-colors: (
   "bundle": $lavender,
   "audio": $pink,
