@@ -3,7 +3,17 @@
   <div>
     <ContentModal />
     <DevTag v-if="showBuildInfo" />
-    <component :is="currentPage" v-if="currentPage" />
+    <component
+      :is="currentPage"
+      v-if="currentPage"
+      @loading="onLoading"
+      @load="onLoad"
+    />
+    <b-overlay :show="isLoading" noWrap>
+      <template #overlay>
+        <img :src="loadingImg" class="loading">
+      </template>
+    </b-overlay>
     <router-view />
   </div>
 
@@ -14,6 +24,7 @@
 
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
+  import EndlessLogo from 'eos-components/src/assets/EndlessLogo.svg';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
   import { PageNames } from '../constants';
   import commonExploreStrings from './commonExploreStrings';
@@ -39,6 +50,7 @@
     data() {
       return {
         lastRoute: null,
+        isLoading: false,
       };
     },
     computed: {
@@ -48,6 +60,9 @@
       },
       showBuildInfo() {
         return window.showBuildInfo;
+      },
+      loadingImg() {
+        return EndlessLogo;
       },
     },
     watch: {
@@ -66,6 +81,14 @@
           query: oldRoute.query,
           params: oldRoute.params,
         };
+      },
+    },
+    methods: {
+      onLoading() {
+        this.isLoading = true;
+      },
+      onLoad() {
+        this.isLoading = false;
       },
     },
   };
@@ -104,6 +127,22 @@
   // https://stackoverflow.com/questions/32862394/bootstrap-modals-keep-adding-padding-right-to-body-after-closed
   body.modal-open {
     padding-right: 0 !important;
+  }
+
+  .loading {
+    animation: spin 2s infinite linear;
+  }
+
+  // Based on this css
+  // https://github.com/loadingio/loading.css/blob/master/dist/loading.css#L1643
+  @keyframes spin {
+    0% {
+      transform: rotateY(0deg);
+      animation-timing-function: cubic-bezier(0.5856, 0.0703, 0.4143, 0.9297);
+    }
+    100% {
+      transform: rotateY(360deg);
+    }
   }
 
 </style>

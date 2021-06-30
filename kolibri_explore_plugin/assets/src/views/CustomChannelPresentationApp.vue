@@ -5,6 +5,7 @@
     class="custom-presentation-iframe"
     frameBorder="0"
     :src="rooturl"
+    @load="$emit('load')"
   >
   </iframe>
 
@@ -43,6 +44,7 @@
     },
     mounted() {
       window.addEventListener('message', this.onMessage);
+      this.$emit('loading');
     },
     beforeDestroy() {
       window.removeEventListener('message', this.onMessage);
