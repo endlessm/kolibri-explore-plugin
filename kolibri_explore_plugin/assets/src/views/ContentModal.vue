@@ -3,19 +3,11 @@
   <b-modal
     id="content-modal"
     v-model="showingModal"
-    size="xl"
+    :size="size"
     centered
-    scrollable
     busy
     :title="content.title"
-    headerBgVariant="dark"
-    headerTextVariant="light"
-    bodyBgVariant="dark"
-    bodyTextVariant="light"
-    footerBgVariant="dark"
-    footerTextVariant="light"
-    headerBorderVariant="dark"
-    footerBorderVariant="dark"
+    headerCloseVariant="light"
   >
     <ContentItem class="text-dark" :content="content" />
   </b-modal>
@@ -26,6 +18,7 @@
 <script>
 
   import { mapState } from 'vuex';
+  import { responsiveMixin } from 'eos-components';
   import {
     hideTopicsContentFromLightbox,
     showTopicsContentInLightbox,
@@ -42,6 +35,7 @@
     components: {
       ContentItem,
     },
+    mixins: [responsiveMixin],
     data() {
       return {
         showingModal: false,
@@ -49,6 +43,12 @@
     },
     computed: {
       ...mapState('topicsTree', ['content', 'channel']),
+      size() {
+        if (this.xl) {
+          return 'xl';
+        }
+        return 'lg';
+      },
     },
     watch: {
       content() {
@@ -96,6 +96,11 @@
 <style lang="scss" scoped>
 
   @import '../styles';
+
+  // This is overriding the Kolibri media player plugin:
+  ::v-deep .content-renderer {
+    border: 0;
+  }
 
   ::v-deep .modal-footer {
     display: none;
