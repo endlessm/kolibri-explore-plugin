@@ -117,6 +117,9 @@ $carousel-indicator-hit-area-height: 10px !default;
 $carousel-indicator-spacer:          3px !default;
 $carousel-indicator-transition:      all .6s ease !default;
 
+$carousel-image-width:    50%;
+$carousel-image-lg-width: 400px;
+
 @import "../../template-ui/src/overrides/styles.scss";
 
 @import 'bootstrap/scss/bootstrap';
