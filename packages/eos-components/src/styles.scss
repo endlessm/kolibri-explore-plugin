@@ -178,3 +178,7 @@ $navbar-height: $navbar-brand-height +
   xl: map-get($grid-breakpoints, "xl");
   xxl: map-get($grid-breakpoints, "xxl");
 }
+
+.description {
+  white-space: pre-wrap;
+}
