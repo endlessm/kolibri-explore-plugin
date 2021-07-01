@@ -8,7 +8,7 @@
             {{ subtitle }}
           </p>
           <!-- eslint-disable vue/no-v-html -->
-          <div class="mb-2" v-html="section.description"></div>
+          <div class="description mb-2" v-html="section.description"></div>
         </b-col>
         <b-col md="6" sm="12">
           <div

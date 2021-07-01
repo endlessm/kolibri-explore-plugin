@@ -8,7 +8,7 @@
             {{ subtitle }}
           </p>
           <!-- eslint-disable vue/no-v-html -->
-          <div class="mb-2" v-html="content.description"></div>
+          <div class="description mb-2" v-html="content.description"></div>
           <b-badge
             v-for="tag in subjectTags"
             :key="tag"
