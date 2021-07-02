@@ -34,6 +34,8 @@
         if (this.customAppContent.id) {
           const { kind, id } = this.customAppContent;
           return `${url}?${kind}Id=${id}`;
+        } else if (this.customAppContent.test) {
+          return `${url}?test=true`;
         }
         return url;
       },
