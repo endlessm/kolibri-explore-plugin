@@ -3,16 +3,36 @@
   <div class="dev fixed-top mx-1 text-right">
     <span v-b-modal.buildinfo class="badge badge-warning">{{ title }}</span>
 
-    <b-modal v-if="info" id="buildinfo" title="Build Info" okOnly>
-      <b-list-group>
+    <b-modal
+      v-if="info"
+      id="buildinfo"
+      ref="dev-modal"
+      title="About this build"
+      okOnly
+      headerCloseVariant="light"
+    >
+      <h6 class="my-3">
+        Release information
+      </h6>
+      <b-list-group class="text-dark">
         <b-list-group-item>Commit: {{ info.commit }}</b-list-group-item>
         <b-list-group-item>Date: {{ info.date }}</b-list-group-item>
         <b-list-group-item>Last Release: {{ info.last_release }}</b-list-group-item>
       </b-list-group>
-      <h3>Log</h3>
-      <b-list-group>
+      <h6 class="my-3">
+        Log of changes
+      </h6>
+      <b-list-group class="text-dark">
         <b-list-group-item v-for="commit in info.log" :key="commit.commit">
           {{ commit.subject }} <br> <i>{{ commit.author }}</i>
+        </b-list-group-item>
+      </b-list-group>
+      <h6 class="my-3">
+        Debugging
+      </h6>
+      <b-list-group class="text-dark">
+        <b-list-group-item href="#" @click="goToTestPage">
+          Open test theme page.
         </b-list-group-item>
       </b-list-group>
     </b-modal>
@@ -24,6 +44,7 @@
 <script>
 
   import urls from 'kolibri.urls';
+  import { PageNames, TestChannelId } from '../constants';
 
   export default {
     name: 'DevTag',
@@ -56,18 +77,29 @@
             console.error(error);
           });
       },
+      goToTestPage() {
+        this.$refs['dev-modal'].hide();
+        this.$router.push({
+          name: PageNames.TOPICS_TEST,
+          params: { channel_id: TestChannelId },
+        });
+      },
     },
   };
 
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 
   @import '../styles';
 
   .dev {
     z-index: $zindex-tooltip !important;
+  }
+
+  ::v-deep .modal-body {
+    padding-top: 0;
   }
 
 </style>
