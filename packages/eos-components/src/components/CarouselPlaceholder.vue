@@ -1,28 +1,17 @@
 <template>
   <b-container class="mb-4">
-    <!-- carousel -->
-    <div class="ph-item">
-      <div class="ph-col-6">
-        <div class="ph-picture"></div>
-      </div>
-      <div class="ph-col-6">
-        <div class="ph-row">
-          <div class="big ph-col-6"></div>
-          <div class="big empty ph-col-6"></div>
+    <b-card noBody imgLeft>
+      <b-skeleton-img cardImg="left" />
+      <b-card-body class="d-flex flex-column">
+        <b-skeleton width="85%" />
+        <b-skeleton width="55%" />
 
-          <div class="ph-col-12"></div>
-          <div class="ph-col-8"></div>
-          <div class="empty ph-col-4"></div>
-          <div class="ph-col-12"></div>
-          <div class="ph-col-6"></div>
-          <div class="empty ph-col-6"></div>
-
-          <div class="empty ph-col-12"></div>
-          <div class="empty ph-col-12"></div>
-          <div class="big ph-col-2"></div>
+        <div class="align-items-center d-flex justify-content-between mt-auto">
+          <b-skeleton width="20%" />
+          <b-skeleton type="button" />
         </div>
-      </div>
-    </div>
+      </b-card-body>
+    </b-card>
   </b-container>
 </template>
 
@@ -34,12 +23,18 @@
 
 <style lang="scss" scoped>
   @import '../styles.scss';
-  @import 'placeholder-loading/src/scss/placeholder-loading.scss';
 
-  .ph-item {
-    min-height: card-body-height(5);
+  .card > .b-aspect {
+    width: $carousel-image-width;
+    @include media-breakpoint-up(lg) {
+      width: $carousel-image-lg-width;
+    }
   }
-  .ph-picture {
-    height: 100%;
+
+  .b-skeleton-text {
+    height: $h4-font-size * $headings-line-height;
+    @include media-breakpoint-up(lg) {
+      height: $h2-font-size * $headings-line-height;
+    }
   }
 </style>

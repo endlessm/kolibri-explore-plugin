@@ -5,19 +5,17 @@
         v-for="item in items"
         :key="item"
         borderVariant="light"
+        noBody
+        imgTop
       >
-        <div class="ph-item">
-          <div class="card-img ph-picture"></div>
-          <div class="ph-col-12">
-            <div class="ph-row">
-              <div class="big ph-col-12"></div>
-              <div class="ph-col-12"></div>
-              <div class="ph-col-12"></div>
-              <div class="empty ph-col-12"></div>
-              <div class="big ph-col-4"></div>
-            </div>
-          </div>
-        </div>
+        <b-skeleton-img cardImg="top" />
+        <b-card-body class="d-flex flex-column">
+          <b-skeleton width="85%" />
+          <b-skeleton width="55%" />
+          <b-skeleton width="35%" />
+
+          <b-skeleton class="mt-5" type="button" />
+        </b-card-body>
       </b-card>
     </b-card-group>
   </b-container>
@@ -42,19 +40,4 @@
 
 <style lang="scss" scoped>
   @import '../styles.scss';
-  @import 'placeholder-loading/src/scss/placeholder-loading.scss';
-
-  .ph-item {
-    min-height: card-body-height(3);
-  }
-
-  .card-body, .ph-item {
-    padding: 0;
-  }
-
-  $card-image-ar: 9 / 16;
-  .card-img {
-    padding-top: percentage($card-image-ar);
-    height: 0;
-  }
 </style>
