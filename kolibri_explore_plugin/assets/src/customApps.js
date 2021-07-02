@@ -5,7 +5,8 @@ import urls from 'kolibri.urls';
 export const CustomChannelApps = {
   '38eaaf9ec82a44f9ab6e7a44cb730f07': 'pbs-kids',
   '3e464ee12f6a50a781cddf59147b48b1': 'sikana',
-  '85461059d7d158f7ac03d050ddbf734e': 'healthy-living',
+  f5f6729f95b55753badeaa066fa6e986: 'healthy-body',
+  '4e413158eac55422a5343af9fcfa8d59': 'healthy-mind',
 };
 
 export function getAppNameByID(id) {
@@ -25,7 +26,8 @@ export const ThumbApps = [
   'khan-academy',
   'open-stax',
   'pbs-kids',
-  'healthy-living',
+  'healthy-body',
+  'healthy-mind',
 ];
 
 export function getBigThumbnail(channel) {
