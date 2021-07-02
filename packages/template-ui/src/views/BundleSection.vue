@@ -2,7 +2,7 @@
   <div>
     <b-container class="main-container">
       <b-row class="mt-3">
-        <b-col md="6" sm="12">
+        <b-col md="4" sm="12">
           <h3>{{ section.title }}</h3>
           <p class="mb-2">
             {{ subtitle }}
@@ -10,18 +10,25 @@
           <!-- eslint-disable vue/no-v-html -->
           <div class="description mb-2" v-html="section.description"></div>
         </b-col>
-        <b-col md="6" sm="12">
-          <div
-            v-for="content in section.children"
-            :key="content.id"
-            class="mb-3"
-          >
-            <b-link
-              @click="goToContent(content)"
+        <b-col
+          md="8"
+          sm="12"
+        >
+          <b-row>
+            <b-col
+              v-for="content in section.children"
+              :key="content.id"
+              class="content-col"
+              md="6"
+              sm="12"
             >
-              <ContentImage :node="content" />
-            </b-link>
-          </div>
+              <b-link
+                @click="goToContent(content)"
+              >
+                <ContentImage :node="content" />
+              </b-link>
+            </b-col>
+          </b-row>
         </b-col>
       </b-row>
     </b-container>
@@ -64,6 +71,10 @@ export default {
   background-color: $white;
   background-size: cover;
   padding-top: $navbar-height;
+}
+
+.content-col {
+  margin-bottom: $grid-gutter-width;
 }
 
 </style>
