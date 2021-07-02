@@ -1,7 +1,7 @@
 <template>
   <b-button
     pill
-    :variant="kind"
+    :variant="`${kind}-${variant}`"
     class="pl-2"
     @click.stop="$emit('click')"
   >
@@ -36,6 +36,10 @@ export default {
   props: {
     kind: String,
     label: String,
+    variant: {
+      type: String,
+      default: 'primary',
+    },
   },
   computed: {
     icon() {

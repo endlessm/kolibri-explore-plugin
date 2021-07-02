@@ -134,7 +134,7 @@ $carousel-image-lg-width: 400px;
 }
 // Change buttons variant:
 @each $color, $value in $theme-colors {
-  .btn-#{$color} {
+  .btn-#{$color}-primary {
     $hover-value: scale-color($value, $lightness: $hover-lightness);
     @include button-variant(
       $background: $value,
@@ -142,6 +142,12 @@ $carousel-image-lg-width: 400px;
       $hover-background: $hover-value,
       $active-background: $hover-value,
       $active-border: $hover-value);
+  }
+  .btn-#{$color}-light {
+    @include button-variant(
+      $background: $light,
+      $border: $light,
+      $hover-border: $value);
   }
 }
 .btn-light {

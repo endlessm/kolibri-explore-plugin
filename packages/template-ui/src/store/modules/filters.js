@@ -66,16 +66,6 @@ function contentKindToVerb(value) {
   return constants.MediaTypeVerbs[value] || value;
 }
 
-function verbToContentKind(verb) {
-  let contentKind = verb;
-  _.each(constants.MediaTypeVerbs, (value, key) => {
-    if (value === verb) {
-      contentKind = key;
-    }
-  });
-  return contentKind;
-}
-
 const MediaFilterName = 'Learning activity';
 const AuthorFilterName = 'author';
 const TagFilterName = 'common keywords';
@@ -117,6 +107,9 @@ export default {
 
       return !Object.keys(state.query).some((k) => state.query[k].length > 0);
     },
+    isMediaFilter: () => (filter) => {
+      return filter.name === MediaFilterName;
+    },
     getFilterOptions: (state) => (filter) => (
       state.query[filter.name] || []
     ),
@@ -127,7 +120,11 @@ export default {
         return filter.name;
       }
 
-      const [first] = selectedFilters;
+      let [first] = selectedFilters;
+      if (getters.isMediaFilter(filter)) {
+        first = contentKindToVerb(first);
+      }
+
       if (count === 1) {
         return first;
       }
@@ -159,9 +156,8 @@ export default {
       // Filter by media type
       const mediaType = query[MediaFilterName];
       if (mediaType && mediaType.length) {
-        const contentKinds = mediaType.map((m) => verbToContentKind(m));
         filtered = filtered.filter((node) => (
-          contentKinds.some((m) => recursiveExistsNodes(node, (n) => n.kind === m))
+          mediaType.some((m) => recursiveExistsNodes(node, (n) => n.kind === m))
         ));
       }
       // Filter by author
@@ -200,7 +196,10 @@ export default {
         case MediaFilterName:
           return filter.options
             .filter((m) => recursiveExistsNodes(root, (n) => n.kind === m))
-            .map((k) => contentKindToVerb(k));
+            .map((k) => ({
+              kind: k,
+              label: contentKindToVerb(k),
+            }));
         case AuthorFilterName:
           return sortOptionsByWeight(root, getAuthorOptions);
         case TagFilterName: {
