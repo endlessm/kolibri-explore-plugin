@@ -1,9 +1,9 @@
 <template>
   <div>
-    <b-container class="main-container">
+    <DetailView>
       <b-row class="mt-3">
         <b-col md="6" sm="12">
-          <h3>{{ content.title }}</h3>
+          <h1>{{ content.title }}</h1>
           <p class="mb-2">
             {{ subtitle }}
           </p>
@@ -27,14 +27,17 @@
           </b-link>
         </b-col>
       </b-row>
-    </b-container>
+    </DetailView>
     <CardGrid
       v-if="nextNodesInTopic.length"
       :nodes="nextNodesInTopic"
       :cardColumns="cardColumns"
+      class="my-grid"
     >
       <b-row>
-        <h3>Next in {{ section.title }}:</h3>
+        <h4 class="next-title text-dark">
+          Next in {{ section.title }}
+        </h4>
       </b-row>
     </CardGrid>
   </div>
@@ -62,14 +65,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import '@/styles.scss';
-
-.main-container {
-  background-color: $white;
-  background-size: cover;
-  padding-top: $navbar-height;
-}
-
-</style>
