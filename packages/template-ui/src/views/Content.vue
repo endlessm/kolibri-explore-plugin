@@ -10,7 +10,7 @@
           <!-- eslint-disable vue/no-v-html -->
           <div class="description mb-2" v-html="content.description"></div>
           <b-badge
-            v-for="tag in subjectTags"
+            v-for="tag in tags"
             :key="tag"
             pill
             variant="light"
@@ -51,8 +51,13 @@ export default {
   computed: {
     ...mapState(['content', 'section', 'cardColumns', 'channel']),
     ...mapGetters(['nextNodesInTopic']),
-    subjectTags() {
-      return this.content.structuredTags[constants.StructuredTags.SUBJECT];
+    tags() {
+      return [
+        ...this.content.structuredTags[constants.StructuredTags.SUBJECT],
+        ...this.content.structuredTags[constants.StructuredTags.TYPE],
+        ...this.content.structuredTags[constants.StructuredTags.GRADE],
+        ...this.content.structuredTags[constants.StructuredTags.LEVEL],
+      ];
     },
     subtitle() {
       return utils.getCardSubtitle(this.content, this.channel.title);
