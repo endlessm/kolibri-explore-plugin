@@ -34,11 +34,9 @@
       :cardColumns="cardColumns"
       class="my-grid"
     >
-      <b-row>
-        <h4 class="next-title text-dark">
-          Next in {{ section.title }}
-        </h4>
-      </b-row>
+      <h4 class="next-title text-dark">
+        Next in {{ section.title }}
+      </h4>
     </CardGrid>
   </div>
 </template>
