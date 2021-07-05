@@ -28,11 +28,16 @@
         </b-list-group-item>
       </b-list-group>
       <h6 class="my-3">
-        Debugging
+        Theme debugging
       </h6>
       <b-list-group class="text-dark">
-        <b-list-group-item href="#" @click="goToTestPage">
-          Open test theme page.
+        <b-list-group-item
+          v-for="(channelName, channelId) in testChannels"
+          :key="channelId"
+          href="#"
+          @click="goToTestPage(channelId)"
+        >
+          {{ channelName }}
         </b-list-group-item>
       </b-list-group>
     </b-modal>
@@ -44,13 +49,15 @@
 <script>
 
   import urls from 'kolibri.urls';
-  import { PageNames, TestChannelId } from '../constants';
+  import { CustomChannelApps } from '../customApps';
+  import { PageNames } from '../constants';
 
   export default {
     name: 'DevTag',
     data() {
       return {
         info: null,
+        testChannels: CustomChannelApps,
       };
     },
     computed: {
@@ -77,11 +84,11 @@
             console.error(error);
           });
       },
-      goToTestPage() {
+      goToTestPage(channelId) {
         this.$refs['dev-modal'].hide();
         this.$router.push({
           name: PageNames.TOPICS_TEST,
-          params: { channel_id: TestChannelId },
+          params: { channel_id: channelId },
         });
       },
     },

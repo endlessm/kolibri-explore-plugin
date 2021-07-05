@@ -26,5 +26,3 @@ export const pageNameToModuleMap = {
 export const CUSTOM_PRESENTATION_TITLE = 'custom-channel-ui';
 
 export const CarouselItems = 5;
-
-export const TestChannelId = 'f5f6729f95b55753badeaa066fa6e986';
