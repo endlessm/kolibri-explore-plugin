@@ -138,6 +138,10 @@ $carousel-image-lg-width: 400px;
   color: $dark;
 }
 
+.close.text-light {
+  text-shadow: none;
+}
+
 // Change header color:
 $header-color: scale-color($secondary, $lightness: 50%);
 
