@@ -95,22 +95,6 @@ $background-alpha: -8%;
            $margins);
 }
 
-// Placeholder variables
-$ph-direction:            ltr !default;
-$ph-bg:                   #fff !default;
-$ph-color:                #ced4da !default;
-$ph-border:               1px solid darken($ph-bg, 10%) !default;
-$ph-border-radius:        1rem;
-
-$ph-cols:                 12 !default;
-$ph-cols-remove-odd:      true !default;
-$ph-gutter:               30px !default;
-$ph-spacer:               15px !default;
-
-$ph-avatar-border-radius: 50% !default;
-
-$ph-animation-duration:   0.8s !default;
-
 $carousel-indicator-width:           24px !default;
 $carousel-indicator-height:          8px !default;
 $carousel-indicator-hit-area-height: 10px !default;
