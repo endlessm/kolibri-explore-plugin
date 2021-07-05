@@ -99,7 +99,7 @@
 
   // This is overriding the Kolibri media player plugin:
   ::v-deep .content-renderer {
-    border: 0;
+    border: 0 !important;
   }
 
   ::v-deep .modal-footer {
