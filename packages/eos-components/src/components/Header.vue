@@ -67,6 +67,13 @@
 
     width: $logo-size;
     cursor: pointer;
+
+    @include media-breakpoint-down(sm) {
+      position: inherit;
+      margin-left: 0;
+      margin-top: 0;
+      margin-right: $spacer;
+    }
   }
 
 </style>

@@ -2,7 +2,7 @@
 
   <div class="channels-page d-flex flex-column min-vh-100">
     <Header class="header" @click-logo="goToTop">
-      <b-nav-text class="btn pl-0">
+      <b-nav-text class="btn d-md-block d-none pl-0">
         Endless Discovery
       </b-nav-text>
 
