@@ -134,15 +134,22 @@
   }
 
   // Based on this css
-  // https://github.com/loadingio/loading.css/blob/master/dist/loading.css#L1643
+  // https://github.com/loadingio/loading.css/blob/master/dist/loading.css#L195
   @keyframes spin {
     0% {
-      transform: rotateY(0deg);
-      animation-timing-function: cubic-bezier(0.5856, 0.0703, 0.4143, 0.9297);
+      transform: translate(0, 0%);
+      animation-timing-function: cubic-bezier(0.1348, 0.3256, 0.2495, 0.8687);
+    }
+    51% {
+      transform: translate(0, -14%);
+      animation-timing-function: cubic-bezier(0.7426, 0.1782, 0.8523, 0.6514);
     }
     100% {
-      transform: rotateY(360deg);
+      transform: translate(0, 0%);
     }
+  }
+  .ld.ld-bounceAlt {
+    animation: ld-bounceAlt 1s infinite linear;
   }
 
 </style>
