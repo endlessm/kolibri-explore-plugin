@@ -39,6 +39,14 @@ export default [
     },
   },
   {
+    name: PageNames.TOPICS_TEST,
+    path: '/topics/:channel_id/test',
+    handler: toRoute => {
+      store.commit('topicsTree/SET_CUSTOM_APP_CONTENT', { test: true });
+      showTopicsChannel(store, toRoute.params.channel_id);
+    },
+  },
+  {
     name: PageNames.TOPICS_TOPIC,
     path: '/topics/:channel_id/t/:id',
     handler: toRoute => {

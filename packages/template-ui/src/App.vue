@@ -69,6 +69,10 @@ export default {
       if (topicId) {
         this.$router.push(`/t/${topicId}`);
       }
+      const test = params.get('test');
+      if (test) {
+        this.$router.push('/test');
+      }
     },
   },
 };
