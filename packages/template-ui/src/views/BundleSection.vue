@@ -1,8 +1,8 @@
 <template>
   <div>
-    <b-container class="main-container">
+    <DetailView>
       <b-row class="mt-3">
-        <b-col md="4" sm="12">
+        <b-col md="5" sm="12">
           <h3>{{ section.title }}</h3>
           <p class="mb-2">
             {{ subtitle }}
@@ -11,7 +11,7 @@
           <div class="description mb-2" v-html="section.description"></div>
         </b-col>
         <b-col
-          md="8"
+          md="7"
           sm="12"
         >
           <b-row>
@@ -26,34 +26,27 @@
                 @click="goToContent(content)"
               >
                 <ContentImage :node="content" />
+                <p class="h6 mt-2 text-dark">
+                  {{ content.title }}
+                </p>
               </b-link>
             </b-col>
           </b-row>
         </b-col>
       </b-row>
-    </b-container>
-    <CardGrid
-      v-if="nextNodesInTopic.length"
-      :nodes="nextNodesInTopic"
-      :cardColumns="cardColumns"
-    >
-      <b-row>
-        <h3>Next in {{ section.title }}:</h3>
-      </b-row>
-    </CardGrid>
+    </DetailView>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import { goToContent } from 'kolibri-api';
 import { utils } from 'eos-components';
 
 export default {
   name: 'BundleSection',
   computed: {
-    ...mapState(['section', 'cardColumns', 'channel']),
-    ...mapGetters(['nextNodesInTopic']),
+    ...mapState(['section', 'channel']),
     subtitle() {
       return utils.getCardSubtitle(this.section, this.channel.title);
     },
@@ -66,12 +59,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/styles.scss';
-
-.main-container {
-  background-color: $white;
-  background-size: cover;
-  padding-top: $navbar-height;
-}
 
 .content-col {
   margin-bottom: $grid-gutter-width;
