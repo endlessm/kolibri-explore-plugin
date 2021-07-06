@@ -7,19 +7,12 @@
       </b-nav-text>
 
       <template v-slot:right>
-        <div class="main-buttons mr-3 mt-1">
-          <b-button
-            v-for="term in searchTerms"
-            :key="term"
-            pill
-            size="sm"
-            variant="primary"
-            class="ml-2"
-            @click="goToTerm(term)"
-          >
-            {{ term }}
-          </b-button>
-        </div>
+        <ButtonsBar
+          class="mr-3 mt-1"
+          title="More Topics"
+          :buttons="searchTerms"
+          @click="goToTerm"
+        />
 
         <b-button pill variant="outline-dark" @click="goToSearch">
           <b-icon-search />
