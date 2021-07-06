@@ -16,7 +16,7 @@
 
         <b-button pill variant="outline-dark" @click="goToSearch">
           <b-icon-search />
-          Search
+          <span class="d-md-inline d-none">Search</span>
         </b-button>
       </template>
     </Header>
