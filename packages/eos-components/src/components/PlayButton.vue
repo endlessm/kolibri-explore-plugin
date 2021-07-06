@@ -1,8 +1,9 @@
 <template>
   <b-button
     pill
+    size="sm"
     :variant="`${kind}-${variant}`"
-    class="pl-2"
+    class="border-0 pb-1 pl-1 play-button pt-1"
     @click.stop="$emit('click')"
   >
     <component
@@ -74,7 +75,8 @@ export default {
 
 .play-button-text {
   // Align the text with the material design icons:
-  line-height: 24px;
+  line-height: 12px;
+  vertical-align: text-bottom;
 }
 
 </style>
