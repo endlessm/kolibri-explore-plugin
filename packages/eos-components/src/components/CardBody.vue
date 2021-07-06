@@ -8,7 +8,11 @@
         {{ node.title }}
       </VClamp>
     </h5>
-    <p class="mb-1 subtitle text-muted text-truncate">
+    <div v-if="showChannelIcon" class="align-items-center d-flex mb-1">
+      <ChannelLogo class="mr-2" :channel="node.channel" size="sm" />
+      <span class="text-muted text-truncate">{{ node.channel.title }}</span>
+    </div>
+    <p v-else class="mb-1 subtitle text-muted text-truncate">
       {{ subtitle }}
     </p>
     <div v-if="tags.length" class="mb-3 tags text-truncate">
@@ -58,6 +62,9 @@ export default {
     },
     tags() {
       return [...this.subjectTags, this.typeTag, this.gradeOrLevelTag];
+    },
+    showChannelIcon() {
+      return this.node.channel;
     },
   },
 };

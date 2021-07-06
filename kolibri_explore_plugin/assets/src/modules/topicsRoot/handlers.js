@@ -142,14 +142,23 @@ export function searchChannels(store, params) {
   store.commit('topicsRoot/SET_SEARCH_RESULT', {});
   return ContentNodeSearchResource.fetchCollection({
     getParams: params,
-  }).then(results => {
-    const { channel_ids } = results;
+  }).then(searchResults => {
+    const { rootNodes } = store.state.topicsRoot;
+    const { channel_ids, results } = searchResults;
+    const nodes = results.map(n => ({
+      ...n,
+      channel: rootNodes.find(c => c.id === n.channel_id),
+    }));
     const promises = channel_ids.map(id => ChannelResource.fetchModel({ id }));
     Promise.all(promises).then(collection => {
       const channels = collection
         .map(c => ({ ...c, title: c.name, order: channel_ids.indexOf(c.id) }))
         .sort((a, b) => a.order - b.order);
-      store.commit('topicsRoot/SET_SEARCH_RESULT', { ...results, channels: channels });
+      store.commit('topicsRoot/SET_SEARCH_RESULT', {
+        ...searchResults,
+        channels: channels,
+        results: nodes,
+      });
       store.commit('CORE_SET_PAGE_LOADING', false);
     });
   });
