@@ -50,6 +50,7 @@
     },
     beforeDestroy() {
       window.removeEventListener('message', this.onMessage);
+      this.$emit('load');
     },
     methods: {
       onMessage(event) {
