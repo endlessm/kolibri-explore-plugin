@@ -44,7 +44,7 @@ $grid-breakpoints: (
   md: 768px,
   lg: 992px,
   xl: 1200px,
-  xxl: 2560px
+  xxl: 1400px,
 ) !default;
 
 $btn-font-weight: 600;
@@ -74,7 +74,7 @@ $breadcrumb-bg: $secondary !default;
 
 // Template variables:
 $header-logo-width: 128;
-$header-height: 300px; // FIXME to be defined exactly in https://phabricator.endlessm.com/T32150
+$header-height: 496px; // Forms an area with the XXL breakpoint of aspect ratio: 2.82
 $hover-lightness: -25%;
 $background-alpha: -8%;
 
