@@ -61,7 +61,8 @@ export default {
       );
     },
     tags() {
-      return [...this.subjectTags, this.typeTag, this.gradeOrLevelTag];
+      const tags = [...this.subjectTags, this.typeTag, this.gradeOrLevelTag];
+      return tags.filter(t => t !== null);
     },
     showChannelIcon() {
       return this.node.channel;
