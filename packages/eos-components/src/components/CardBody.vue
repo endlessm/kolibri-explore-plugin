@@ -49,7 +49,7 @@ export default {
   },
   computed: {
     subjectTags() {
-      return this.node.structuredTags[StructuredTags.SUBJECT];
+      return this.node.structuredTags[StructuredTags.SUBJECT] || [];
     },
     typeTag() {
       return getFirstStructuredTag(this.node, StructuredTags.TYPE);
