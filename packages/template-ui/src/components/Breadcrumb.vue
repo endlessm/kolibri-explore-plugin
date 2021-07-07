@@ -4,7 +4,7 @@
     aria-label="breadcrumb"
   >
     <b-link
-      class="d-none d-sm-block mt-1"
+      class="d-none d-sm-block mt-2"
       to="/"
     >
       <ChannelLogo :channel="channel" size="sm" />

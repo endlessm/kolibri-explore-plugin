@@ -43,7 +43,7 @@
   }
 
   .sm {
-    $size: 32px;
+    $size: 24px;
     min-height: $size;
     min-width: $size;
     max-height: $size;
