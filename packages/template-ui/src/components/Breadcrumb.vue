@@ -11,14 +11,14 @@
     </b-link>
     <ol
       v-if="node.ancestors && node.ancestors.length"
-      class="bg-transparent breadcrumb px-2"
+      class="bg-transparent breadcrumb flex-nowrap px-2"
     >
       <template v-if="xs || sm">
         <li v-if="node.ancestors.length > 1" class="active breadcrumb-item">
           ...
         </li>
         <li
-          class="breadcrumb-item"
+          class="breadcrumb-item text-truncate"
         >
           <b-link
             :to="getTopicUrl(parentNode)"
@@ -31,7 +31,7 @@
         <li
           v-for="a in node.ancestors"
           :key="a.id"
-          class="breadcrumb-item"
+          class="breadcrumb-item text-truncate"
         >
           <b-link
             :to="getTopicUrl(a)"
@@ -45,7 +45,7 @@
       v-else
       class="bg-transparent breadcrumb px-2"
     >
-      <li class="breadcrumb-item">
+      <li class="breadcrumb-item text-truncate">
         <b-link
           :to="getNodeUrl(node)"
         >
