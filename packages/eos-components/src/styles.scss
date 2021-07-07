@@ -1,6 +1,3 @@
-@import "~@fontsource/lato/index.css";
-@import "~@fontsource/poppins/index.css";
-
 // Bootstrap theme variables:
 $primary: #F15A22;
 $secondary: #14BF96;
@@ -79,6 +76,11 @@ $background-alpha: -8%;
 
 :export {
   headerLogoWidth: $header-logo-width;
+  xs: map-get($grid-breakpoints, "xs");
+  sm: map-get($grid-breakpoints, "sm");
+  md: map-get($grid-breakpoints, "md");
+  lg: map-get($grid-breakpoints, "lg");
+  xl: map-get($grid-breakpoints, "xl");
 }
 
 @function card-body-height($title-lines) {
@@ -103,75 +105,72 @@ $carousel-indicator-transition:      all .6s ease !default;
 $carousel-image-width:    50%;
 $carousel-image-lg-width: 400px;
 
+// Copy of the Bootstrap mixin. Allows to pass a border color different than the text color.
+@mixin eos-button-outline-variant($color, $border-color: $color, $color-hover: color-yiq($color), $active-background: $color, $active-border: $color) {
+  color: $color;
+  border-color: $border-color;
+
+  @include hover() {
+    color: $color-hover;
+    background-color: $active-background;
+    border-color: $active-border;
+  }
+
+  &:focus,
+  &.focus {
+    box-shadow: 0 0 0 $btn-focus-width rgba($active-border, .5);
+  }
+
+  &.disabled,
+  &:disabled {
+    color: $color;
+    background-color: transparent;
+  }
+
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active,
+  .show > &.dropdown-toggle {
+    color: $color;
+    background-color: $active-background;
+    border-color: $active-border;
+
+    &:focus {
+      @if $enable-shadows and $btn-active-box-shadow != none {
+        @include box-shadow($btn-active-box-shadow, 0 0 0 $btn-focus-width rgba($active-border, .5));
+      } @else {
+        // Avoid using mixin so we can pass custom focus shadow properly
+        box-shadow: 0 0 0 $btn-focus-width rgba($active-border, .5);
+      }
+    }
+  }
+}
+
+// Allows reusing the same style in the header and in the navbar:
+@mixin navbar-background($header-height) {
+  background-color: $header-color;
+  background-attachment: fixed;
+  background-position: top center;
+  background-repeat: no-repeat;
+
+  @include media-breakpoint-down(xxl) {
+    background-size: auto $header-height;
+  }
+
+  @include media-breakpoint-up(xxl) {
+    background-size: 100% auto;
+  }
+}
+
 @import "../../template-ui/src/overrides/styles.scss";
 
-@import 'bootstrap/scss/bootstrap';
-@import 'bootstrap-vue/src/index';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/variables';
 
-@import 'mixins';
-
-// Change button dark outline variant:
-.btn-outline-dark {
-  $value: theme-color("dark");
-  @include eos-button-outline-variant($value, $color-hover: $value, $border-color: $gray-500, $active-background: transparent, $active-border: $primary);
-}
-// Change buttons variant:
-@each $color, $value in $theme-colors {
-  .btn-#{$color}-primary {
-    $hover-value: scale-color($value, $lightness: $hover-lightness);
-    @include button-variant(
-      $background: $value,
-      $border: $value,
-      $hover-background: $hover-value,
-      $active-background: $hover-value,
-      $active-border: $hover-value);
-  }
-  .btn-#{$color}-light {
-    @include button-variant(
-      $background: $light,
-      $border: $light,
-      $hover-border: $value);
-  }
-}
-.btn-light {
-  color: $dark;
-}
-
-.close.text-light {
-  text-shadow: none;
-}
-
-// Change header color:
-$header-color: scale-color($secondary, $lightness: 50%);
-
-// Change breadcrumbs:
-.breadcrumb {
-  font-family: $headings-font-family;
-  font-weight: $headings-font-weight;
-  background-color: $header-color;
-}
-.badge {
-  font-family: $headings-font-family;
-  color: $text-muted;
-}
-
-.breadcrumb-item a {
-  color: $gray-700;
-}
+// Calculate header color:
+$header-color: scale-color($secondary, $lightness: 50%) !default;
 
 // Calculate navbar height:
 $navbar-height: $navbar-brand-height +
                 $navbar-brand-padding-y * 2 +
                 $navbar-padding-y * 2;
-
-:export {
-  xs: map-get($grid-breakpoints, "xs");
-  sm: map-get($grid-breakpoints, "sm");
-  md: map-get($grid-breakpoints, "md");
-  lg: map-get($grid-breakpoints, "lg");
-  xl: map-get($grid-breakpoints, "xl");
-}
-
-.description {
-  white-space: pre-wrap;
-}

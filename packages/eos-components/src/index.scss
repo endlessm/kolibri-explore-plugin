@@ -1,0 +1,60 @@
+@import 'styles';
+
+@import 'bootstrap/scss/bootstrap';
+@import 'bootstrap-vue/src/index';
+
+@import "~@fontsource/lato/index.css";
+@import "~@fontsource/poppins/index.css";
+
+// Change button dark outline variant:
+.btn-outline-dark {
+  $value: theme-color("dark");
+  @include eos-button-outline-variant($value, $color-hover: $value, $border-color: $gray-500, $active-background: transparent, $active-border: $primary);
+}
+
+// Change buttons variant:
+@each $color, $value in $theme-colors {
+  .btn-#{$color}-primary {
+    $hover-value: scale-color($value, $lightness: $hover-lightness);
+    @include button-variant(
+      $background: $value,
+      $border: $value,
+      $hover-background: $hover-value,
+      $active-background: $hover-value,
+      $active-border: $hover-value);
+  }
+
+  .btn-#{$color}-light {
+    @include button-variant(
+      $background: $light,
+      $border: $light,
+      $hover-border: $value);
+  }
+}
+
+.btn-light {
+  color: $dark;
+}
+
+.close.text-light {
+  text-shadow: none;
+}
+
+// Change breadcrumbs:
+.breadcrumb {
+  font-family: $headings-font-family;
+  font-weight: $headings-font-weight;
+}
+
+.badge {
+  font-family: $headings-font-family;
+  color: $text-muted;
+}
+
+.breadcrumb-item a {
+  color: $gray-700;
+}
+
+.description {
+  white-space: pre-wrap;
+}
