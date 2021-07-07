@@ -1,3 +1,4 @@
+import ButtonsBar from './components/ButtonsBar.vue';
 import Card from './components/Card.vue';
 import CardBody from './components/CardBody.vue';
 import CardGrid from './components/CardGrid.vue';
@@ -30,6 +31,7 @@ import utils from './utils.js';
 import constants from './constants.js';
 
 const components = {
+  ButtonsBar,
   Card,
   CardBody,
   CardGrid,
