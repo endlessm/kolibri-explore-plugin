@@ -15,13 +15,6 @@
 import { askChannelInformation } from 'kolibri-api';
 import { mapMutations } from 'vuex';
 
-let mockData;
-if (process.env.VUE_APP_USE_MOCK_DATA === 'true') {
-  const mockDataFilename = 'nodes';
-  // eslint-disable-next-line global-require, import/no-dynamic-require
-  mockData = require(`@/${mockDataFilename}.json`);
-}
-
 export default {
   name: 'App',
   watch: {
@@ -46,11 +39,7 @@ export default {
     },
   },
   created() {
-    if (process.env.VUE_APP_USE_MOCK_DATA === 'true') {
-      this.gotChannelInformation(mockData);
-    } else {
-      askChannelInformation(this.gotChannelInformation);
-    }
+    askChannelInformation(this.gotChannelInformation);
   },
   methods: {
     ...mapMutations(['setContentNavigation', 'setSectionNavigation', 'setHomeNavigation']),

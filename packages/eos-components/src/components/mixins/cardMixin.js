@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     getThumbnail() {
-      if (!this.node.thumbnail && process.env.VUE_APP_USE_MOCK_DATA === 'true') {
+      if (!this.node.thumbnail || this.node.useDefaultThumbnail) {
         this.thumbnail = this.getAsset('defaultThumbnail');
         return;
       }
