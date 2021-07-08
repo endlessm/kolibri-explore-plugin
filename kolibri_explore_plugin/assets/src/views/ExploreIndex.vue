@@ -98,7 +98,7 @@
 
 <style lang="scss">
 
-  @import '../styles';
+  @import '../index';
 
   .partial-fonts-loaded body,
   .partial-fonts-loaded button,
