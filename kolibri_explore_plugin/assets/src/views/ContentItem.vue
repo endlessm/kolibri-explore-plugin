@@ -1,6 +1,6 @@
 <template>
 
-  <div>
+  <div class="content-item" :class="{ 'content-item--dark': isDark }">
     <template v-if="sessionReady">
       <KContentRenderer
         v-if="!content.assessment"
@@ -72,6 +72,10 @@
       content: {
         type: Object,
         required: true,
+      },
+      isDark: {
+        type: Boolean,
+        default: false,
       },
     },
     data() {
@@ -166,6 +170,27 @@
   .content-renderer::v-deep .button img,
   .content-renderer::v-deep .button svg {
     vertical-align: baseline;
+  }
+
+  .content-item--dark::v-deep .content-renderer .fullscreen-header {
+    color: $gray-300;
+    background-color: $lightbox-toolbar !important;
+
+    .button {
+      color: $gray-300 !important;
+
+      &.zim-search-button {
+        background-color: $lightbox-toolbar-primary !important;
+      }
+
+      &:hover {
+        background-color: lighten($lightbox-toolbar, 10%) !important;
+      }
+
+      svg {
+        fill: $gray-300 !important;
+      }
+    }
   }
 
 </style>
