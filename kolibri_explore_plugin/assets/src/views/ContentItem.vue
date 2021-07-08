@@ -182,6 +182,16 @@
     display: none;
   }
 
+  // Tweak fullscreen icons to look nicer here
+  .content-renderer::v-deep .fullscreen-header {
+    .fullscreen-button svg,
+    .button .fs-icon {
+      top: 5px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
   .content-item--dark::v-deep .content-renderer .fullscreen-header {
     color: $gray-300;
     background-color: $lightbox-toolbar !important;
