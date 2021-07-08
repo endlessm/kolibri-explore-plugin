@@ -114,8 +114,6 @@ export default {
 .card-body {
   border-top-left-radius: $border-radius-lg;
   border-top-right-radius: $border-radius-lg;
-  // This 8 is an estimation:
-  height: card-body-height(9);
   justify-content: space-between;
 }
 
@@ -131,8 +129,13 @@ export default {
 .card-body {
   padding: 0;
 }
+
+// This is solely to match the content card height:
+$missing-height: 23px;
+
 .body-wrapper {
   padding: $card-spacer-x;
+  height: calc(#{card-body-height(2)} + #{$missing-height});
 }
 
 .low-quality-img {
