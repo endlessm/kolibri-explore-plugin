@@ -5,11 +5,11 @@
     :subtitle="subtitle"
     :isBundle="isBundle"
     :url="getNodeUrl(node)"
+    :mediaQuality="mediaQuality"
   />
 </template>
 
 <script>
-import { MediaQuality } from '../constants';
 import { getNodeUrl, getCardSubtitle } from '../utils';
 
 export default {
@@ -23,13 +23,7 @@ export default {
       if (this.node.kind === 'topic') {
         return 'TopicCard';
       }
-      switch (this.mediaQuality) {
-        case MediaQuality.LOW:
-          return 'LowResCard';
-        case MediaQuality.REGULAR:
-        default:
-          return 'RegularCard';
-      }
+      return 'ContentCard';
     },
     subtitle() {
       let fallback = '';
