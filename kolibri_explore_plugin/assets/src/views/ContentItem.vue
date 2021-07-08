@@ -211,6 +211,19 @@
         fill: $gray-300 !important;
       }
     }
+
+    .ui-icon-button {
+      color: $gray-300;
+      background: none;
+
+      &:hover {
+        background-color: lighten($lightbox-toolbar, 10%) !important;
+      }
+
+      svg {
+        fill: $gray-300;
+      }
+    }
   }
 
 </style>
