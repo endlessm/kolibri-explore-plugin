@@ -151,13 +151,9 @@ $carousel-image-lg-width: 400px;
   background-attachment: fixed;
   background-position: top center;
   background-repeat: no-repeat;
-
-  @include media-breakpoint-down(xxl) {
+  background-size: 100% auto;
+  @include media-breakpoint-down(md) {
     background-size: auto $header-height;
-  }
-
-  @include media-breakpoint-up(xxl) {
-    background-size: 100% auto;
   }
 }
 
