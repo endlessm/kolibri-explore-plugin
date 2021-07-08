@@ -130,26 +130,23 @@
   }
 
   .loading {
-    animation: spin 2s infinite linear;
+    animation: bounce 1s infinite linear;
   }
 
   // Based on this css
   // https://github.com/loadingio/loading.css/blob/master/dist/loading.css#L195
-  @keyframes spin {
+  @keyframes bounce {
     0% {
       transform: translate(0, 0%);
       animation-timing-function: cubic-bezier(0.1348, 0.3256, 0.2495, 0.8687);
     }
     51% {
-      transform: translate(0, -14%);
+      transform: translate(0, -50%);
       animation-timing-function: cubic-bezier(0.7426, 0.1782, 0.8523, 0.6514);
     }
     100% {
       transform: translate(0, 0%);
     }
-  }
-  .ld.ld-bounceAlt {
-    animation: ld-bounceAlt 1s infinite linear;
   }
 
 </style>

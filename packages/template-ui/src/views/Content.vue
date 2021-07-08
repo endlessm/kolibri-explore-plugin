@@ -34,7 +34,7 @@
       :cardColumns="cardColumns"
       class="my-grid"
     >
-      <h4 class="next-title text-dark">
+      <h4 class="next-title text-dark text-truncate w-75">
         Next in {{ section.title }}
       </h4>
     </CardGrid>
