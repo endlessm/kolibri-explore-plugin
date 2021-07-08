@@ -90,15 +90,15 @@ export default {
     },
     titleMaxLines() {
       if (!this.node.description) {
-        return 5;
+        return 4;
       }
-      return 3;
+      return 2;
     },
     descriptionMaxLines() {
       if (this.isTitleClamped) {
         return 2;
       }
-      return 5;
+      return 3;
     }
   },
 };
