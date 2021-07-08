@@ -8,7 +8,7 @@
 
     <b-collapse
       :id="'collapse-' + id"
-      :class="{ 'mt-2': !isHighQualityMedia }"
+      class="mt-2"
     >
       <GridPage
         :nodes="nodes.slice(itemsPerPage)"
@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import { MediaQuality } from '../constants';
 
 export default {
   name: 'CollapsibleCardGrid',
@@ -41,11 +40,6 @@ export default {
     itemsPerPage: {
       type: Number,
       default: 8,
-    },
-  },
-  computed: {
-    isHighQualityMedia() {
-      return this.mediaQuality === MediaQuality.HIGH;
     },
   },
 };

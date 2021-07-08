@@ -34,7 +34,7 @@
       >
         <template #img>
           <b-card-group
-            :deck="!isHighQualityMedia"
+            deck
             class="my-2"
           >
             <Card
@@ -59,7 +59,6 @@
 
 <script>
 import _ from 'underscore';
-import { MediaQuality } from '../constants';
 import responsiveMixin from './mixins/responsiveMixin';
 
 export default {
@@ -103,9 +102,6 @@ export default {
     },
     isLastSlide() {
       return this.slide === this.slides.length - 1;
-    },
-    isHighQualityMedia() {
-      return this.mediaQuality === MediaQuality.HIGH;
     },
   },
   methods: {

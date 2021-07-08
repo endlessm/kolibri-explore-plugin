@@ -24,8 +24,6 @@ export default {
         return 'TopicCard';
       }
       switch (this.mediaQuality) {
-        case MediaQuality.HIGH:
-          return 'HighResCard';
         case MediaQuality.LOW:
           return 'LowResCard';
         case MediaQuality.REGULAR:

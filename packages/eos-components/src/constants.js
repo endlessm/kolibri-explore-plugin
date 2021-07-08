@@ -10,7 +10,6 @@ export const MediaTypeVerbs = {
 export const MediaQuality = {
   LOW: 'low',
   REGULAR: 'regular',
-  HIGH: 'high',
 };
 
 export const DefaultKindLabel = 'resources';

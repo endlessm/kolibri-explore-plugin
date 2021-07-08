@@ -15,7 +15,6 @@ import DummyButton from './components/DummyButton.vue';
 import Footer from './components/Footer.vue';
 import GridPage from './components/GridPage.vue';
 import Header from './components/Header.vue';
-import HighResCard from './components/HighResCard.vue';
 import LowResCard from './components/LowResCard.vue';
 import PaginatedCardGrid from './components/PaginatedCardGrid.vue';
 import PlayButton from './components/PlayButton.vue';
@@ -48,7 +47,6 @@ const components = {
   Footer,
   GridPage,
   Header,
-  HighResCard,
   LowResCard,
   PaginatedCardGrid,
   PlayButton,
