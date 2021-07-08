@@ -4,21 +4,21 @@
     aria-label="breadcrumb"
   >
     <b-link
-      class="d-none d-sm-block mt-1"
+      class="d-none d-sm-block mt-2"
       to="/"
     >
       <ChannelLogo :channel="channel" size="sm" />
     </b-link>
     <ol
       v-if="node.ancestors && node.ancestors.length"
-      class="bg-transparent breadcrumb px-2"
+      class="bg-transparent breadcrumb flex-nowrap px-2"
     >
+      <li v-if="isShortened" class="active breadcrumb-item">
+        ...
+      </li>
       <template v-if="xs || sm">
-        <li v-if="node.ancestors.length > 1" class="active breadcrumb-item">
-          ...
-        </li>
         <li
-          class="breadcrumb-item"
+          class="breadcrumb-item text-truncate"
         >
           <b-link
             :to="getTopicUrl(parentNode)"
@@ -29,9 +29,9 @@
       </template>
       <template v-else>
         <li
-          v-for="a in node.ancestors"
+          v-for="a in node.ancestors.slice(-maxBreadcrumbs)"
           :key="a.id"
-          class="breadcrumb-item"
+          class="breadcrumb-item text-truncate"
         >
           <b-link
             :to="getTopicUrl(a)"
@@ -45,7 +45,7 @@
       v-else
       class="bg-transparent breadcrumb px-2"
     >
-      <li class="breadcrumb-item">
+      <li class="breadcrumb-item text-truncate">
         <b-link
           :to="getNodeUrl(node)"
         >
@@ -67,6 +67,11 @@ export default {
   props: {
     node: Object,
   },
+  data() {
+    return {
+      maxBreadcrumbs: 4,
+    };
+  },
   computed: {
     ...mapState(['channel']),
     parentNode() {
@@ -74,7 +79,13 @@ export default {
         return null;
       }
       return this.node.ancestors[this.node.ancestors.length-1];
-    }
+    },
+    isShortened() {
+      if (!this.node.ancestors || !this.node.ancestors.length) {
+        return false;
+      }
+      return this.xs || this.sm || this.node.ancestors.length > this.maxBreadcrumbs;
+    },
   },
   methods: {
     getTopicUrl(n) {
