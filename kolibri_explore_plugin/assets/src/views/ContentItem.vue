@@ -1,6 +1,6 @@
 <template>
 
-  <div :class="contentItemClass">
+  <div class="content-item" :class="{ 'content-item--dark': isDark }">
     <template v-if="sessionReady">
       <KContentRenderer
         v-if="!content.assessment"
@@ -73,7 +73,7 @@
         type: Object,
         required: true,
       },
-      dark: {
+      isDark: {
         type: Boolean,
         default: false,
       },
@@ -94,13 +94,6 @@
         extraFields: state => state.core.logging.summary.extra_fields,
         fullName: state => state.core.session.full_name,
       }),
-      contentItemClass() {
-        const classNames = ['content-item'];
-        if (this.dark) {
-          classNames.push('content-item--dark');
-        }
-        return classNames;
-      },
       progress() {
         if (this.isUserLoggedIn) {
           // if there no attempts for this exercise, there is no progress
