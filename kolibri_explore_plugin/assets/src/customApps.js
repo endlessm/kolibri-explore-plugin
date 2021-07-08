@@ -30,6 +30,10 @@ export const ThumbApps = [
   'healthy-mind',
 ];
 
+export const GameAppIDs = [
+  '3160899a73564d8a8467284d9219b91c', // Terminal Two
+];
+
 export function getBigThumbnail(channel) {
   if (!channel.title) {
     return null;
