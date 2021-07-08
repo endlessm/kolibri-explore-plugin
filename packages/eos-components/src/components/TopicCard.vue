@@ -10,7 +10,7 @@
     <ContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
       <b-card-body :class="{ 'bg-primary': !isBundle, 'bg-bundle': isBundle }">
         <b-img
-          fluidGrow
+          fluid
           :src="thumbnail"
           class="mb-3"
           v-bind="thumbnailProps"
@@ -20,7 +20,8 @@
         <b-card-title>
           <VClamp
             autoresize
-            :maxLines="3"
+            :maxLines="titleMaxLines"
+            @clampchange="(e) => isTitleClamped = e"
           >
             {{ node.title }}
           </VClamp>
@@ -28,7 +29,7 @@
         <b-card-text>
           <VClamp
             autoresize
-            :maxLines="5"
+            :maxLines="descriptionMaxLines"
           >
             {{ node.description }}
           </VClamp>
@@ -65,8 +66,23 @@ export default {
   data() {
     return {
       isHovered: false,
+      isTitleClamped: false,
       thumbnailProps: { width: ThumbnailSize.width, height: ThumbnailSize.height },
     };
+  },
+  computed: {
+    titleMaxLines() {
+      if (!this.node.description) {
+        return 5;
+      }
+      return 3;
+    },
+    descriptionMaxLines() {
+      if (this.isTitleClamped) {
+        return 2;
+      }
+      return 5;
+    }
   },
 };
 </script>

@@ -148,6 +148,7 @@ $header-color: scale-color($secondary, $lightness: 50%);
 .breadcrumb {
   font-family: $headings-font-family;
   font-weight: $headings-font-weight;
+  background-color: $header-color;
 }
 .badge {
   font-family: $headings-font-family;

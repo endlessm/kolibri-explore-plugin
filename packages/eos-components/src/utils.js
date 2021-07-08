@@ -68,6 +68,9 @@ export function getNodeUrl(node, channelId) {
 
 export function getLeaves(node) {
   if (!node.children) {
+    if (node.kind === 'topic') {
+      return [];
+    }
     return [node];
   }
   return node.children
