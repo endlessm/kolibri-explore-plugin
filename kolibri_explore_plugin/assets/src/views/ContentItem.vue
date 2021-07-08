@@ -1,6 +1,6 @@
 <template>
 
-  <div>
+  <div :class="contentItemClass">
     <template v-if="sessionReady">
       <KContentRenderer
         v-if="!content.assessment"
@@ -73,6 +73,10 @@
         type: Object,
         required: true,
       },
+      dark: {
+        type: Boolean,
+        default: false,
+      },
     },
     data() {
       return {
@@ -90,6 +94,13 @@
         extraFields: state => state.core.logging.summary.extra_fields,
         fullName: state => state.core.session.full_name,
       }),
+      contentItemClass() {
+        const classNames = ['content-item'];
+        if (this.dark) {
+          classNames.push('content-item--dark');
+        }
+        return classNames;
+      },
       progress() {
         if (this.isUserLoggedIn) {
           // if there no attempts for this exercise, there is no progress
@@ -166,6 +177,27 @@
   .content-renderer::v-deep .button img,
   .content-renderer::v-deep .button svg {
     vertical-align: baseline;
+  }
+
+  .content-item--dark::v-deep .content-renderer .fullscreen-header {
+    color: $gray-300;
+    background-color: $lightbox-toolbar !important;
+
+    .button {
+      color: $gray-300 !important;
+
+      &.zim-search-button {
+        background-color: $lightbox-toolbar-primary !important;
+      }
+
+      &:hover {
+        background-color: lighten($lightbox-toolbar, 10%) !important;
+      }
+
+      svg {
+        fill: $gray-300 !important;
+      }
+    }
   }
 
 </style>
