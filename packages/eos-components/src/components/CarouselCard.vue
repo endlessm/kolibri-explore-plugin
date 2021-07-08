@@ -7,11 +7,11 @@
             <div class="img" :style="backgroundStyle"></div>
             <b-card-text>
               <div class="card-content">
-                <h2 class="d-lg-block d-none mb-1 title">
+                <h3 class="d-lg-block d-none mb-1 title">
                   <VClamp autoresize :maxLines="3">
                     {{ node.title }}
                   </VClamp>
-                </h2>
+                </h3>
                 <h4 class="d-lg-none mb-1 title">
                   <VClamp autoresize :maxLines="4">
                     {{ node.title }}
@@ -125,12 +125,16 @@ export default {
   }
 }
 
-.card-content h2 {
+.card-content h3 {
   min-height: 3 * ($h2-font-size * $headings-line-height);
 }
 
 .card-content h4 {
   min-height: 4 * ($h4-font-size * $headings-line-height);
+}
+
+.card-content {
+  padding: ($spacer * 0.75);
 }
 
 ::v-deep .card-media-type {

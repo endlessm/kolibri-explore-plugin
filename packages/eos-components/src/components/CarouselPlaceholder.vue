@@ -34,7 +34,7 @@
   .b-skeleton-text {
     height: $h4-font-size * $headings-line-height;
     @include media-breakpoint-up(lg) {
-      height: $h2-font-size * $headings-line-height;
+      height: $h3-font-size * $headings-line-height;
     }
   }
 </style>
