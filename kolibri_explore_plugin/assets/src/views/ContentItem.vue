@@ -5,6 +5,7 @@
       <KContentRenderer
         v-if="!content.assessment"
         class="content-renderer"
+        :class="{ 'without-fullscreen-bar': withoutFullscreenBar }"
         :kind="content.kind"
         :lang="content.lang"
         :files="content.files"
@@ -26,6 +27,7 @@
         v-else
         :id="content.id"
         class="content-renderer"
+        :class="{ 'without-fullscreen-bar': withoutFullscreenBar }"
         :kind="content.kind"
         :files="content.files"
         :lang="content.lang"
@@ -59,6 +61,7 @@
   import { mapState, mapGetters, mapActions } from 'vuex';
   import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
   import { updateContentNodeProgress } from '../modules/coreExplore/utils';
+  import { GameAppIDs } from '../customApps';
   import AssessmentWrapper from './AssessmentWrapper';
   import commonExploreStrings from './commonExploreStrings';
 
@@ -103,6 +106,9 @@
           return this.summaryProgress;
         }
         return this.sessionProgress;
+      },
+      withoutFullscreenBar() {
+        return GameAppIDs.includes(this.content.channel_id);
       },
     },
     created() {
@@ -170,6 +176,10 @@
   .content-renderer::v-deep .button img,
   .content-renderer::v-deep .button svg {
     vertical-align: baseline;
+  }
+
+  .content-renderer.without-fullscreen-bar::v-deep .fullscreen-header {
+    display: none;
   }
 
   .content-item--dark::v-deep .content-renderer .fullscreen-header {
