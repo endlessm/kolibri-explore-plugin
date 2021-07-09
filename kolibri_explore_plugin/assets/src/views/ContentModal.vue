@@ -3,6 +3,7 @@
   <b-modal
     id="content-modal"
     v-model="showingModal"
+    :modalClass="contentModalClass"
     :size="size"
     centered
     busy
@@ -48,6 +49,9 @@
           return 'xl';
         }
         return 'lg';
+      },
+      contentModalClass() {
+        return ['content-modal', `content-modal-kind--${this.content.kind}`];
       },
     },
     watch: {
@@ -110,6 +114,25 @@
     padding-top: 0;
     border-bottom-right-radius: $modal-content-border-radius;
     border-bottom-left-radius: $modal-content-border-radius;
+  }
+
+  ::v-deep .content-modal-kind--zim {
+    .modal-header {
+      padding: 0.5rem 1rem;
+    }
+
+    .modal-title {
+      display: none;
+    }
+
+    .modal-body {
+      padding-right: 0;
+      padding-bottom: 0;
+      padding-left: 0;
+      // We need to use overflow: hidden for the existing rounded corners to
+      // mask the content renderer.
+      overflow: hidden;
+    }
   }
 
 </style>
