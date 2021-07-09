@@ -14,11 +14,11 @@
       <SearchBar
         v-model="query"
         :debounce="800"
-        :loading="loading"
+        :loading="isLoading"
         @clear-input="clearInput"
       />
       <b-container class="pb-5 pt-3">
-        <div v-if="!hasResults && !loading" class="align-items-center d-flex">
+        <div v-if="!hasResults && !isLoading" class="align-items-center d-flex">
           <h5 class="mb-0 text-muted">
             Topic Ideas
           </h5>
@@ -70,18 +70,21 @@
       </div>
     </div>
 
-    <div v-if="recommended" class="flex-shrink-0 mt-auto recommended">
+    <div v-if="recommended && emptySearch" class="flex-shrink-0 pt-5 recommended">
       <b-container v-if="recommended" class="pb-5 pt-3">
         <h4 class="text-muted">
-          Featured Channels
+          Explore
         </h4>
         <ChannelCardGroup
           :rows="recommended"
+          :getThumbnail="getBigThumbnail"
           :columns="columns"
           @card-click="goToChannel"
         />
       </b-container>
     </div>
+
+    <DiscoveryFooter />
   </div>
 
 </template>
@@ -96,9 +99,13 @@
 
   import { PageNames, searchTerms } from '../constants';
   import { searchChannels } from '../modules/topicsRoot/handlers';
+  import { getBigThumbnail } from '../customApps';
+
+  import DiscoveryFooter from './DiscoveryFooter';
 
   export default {
     name: 'SearchPage',
+    components: { DiscoveryFooter },
     mixins: [responsiveMixin],
     data() {
       return {
@@ -117,6 +124,12 @@
         loading: state => state.core.loading,
         searchTerm: 'searchTerm',
       }),
+      isLoading() {
+        return this.loading && !!this.query.trim();
+      },
+      emptySearch() {
+        return !this.loading && !!this.query.trim() && !this.resultCards;
+      },
       recommended() {
         if (!this.channels || !this.channels.length) {
           return null;
@@ -124,7 +137,7 @@
 
         // FIXME: Placeholder recommended channels, randomly selected
         const channels = [];
-        const allChannels = [...this.channels];
+        const allChannels = this.channels.filter(c => getBigThumbnail(c));
         while (channels.length < this.columns && allChannels.length > 0) {
           const index = _.random(0, allChannels.length - 1);
           const [channel] = allChannels.splice(index, 1);
@@ -229,6 +242,9 @@
         const channel = this.searchResult.channels.find(c => c.id === channelId);
         return channel ? channel.title : channelId;
       },
+      getBigThumbnail(channel) {
+        return getBigThumbnail(channel);
+      },
     },
   };
 
@@ -240,7 +256,7 @@
   @import '../styles';
 
   .main {
-    background-color: white;
+    background-color: $gray-300;
   }
 
   .discovery-header {
@@ -253,7 +269,7 @@
   }
 
   .recommended {
-    background-color: $body-bg;
+    background-color: $gray-400;
   }
 
 </style>
