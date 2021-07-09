@@ -1,9 +1,12 @@
 <template>
 
   <div class="d-flex flex-column min-vh-100 search-page">
-    <Header class="header" @click-logo="goBack">
+    <Header class="discovery-header" @click-logo="goBack">
       <b-nav-text class="btn pl-0" @click="goBack">
-        Back to Discovery
+        <b-icon-chevron-left />
+        <span class="text-primary">
+          Endless Discovery
+        </span>
       </b-nav-text>
     </Header>
 
@@ -226,8 +229,9 @@
     background-color: white;
   }
 
-  .header {
-    background: white;
+  .discovery-header {
+    background: $gray-300;
+    border-bottom: 1px solid $gray-400;
   }
 
   .search-page {
