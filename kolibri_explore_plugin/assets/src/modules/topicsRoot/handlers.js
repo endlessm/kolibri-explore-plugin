@@ -69,6 +69,8 @@ function _fetchCarouselNodes(store) {
         const base = `/topics/${node.channel_id}`;
         if (node.kind === 'topic') {
           node.nodeUrl = `${base}/t/${node.id}`;
+        } else if (node.parent === node.channel_id) {
+          node.nodeUrl = `${base}`;
         } else {
           node.nodeUrl = `${base}/c/${node.id}`;
         }
