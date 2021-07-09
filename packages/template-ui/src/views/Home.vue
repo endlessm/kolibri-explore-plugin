@@ -18,12 +18,22 @@
       <FilterContent v-if="hasFilters" />
 
       <div v-if="isFilterEmpty">
-        <CardGrid
-          v-if="contentNodes.length"
-          :nodes="contentNodes"
-          :mediaQuality="mediaQuality"
-          :cardColumns="cardColumns"
-        />
+        <b-container v-if="contentNodes.length && displayHeroContent">
+          <CarouselCard
+            v-for="node in contentNodes"
+            :key="'node-' + node.id"
+            :node="node"
+            :style="{ cursor: 'pointer', marginBottom: '2rem' }"
+            @click="goToContent(node)"
+          />
+        </b-container>
+        <div v-else-if="contentNodes.length">
+          <CardGrid
+            :nodes="contentNodes"
+            :mediaQuality="mediaQuality"
+            :cardColumns="cardColumns"
+          />
+        </div>
         <div
           v-for="section in mainSections"
           :key="section.id"
@@ -52,6 +62,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import _ from 'underscore';
+import { goToContent } from 'kolibri-api';
 
 export default {
   name: 'Home',
@@ -67,6 +78,7 @@ export default {
       'hasSectionsSearch',
       'hasCarousel',
       'hasFilters',
+      'displayHeroContent',
     ]),
     ...mapGetters({
       mainSections: 'mainSections',
@@ -101,6 +113,7 @@ export default {
         this.nodes.find((m) => m.id === n.id)
       ));
     },
+    goToContent,
   },
 };
 </script>
