@@ -1,49 +1,43 @@
 <template>
-  <ContentLink :url="url" :node="node">
-    <b-carousel-slide>
-      <template #img>
-        <b-card>
-          <template>
-            <div class="img" :style="backgroundStyle"></div>
-            <b-card-text>
-              <div class="card-content">
-                <h3 class="d-lg-block d-none mb-1 title">
-                  <VClamp autoresize :maxLines="3">
-                    {{ node.title }}
-                  </VClamp>
-                </h3>
-                <h4 class="d-lg-none mb-1 title">
-                  <VClamp autoresize :maxLines="4">
-                    {{ node.title }}
-                  </VClamp>
-                </h4>
-                <div class="d-flex justify-content-between">
-                  <div v-if="showChannelIcon" class="align-items-center d-flex">
-                    <ChannelLogo class="mr-2" :channel="node.channel" size="sm" />
-                    <span class="text-muted">{{ node.channel.title }}</span>
-                  </div>
-                  <p v-else class="align-self-center mb-1 subtitle text-muted text-truncate">
-                    {{ subtitle }}
-                  </p>
-                  <PlayButton
-                    class="ml-auto"
-                    :kind="node.kind"
-                    @click="goToContent(node)"
-                  />
-                </div>
-              </div>
-            </b-card-text>
-          </template>
-        </b-card>
-      </template>
-    </b-carousel-slide>
-  </ContentLink>
+  <b-card @click.stop="$emit('click')">
+    <template>
+      <div class="img" :style="backgroundStyle"></div>
+      <b-card-text>
+        <div class="card-content">
+          <h3 class="d-lg-block d-none mb-1 title">
+            <VClamp autoresize :maxLines="3">
+              {{ node.title }}
+            </VClamp>
+          </h3>
+          <h4 class="d-lg-none mb-1 title">
+            <VClamp autoresize :maxLines="4">
+              {{ node.title }}
+            </VClamp>
+          </h4>
+          <div class="d-flex justify-content-between">
+            <div v-if="showChannelIcon" class="align-items-center d-flex">
+              <ChannelLogo class="mr-2" :channel="node.channel" size="sm" />
+              <span class="text-muted">{{ node.channel.title }}</span>
+            </div>
+            <p v-else class="align-self-center mb-1 subtitle text-muted text-truncate">
+              {{ subtitle }}
+            </p>
+            <PlayButton
+              class="ml-auto"
+              :kind="node.kind"
+              @click="goToContent(node)"
+            />
+          </div>
+        </div>
+      </b-card-text>
+    </template>
+  </b-card>
 </template>
 
 <script>
 import VClamp from 'vue-clamp';
 import { goToContent } from 'kolibri-api';
-import { getNodeUrl, getCardSubtitle } from '../utils';
+import { getCardSubtitle } from '../utils';
 import cardMixin from './mixins/cardMixin';
 
 export default {
@@ -69,9 +63,6 @@ export default {
       return {
         backgroundImage: `url("${bg}")`,
       };
-    },
-    url() {
-      return getNodeUrl(this.node);
     },
     subtitle() {
       let fallback = '';

@@ -7,12 +7,20 @@
       :interval="interval"
       class="bg-secondary rounded-lg shadow"
     >
-      <CarouselCard
+      <b-carousel-slide
         v-for="node in nodes"
         :key="'item-' + node.id"
-        :showChannelIcon="showChannelIcon"
-        :node="node"
-      />
+      >
+        <template #img>
+
+          <ContentLink :url="getNodeUrl(node)">
+            <CarouselCard
+              :showChannelIcon="showChannelIcon"
+              :node="node"
+            />
+          </ContentLink>
+        </template>
+      </b-carousel-slide>
     </b-carousel>
   </b-container>
 </template>
@@ -20,6 +28,7 @@
 <script>
 
 import { CarouselInterval } from '../constants';
+import { getNodeUrl } from '../utils';
 
 export default {
   name: 'Carousel',
@@ -35,6 +44,9 @@ export default {
       slide: 0,
       interval: CarouselInterval,
     };
+  },
+  methods: {
+    getNodeUrl,
   },
 };
 </script>
