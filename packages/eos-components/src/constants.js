@@ -5,6 +5,7 @@ export const MediaTypeVerbs = {
   'document': 'Read',
   'exercise': 'Practice',
   'html5': 'Interact',
+  'zim': 'Interact',
 };
 
 export const MediaQuality = {
@@ -20,6 +21,7 @@ export const LabelPerKind = {
   audio: 'audios',
   document: 'documents',
   html5: 'applications',
+  zim: 'articles',
 };
 
 export const StructuredTags = {

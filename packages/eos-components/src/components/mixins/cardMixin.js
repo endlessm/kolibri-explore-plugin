@@ -69,6 +69,7 @@ export default {
         case 'video':
           return VideoThumb;
         case 'html5':
+        case 'zim':
           return AppThumb;
         default:
           return BundleThumb;

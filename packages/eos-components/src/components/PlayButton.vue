@@ -52,6 +52,7 @@ export default {
         case 'exercise':
           return 'ClipboardTextOutlineIcon';
         case 'html5':
+        case 'zim':
           return 'ShapeOutlineIcon';
         case 'bundle':
           return 'PlayBoxMultipleOutlineIcon';
@@ -64,7 +65,7 @@ export default {
       if (this.label) {
         return this.label;
       }
-      return MediaTypeVerbs[this.kind].toUpperCase();
+      return MediaTypeVerbs[this.kind];
     },
   },
 };
@@ -77,6 +78,7 @@ export default {
   // Align the text with the material design icons:
   line-height: 12px;
   vertical-align: text-bottom;
+  text-transform: uppercase;
 }
 
 </style>
