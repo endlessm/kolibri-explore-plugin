@@ -10,6 +10,7 @@ export const CustomChannelApps = {
   '3160899a73564d8a8467284d9219b91c': 'terminal-two',
   '057f871caa405ec29d62ba0523c193d7': 'music',
   efcc464be5a85ba5a58d1636b00313fc: 'gardening',
+  f62db29be20453c4a267132e93a9e602: 'wikipedia',
 };
 
 export function getAppNameByID(id) {
