@@ -18,9 +18,17 @@
         @clear-input="clearInput"
       />
       <b-container class="pb-5 pt-3">
-        <h5 v-if="!hasResults && !loading" class="text-center">
-          Type something to search for channels and content.
-        </h5>
+        <div v-if="!hasResults && !loading" class="align-items-center d-flex">
+          <h5 class="mb-0 text-muted">
+            Topic Ideas
+          </h5>
+          <ButtonsBar
+            class="ml-3"
+            title="More Topics"
+            :buttons="searchTerms"
+            @click="goToTerm"
+          />
+        </div>
         <div v-if="resultChannels">
           <h4 class="text-muted">
             Channels
@@ -86,7 +94,7 @@
   import { utils, constants, responsiveMixin } from 'eos-components';
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 
-  import { PageNames } from '../constants';
+  import { PageNames, searchTerms } from '../constants';
   import { searchChannels } from '../modules/topicsRoot/handlers';
 
   export default {
@@ -175,6 +183,9 @@
 
         return 3;
       },
+      searchTerms() {
+        return searchTerms;
+      },
     },
     watch: {
       cleanedQuery() {
@@ -199,6 +210,9 @@
           name: PageNames.TOPICS_CHANNEL,
           params: { channel_id: channelId },
         });
+      },
+      goToTerm(term) {
+        this.query = term;
       },
       search(query) {
         if (!query) {

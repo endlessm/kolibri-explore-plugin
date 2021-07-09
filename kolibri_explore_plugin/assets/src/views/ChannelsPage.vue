@@ -85,17 +85,12 @@
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import _ from 'underscore';
   import { responsiveMixin } from 'eos-components';
-  import { PageNames } from '../constants';
+  import { PageNames, searchTerms } from '../constants';
   import { getBigThumbnail } from '../customApps';
 
   export default {
     name: 'ChannelsPage',
     mixins: [commonCoreStrings, responsiveMixin],
-    data() {
-      return {
-        searchTerms: ['STEM', 'Games', 'Fitness', 'Cooking', 'Arts'],
-      };
-    },
     computed: {
       ...mapState('topicsRoot', { channels: 'rootNodes', carouselNodes: 'carouselNodes' }),
       ...mapState(['core']),
@@ -126,6 +121,9 @@
         }
 
         return 3;
+      },
+      searchTerms() {
+        return searchTerms;
       },
     },
     methods: {
