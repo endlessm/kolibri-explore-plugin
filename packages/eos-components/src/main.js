@@ -15,11 +15,9 @@ import DummyButton from './components/DummyButton.vue';
 import Footer from './components/Footer.vue';
 import GridPage from './components/GridPage.vue';
 import Header from './components/Header.vue';
-import HighResCard from './components/HighResCard.vue';
-import LowResCard from './components/LowResCard.vue';
 import PaginatedCardGrid from './components/PaginatedCardGrid.vue';
 import PlayButton from './components/PlayButton.vue';
-import RegularCard from './components/RegularCard.vue';
+import ContentCard from './components/ContentCard.vue';
 import SearchBar from './components/SearchBar.vue';
 import SlidableCardGrid from './components/SlidableCardGrid.vue';
 import TopicCard from './components/TopicCard.vue';
@@ -48,11 +46,9 @@ const components = {
   Footer,
   GridPage,
   Header,
-  HighResCard,
-  LowResCard,
   PaginatedCardGrid,
   PlayButton,
-  RegularCard,
+  ContentCard,
   SearchBar,
   SlidableCardGrid,
   TopicCard,

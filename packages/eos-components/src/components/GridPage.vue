@@ -1,5 +1,5 @@
 <template>
-  <b-row :noGutters="isHighQualityMedia">
+  <b-row>
     <b-col
       v-for="node in nodes"
       :key="node.id"
@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import { MediaQuality } from '../constants';
 
 export default {
   name: 'GridPage',
@@ -21,11 +20,6 @@ export default {
     nodes: Array,
     mediaQuality: String,
     cardColumns: Object,
-  },
-  computed: {
-    isHighQualityMedia() {
-      return this.mediaQuality === MediaQuality.HIGH;
-    },
   },
 };
 </script>

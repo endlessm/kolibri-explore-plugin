@@ -160,12 +160,21 @@
     <b-row>
       <b-col
         v-for="node in [...topicNodes.slice(0, 1), ...contentNodes.slice(0, 1)]"
-        :key="node.id"
+        :key="node.id + 'hi'"
         lg="3"
         md="6"
         xs="12"
       >
         <Card :node="node" mediaQuality="regular" />
+      </b-col>
+      <b-col
+        v-for="node in [...topicNodes.slice(0, 1), ...contentNodes.slice(0, 1)]"
+        :key="node.id + 'low'"
+        lg="3"
+        md="6"
+        xs="12"
+      >
+        <Card :node="node" mediaQuality="low" />
       </b-col>
     </b-row>
 
