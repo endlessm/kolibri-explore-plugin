@@ -1,7 +1,7 @@
 <template>
 
   <div class="channels-page d-flex flex-column min-vh-100">
-    <Header class="header" @click-logo="goToTop">
+    <Header class="discovery-header" @click-logo="goToTop">
       <b-nav-text class="btn d-md-block d-none pl-0">
         Endless Discovery
       </b-nav-text>
@@ -166,8 +166,9 @@
     background-color: white;
   }
 
-  .header {
-    background: white;
+  .discovery-header {
+    background: $gray-300;
+    border-bottom: 1px solid $gray-400;
   }
 
   .channels-page {
