@@ -14,7 +14,6 @@
       <SearchBar
         v-model="query"
         :debounce="800"
-        :loading="isLoading"
         @clear-input="clearInput"
       />
       <b-container class="pb-5 pt-3">
@@ -28,6 +27,9 @@
             :buttons="searchTerms"
             @click="goToTerm"
           />
+        </div>
+        <div v-if="isLoading" class="placeholder">
+          <CardGridPlaceholder />
         </div>
         <div v-if="resultChannels">
           <h4 class="text-muted">
