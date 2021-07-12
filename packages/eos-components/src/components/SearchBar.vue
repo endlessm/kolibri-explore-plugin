@@ -9,9 +9,14 @@
           </b-input-group-text>
         </template>
         <template #append>
-          <span v-if="value" @click="clearSearchInput">
-            <b-icon-x />
-          </span>
+          <b-button
+            v-if="value"
+            variant="link"
+            class="text-muted"
+            @click="clearSearchInput"
+          >
+            <b-icon-x-circle scale="2" />
+          </b-button>
         </template>
         <input
           ref="searchInput"
@@ -78,6 +83,7 @@
     border: none;
     box-shadow: none;
   }
+  font-size: $h5-font-size;
 }
 
 .input-group-text {
@@ -88,7 +94,6 @@
 .search-row {
   background-color: $white;
   margin-bottom: $jumbotron-padding;
-  box-shadow: $btn-active-box-shadow;
 }
 
 </style>
