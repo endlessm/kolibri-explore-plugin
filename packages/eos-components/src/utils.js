@@ -63,9 +63,6 @@ export function getNodeUrl(node, channelId) {
   if (node.kind === 'topic') {
     return `/t/${node.id}`;
   }
-  if (node.parent === node.channel_id) {
-    return '/';
-  }
   return `/c/${node.id}`;
 };
 
