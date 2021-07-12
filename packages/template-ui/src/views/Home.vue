@@ -23,7 +23,7 @@
             v-for="node in contentNodes"
             :key="'node-' + node.id"
             :node="node"
-            :style="{ cursor: 'pointer', marginBottom: '2rem' }"
+            class="template-ui-hero-card"
             @click="goToContent(node)"
           />
         </b-container>
@@ -117,3 +117,17 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import '../styles.scss';
+
+::v-deep .template-ui-hero-card {
+  cursor: pointer;
+  margin-bottom: 2rem;
+
+  .subtitle {
+    display: none;
+  }
+}
+
+</style>
