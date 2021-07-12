@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     getThumbnail() {
-      if (!this.node.thumbnail || this.node.useDefaultThumbnail) {
+      if (!this.node.thumbnail && this.node.useDefaultThumbnail) {
         this.thumbnail = this.getAsset('defaultThumbnail');
         return;
       }
