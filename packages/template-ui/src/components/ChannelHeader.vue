@@ -12,10 +12,16 @@
           <h1 class="d-md-none h3">
             {{ section.title }}
           </h1>
-          <h1 class="d-md-block d-none">
+          <h1
+            class="d-md-block d-none"
+            :class="{ 'text-light': hasDarkHeader }"
+          >
             {{ section.title }}
           </h1>
-          <div class="lead mb-2 text-muted">
+          <div
+            class="lead mb-2"
+            :class="{ 'text-light': hasDarkHeader, 'text-muted': !hasDarkHeader }"
+          >
             {{ headerDescription }}
           </div>
         </b-col>
@@ -37,7 +43,7 @@ export default {
   name: 'ChannelHeader',
   mixins: [headerMixin],
   computed: {
-    ...mapState(['displayLogoInHeader']),
+    ...mapState(['displayLogoInHeader', 'hasDarkHeader']),
     ...mapGetters(['headerDescription']),
   },
 };

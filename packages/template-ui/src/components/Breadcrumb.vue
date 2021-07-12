@@ -13,12 +13,17 @@
       v-if="node.ancestors && node.ancestors.length"
       class="bg-transparent breadcrumb flex-nowrap px-2"
     >
-      <li v-if="isShortened" class="active breadcrumb-item">
+      <li
+        v-if="isShortened"
+        class="active breadcrumb-item"
+        :class="{ 'text-light': hasDarkHeader }"
+      >
         ...
       </li>
       <template v-if="xs || sm">
         <li
           class="breadcrumb-item text-truncate"
+          :class="{ 'text-light': hasDarkHeader }"
         >
           <b-link
             :to="getTopicUrl(parentNode)"
@@ -32,6 +37,7 @@
           v-for="a in node.ancestors.slice(-maxBreadcrumbs)"
           :key="a.id"
           class="breadcrumb-item text-truncate"
+          :class="{ 'text-light': hasDarkHeader }"
         >
           <b-link
             :to="getTopicUrl(a)"
@@ -45,7 +51,10 @@
       v-else
       class="bg-transparent breadcrumb px-2"
     >
-      <li class="breadcrumb-item text-truncate">
+      <li
+        class="breadcrumb-item text-truncate"
+        :class="{ 'text-light': hasDarkHeader }"
+      >
         <b-link
           :to="getNodeUrl(node)"
         >
@@ -73,7 +82,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['channel']),
+    ...mapState(['channel', 'hasDarkHeader']),
     parentNode() {
       if (!this.node.ancestors || !this.node.ancestors.length) {
         return null;
