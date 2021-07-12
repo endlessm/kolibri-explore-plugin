@@ -26,3 +26,5 @@ export const pageNameToModuleMap = {
 export const CUSTOM_PRESENTATION_TITLE = 'custom-channel-ui';
 
 export const CarouselItems = 5;
+
+export const searchTerms = ['STEM', 'Games', 'Fitness', 'Cooking', 'Arts'];

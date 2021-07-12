@@ -49,30 +49,7 @@
       </b-container>
     </div>
 
-    <Footer class="flex-shrink-0 mt-auto">
-      <template #left>
-        <h3 class="text-muted">
-          <strong>The Endless Key Discovery</strong> — content to help you do
-          your homework and discover curiosity you didn't even know you had,
-          even without internet.
-        </h3>
-      </template>
-      <template #right>
-        <p class="text-muted">
-          The Endless Key initiative is brought to you by the Endless OS
-          Foundation in partnership with Common Sense and Learning
-          Equality
-        </p>
-        <b-button
-          pill
-          variant="outline-secondary"
-          target="_blank"
-          href="https://www.endlessos.org/key"
-        >
-          Learn more <b-icon-chevron-right />
-        </b-button>
-      </template>
-    </Footer>
+    <DiscoveryFooter />
 
   </div>
 
@@ -85,17 +62,15 @@
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import _ from 'underscore';
   import { responsiveMixin } from 'eos-components';
-  import { PageNames } from '../constants';
+  import { PageNames, searchTerms } from '../constants';
   import { getBigThumbnail } from '../customApps';
+
+  import DiscoveryFooter from './DiscoveryFooter';
 
   export default {
     name: 'ChannelsPage',
+    components: { DiscoveryFooter },
     mixins: [commonCoreStrings, responsiveMixin],
-    data() {
-      return {
-        searchTerms: ['STEM', 'Games', 'Fitness', 'Cooking', 'Arts'],
-      };
-    },
     computed: {
       ...mapState('topicsRoot', { channels: 'rootNodes', carouselNodes: 'carouselNodes' }),
       ...mapState(['core']),
@@ -126,6 +101,9 @@
         }
 
         return 3;
+      },
+      searchTerms() {
+        return searchTerms;
       },
     },
     methods: {
