@@ -6,7 +6,7 @@
       pill
       size="sm"
       variant="primary"
-      class="ml-2"
+      class="mr-2"
       @click="$emit('click', button)"
     >
       {{ button }}
@@ -15,7 +15,7 @@
       v-if="buttonsHidden.length"
       ref="dropdown"
       size="sm"
-      class="ml-2"
+      class="mr-2"
       variant="primary"
       text="···"
       noCaret
@@ -34,7 +34,7 @@
             pill
             size="sm"
             variant="primary"
-            class="ml-2 mt-2"
+            class="mr-2 mt-2"
             @click="$emit('click', button)"
           >
             {{ button }}
