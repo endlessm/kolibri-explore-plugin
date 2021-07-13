@@ -35,22 +35,11 @@
               @click="goToTerm"
             />
           </div>
-          <div v-if="resultChannels">
-            <h4 class="text-muted">
-              Channels
-            </h4>
-            <ChannelCardGroup
-              :rows="resultChannels"
-              :hasThumbnail="false"
-              :columns="columns"
-              @card-click="goToChannel"
-            />
-          </div>
         </div>
       </b-container>
 
       <div v-if="resultCards">
-        <div v-for="(nodes, channelId) in resultCards" :key="channelId">
+        <div v-for="(nodes, kind) in resultCards" :key="kind">
           <CardGrid
             id="root"
             :nodes="nodes"
@@ -58,23 +47,32 @@
             :cardColumns="cardColumns"
           >
             <div>
-              <hr>
-              <b-row>
-                <b-col>
-                  <h4 class="text-muted">
-                    {{ channelTitle(channelId) }}
-                  </h4>
-                </b-col>
-                <b-col class="text-primary text-right">
-                  <b-link @click="goToChannel(channelId)">
-                    go to channel <b-icon-arrow-right />
-                  </b-link>
-                </b-col>
-              </b-row>
+              <h4 class="text-muted">
+                <span class="font-weight-normal">
+                  {{ nodes.length }} results for "{{ cleanedQuery }}"
+                </span>
+                to {{ groupVerb(kind) }}
+              </h4>
             </div>
           </CardGrid>
+          <hr>
         </div>
       </div>
+
+      <b-container class="pb-5 pt-3">
+        <div v-if="resultChannels">
+          <h4 class="text-muted">
+            {{ searchResult.channels.length }} channels related to "{{ cleanedQuery }}"
+          </h4>
+          <ChannelCardGroup
+            variant="smallCard"
+            :rows="resultChannels"
+            :columns="columns"
+            @card-click="goToChannel"
+          />
+        </div>
+      </b-container>
+
     </div>
 
     <div v-if="recommended && isNoResults" class="flex-shrink-0 pt-5 recommended">
@@ -192,8 +190,8 @@
           }
         });
 
-        // Group by channel
-        const grouped = _.groupBy(nodes, n => n.channel_id);
+        // Group by content kind
+        const grouped = _.groupBy(nodes, n => n.kind);
 
         return grouped;
       },
@@ -250,9 +248,8 @@
       clearInput() {
         this.query = '';
       },
-      channelTitle(channelId) {
-        const channel = this.searchResult.channels.find(c => c.id === channelId);
-        return channel ? channel.title : channelId;
+      groupVerb(kind) {
+        return constants.MediaTypeVerbs[kind === 'topic' ? 'bundle' : kind];
       },
       getBigThumbnail(channel) {
         return getBigThumbnail(channel);

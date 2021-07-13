@@ -11,6 +11,7 @@
         :key="channel.id"
         :channel="channel"
         :thumbnail="getThumbnail(channel)"
+        :variant="variant"
         @click.native="$emit('card-click', channel.id)"
       />
 
@@ -45,6 +46,10 @@
       getThumbnail: {
         type: Function,
         default: () => '',
+      },
+      variant: {
+        type: String,
+        default: 'basicCard',
       },
     },
   }
