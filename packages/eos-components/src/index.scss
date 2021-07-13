@@ -46,6 +46,9 @@
   font-weight: $headings-font-weight;
   background-color: $header-color;
 }
+.breadcrumb-item.text-light a {
+  color: $light;
+};
 
 .badge {
   font-family: $headings-font-family;

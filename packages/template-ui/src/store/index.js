@@ -66,6 +66,7 @@ const initialState = {
 
   mediaQuality: ComponentConstants.MediaQuality.REGULAR,
   displayLogoInHeader: true,
+  hasDarkHeader: false,
   hasSectionsSearch: true,
   hasCarousel: true,
   hasFilters: true,
