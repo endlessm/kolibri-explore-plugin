@@ -42,6 +42,7 @@
         <div v-for="(nodes, kind) in resultCards" :key="kind">
           <CardGrid
             id="root"
+            variant="collapsible"
             :nodes="nodes"
             :mediaQuality="mediaQuality"
             :cardColumns="cardColumns"
