@@ -8,9 +8,13 @@
         {{ node.title }}
       </VClamp>
     </h5>
-    <div v-if="showChannelIcon" class="align-items-center d-flex mb-1">
-      <ChannelLogo class="mr-2" :channel="node.channel" size="sm" />
-      <span class="text-muted text-truncate">{{ node.channel.title }}</span>
+    <div v-if="showChannelIcon">
+      <h6 class="align-items-center d-flex mb-1 text-muted">
+        <ChannelLogo class="mr-2" :channel="node.channel" size="sm" />
+        <span class="text-truncate">
+          {{ node.channel.title }}
+        </span>
+      </h6>
     </div>
     <p v-else class="mb-1 subtitle text-muted text-truncate">
       {{ subtitle }}
