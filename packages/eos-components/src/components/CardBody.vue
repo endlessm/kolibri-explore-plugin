@@ -1,6 +1,6 @@
 <template>
   <div class="card-content">
-    <h5 class="mb-0 title">
+    <h5 class="mb-1 title">
       <VClamp
         autoresize
         :maxLines="titleLines"
