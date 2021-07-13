@@ -32,7 +32,7 @@
       v-if="nextNodesInTopic.length"
       :nodes="nextNodesInTopic"
       :cardColumns="cardColumns"
-      class="my-grid"
+      class="next-grid"
     >
       <h4 class="next-title text-dark text-truncate w-75">
         Next in {{ section.title }}
@@ -68,3 +68,14 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import '@/styles.scss';
+
+$big-spacer: $spacer * 3.5;
+
+.next-grid {
+  margin-top: $big-spacer !important;
+}
+
+</style>
