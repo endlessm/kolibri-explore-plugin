@@ -7,6 +7,9 @@ export const CustomChannelApps = {
   '3e464ee12f6a50a781cddf59147b48b1': 'sikana',
   f5f6729f95b55753badeaa066fa6e986: 'healthy-body',
   '4e413158eac55422a5343af9fcfa8d59': 'healthy-mind',
+  '3160899a73564d8a8467284d9219b91c': 'terminal-two',
+  '057f871caa405ec29d62ba0523c193d7': 'music',
+  efcc464be5a85ba5a58d1636b00313fc: 'gardening',
 };
 
 export function getAppNameByID(id) {
@@ -28,6 +31,8 @@ export const ThumbApps = [
   'pbs-kids',
   'healthy-body',
   'healthy-mind',
+  'terminal-two',
+  'gardening',
 ];
 
 export const GameAppIDs = [
