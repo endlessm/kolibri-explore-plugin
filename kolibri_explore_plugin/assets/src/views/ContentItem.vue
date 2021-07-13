@@ -193,7 +193,7 @@
   }
 
   .content-item--dark::v-deep .content-renderer .fullscreen-header {
-    color: $gray-300;
+    color: $gray-300 !important;
     background-color: $lightbox-toolbar !important;
 
     .button {

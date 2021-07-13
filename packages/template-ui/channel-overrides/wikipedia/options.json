@@ -1,0 +1,9 @@
+{
+  "displayLogoInHeader": true,
+  "hasSectionsSearch": false,
+  "hasCarousel": false,
+  "hasFilters": false,
+  "displayHeroContent": true,
+  "isEndlessApp": true,
+  "bundleKind": "simple"
+}

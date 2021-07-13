@@ -70,6 +70,7 @@ const initialState = {
   hasSectionsSearch: true,
   hasCarousel: true,
   hasFilters: true,
+  displayHeroContent: false,
   isEndlessApp: false,
   bundleKind: null,
 };

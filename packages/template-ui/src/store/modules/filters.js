@@ -60,6 +60,7 @@ const ContentNodeKinds = [
   'exam',
   'lesson',
   'slideshow',
+  'zim',
 ];
 
 function contentKindToVerb(value) {
