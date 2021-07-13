@@ -11,7 +11,7 @@
       fluid
       :src="thumbnail"
       :alt="node.title"
-      class="d-block mx-auto rounded"
+      class="border d-block mx-auto rounded"
     />
   </div>
 </template>
