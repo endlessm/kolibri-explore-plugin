@@ -20,10 +20,10 @@ export default {
   },
   computed: {
     cardVariant() {
-      if (this.node.kind === 'topic') {
-        return 'TopicCard';
+      if (this.node.kind !== 'topic' || this.isBundle) {
+        return 'ContentCard';
       }
-      return 'ContentCard';
+      return 'TopicCard';
     },
     subtitle() {
       let fallback = '';
@@ -36,6 +36,11 @@ export default {
       return getCardSubtitle(this.node, fallback);
     },
     isBundle() {
+      if ('isBundle' in this.node) {
+        return this.node.isBundle;
+      }
+      // FIXME we shouldn't look at the store to check if this node represents a bundle.
+      // Instead, we should traverse all nodes and add the isBundle flag above at load time.
       if (this.$store) {
         const { getters } = this.$store;
         if (getters.isSimpleBundle && getters.showAsBundle(this.node)) {

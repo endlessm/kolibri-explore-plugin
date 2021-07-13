@@ -27,9 +27,8 @@
         <b-card-text>
           <CardBody :node="node" :subtitle="subtitle" />
           <PlayButton
-            :kind="node.kind"
-            :label="label"
-            @click="goToContent(node)"
+            :kind="kind"
+            @click="onClick"
           />
         </b-card-text>
       </b-card-body>
@@ -48,6 +47,7 @@ export default {
   props: {
     node: Object,
     subtitle: String,
+    isBundle: Boolean,
     url: String,
     mediaQuality: String,
   },
@@ -69,9 +69,21 @@ export default {
         backgroundImage: `url("${this.thumbnail}")`,
       };
     },
+    kind() {
+      if (this.isBundle) {
+        return 'bundle';
+      }
+      return this.node.kind;
+    },
   },
   methods: {
-    goToContent,
+    onClick() {
+      if (this.kind === 'bundle') {
+        this.$router.push(this.url);
+      } else {
+        goToContent(this.node);
+      }
+    },
   },
 };
 </script>

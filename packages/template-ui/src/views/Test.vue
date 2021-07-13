@@ -199,6 +199,8 @@ export default {
           title: 'A topic',
           description: 'This is a topic.',
           useDefaultThumbnail: true,
+          isBundle: false,
+          structuredTags: {},
         },
         // Topic node with long title:
         {
@@ -207,6 +209,8 @@ export default {
           title: lorem,
           description: '',
           useDefaultThumbnail: true,
+          isBundle: false,
+          structuredTags: {},
         },
         // Topic node with long description:
         {
@@ -215,6 +219,8 @@ export default {
           title: 'A topic',
           description: lorem,
           useDefaultThumbnail: true,
+          isBundle: false,
+          structuredTags: {},
         },
         // Topic node with long title and description:
         {
@@ -223,6 +229,8 @@ export default {
           title: lorem,
           description: lorem,
           useDefaultThumbnail: true,
+          isBundle: false,
+          structuredTags: {},
         },
       ],
       contentNodes: [
@@ -258,9 +266,18 @@ export default {
           useDefaultThumbnail: true,
           structuredTags: {},
         },
-        // FIXME: add bundle card here.
         {
           id: 'c4',
+          kind: 'topic',
+          title: 'A bundle',
+          description: 'Wont appear',
+          author: 'Endless',
+          useDefaultThumbnail: true,
+          isBundle: true,
+          structuredTags: {},
+        },
+        {
+          id: 'c5',
           kind: 'audio',
           title: 'An audio',
           author: 'Endless',
