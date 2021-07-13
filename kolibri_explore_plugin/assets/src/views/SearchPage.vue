@@ -79,9 +79,14 @@
 
     <div v-if="recommended && isNoResults" class="flex-shrink-0 pt-5 recommended">
       <b-container v-if="recommended" class="pb-5 pt-3">
-        <h4 class="text-muted">
+        <h3 class="text-muted">
           Explore
-        </h4>
+        </h3>
+        <h5>
+          <b-link @click="goBack">
+            See all channels <b-icon-arrow-right />
+          </b-link>
+        </h5>
         <ChannelCardGroup
           :rows="recommended"
           :getThumbnail="getBigThumbnail"
