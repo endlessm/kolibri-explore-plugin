@@ -8,9 +8,9 @@
         {{ node.title }}
       </VClamp>
     </h5>
-    <div v-if="showChannelIcon" class="align-items-center d-flex mb-1">
+    <div v-if="showChannelIcon" class="align-items-center d-flex mb-3">
       <ChannelLogo class="mr-2" :channel="node.channel" size="sm" />
-      <span class="text-muted text-truncate">{{ node.channel.title }}</span>
+      <span class="channel-title text-muted text-truncate">{{ node.channel.title }}</span>
     </div>
     <p v-else class="mb-1 subtitle text-muted text-truncate">
       {{ subtitle }}
@@ -80,6 +80,12 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.channel-title {
+  font-family: $btn-font-family;
+  font-size: $btn-font-size;
+  font-weight: $btn-font-weight;
 }
 
 .subtitle {
