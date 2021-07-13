@@ -24,13 +24,13 @@
         <div class="card-img" :style="cardStyle">
           <span class="sr-only">{{ node.title }}</span>
         </div>
-        <b-card-text>
+        <div class="body-wrapper">
           <CardBody :node="node" :subtitle="subtitle" />
           <PlayButton
             :kind="kind"
             @click="onClick"
           />
-        </b-card-text>
+        </div>
       </b-card-body>
     </ContentLink>
   </b-card>
@@ -102,7 +102,7 @@ export default {
 .card-body {
   padding: 0;
 }
-.card-text {
+.body-wrapper {
   padding: $card-spacer-x;
 }
 

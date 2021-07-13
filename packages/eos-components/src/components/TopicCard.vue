@@ -25,41 +25,47 @@
           <span class="sr-only">{{ node.title }}</span>
         </div>
         <div class="body-wrapper">
-          <b-card-title>
-            <VClamp
-              autoresize
-              :maxLines="titleMaxLines"
-              @clampchange="(e) => isTitleClamped = e"
-            >
-              {{ node.title }}
-            </VClamp>
-          </b-card-title>
-          <b-card-text>
-            <VClamp
-              autoresize
-              :maxLines="descriptionMaxLines"
-            >
-              {{ node.description }}
-            </VClamp>
+          <div class="card-content">
+            <b-card-title titleTag="h5" class="mb-1">
+              <VClamp
+                autoresize
+                :maxLines="titleMaxLines"
+                @clampchange="(e) => isTitleClamped = e"
+              >
+                {{ node.title }}
+              </VClamp>
+            </b-card-title>
+            <b-card-text>
+              <VClamp
+                autoresize
+                :maxLines="descriptionMaxLines"
+              >
+                {{ node.description }}
+              </VClamp>
+            </b-card-text>
+          </div>
+          <b-card-text class="my-1">
+            <ImageFilterNoneIcon />
+            <span class="ml-2 subtitle">
+              {{ subtitle }}
+            </span>
           </b-card-text>
         </div>
       </b-card-body>
-      <b-card-footer class="text-truncate">
-        <b-icon-files class="mr-2" />
-        {{ subtitle }}
-      </b-card-footer>
     </ContentLink>
   </b-card>
 </template>
 
 <script>
 import VClamp from 'vue-clamp';
+import ImageFilterNoneIcon from 'vue-material-design-icons/ImageFilterNone.vue';
 import { MediaQuality, ThumbnailSize } from '../constants';
 import cardMixin from './mixins/cardMixin.js';
 
 export default {
   name: 'TopicCard',
   components: {
+    ImageFilterNoneIcon,
     VClamp,
   },
   mixins: [cardMixin],
@@ -90,15 +96,15 @@ export default {
     },
     titleMaxLines() {
       if (!this.node.description) {
-        return 4;
+        return 5;
       }
       return 2;
     },
     descriptionMaxLines() {
       if (this.isTitleClamped) {
-        return 2;
+        return 3;
       }
-      return 3;
+      return 4;
     }
   },
 };
@@ -112,8 +118,7 @@ export default {
 }
 
 .card-body {
-  border-top-left-radius: $border-radius-lg;
-  border-top-right-radius: $border-radius-lg;
+  border-radius: $border-radius-lg;
   justify-content: space-between;
 }
 
@@ -131,11 +136,13 @@ export default {
 }
 
 // This is solely to match the content card height:
-$missing-height: 23px;
+$missing-height: 2px;
 
 .body-wrapper {
   padding: $card-spacer-x;
-  height: calc(#{card-body-height(2)} + #{$missing-height});
+}
+.card-content {
+  height: calc(#{card-body-height(2)} - #{$missing-height});
 }
 
 .low-quality-img {
@@ -148,6 +155,12 @@ $missing-height: 23px;
   background-size: cover;
   background-position: center;
   padding-top: $card-image-ar;
+}
+
+.subtitle {
+  font-family: $btn-font-family;
+  font-size: $btn-font-size;
+  font-weight: $btn-font-weight;
 }
 
 </style>
