@@ -17,30 +17,35 @@
         @clear-input="clearInput"
       />
       <b-container class="pb-5 pt-3">
-        <div v-if="!hasResults && !isLoading" class="align-items-center d-flex">
-          <h5 class="mb-0 text-muted">
-            Topic Ideas
-          </h5>
-          <ButtonsBar
-            class="ml-3"
-            title="More Topics"
-            :buttons="searchTerms"
-            @click="goToTerm"
-          />
-        </div>
         <div v-if="isLoading" class="placeholder">
           <CardGridPlaceholder />
         </div>
-        <div v-if="resultChannels">
-          <h4 class="text-muted">
-            Channels
-          </h4>
-          <ChannelCardGroup
-            :rows="resultChannels"
-            :hasThumbnail="false"
-            :columns="columns"
-            @card-click="goToChannel"
-          />
+        <div v-else>
+          <div v-if="isNoResults" class="empty mb-4 w-50">
+            <h1>Sorry, we can’t find any content that matches your search.</h1>
+            <h5>You can try to use fewer words or try one of the channel suggestions bellow.</h5>
+          </div>
+          <div v-if="isEmpty || isNoResults" class="align-items-center d-flex">
+            <h5 v-if="isEmpty" class="mb-0 mr-3 text-muted">
+              Topic Ideas
+            </h5>
+            <ButtonsBar
+              title="More Topics"
+              :buttons="searchTerms"
+              @click="goToTerm"
+            />
+          </div>
+          <div v-if="resultChannels">
+            <h4 class="text-muted">
+              Channels
+            </h4>
+            <ChannelCardGroup
+              :rows="resultChannels"
+              :hasThumbnail="false"
+              :columns="columns"
+              @card-click="goToChannel"
+            />
+          </div>
         </div>
       </b-container>
 
@@ -72,7 +77,7 @@
       </div>
     </div>
 
-    <div v-if="recommended && emptySearch" class="flex-shrink-0 pt-5 recommended">
+    <div v-if="recommended && isNoResults" class="flex-shrink-0 pt-5 recommended">
       <b-container v-if="recommended" class="pb-5 pt-3">
         <h4 class="text-muted">
           Explore
@@ -126,11 +131,14 @@
         loading: state => state.core.loading,
         searchTerm: 'searchTerm',
       }),
-      isLoading() {
-        return this.loading && !!this.query.trim();
+      isEmpty() {
+        return !this.query.trim();
       },
-      emptySearch() {
-        return !this.loading && !!this.query.trim() && !this.resultCards;
+      isLoading() {
+        return this.loading && !this.isEmpty;
+      },
+      isNoResults() {
+        return !this.isEmpty && !this.isLoading && !this.resultCards;
       },
       recommended() {
         if (!this.channels || !this.channels.length) {
@@ -149,9 +157,6 @@
       },
       cleanedQuery() {
         return this.query.trim();
-      },
-      hasResults() {
-        return this.searchResult.channels || this.searchResult.result;
       },
       resultChannels() {
         const { channels } = this.searchResult;
@@ -272,6 +277,14 @@
 
   .recommended {
     background-color: $gray-400;
+  }
+
+  .empty h1 {
+    color: $gray-500;
+  }
+
+  .empty h5 {
+    color: $gray-600;
   }
 
 </style>
