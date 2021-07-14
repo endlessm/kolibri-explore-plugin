@@ -27,14 +27,14 @@
           <b-button-close @click="close" />
         </b-dropdown-header>
         <b-dropdown-divider class="my-1" />
-        <div class="filter-content flex-fill">
+        <div class="filter-content flex-fill mx-1">
           <b-button
             v-for="button in buttonsHidden"
             :key="button"
             pill
             size="sm"
             variant="primary"
-            class="mr-2 mt-2"
+            class="mt-2 mx-1"
             @click="$emit('click', button)"
           >
             {{ button }}
