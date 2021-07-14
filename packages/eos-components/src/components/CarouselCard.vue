@@ -1,5 +1,5 @@
 <template>
-  <b-card @click.stop="$emit('click')">
+  <b-card @click="$emit('click')">
     <template>
       <div class="img" :style="backgroundStyle"></div>
       <b-card-text>
