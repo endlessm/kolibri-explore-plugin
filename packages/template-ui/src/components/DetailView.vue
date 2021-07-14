@@ -17,7 +17,7 @@ export default {
 @import '@/styles.scss';
 
 $main-container-top: $navbar-height + $spacer * 4;
-$main-container-bottom: $spacer * 2;
+$main-container-bottom: $spacer * 3.5;
 
 .main-container {
   padding-top: $main-container-top;

@@ -24,14 +24,13 @@
         <div class="card-img" :style="cardStyle">
           <span class="sr-only">{{ node.title }}</span>
         </div>
-        <b-card-text>
+        <div class="body-wrapper">
           <CardBody :node="node" :subtitle="subtitle" />
           <PlayButton
-            :kind="node.kind"
-            :label="label"
-            @click="goToContent(node)"
+            :kind="kind"
+            @click="onClick"
           />
-        </b-card-text>
+        </div>
       </b-card-body>
     </ContentLink>
   </b-card>
@@ -48,6 +47,7 @@ export default {
   props: {
     node: Object,
     subtitle: String,
+    isBundle: Boolean,
     url: String,
     mediaQuality: String,
   },
@@ -69,9 +69,21 @@ export default {
         backgroundImage: `url("${this.thumbnail}")`,
       };
     },
+    kind() {
+      if (this.isBundle) {
+        return 'bundle';
+      }
+      return this.node.kind;
+    },
   },
   methods: {
-    goToContent,
+    onClick() {
+      if (this.kind === 'bundle') {
+        this.$router.push(this.url);
+      } else {
+        goToContent(this.node);
+      }
+    },
   },
 };
 </script>
@@ -90,7 +102,7 @@ export default {
 .card-body {
   padding: 0;
 }
-.card-text {
+.body-wrapper {
   padding: $card-spacer-x;
 }
 
@@ -99,8 +111,7 @@ export default {
 }
 
 .card-img {
-  border-top-left-radius: $border-radius-lg;
-  border-top-right-radius: $border-radius-lg;
+  border-radius: $border-radius-lg $border-radius-lg 0 0;
   background-size: cover;
   background-position: center;
   padding-top: $card-image-ar;

@@ -1,12 +1,13 @@
 import { getThumbnail } from 'kolibri-api';
 import { getFirstStructuredTag } from '../../utils';
-import { StructuredTags } from '../../constants';
+import { MediaQuality, StructuredTags } from '../../constants';
 
 import AppThumb from '../../assets/thumbnails/app.jpg';
 import AudioThumb from '../../assets/thumbnails/audio.jpg';
 import BundleThumb from '../../assets/thumbnails/bundle.jpg';
 import DocumentThumb from '../../assets/thumbnails/document.jpg';
 import ExerciseThumb from '../../assets/thumbnails/exercise.jpg';
+import TopicThumb from '../../assets/thumbnails/topic.png';
 import VideoThumb from '../../assets/thumbnails/video.jpg';
 
 export default {
@@ -59,6 +60,9 @@ export default {
       return fn(name);
     },
     fallbackGetAsset() {
+      if (this.isBundle) {
+        return BundleThumb;
+      }
       switch (this.node.kind) {
         case 'audio':
           return AudioThumb;
@@ -71,8 +75,12 @@ export default {
         case 'html5':
         case 'zim':
           return AppThumb;
+        case 'topic':
         default:
-          return BundleThumb;
+          if (this.mediaQuality === MediaQuality.LOW) {
+            return BundleThumb;
+          }
+          return TopicThumb;
       }
     },
     getDuration() {
