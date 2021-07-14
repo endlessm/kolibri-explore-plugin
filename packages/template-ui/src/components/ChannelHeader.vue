@@ -9,7 +9,10 @@
       </div>
       <b-row>
         <b-col xs="12" sm="8" md="9" lg="9" xl="8">
-          <h1 class="d-md-none h3">
+          <h1
+            class="d-md-none h3"
+            :class="{ 'text-light': hasDarkHeader }"
+          >
             {{ section.title }}
           </h1>
           <h1
