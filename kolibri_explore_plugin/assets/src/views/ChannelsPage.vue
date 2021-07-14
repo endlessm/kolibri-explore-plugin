@@ -13,11 +13,7 @@
           :buttons="searchTerms"
           @click="goToTerm"
         />
-
-        <b-button pill variant="outline-dark" @click="goToSearch">
-          <b-icon-search />
-          <span class="d-md-inline d-none">Search</span>
-        </b-button>
+        <SearchButton @click="goToSearch" />
       </template>
     </Header>
 
