@@ -22,6 +22,8 @@
       </li>
       <template v-if="xs || sm">
         <li
+          v-b-tooltip.hover
+          :title="parentNode.title"
           class="breadcrumb-item text-truncate"
           :class="{ 'text-light': hasDarkHeader }"
         >
@@ -36,6 +38,8 @@
         <li
           v-for="a in node.ancestors.slice(-maxBreadcrumbs)"
           :key="a.id"
+          v-b-tooltip.hover
+          :title="a.title"
           class="breadcrumb-item text-truncate"
           :class="{ 'text-light': hasDarkHeader }"
         >
@@ -52,6 +56,8 @@
       class="bg-transparent breadcrumb px-2"
     >
       <li
+        v-b-tooltip.hover
+        :title="node.title"
         class="breadcrumb-item text-truncate"
         :class="{ 'text-light': hasDarkHeader }"
       >
