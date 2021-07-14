@@ -4,7 +4,7 @@
   </div>
   <CardGrid
     v-else
-    variant="paginated"
+    variant="collapsible"
     :nodes="filteredNodes"
     :mediaQuality="mediaQuality"
     :cardColumns="cardColumns"

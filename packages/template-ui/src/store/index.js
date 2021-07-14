@@ -70,6 +70,7 @@ const initialState = {
   hasSectionsSearch: true,
   hasCarousel: true,
   hasFilters: true,
+  hasFlatGrid: false,
   displayHeroContent: false,
   isEndlessApp: false,
   bundleKind: null,
@@ -80,8 +81,22 @@ const store = new Vuex.Store({
   mutations: {
     setChannelInformation(state, payload) {
       state.channel = payload.channel;
-      state.nodes = utils.parseNodes(payload.nodes, state.bundleKind !== null);
-      state.tree = getNodesTree(payload.nodes);
+      const parsedNodes = utils.parseNodes(payload.nodes, state.bundleKind !== null);
+      if (state.hasFlatGrid) {
+        const rootNode = payload.nodes.find((n) => n.id === payload.channel.id);
+        const contentNodes = parsedNodes
+          .filter((n) => n.kind !== 'topic')
+          .map((n) => {
+            n.parent = rootNode.id;
+            n.ancestors = [rootNode.id];
+            return n;
+          });
+        state.nodes = [rootNode, ...contentNodes];
+        state.tree = getNodesTree(state.nodes);
+      } else {
+        state.nodes = parsedNodes;
+      }
+      state.tree = getNodesTree(state.nodes);
       state.loading = false;
     },
     setContentNavigation(state, payload) {
