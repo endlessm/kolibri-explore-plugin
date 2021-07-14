@@ -9,15 +9,7 @@
           <b-button-group
             class="ml-md-auto mx-1 my-1"
           >
-            <b-button
-              pill
-              class="search-button"
-              variant="outline-dark"
-              to="/search"
-            >
-              <b-icon-search />
-              Search
-            </b-button>
+            <SearchButton to="/search" />
           </b-button-group>
         </b-button-toolbar>
       </b-col>
