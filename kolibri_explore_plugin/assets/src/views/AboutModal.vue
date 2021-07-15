@@ -138,6 +138,11 @@
     overflow-y: scroll;
   }
 
+  .list-group-item {
+    border-right-width: 0;
+    border-left-width: 0;
+  }
+
   ::v-deep .modal-body {
     padding-top: 0;
   }
