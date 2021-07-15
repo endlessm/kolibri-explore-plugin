@@ -30,6 +30,7 @@
         <div v-else-if="contentNodes.length">
           <CardGrid
             :nodes="contentNodes"
+            :variant="hasFlatGrid ? 'collapsible' : 'slidable'"
             :mediaQuality="mediaQuality"
             :cardColumns="cardColumns"
           />
@@ -78,6 +79,7 @@ export default {
       'hasSectionsSearch',
       'hasCarousel',
       'hasFilters',
+      'hasFlatGrid',
       'displayHeroContent',
     ]),
     ...mapGetters({

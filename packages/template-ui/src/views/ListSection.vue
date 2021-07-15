@@ -3,7 +3,7 @@
     :style="{ backgroundImage: backgroundImageURL }"
   >
     <slot></slot>
-    <FilterContent />
+    <FilterContent v-if="hasFilters" />
 
     <div v-if="isFilterEmpty">
       <div v-if="isInlineLevel">
@@ -44,7 +44,7 @@ import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'ListSection',
   computed: {
-    ...mapState(['section', 'cardColumns', 'mediaQuality']),
+    ...mapState(['section', 'cardColumns', 'mediaQuality', 'hasFilters']),
     ...mapGetters({
       isInlineLevel: 'isInlineLevel',
       getAssetURL: 'getAssetURL',
