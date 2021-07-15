@@ -3,7 +3,7 @@
   "description": "Monorepo with kolibri's Discovery page and custom channel presentations.",
   "private": true,
   "scripts": {
-    "build": "lerna run build && yarn deploy:apps && yarn build:plugin && yarn build:info",
+    "build": "lerna run build && yarn deploy:apps && yarn deploy:loading && yarn build:plugin && yarn build:info",
     "build:plugin": "./scripts/set_override.py default && kolibri-tools build prod --plugins kolibri_explore_plugin",
     "build:info": "./scripts/build_info.sh > kolibri_explore_plugin/static/build-info.json",
     "build-dist": "./scripts/clean.sh && yarn clean && yarn build && python setup.py bdist_wheel --universal",
@@ -14,6 +14,7 @@
     "lint-frontend": "kolibri-tools lint -p 'kolibri_explore_plugin/assets/**/*.{js,vue,scss,less,css}'",
     "lint-frontend:format": "yarn run lint-frontend --write",
     "bump-version": "bump2version",
+    "deploy:loading": "cp -rf packages/loading-screen/dist kolibri_explore_plugin/loadingScreen",
     "release": "./scripts/check_can_relese.sh && twine upload -s dist/*"
   },
   "workspaces": [
