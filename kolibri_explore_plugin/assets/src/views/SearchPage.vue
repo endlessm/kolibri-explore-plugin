@@ -43,6 +43,7 @@
           <CardGrid
             id="root"
             variant="collapsible"
+            itemsPerPage="4"
             :nodes="nodes"
             :mediaQuality="mediaQuality"
             :cardColumns="cardColumns"
