@@ -7,15 +7,14 @@
     >
     </div>
     <b-card-header
-      class="pb-3"
-      :class="{ withThumbnail: hasThumbnail }"
+      :class="{ withThumbnail: hasThumbnail, 'pb-3': !isSmall }"
     >
       <ChannelLogo class="mr-3" :channel="channel" size="md" />
       <h6>
         {{ channel.title }}
       </h6>
     </b-card-header>
-    <b-card-text class="pt-2 text-muted">
+    <b-card-text v-if="!isSmall" class="pt-2 text-muted">
       {{ description }}
     </b-card-text>
   </b-card>
@@ -37,7 +36,7 @@
         type: String,
         default: 'basicCard',
         validator: (value) => {
-          return ['basicCard', 'infoCard'].indexOf(value) !== -1;
+          return ['basicCard', 'infoCard', 'smallCard'].indexOf(value) !== -1;
         },
       },
     },
@@ -56,6 +55,9 @@
       hasThumbnail() {
         return this.thumbnail;
       },
+      isSmall() {
+        return this.variant === 'smallCard';
+      },
     },
   }
 </script>
@@ -72,14 +74,19 @@
     padding: 0 !important;
   }
 
+  .smallCard,
   .basicCard {
     cursor: pointer;
     border-radius: $border-radius-lg !important;
     background-color: #EFF0F3 !important;
-    border: 0 !important;
     transition: all 0.3s ease;
   }
 
+  .basicCard {
+    border: 0 !important;
+  }
+
+  .smallCard:hover,
   .basicCard:hover {
     box-shadow: $box-shadow;
   }
@@ -90,6 +97,14 @@
     font-weight: bold;
     display: flex;
     align-items: center;
+  }
+
+  .smallCard .card-header {
+    border-bottom: none;
+  }
+
+  .smallCard {
+    border: $border-width solid $card-border-color;
   }
 
   $card-image-ar: 376 / 600;

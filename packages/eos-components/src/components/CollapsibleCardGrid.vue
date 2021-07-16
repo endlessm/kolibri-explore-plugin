@@ -1,45 +1,67 @@
 <template>
   <span>
     <GridPage
-      :nodes="nodes.slice(0, itemsPerPage)"
+      :nodes="visibleNodes"
       :cardColumns="cardColumns"
       :mediaQuality="mediaQuality"
     />
 
-    <b-collapse
-      :id="'collapse-' + id"
-      class="mt-2"
-    >
-      <GridPage
-        :nodes="nodes.slice(itemsPerPage)"
-        :cardColumns="cardColumns"
-        :mediaQuality="mediaQuality"
-      />
-    </b-collapse>
-
-    <b-row v-if="nodes.length > itemsPerPage" alignH="center">
-      <b-button v-b-toggle="'collapse-' + id" class="mt-2" variant="light">
-        <span class="when-open">Show less</span>
-        <span class="when-closed">Show more</span>
-        <b-icon-arrow-up class="when-open" />
-        <b-icon-arrow-down class="when-closed" />
+    <b-row alignH="center">
+      <b-button
+        v-if="rowsToShow > 1 || !showedAll"
+        pill
+        class="mt-2"
+        variant="outline-dark"
+        @click="showMore"
+      >
+        <span v-if="showedAll">Show less</span>
+        <span v-else>Show more</span>
       </b-button>
     </b-row>
   </span>
 </template>
 
 <script>
+import responsiveMixin from './mixins/responsiveMixin';
 
 export default {
   name: 'CollapsibleCardGrid',
+  mixins: [responsiveMixin],
   props: {
     nodes: Array,
-    id: String,
     mediaQuality: String,
     cardColumns: Object,
-    itemsPerPage: {
-      type: Number,
-      default: 8,
+  },
+  data() {
+    return {
+      rowsToShow: 1,
+    };
+  },
+  computed: {
+    showedAll() {
+      return (this.rowsToShow * this.columns) >= this.nodes.length;
+    },
+    columns() {
+      if (this.md) {
+        return 12 / this.cardColumns.md;
+      }
+      if (this.lg || this.xl) {
+        return 12 / this.cardColumns.lg;
+      }
+      return 12 / this.cardColumns.cols;
+    },
+    visibleNodes() {
+      const elements = this.rowsToShow * this.columns;
+      return this.nodes.slice(0, elements);
+    },
+  },
+  methods: {
+    showMore() {
+      if (this.showedAll) {
+        this.rowsToShow = 1;
+      } else {
+        this.rowsToShow++;
+      }
     },
   },
 };
