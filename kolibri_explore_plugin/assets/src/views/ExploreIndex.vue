@@ -11,7 +11,7 @@
     />
     <b-overlay :show="isLoading" noWrap>
       <template #overlay>
-        <img :src="loadingImg" class="loading">
+        <img :src="loadingImg">
       </template>
     </b-overlay>
     <router-view />
@@ -24,7 +24,7 @@
 
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
-  import EndlessLogo from 'eos-components/src/assets/EndlessLogo.svg';
+  import LoadingImage from 'eos-components/src/assets/loading-animation.gif';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
   import { PageNames } from '../constants';
   import commonExploreStrings from './commonExploreStrings';
@@ -62,7 +62,7 @@
         return window.showBuildInfo;
       },
       loadingImg() {
-        return EndlessLogo;
+        return LoadingImage;
       },
     },
     watch: {
@@ -128,26 +128,6 @@
   // https://stackoverflow.com/questions/32862394/bootstrap-modals-keep-adding-padding-right-to-body-after-closed
   body.modal-open {
     padding-right: 0 !important;
-  }
-
-  .loading {
-    animation: bounce 1s infinite linear;
-  }
-
-  // Based on this css
-  // https://github.com/loadingio/loading.css/blob/master/dist/loading.css#L195
-  @keyframes bounce {
-    0% {
-      transform: translate(0, 0%);
-      animation-timing-function: cubic-bezier(0.1348, 0.3256, 0.2495, 0.8687);
-    }
-    51% {
-      transform: translate(0, -50%);
-      animation-timing-function: cubic-bezier(0.7426, 0.1782, 0.8523, 0.6514);
-    }
-    100% {
-      transform: translate(0, 0%);
-    }
   }
 
 </style>
