@@ -12,6 +12,7 @@ export const CustomChannelApps = {
   efcc464be5a85ba5a58d1636b00313fc: 'gardening',
   f62db29be20453c4a267132e93a9e602: 'wikipedia',
   '85b42a40745f4e2392ed62e72d4dad6e': 'oceanx',
+  e409b964366a59219c148f2aaa741f43: 'blockly-games',
 };
 
 export function getAppNameByID(id) {
