@@ -2,6 +2,7 @@
   <Header
     class="header"
     :style="{ backgroundImage: headerImageURL }"
+    :class="{ 'has-image': hasHeaderImage }"
     @click-logo="goToChannelList"
   >
     <Breadcrumb v-if="notAtHome" :node="node" />
@@ -42,6 +43,9 @@ export default {
 
 .header {
   @include navbar-background($header-height);
+  &.has-image {
+    background-color: $primary;
+  }
 }
 
 img {
