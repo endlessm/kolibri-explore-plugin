@@ -1,5 +1,8 @@
 {
   "displayLogoInHeader": false,
   "isEndlessApp": true,
-  "hasDarkHeader": true
+  "hasDarkHeader": true,
+  "hasFlatGrid": true,
+  "hasCarousel": false,
+  "hasFilters": false
 }
