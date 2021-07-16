@@ -169,6 +169,11 @@ $carousel-image-lg-width: 400px;
 @import 'bootstrap/scss/mixins';
 @import 'bootstrap/scss/variables';
 
+// Style the list groups after the override colors are applied:
+$list-group-active-color: $primary;
+$list-group-active-bg: $white;
+$list-group-active-border-color: $list-group-border-color;
+
 // Calculate header color:
 $header-color: scale-color($secondary, $lightness: 50%) !default;
 
