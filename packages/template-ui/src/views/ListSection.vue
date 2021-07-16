@@ -27,7 +27,7 @@
           :nodes="section.children"
           :mediaQuality="mediaQuality"
           :cardColumns="cardColumns"
-          variant="paginated"
+          variant="collapsible"
         />
       </div>
     </div>
