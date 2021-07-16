@@ -29,7 +29,7 @@ export default {
   @import '../styles.scss';
 
   .fade-enter-active, .fade-leave-active {
-    transition: all 0.3s;
+    @include transition($transition-fade);
   }
   .fade-enter, .fade-leave-to {
     opacity: 0;
