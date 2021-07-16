@@ -27,7 +27,7 @@
       :nodes="resultNodes"
       :mediaQuality="mediaQuality"
       :cardColumns="cardColumns"
-      variant="paginated"
+      variant="collapsible"
     >
       <h3>Results</h3>
     </CardGrid>

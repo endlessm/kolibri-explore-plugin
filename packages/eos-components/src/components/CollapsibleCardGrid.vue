@@ -8,14 +8,22 @@
 
     <b-row alignH="center">
       <b-button
-        v-if="rowsToShow > 1 || !showedAll"
+        v-if="canShowMore"
         pill
         class="mt-2"
         variant="outline-dark"
         @click="showMore"
       >
-        <span v-if="showedAll">Show less</span>
-        <span v-else>Show more</span>
+        <span>Show more</span>
+      </b-button>
+      <b-button
+        v-else-if="canShowLess"
+        pill
+        class="mt-2"
+        variant="outline-dark"
+        @click="showLess"
+      >
+        <span>Show less</span>
       </b-button>
     </b-row>
   </span>
@@ -31,15 +39,26 @@ export default {
     nodes: Array,
     mediaQuality: String,
     cardColumns: Object,
+    itemsPerPage: {
+      type: Number,
+      default: 16,
+    },
   },
   data() {
     return {
-      rowsToShow: 1,
+      // Display 4 rows of 4 cards (16 total) in a large screen.
+      rowsToShow: Math.ceil(this.itemsPerPage * this.cardColumns.lg / 12),
     };
   },
   computed: {
-    showedAll() {
-      return (this.rowsToShow * this.columns) >= this.nodes.length;
+    initialRows() {
+      return Math.ceil(this.itemsPerPage / this.columns);
+    },
+    canShowMore() {
+      return (this.rowsToShow * this.columns) < this.nodes.length;
+    },
+    canShowLess() {
+      return this.rowsToShow > this.initialRows;
     },
     columns() {
       if (this.md) {
@@ -57,11 +76,16 @@ export default {
   },
   methods: {
     showMore() {
-      if (this.showedAll) {
-        this.rowsToShow = 1;
-      } else {
-        this.rowsToShow++;
+      if (!this.canShowMore) {
+        return;
       }
+      this.rowsToShow++;
+    },
+    showLess() {
+      if (!this.canShowLess) {
+        return;
+      }
+      this.rowsToShow = this.initialRows;
     },
   },
 };
