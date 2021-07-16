@@ -2,6 +2,7 @@
   <Header
     class="header"
     :style="{ backgroundImage: headerImageURL }"
+    :class="{ 'has-image': hasHeaderImage }"
     :showLogo="showLogo"
     @click-logo="goToChannelList"
   >
@@ -47,6 +48,9 @@ export default {
 
 .header {
   @include navbar-background($header-height);
+  &.has-image {
+    background-color: $primary;
+  }
 }
 
 img {
