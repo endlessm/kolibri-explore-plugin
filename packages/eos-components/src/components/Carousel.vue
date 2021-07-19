@@ -1,5 +1,5 @@
 <template>
-  <b-container class="mb-5">
+  <EOSContainer class="mb-5">
     <b-carousel
       v-model="slide"
       fade
@@ -22,7 +22,7 @@
         </template>
       </b-carousel-slide>
     </b-carousel>
-  </b-container>
+  </EOSContainer>
 </template>
 
 <script>
