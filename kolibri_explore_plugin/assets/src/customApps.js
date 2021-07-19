@@ -17,6 +17,7 @@ export const CustomChannelApps = {
   bbb4ea407a3c450cb18cbaa76f2d75cd: 'cspathshala',
   fc47aee82e0153e2a30197d3fdee1128: 'open-stax',
   '74f36493bb475b62935fa8705ed59fed': 'thoughtful-learning',
+  '1e378725d3924b47aa5e1260628820b5': 'ted-ed-lessons',
 };
 
 export function getAppNameByID(id) {
