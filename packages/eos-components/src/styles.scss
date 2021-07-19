@@ -40,12 +40,21 @@ $theme-colors: (
 
 $card-border-width: 0;
 
+$eos-container-padding: 60px;
+
 $grid-breakpoints: (
   xs: 0,
-  sm: 576px,
-  md: 768px,
-  lg: 992px,
-  xl: 1200px,
+  sm: 666px,
+  md: 858px,
+  lg: 1172px,
+  xl: 1290px, // 1200 + 2 * 60 - 2 * 15
+) !default;
+
+$container-max-widths: (
+  sm: 630px,
+  md: 810px,
+  lg: 1050px,
+  xl: 1230px, // 1140 + 2 * 60 - 2 * 15
 ) !default;
 
 $btn-font-weight: 600;

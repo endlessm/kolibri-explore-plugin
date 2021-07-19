@@ -12,13 +12,13 @@
 
     <template v-else>
       <Carousel v-if="hasCarousel" :nodes="carouselNodes" />
-      <b-container v-if="hasCarousel">
+      <EOSContainer v-if="hasCarousel">
         <hr>
-      </b-container>
+      </EOSContainer>
       <FilterContent v-if="hasFilters" />
 
       <div v-if="isFilterEmpty">
-        <b-container v-if="contentNodes.length && displayHeroContent">
+        <EOSContainer v-if="contentNodes.length && displayHeroContent">
           <CarouselCard
             v-for="node in contentNodes"
             :key="'node-' + node.id"
@@ -26,7 +26,7 @@
             class="template-ui-hero-card"
             @click="goToContent(node)"
           />
-        </b-container>
+        </EOSContainer>
         <div v-else-if="contentNodes.length">
           <CardGrid
             :nodes="contentNodes"

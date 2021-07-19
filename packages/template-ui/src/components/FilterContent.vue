@@ -1,5 +1,5 @@
 <template>
-  <b-container v-if="availableFilters.length" class="my-5">
+  <EOSContainer v-if="availableFilters.length" class="my-5">
     <span class="mr-4">Filter By</span>
 
     <FilterDropDown
@@ -14,7 +14,7 @@
     >
       clear filters
     </b-button>
-  </b-container>
+  </EOSContainer>
 </template>
 
 <script>

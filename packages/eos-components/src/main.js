@@ -12,6 +12,7 @@ import ChannelLogo from './components/ChannelLogo.vue';
 import CollapsibleCardGrid from './components/CollapsibleCardGrid.vue';
 import ContentLink from './components/ContentLink.vue';
 import DummyButton from './components/DummyButton.vue';
+import EOSContainer from './components/EOSContainer.vue';
 import Footer from './components/Footer.vue';
 import GridPage from './components/GridPage.vue';
 import Header from './components/Header.vue';
@@ -44,6 +45,7 @@ const components = {
   CollapsibleCardGrid,
   ContentLink,
   DummyButton,
+  EOSContainer,
   Footer,
   GridPage,
   Header,

@@ -1,5 +1,5 @@
 <template>
-  <b-container class="mb-5 mt-4 section-container">
+  <EOSContainer class="mb-5 mt-4 section-container">
     <slot></slot>
 
     <component
@@ -10,7 +10,7 @@
       :mediaQuality="mediaQuality"
       :cardColumns="cardColumns"
     />
-  </b-container>
+  </EOSContainer>
 </template>
 
 <script>

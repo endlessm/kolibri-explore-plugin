@@ -1,6 +1,6 @@
 <template>
   <b-navbar class="header" :class="{ shadow: hasScrolled }" fixed="top">
-    <b-container class="px-3">
+    <b-container class="px-1">
       <img class="logo" :src="logo" @click="$emit('click-logo')">
       <slot></slot>
 
@@ -60,10 +60,7 @@
   // 2.27 is the AR of the endless logo
   $logo-height: $logo-size / 2.27;
   .logo {
-    position: absolute;
-    margin-left: - ($logo-size + 20px);
-    margin-top: - ($logo-height / 2);
-    top: 50%;
+    margin-right: $spacer;
 
     width: $logo-size;
     cursor: pointer;

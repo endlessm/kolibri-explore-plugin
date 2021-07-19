@@ -1,5 +1,5 @@
 <template>
-  <b-container class="my-4">
+  <EOSContainer class="my-4">
     <b-row>
       <b-col sm="12" md="8" lg="10">
         <MainSections />
@@ -14,7 +14,7 @@
         </b-button-toolbar>
       </b-col>
     </b-row>
-  </b-container>
+  </EOSContainer>
 </template>
 
 <style lang="scss" scoped>
