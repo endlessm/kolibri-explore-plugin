@@ -1,7 +1,7 @@
 <template>
   <b-navbar class="header" :class="{ shadow: hasScrolled }" fixed="top">
     <b-container class="px-3">
-      <img class="logo" :src="logo" @click="$emit('click-logo')">
+      <img v-if="showLogo" class="logo" :src="logo" @click="$emit('click-logo')">
       <slot></slot>
 
       <b-navbar-nav class="ml-auto">
@@ -17,6 +17,12 @@
 
   export default {
     name: 'Header',
+    props: {
+      showLogo: {
+        type: Boolean,
+        default: true,
+      },
+    },
     data() {
       return {
         hasScrolled: false,
@@ -57,23 +63,10 @@
   }
 
   $logo-size: 50px;
-  // 2.27 is the AR of the endless logo
-  $logo-height: $logo-size / 2.27;
   .logo {
-    position: absolute;
-    margin-left: - ($logo-size + 20px);
-    margin-top: - ($logo-height / 2);
-    top: 50%;
-
+    margin-right: $spacer;
     width: $logo-size;
     cursor: pointer;
-
-    @include media-breakpoint-down(sm) {
-      position: inherit;
-      margin-left: 0;
-      margin-top: 0;
-      margin-right: $spacer;
-    }
   }
 
 </style>
