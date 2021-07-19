@@ -1,7 +1,7 @@
 <template>
   <Header
     class="header"
-    :style="{ backgroundImage: headerImageURL }"
+    :style="{ backgroundColor: headerColor }"
     :showLogo="showLogo"
     @click-logo="goToChannelList"
   >
@@ -19,7 +19,7 @@ export default {
   name: 'ChannelNavBar',
   mixins: [headerMixin, responsiveMixin],
   computed: {
-    ...mapState(['content']),
+    ...mapState(['content', 'mainSection']),
     node() {
       if (this.content && Object.keys(this.content).length) {
         return this.content;
@@ -33,6 +33,20 @@ export default {
     showLogo() {
       return !(this.xs && this.node.ancestors.length);
     },
+    headerColor() {
+      switch (this.mainSection.id) {
+        // PreK - Kindergarten
+        case '2d67696f13b64a7e9b74f45ab5ae6d97':
+          return '#00bbf5';
+        // Grades 1 - 2
+        case '8799319da639424396425db62329be2b':
+          return '#14c0b4';
+        // Home:
+        case undefined:
+        default:
+          return '#93cb00';
+      }
+    },
   },
   methods: {
     goToChannelList() {
@@ -44,10 +58,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/styles.scss';
-
-.header {
-  @include navbar-background($header-height);
-}
 
 img {
   box-shadow: $toast-box-shadow;
