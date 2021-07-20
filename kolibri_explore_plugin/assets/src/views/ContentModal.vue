@@ -106,8 +106,18 @@
     border: 0 !important;
   }
 
+  ::v-deep .content-renderer .bg-light {
+    padding-right: $spacer !important;
+    padding-left: $spacer !important;
+    background-color: white !important;
+  }
+
   ::v-deep .modal-footer {
     display: none;
+  }
+
+  ::v-deep .modal-content .paragraph {
+    color: $gray-700 !important;
   }
 
   ::v-deep .modal-body {
