@@ -2,6 +2,7 @@
   <Header
     class="header"
     :style="{ backgroundImage: headerImageURL }"
+    :showLogo="showLogo"
     @click-logo="goToChannelList"
   >
     <Breadcrumb v-if="notAtHome" :node="node" />
@@ -9,13 +10,14 @@
 </template>
 
 <script>
+import { responsiveMixin } from 'eos-components';
 import { mapState } from 'vuex';
 import headerMixin from '@/components/mixins/headerMixin';
 import { goToChannelList } from 'kolibri-api';
 
 export default {
   name: 'ChannelNavBar',
-  mixins: [headerMixin],
+  mixins: [headerMixin, responsiveMixin],
   computed: {
     ...mapState(['content']),
     node() {
@@ -27,6 +29,9 @@ export default {
     },
     notAtHome() {
       return this.$route.name !== 'Home';
+    },
+    showLogo() {
+      return !(this.xs && this.node.ancestors.length);
     },
   },
   methods: {
