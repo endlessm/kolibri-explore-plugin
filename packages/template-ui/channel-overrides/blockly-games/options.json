@@ -1,5 +1,6 @@
 {
   "hasFlatGrid": true,
   "hasCarousel": false,
-  "hasFilters": false
+  "hasFilters": false,
+  "mediaQuality": "low"
 }
