@@ -41,6 +41,11 @@ export default {
       )).filter((f) => f.options.length > 1);
     },
   },
+  watch: {
+    section() {
+      this.clearFilter({});
+    },
+  },
   mounted() {
     this.clearFilter({});
   },
