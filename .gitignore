@@ -4,6 +4,7 @@ node_modules
 
 # Built and cached files
 kolibri_explore_plugin/apps/**/*.zip
+kolibri_explore_plugin/loadingScreen/
 kolibri_explore_plugin/static/kolibri_explore_plugin*
 kolibri_explore_plugin/static/build-info.json
 kolibri_explore_plugin/build/
