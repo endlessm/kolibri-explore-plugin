@@ -77,7 +77,7 @@ export default {
 .play-button-text {
   // Align the text with the material design icons:
   line-height: 12px;
-  vertical-align: text-bottom;
+  vertical-align: middle;
   text-transform: uppercase;
 }
 
