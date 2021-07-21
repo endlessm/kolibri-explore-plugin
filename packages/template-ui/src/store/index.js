@@ -88,7 +88,7 @@ const store = new Vuex.Store({
           .filter((n) => n.kind !== 'topic')
           .map((n) => {
             n.parent = rootNode.id;
-            n.ancestors = [rootNode.id];
+            n.ancestors = [rootNode];
             return n;
           });
         state.nodes = [rootNode, ...contentNodes];
