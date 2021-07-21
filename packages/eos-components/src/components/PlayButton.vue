@@ -16,12 +16,12 @@
 </template>
 
 <script>
-import AudioIcon from 'vue-material-design-icons/MusicNoteOutline.vue';
-import DocumentIcon from 'vue-material-design-icons/BookOutline.vue';
-import ExerciseIcon from 'vue-material-design-icons/ClipboardTextOutline.vue';
-import Html5Icon from 'vue-material-design-icons/ShapeOutline.vue';
-import BundleIcon from 'vue-material-design-icons/PlayBoxMultipleOutline.vue';
-import VideoIcon from 'vue-material-design-icons/PlayOutline.vue';
+import AudioIcon from 'vue-material-design-icons/Podcast.vue';
+import DocumentIcon from 'vue-material-design-icons/TextBoxOutline.vue';
+import ExerciseIcon from 'vue-material-design-icons/CheckboxMarkedCircleOutline.vue';
+import Html5Icon from 'vue-material-design-icons/MotionOutline.vue';
+import BundleIcon from 'vue-material-design-icons/CubeOutline.vue';
+import VideoIcon from 'vue-material-design-icons/PlayCircleOutline.vue';
 import { MediaTypeVerbs } from '../constants';
 
 export default {
