@@ -16,23 +16,23 @@
 </template>
 
 <script>
-import MusicNoteOutlineIcon from 'vue-material-design-icons/MusicNoteOutline.vue';
-import BookOutlineIcon from 'vue-material-design-icons/BookOutline.vue';
-import ClipboardTextOutlineIcon from 'vue-material-design-icons/ClipboardTextOutline.vue';
-import ShapeOutlineIcon from 'vue-material-design-icons/ShapeOutline.vue';
-import PlayBoxMultipleOutlineIcon from 'vue-material-design-icons/PlayBoxMultipleOutline.vue';
-import PlayOutlineIcon from 'vue-material-design-icons/PlayOutline.vue';
+import AudioIcon from 'vue-material-design-icons/MusicNoteOutline.vue';
+import DocumentIcon from 'vue-material-design-icons/BookOutline.vue';
+import ExerciseIcon from 'vue-material-design-icons/ClipboardTextOutline.vue';
+import Html5Icon from 'vue-material-design-icons/ShapeOutline.vue';
+import BundleIcon from 'vue-material-design-icons/PlayBoxMultipleOutline.vue';
+import VideoIcon from 'vue-material-design-icons/PlayOutline.vue';
 import { MediaTypeVerbs } from '../constants';
 
 export default {
   name: 'PlayButton',
   components: {
-    MusicNoteOutlineIcon,
-    BookOutlineIcon,
-    ClipboardTextOutlineIcon,
-    ShapeOutlineIcon,
-    PlayBoxMultipleOutlineIcon,
-    PlayOutlineIcon,
+    AudioIcon,
+    DocumentIcon,
+    ExerciseIcon,
+    Html5Icon,
+    BundleIcon,
+    VideoIcon,
   },
   props: {
     kind: String,
@@ -46,19 +46,19 @@ export default {
     icon() {
       switch (this.kind) {
         case 'audio':
-          return 'MusicNoteOutlineIcon';
+          return 'AudioIcon';
         case 'document':
-          return 'BookOutlineIcon';
+          return 'DocumentIcon';
         case 'exercise':
-          return 'ClipboardTextOutlineIcon';
+          return 'ExerciseIcon';
         case 'html5':
         case 'zim':
-          return 'ShapeOutlineIcon';
+          return 'Html5Icon';
         case 'bundle':
-          return 'PlayBoxMultipleOutlineIcon';
+          return 'BundleIcon';
         case 'video':
         default:
-          return 'PlayOutlineIcon';
+          return 'VideoIcon';
       }
     },
     mediaInfo() {
