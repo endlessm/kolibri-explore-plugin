@@ -18,6 +18,7 @@ export const CustomChannelApps = {
   fc47aee82e0153e2a30197d3fdee1128: 'open-stax',
   '74f36493bb475b62935fa8705ed59fed': 'thoughtful-learning',
   '1e378725d3924b47aa5e1260628820b5': 'ted-ed-lessons',
+  '922e9c576c2f59e59389142b136308ff': 'career-girls',
 };
 
 export function getAppNameByID(id) {
@@ -29,7 +30,7 @@ export const ThumbApps = [
   'music',
   'ted-ed-lessons',
   'common-sense-student-resources',
-  'carreer-girls',
+  'career-girls',
   'cspathshala',
   'touchable-earth',
   'oceanx',
