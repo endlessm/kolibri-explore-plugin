@@ -109,7 +109,7 @@
   import { utils, constants, responsiveMixin } from 'eos-components';
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 
-  import { PageNames, searchTerms } from '../constants';
+  import { PageNames, searchTerms, searchTermSynonyms } from '../constants';
   import { searchChannels } from '../modules/topicsRoot/handlers';
   import { getBigThumbnail } from '../customApps';
 
@@ -244,8 +244,14 @@
           this.setSearchResult({});
           return;
         }
+        let termsToSearch;
+        if (query.toLowerCase() in searchTermSynonyms) {
+          termsToSearch = searchTermSynonyms[query.toLowerCase()];
+        } else {
+          termsToSearch = query;
+        }
 
-        searchChannels(this.$store, { search: query });
+        searchChannels(this.$store, { search: termsToSearch });
       },
       clearInput() {
         this.query = '';

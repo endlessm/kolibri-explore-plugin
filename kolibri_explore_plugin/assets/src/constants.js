@@ -27,4 +27,26 @@ export const CUSTOM_PRESENTATION_TITLE = 'custom-channel-ui';
 
 export const CarouselItems = 5;
 
-export const searchTerms = ['STEM', 'Games', 'Fitness', 'Cooking', 'Arts'];
+export const searchTerms = [
+  'Arts',
+  'Careers',
+  'Cooking',
+  'Fitness',
+  'Games',
+  'Maths',
+  'Music',
+  'Science',
+  'Sports',
+];
+
+export const searchTermSynonyms = {
+  arts: 'artist music painting drawing arts',
+  careers: 'career college degrees personality',
+  cooking: 'recipes desserts meat vegetables bread culinary',
+  fitness: 'fitness yoga workout',
+  games: 'games gamers gaming the maze',
+  maths: 'mathematics',
+  music: 'blues rhythm ukulele guitar beatbox',
+  science: 'cool science sciences physics biology molecules gravity',
+  sports: 'football soccer dribbling volley tennis skating',
+};
