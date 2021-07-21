@@ -49,9 +49,8 @@ export function goToContent(node) {
   window.parent.postMessage(message, '*');
 }
 
-export function askChannelInformation(callback) {
+export function askChannelInformation(callback, fetchAsync = false) {
   window.addEventListener('message', (event) => {
-    // console.log(event);
     if (event.data.event && event.data.nameSpace === 'hashi'
               && event.data.event === 'sendChannelInformation') {
       callback(event.data.data);
@@ -60,7 +59,7 @@ export function askChannelInformation(callback) {
 
   const nameSpace = 'customChannelPresentation';
   const event = 'askChannelInformation';
-  const data = null;
+  const data = { fetchAsync };
   const message = {
     event,
     data,

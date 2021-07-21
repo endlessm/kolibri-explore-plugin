@@ -30,9 +30,5 @@ export default {
       return 'ListSection';
     },
   },
-  methods: {
-    ...mapGetters({
-    }),
-  },
 };
 </script>
