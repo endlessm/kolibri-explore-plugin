@@ -31,7 +31,7 @@
             </h5>
             <ButtonsBar
               title="More Topics"
-              :buttons="searchTerms"
+              :buttons="Array.from(searchTerms.keys())"
               @click="goToTerm"
             />
           </div>
@@ -240,7 +240,7 @@
         });
       },
       goToTerm(term) {
-        this.query = term;
+        this.query = searchTerms.get(term) || term;
       },
       search(query) {
         if (!query) {

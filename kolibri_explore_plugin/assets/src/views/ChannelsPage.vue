@@ -10,7 +10,7 @@
         <ButtonsBar
           class="mr-3 mt-1"
           title="More Topics"
-          :buttons="searchTerms"
+          :buttons="Array.from(searchTerms.keys())"
           @click="goToTerm"
         />
         <SearchButton @click="goToSearch" />
@@ -118,9 +118,10 @@
         });
       },
       goToTerm(term) {
+        const query = searchTerms.get(term) || term;
         this.$router.push({
           name: PageNames.SEARCH,
-          params: { query: term },
+          params: { query },
         });
       },
       getBigThumbnail(channel) {
