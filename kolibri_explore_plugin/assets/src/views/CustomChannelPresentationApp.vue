@@ -47,6 +47,9 @@
     mounted() {
       window.addEventListener('message', this.onMessage);
       this.$emit('loading');
+
+      window.t = this;
+      window.ContentNodeResource = ContentNodeResource;
     },
     beforeDestroy() {
       window.removeEventListener('message', this.onMessage);
@@ -70,40 +73,56 @@
         if (event.data.event === 'getThumbnail') {
           this.sendThumbnail(event.data.data);
         }
+        if (event.data.event === 'fetchCollection') {
+          this.fetchCollection(event.data.data);
+        }
+      },
+      fetchCollection(data) {
+        if (!this.iframeWindow) {
+          return;
+        }
+
+        const { getParams } = data;
+        ContentNodeResource.fetchCollection({ getParams }).then(nodes => {
+          Promise.all(nodes).then(node => {
+            const event = 'sendCollection';
+            const message = {
+              event,
+              nameSpace,
+              data: { channel: this.channel, nodes: node },
+            };
+            this.iframeWindow.postMessage(message, '*');
+          });
+        });
       },
       sendChannelInformation(data) {
         if (!this.iframeWindow) {
           return;
         }
 
-        if (data.fetchAsync) {
-          ContentNodeResource.fetchChannelAsync(this.channel.id).then(nodes => {
+        const getParams = {
+          channel_id: this.channel.id,
+          user_kind: this.$store.getters.getUserKind,
+        };
+
+        const { allNodes } = data;
+        if (!allNodes) {
+          getParams.parent = this.channel.id;
+        }
+
+        ContentNodeResource.fetchCollection({
+          getParams,
+        }).then(nodes => {
+          Promise.all(nodes).then(node => {
             const event = 'sendChannelInformation';
             const message = {
               event,
               nameSpace,
-              data: { channel: this.channel, nodes: [this.channel, ...nodes] },
+              data: { channel: this.channel, nodes: node },
             };
             this.iframeWindow.postMessage(message, '*');
           });
-        } else {
-          ContentNodeResource.fetchCollection({
-            getParams: {
-              channel_id: this.channel.id,
-              user_kind: this.$store.getters.getUserKind,
-            },
-          }).then(nodes => {
-            Promise.all(nodes).then(node => {
-              const event = 'sendChannelInformation';
-              const message = {
-                event,
-                nameSpace,
-                data: { channel: this.channel, nodes: node },
-              };
-              this.iframeWindow.postMessage(message, '*');
-            });
-          });
-        }
+        });
       },
 
       sendThumbnail(id) {

@@ -89,6 +89,9 @@ export default {
       return Math.ceil(this.itemsPerPage / 4);
     },
     slides() {
+      if (!this.nodes) {
+        return [];
+      }
       return _.chunk(this.nodes, this.itemsPerSlide);
     },
     emptyCardsNumber() {
