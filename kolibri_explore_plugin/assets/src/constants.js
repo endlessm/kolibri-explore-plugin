@@ -27,4 +27,14 @@ export const CUSTOM_PRESENTATION_TITLE = 'custom-channel-ui';
 
 export const CarouselItems = 5;
 
-export const searchTerms = ['STEM', 'Games', 'Fitness', 'Cooking', 'Arts'];
+export const searchTerms = new Map([
+  ['Arts', 'artist music painting drawing arts'],
+  ['Careers', 'career college degrees personality'],
+  ['Cooking', 'recipes desserts meat vegetables bread culinary'],
+  ['Fitness', 'fitness yoga workout'],
+  ['Games', 'games gamers gaming the maze'],
+  ['Maths', 'mathematics'],
+  ['Music', 'blues rhythm ukulele guitar beatbox'],
+  ['Science', 'cool science sciences physics biology molecules gravity'],
+  ['Sports', 'football soccer dribbling volley tennis skating'],
+]);
