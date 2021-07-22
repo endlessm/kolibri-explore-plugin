@@ -104,6 +104,9 @@ export default {
       return this.carouselNodesRandom(this.carouselSlideNumber);
     },
   },
+  mounted() {
+    window.home = this;
+  },
   methods: {
     carouselNodesRandom(n) {
       // Get n random nodes that are not topic:

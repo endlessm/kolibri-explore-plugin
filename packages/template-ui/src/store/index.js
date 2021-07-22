@@ -74,7 +74,6 @@ const initialState = {
   displayHeroContent: false,
   isEndlessApp: false,
   bundleKind: null,
-  fetchAsync: false,
 };
 
 const store = new Vuex.Store({
@@ -93,6 +92,7 @@ const store = new Vuex.Store({
             return n;
           });
         state.nodes = [rootNode, ...contentNodes];
+        state.tree = getNodesTree(state.nodes);
       } else {
         state.nodes = parsedNodes;
       }

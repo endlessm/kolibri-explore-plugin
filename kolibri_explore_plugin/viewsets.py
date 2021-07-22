@@ -1,9 +1,20 @@
+from django_filters.rest_framework import CharFilter
+from kolibri.core.content.api import ContentNodeFilter
 from kolibri.core.content.api import ContentNodeSearchViewset
 from kolibri.core.content.api import ContentNodeViewset
 from kolibri.core.content.models import ContentTag
 
 
+class CustomContentNodeFilter(ContentNodeFilter):
+    parent_in = CharFilter(method="filter_parent_in", label="parent_in")
+
+    def filter_parent_in(self, queryset, name, value):
+        return queryset.filter(parent__in=value.split(","))
+
+
 class CustomContentNodeViewset(ContentNodeViewset):
+    filter_class = CustomContentNodeFilter
+
     def _consolidate(self, items, queryset):
         if not items:
             return []

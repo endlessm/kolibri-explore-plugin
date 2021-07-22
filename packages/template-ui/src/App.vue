@@ -12,14 +12,21 @@
 </template>
 
 <script>
-import { askChannelInformation } from 'kolibri-api';
-import { mapMutations, mapState } from 'vuex';
+import { mapMutations } from 'vuex';
+
+// appMixin can be override
+let appMixin = require('@/components/mixins/appMixin');
+
+try {
+  // eslint-disable-next-line global-require, import/no-dynamic-require
+  appMixin = require('@/overrides/components/mixins/appMixin');
+} catch (e) {
+  console.log('No appMixin override');
+}
 
 export default {
   name: 'App',
-  computed: {
-    ...mapState(['fetchAsync']),
-  },
+  mixins: [appMixin.default],
   watch: {
     $route(to) {
       // Watch the router "to" parameter, and set the navigation state accordingly.
@@ -41,31 +48,8 @@ export default {
       }
     },
   },
-  created() {
-    askChannelInformation(this.gotChannelInformation, this.fetchAsync);
-  },
   methods: {
     ...mapMutations(['setContentNavigation', 'setSectionNavigation', 'setHomeNavigation']),
-    gotChannelInformation(data) {
-      this.$store.commit('setChannelInformation', data);
-      this.$store.commit('setHomeNavigation');
-      const uri = window.location.search.substring(1);
-      const params = new URLSearchParams(uri);
-      // Check if we need to navigate to a specific content or topic. Content takes precedence.
-      const contentId = params.get('contentId');
-      if (contentId) {
-        this.$router.push(`/c/${contentId}`);
-        return;
-      }
-      const topicId = params.get('topicId');
-      if (topicId) {
-        this.$router.push(`/t/${topicId}`);
-      }
-      const test = params.get('test');
-      if (test) {
-        this.$router.push('/test');
-      }
-    },
   },
 };
 </script>

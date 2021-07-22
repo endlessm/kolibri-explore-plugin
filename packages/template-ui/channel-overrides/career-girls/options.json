@@ -1,3 +1,4 @@
 {
-  "fetchAsync": true
+  "hasCarousel": false,
+  "hasFilters": false
 }
