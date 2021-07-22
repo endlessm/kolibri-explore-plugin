@@ -1,6 +1,7 @@
 import { getThumbnail } from 'kolibri-api';
 import { getFirstStructuredTag } from '../../utils';
 import { MediaQuality, StructuredTags } from '../../constants';
+import { cardImageAspectRatio } from '../../styles.scss';
 
 import AppThumb from '../../assets/thumbnails/app.jpg';
 import AudioThumb from '../../assets/thumbnails/audio.jpg';
@@ -15,11 +16,15 @@ export default {
     return {
       thumbnail: null,
       thumbnailWidth: null,
+      thumbnailAspectRatio: null,
     };
   },
   computed: {
     label() {
       return this.getDuration();
+    },
+    isThumbnailWide() {
+      return this.thumbnailAspectRatio <= cardImageAspectRatio;
     },
   },
   methods: {
@@ -104,6 +109,7 @@ export default {
       const img = new Image();
       img.onload = () => {
         this.thumbnailWidth = img.width;
+        this.thumbnailAspectRatio = img.height / img.width;
       };
       img.src = value;
     },

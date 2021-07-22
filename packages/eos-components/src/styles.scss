@@ -78,10 +78,11 @@ $header-logo-width: 128;
 $header-height: 349px; // Forms an area with the LG breakpoint of aspect ratio: 2.8444
 $hover-lightness: 25%;
 $background-alpha: -8%;
-$card-image-ar: percentage(9 / 16);
+$card-image-ar: 9 / 16;
 
 :export {
   headerLogoWidth: $header-logo-width;
+  cardImageAspectRatio: $card-image-ar;
   xs: map-get($grid-breakpoints, "xs");
   sm: map-get($grid-breakpoints, "sm");
   md: map-get($grid-breakpoints, "md");
