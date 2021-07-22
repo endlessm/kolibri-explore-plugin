@@ -39,11 +39,11 @@
       </b-container>
 
       <div v-if="resultCards">
-        <div v-for="(nodes, kind) in resultCards" :key="kind">
+        <div v-for="[kind, nodes] in resultCards" :key="kind">
           <CardGrid
             id="root"
             variant="collapsible"
-            itemsPerPage="4"
+            :itemsPerPage="4"
             :nodes="nodes"
             :mediaQuality="mediaQuality"
             :cardColumns="cardColumns"
@@ -194,8 +194,11 @@
 
         // Group by content kind
         const grouped = _.groupBy(nodes, n => n.kind);
-
-        return grouped;
+        // Order by number of results
+        const sortedKeys = _.sortBy(Object.keys(grouped), k => grouped[k].length).reverse();
+        const sortedValues = sortedKeys.map(k => grouped[k]);
+        const zipped = _.zip(sortedKeys, sortedValues);
+        return zipped;
       },
       columns() {
         if (this.xs) {
