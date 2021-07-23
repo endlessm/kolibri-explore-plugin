@@ -127,8 +127,7 @@ $missing-height: 2px;
 }
 
 .card-img {
-  border-top-left-radius: $border-radius-lg;
-  border-top-right-radius: $border-radius-lg;
+  border-radius: $border-radius-lg $border-radius-lg 0 0;
   background-size: cover;
   background-position: center;
   padding-top: percentage($card-image-ar);
