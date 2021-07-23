@@ -30,7 +30,6 @@
               <VClamp
                 autoresize
                 :maxLines="titleMaxLines"
-                @clampchange="(e) => isTitleClamped = e"
               >
                 {{ node.title }}
               </VClamp>
@@ -78,7 +77,7 @@ export default {
   data() {
     return {
       isHovered: false,
-      isTitleClamped: false,
+      descriptionMaxLines: 3,
       thumbnailProps: { width: ThumbnailSize.width, height: ThumbnailSize.height },
     };
   },
@@ -100,12 +99,6 @@ export default {
       }
       return 2;
     },
-    descriptionMaxLines() {
-      if (this.isTitleClamped) {
-        return 3;
-      }
-      return 4;
-    }
   },
 };
 </script>
