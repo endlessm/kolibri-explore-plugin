@@ -1,7 +1,7 @@
 <template>
-  <b-navbar class="header" :class="{ shadow: hasScrolled }" fixed="top">
-    <b-container class="px-3">
-      <img v-if="showLogo" class="logo" :src="logo" @click="$emit('click-logo')">
+  <b-navbar class="header px-0" :class="{ shadow: hasScrolled }" fixed="top">
+    <b-container>
+      <img v-if="showLogo" class="logo mr-3" :src="logo" @click="$emit('click-logo')">
       <slot></slot>
 
       <b-navbar-nav class="ml-auto">
@@ -53,18 +53,16 @@
   @import '../styles.scss';
 
   .header {
-    background: white;
     height: $navbar-height;
     @include transition($btn-transition);
-  }
-
-  .header > .container {
-    padding: $card-spacer-x;
+    & .container {
+      padding-right: $grid-gutter-width / 2;
+      padding-left: $grid-gutter-width / 2;
+    }
   }
 
   $logo-size: 50px;
   .logo {
-    margin-right: $spacer;
     width: $logo-size;
     cursor: pointer;
   }
