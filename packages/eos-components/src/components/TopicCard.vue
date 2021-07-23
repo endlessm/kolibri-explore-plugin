@@ -10,18 +10,10 @@
     <ContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
       <b-card-body class="bg-primary">
         <div
-          v-if="isLowQuality"
-          class="float-left low-quality-img"
+          class="card-img"
+          :class="{ 'low-quality': isLowQuality, 'is-thumbnail-wide': isThumbnailWide }"
+          :style="cardStyle"
         >
-          <b-img
-            fluid
-            :src="thumbnail"
-            v-bind="thumbnailProps"
-            rounded
-            :alt="node.title"
-          />
-        </div>
-        <div class="card-img" :style="cardStyle">
           <span class="sr-only">{{ node.title }}</span>
         </div>
         <div class="body-wrapper">
@@ -30,7 +22,6 @@
               <VClamp
                 autoresize
                 :maxLines="titleMaxLines"
-                @clampchange="(e) => isTitleClamped = e"
               >
                 {{ node.title }}
               </VClamp>
@@ -59,7 +50,7 @@
 <script>
 import VClamp from 'vue-clamp';
 import ImageFilterNoneIcon from 'vue-material-design-icons/ImageFilterNone.vue';
-import { MediaQuality, ThumbnailSize } from '../constants';
+import { MediaQuality } from '../constants';
 import cardMixin from './mixins/cardMixin.js';
 
 export default {
@@ -78,8 +69,7 @@ export default {
   data() {
     return {
       isHovered: false,
-      isTitleClamped: false,
-      thumbnailProps: { width: ThumbnailSize.width, height: ThumbnailSize.height },
+      descriptionMaxLines: 3,
     };
   },
   computed: {
@@ -87,9 +77,6 @@ export default {
       return this.mediaQuality === MediaQuality.LOW;
     },
     cardStyle() {
-      if (this.isLowQuality) {
-        return {};
-      }
       return {
         backgroundImage: `url("${this.thumbnail}")`,
       };
@@ -100,12 +87,6 @@ export default {
       }
       return 2;
     },
-    descriptionMaxLines() {
-      if (this.isTitleClamped) {
-        return 3;
-      }
-      return 4;
-    }
   },
 };
 </script>
@@ -145,16 +126,19 @@ $missing-height: 2px;
   height: calc(#{card-body-height(2)} - #{$missing-height});
 }
 
-.low-quality-img {
-  padding: $card-spacer-x;
-}
-
 .card-img {
-  border-top-left-radius: $border-radius-lg;
-  border-top-right-radius: $border-radius-lg;
+  border-radius: $border-radius-lg $border-radius-lg 0 0;
   background-size: cover;
   background-position: center;
   padding-top: $card-image-ar;
+  &.low-quality {
+    background-size: auto calc(100% - #{$card-spacer-x});
+    background-position: $card-spacer-x $card-spacer-x;
+    background-repeat: no-repeat;
+    &.is-thumbnail-wide {
+      background-size: calc(100% - 2 * #{$card-spacer-x}) auto;
+    };
+  };
 }
 
 .subtitle {
