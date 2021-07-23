@@ -95,7 +95,7 @@ $card-image-ar: percentage(9 / 16);
   $subtitle-line-height: $font-size-base * $line-height-base;
   $tags-line-height: $font-size-base * $line-height-base;
 
-  $margins: map-get($spacers, 1) * 4;
+  $margins: map-get($spacers, 1) * 6;
 
   @return ($type-line-height + $title-line-height +
            $subtitle-line-height + $tags-line-height +
