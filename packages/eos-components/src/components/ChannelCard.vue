@@ -15,14 +15,24 @@
       </h6>
     </b-card-header>
     <b-card-text v-if="!isSmall" class="pt-2 text-muted">
-      {{ description }}
+      <VClamp
+        autoresize
+        :maxLines="maxDescriptionLines"
+      >
+        {{ description }}
+      </VClamp>
     </b-card-text>
   </b-card>
 </template>
 
 <script>
+  import VClamp from 'vue-clamp';
+
   export default {
     name: 'ChannelCard',
+    components: {
+      VClamp,
+    },
     props: {
       channel: {
         type: Object,
@@ -39,6 +49,11 @@
           return ['basicCard', 'infoCard', 'smallCard'].indexOf(value) !== -1;
         },
       },
+    },
+    data() {
+      return {
+        maxDescriptionLines: 3,
+      };
     },
     computed: {
       description() {
