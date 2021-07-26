@@ -10,18 +10,10 @@
     <ContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
       <b-card-body>
         <div
-          v-if="isLowQuality"
-          class="float-left low-quality-img"
+          class="card-img"
+          :class="{ 'low-quality': isLowQuality, 'is-thumbnail-wide': isThumbnailWide }"
+          :style="cardStyle"
         >
-          <b-img
-            fluid
-            :src="thumbnail"
-            v-bind="thumbnailProps"
-            rounded
-            :alt="node.title"
-          />
-        </div>
-        <div class="card-img" :style="cardStyle">
           <span class="sr-only">{{ node.title }}</span>
         </div>
         <div class="body-wrapper">
@@ -38,7 +30,7 @@
 
 <script>
 import { goToContent } from 'kolibri-api';
-import { MediaQuality, ThumbnailSize } from '../constants';
+import { MediaQuality } from '../constants';
 import cardMixin from './mixins/cardMixin.js';
 
 export default {
@@ -54,7 +46,6 @@ export default {
   data() {
     return {
       isHovered: false,
-      thumbnailProps: { width: ThumbnailSize.width, height: ThumbnailSize.height },
     };
   },
   computed: {
@@ -62,9 +53,6 @@ export default {
       return this.mediaQuality === MediaQuality.LOW;
     },
     cardStyle() {
-      if (this.isLowQuality) {
-        return {};
-      }
       return {
         backgroundImage: `url("${this.thumbnail}")`,
       };
@@ -114,7 +102,15 @@ export default {
   border-radius: $border-radius-lg $border-radius-lg 0 0;
   background-size: cover;
   background-position: center;
-  padding-top: $card-image-ar;
+  padding-top: percentage($card-image-ar);
+  &.low-quality {
+    background-size: auto calc(100% - #{$card-spacer-x});
+    background-position: $card-spacer-x $card-spacer-x;
+    background-repeat: no-repeat;
+    &.is-thumbnail-wide {
+      background-size: calc(100% - 2 * #{$card-spacer-x}) auto;
+    };
+  };
 }
 
 </style>
