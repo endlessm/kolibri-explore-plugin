@@ -26,6 +26,7 @@ export const pageNameToModuleMap = {
 export const CUSTOM_PRESENTATION_TITLE = 'custom-channel-ui';
 
 export const CarouselItemsLength = 5;
+export const CarouselAllowedKinds = ['document', 'html5', 'video'];
 
 export const searchTerms = new Map([
   ['Arts', 'artist music painting drawing arts'],
