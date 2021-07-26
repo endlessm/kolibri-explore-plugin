@@ -25,7 +25,7 @@ export const pageNameToModuleMap = {
 
 export const CUSTOM_PRESENTATION_TITLE = 'custom-channel-ui';
 
-export const CarouselItems = 5;
+export const CarouselItemsLength = 5;
 
 export const searchTerms = new Map([
   ['Arts', 'artist music painting drawing arts'],
