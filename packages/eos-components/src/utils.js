@@ -100,6 +100,18 @@ export function getCardSubtitle(node, fallback) {
   return byLine ? `by ${byLine}` : '';
 };
 
+export function getSlug(title) {
+  return title
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    // Remove invalid characters
+    .replace(/[^a-z0-9 -]/g, '')
+    // Replace whitespace by -
+    .replace(/\s+/g, '-')
+    // Collapse dashes
+    .replace(/-+/g, '-');
+}
+
 export default {
   getFirstStructuredTag,
   getStructuredTags,
@@ -108,4 +120,5 @@ export default {
   getLeaves,
   getTopicCardSubtitle,
   getCardSubtitle,
+  getSlug,
 };

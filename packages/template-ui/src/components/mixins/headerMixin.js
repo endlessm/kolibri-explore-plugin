@@ -1,6 +1,6 @@
 import { mapState, mapGetters } from 'vuex';
 import { headerLogoWidth } from '@/styles.scss';
-import { getSlug } from '@/utils';
+import { utils } from 'eos-components';
 import dynamicRequireAsset from '@/dynamicRequireAsset';
 
 export default {
@@ -16,7 +16,7 @@ export default {
       if (!this.section || !this.section.title) {
         return null;
       }
-      const sectionSlug = this.getSlug(this.section.title);
+      const sectionSlug = utils.getSlug(this.section.title);
       const headerSectionFilename = `header-${sectionSlug}.jpg`;
       const headerSectionAsset = dynamicRequireAsset(headerSectionFilename);
       if (headerSectionAsset) {
@@ -30,8 +30,5 @@ export default {
     hasHeaderImage() {
       return this.headerImageURL !== null;
     },
-  },
-  methods: {
-    getSlug,
   },
 };
