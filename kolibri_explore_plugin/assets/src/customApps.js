@@ -32,11 +32,11 @@ export const ThumbApps = [
   // 'dance',
   'terminal-two',
   'music',
-  // 'wikipedia',
+  'wikipedia', // FIXME replace thumbnail.
   'career-girls',
   'gardening',
   'healthy-body',
-  // '49ers-edu-digital-playbook',
+  '49ers-edu-digital-playbook', // FIXME replace thumbnail.
   // 'financial-education',
   // 'reading',
   'oceanx',
@@ -46,9 +46,9 @@ export const ThumbApps = [
   'touchable-earth',
   'healthy-mind',
   'khan-academy',
-  // 'techbridge-girls-home',
-  // 'blockly-games',
-  // 'sikana-english',
+  'techbridge-girls-home', // FIXME replace thumbnail.
+  'blockly-games', // FIXME replace thumbnail.
+  'sikana-english', // FIXME replace thumbnail.
   'cspathshala-english',
   'open-stax',
   'phet-interactive-simulations',
