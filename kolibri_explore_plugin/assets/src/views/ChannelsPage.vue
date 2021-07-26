@@ -17,32 +17,51 @@
       </template>
     </Header>
 
-    <div class="flex-fill main">
-      <div v-if="core.loading" class="placeholder">
-        <CarouselPlaceholder />
-        <CardGridPlaceholder :elements="columns" />
-      </div>
+    <b-container class="mb-2 mt-4">
+      <h5 class="mt-2 text-muted">
+        Popular Content Suggestions
+      </h5>
+    </b-container>
 
+    <template v-if="core.loading">
+      <CarouselPlaceholder v-if="hasCarousel" />
+    </template>
 
-      <!-- Carousel -->
+    <template v-else>
       <Carousel class="pt-3" :nodes="carouselNodes" :showChannelIcon="true" />
+    </template>
 
-      <b-container class="channels pb-5">
-        <!-- Cards with thumbnail -->
-        <ChannelCardGroup
-          :rows="rows.withThumbnail"
-          :getThumbnail="getBigThumbnail"
-          :columns="columns"
-          @card-click="goToChannel"
-        />
+    <div class="flex-fill main">
 
-        <!-- Cards without thumbnail -->
-        <ChannelCardGroup
-          :rows="rows.withoutThumbnail"
-          :columns="columns"
-          @card-click="goToChannel"
-        />
+      <b-container class="mb-1 mt-4">
+        <h5 class="mt-2 text-muted">
+          Discover the channels
+        </h5>
       </b-container>
+
+      <template v-if="core.loading">
+        <CardGridPlaceholder />
+      </template>
+
+      <template v-else>
+        <b-container class="channels pb-5">
+          <!-- Cards with thumbnail -->
+          <ChannelCardGroup
+            :rows="rows.withThumbnail"
+            :getThumbnail="getBigThumbnail"
+            :columns="columns"
+            @card-click="goToChannel"
+          />
+
+          <!-- Cards without thumbnail -->
+          <ChannelCardGroup
+            :rows="rows.withoutThumbnail"
+            :columns="columns"
+            @card-click="goToChannel"
+          />
+        </b-container>
+      </template>
+
     </div>
 
     <DiscoveryFooter />
@@ -138,7 +157,7 @@
   @import '../styles';
 
   .main {
-    background-color: white;
+    background-color: $white;
   }
 
   .discovery-header {
