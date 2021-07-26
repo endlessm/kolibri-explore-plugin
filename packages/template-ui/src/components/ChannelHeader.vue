@@ -40,7 +40,7 @@
                   pill
                   :variant="hasHeaderImage ? 'primary' : 'secondary'"
                   size="sm"
-                  class="mt-1"
+                  class="my-1"
                   @click.prevent="toggle"
                 >
                   {{ expanded ? 'Show less' : 'Show more' }}
