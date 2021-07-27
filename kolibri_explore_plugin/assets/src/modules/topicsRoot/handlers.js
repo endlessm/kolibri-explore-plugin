@@ -3,7 +3,7 @@ import urls from 'kolibri.urls';
 import { ChannelResource } from 'kolibri.resources';
 import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 import { ContentNodeResource, ContentNodeSearchResource } from '../../apiResources';
-import { CarouselItems, PageNames } from '../../constants';
+import { CarouselAllowedKinds, CarouselItemsLength, PageNames } from '../../constants';
 import { CustomChannelApps } from '../../customApps';
 import { _collectionState } from '../coreExplore/utils';
 
@@ -60,7 +60,8 @@ function _fetchCarouselNodes(store) {
   return ContentNodeResource.fetchPopular({
     user_kind: store.getters.getUserKind,
   })
-    .then(nodes => _.sample(nodes, CarouselItems))
+    .then(nodes => nodes.filter(node => CarouselAllowedKinds.includes(node.kind)))
+    .then(nodes => _.sample(nodes, CarouselItemsLength))
     .then(nodes => {
       nodes.forEach(node => {
         const thumbnailUrl = getContentNodeThumbnail(node);
