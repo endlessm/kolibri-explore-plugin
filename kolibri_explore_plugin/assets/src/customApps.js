@@ -20,6 +20,7 @@ export const CustomChannelApps = {
   '74f36493bb475b62935fa8705ed59fed': 'thoughtful-learning',
   '1e378725d3924b47aa5e1260628820b5': 'ted-ed-lessons',
   '922e9c576c2f59e59389142b136308ff': 'career-girls',
+  e11462f71c6f5472b113311c69071b05: 'dance',
 };
 
 export function getAppNameByID(id) {
@@ -29,7 +30,7 @@ export function getAppNameByID(id) {
 // This should match a file existing on static/thumbnails/NAME.jpg
 export const ThumbApps = [
   'ted-ed-lessons',
-  // 'dance',
+  'dance',
   'terminal-two',
   'music',
   'wikipedia', // FIXME replace thumbnail.
