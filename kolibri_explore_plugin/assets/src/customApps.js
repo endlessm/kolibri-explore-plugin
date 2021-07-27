@@ -33,7 +33,7 @@ export const ThumbApps = [
   'dance',
   'terminal-two',
   'music',
-  'wikipedia', // FIXME replace thumbnail.
+  'wikipedia',
   'career-girls',
   'gardening',
   'healthy-body',
