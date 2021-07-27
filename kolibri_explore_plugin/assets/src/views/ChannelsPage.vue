@@ -34,7 +34,7 @@
     <div class="flex-fill main">
 
       <b-container class="mb-1 mt-4">
-        <h5 class="mt-2 text-muted">
+        <h5 class="pt-2 text-muted">
           Discover the channels
         </h5>
       </b-container>
