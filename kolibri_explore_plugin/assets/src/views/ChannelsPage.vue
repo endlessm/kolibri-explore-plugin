@@ -24,7 +24,7 @@
     </b-container>
 
     <template v-if="core.loading">
-      <CarouselPlaceholder v-if="hasCarousel" />
+      <CarouselPlaceholder />
     </template>
 
     <template v-else>
