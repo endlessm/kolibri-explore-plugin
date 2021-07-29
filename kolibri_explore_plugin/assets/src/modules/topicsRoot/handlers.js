@@ -4,7 +4,7 @@ import { ChannelResource } from 'kolibri.resources';
 import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 import { ContentNodeResource, ContentNodeSearchResource } from '../../apiResources';
 import { CarouselAllowedKinds, CarouselItemsLength, PageNames } from '../../constants';
-import { CustomChannelApps } from '../../customApps';
+import { CustomChannelApps, RecommendedChannelIDs } from '../../customApps';
 import { _collectionState } from '../coreExplore/utils';
 
 function _findNodes(channels, channelCollection) {
@@ -54,8 +54,8 @@ function _filterCustomApp(channel) {
 
 function _fetchCarouselNodes(store) {
   const { rootNodes } = store.state.topicsRoot;
-  // FIXME Filter recommended channels
-  const carouselChannels = _.sample(rootNodes, CarouselItemsLength);
+  const availableRecommendedChannels = rootNodes.filter(c => RecommendedChannelIDs.includes(c.id));
+  const carouselChannels = _.sample(availableRecommendedChannels, CarouselItemsLength);
   const carouselNodeIds = Promise.all(
     carouselChannels.map(channel => {
       return ContentNodeResource.fetchRandomFromChannel({
