@@ -54,15 +54,21 @@ function _filterCustomApp(channel) {
 
 function _fetchCarouselNodes(store) {
   const { rootNodes } = store.state.topicsRoot;
+  // FIXME Filter recommended channels
+  const carouselChannels = _.sample(rootNodes, CarouselItemsLength);
+  const carouselNodeIds = Promise.all(
+    carouselChannels.map(channel => {
+      return ContentNodeResource.fetchRandomFromChannel({
+        kind_in: CarouselAllowedKinds,
+        channel_id: channel.id,
+      });
+    })
+  ).then(results => [].concat.apply([], results));
 
-  // FIXME: Currently fetching random popular content, we can have a fixed list
-  // of content id to look for.
-  return ContentNodeResource.fetchPopular({
-    user_kind: store.getters.getUserKind,
-  })
-    .then(nodes => nodes.filter(node => CarouselAllowedKinds.includes(node.kind)))
-    .then(nodes => _.sample(nodes, CarouselItemsLength))
-    .then(nodes => {
+  return carouselNodeIds.then(nodes => {
+    return ContentNodeResource.fetchCollection({
+      getParams: { ids: nodes.map(n => n.id) },
+    }).then(nodes => {
       nodes.forEach(node => {
         const thumbnailUrl = getContentNodeThumbnail(node);
         node.thumbnail = thumbnailUrl;
@@ -76,6 +82,7 @@ function _fetchCarouselNodes(store) {
       });
       return nodes;
     });
+  });
 }
 
 export function showChannels(store) {
