@@ -5,17 +5,17 @@
         <template #prepend>
           <b-input-group-text>
             <b-spinner v-if="loading" small label="Spinning" />
-            <b-icon-search v-else />
+            <MagnifyIcon v-else />
           </b-input-group-text>
         </template>
         <template #append>
           <b-button
             v-if="value"
             variant="link"
-            class="text-muted"
+            class="text-primary"
             @click="clearSearchInput"
           >
-            <b-icon-x-circle scale="2" />
+            <CloseIcon />
           </b-button>
         </template>
         <input
@@ -33,9 +33,15 @@
 
 <script>
   import _ from 'underscore';
+  import CloseIcon from 'vue-material-design-icons/CloseCircleOutline.vue';
+  import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
 
   export default {
     name: 'SearchBar',
+    components: {
+      CloseIcon,
+      MagnifyIcon,
+    },
     props: {
       value: {
         type: String,
