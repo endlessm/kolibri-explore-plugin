@@ -35,6 +35,9 @@ export const ContentNodeResource = new Resource({
   fetchPopular(getParams) {
     return this.fetchListCollection('popular', getParams);
   },
+  fetchRandomFromChannel(getParams) {
+    return this.fetchListCollection('random_from_channel', getParams);
+  },
   fetchNextSteps(getParams) {
     return this.fetchDetailCollection('next_steps', Store.getters.currentUserId, getParams);
   },

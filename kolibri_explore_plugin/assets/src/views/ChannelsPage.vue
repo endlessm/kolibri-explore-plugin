@@ -76,9 +76,9 @@
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import _ from 'underscore';
-  import { responsiveMixin, utils } from 'eos-components';
+  import { responsiveMixin } from 'eos-components';
   import { PageNames, searchTerms } from '../constants';
-  import { getBigThumbnail, ThumbApps } from '../customApps';
+  import { getBigThumbnail, RecommendedChannelIDs } from '../customApps';
 
   import DiscoveryFooter from './DiscoveryFooter';
 
@@ -94,8 +94,7 @@
         let withoutThumbnail = [];
 
         this.channels.forEach(channel => {
-          const thumb = getBigThumbnail(channel);
-          if (thumb) {
+          if (RecommendedChannelIDs.includes(channel.id)) {
             withThumbnail.push(channel);
           } else {
             withoutThumbnail.push(channel);
@@ -103,7 +102,7 @@
         });
 
         // Order the channels with thumbnail as in the ThumbApps array:
-        withThumbnail = _.sortBy(withThumbnail, n => ThumbApps.indexOf(utils.getSlug(n.title)));
+        withThumbnail = _.sortBy(withThumbnail, n => RecommendedChannelIDs.indexOf(n.id));
 
         // Split the channels in rows:
         withThumbnail = _.chunk(withThumbnail, this.columns);
@@ -147,9 +146,7 @@
           params: { query },
         });
       },
-      getBigThumbnail(channel) {
-        return getBigThumbnail(channel);
-      },
+      getBigThumbnail,
     },
   };
 

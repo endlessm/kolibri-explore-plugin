@@ -4,7 +4,7 @@ import { ChannelResource } from 'kolibri.resources';
 import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 import { ContentNodeResource, ContentNodeSearchResource } from '../../apiResources';
 import { CarouselAllowedKinds, CarouselItemsLength, PageNames } from '../../constants';
-import { CustomChannelApps } from '../../customApps';
+import { CustomChannelApps, RecommendedChannelIDs } from '../../customApps';
 import { _collectionState } from '../coreExplore/utils';
 
 function _findNodes(channels, channelCollection) {
@@ -54,15 +54,21 @@ function _filterCustomApp(channel) {
 
 function _fetchCarouselNodes(store) {
   const { rootNodes } = store.state.topicsRoot;
+  const availableRecommendedChannels = rootNodes.filter(c => RecommendedChannelIDs.includes(c.id));
+  const carouselChannels = _.sample(availableRecommendedChannels, CarouselItemsLength);
+  const carouselNodeIds = Promise.all(
+    carouselChannels.map(channel => {
+      return ContentNodeResource.fetchRandomFromChannel({
+        kind_in: CarouselAllowedKinds,
+        channel_id: channel.id,
+      });
+    })
+  ).then(results => [].concat.apply([], results));
 
-  // FIXME: Currently fetching random popular content, we can have a fixed list
-  // of content id to look for.
-  return ContentNodeResource.fetchPopular({
-    user_kind: store.getters.getUserKind,
-  })
-    .then(nodes => nodes.filter(node => CarouselAllowedKinds.includes(node.kind)))
-    .then(nodes => _.sample(nodes, CarouselItemsLength))
-    .then(nodes => {
+  return carouselNodeIds.then(nodes => {
+    return ContentNodeResource.fetchCollection({
+      getParams: { ids: nodes.map(n => n.id) },
+    }).then(nodes => {
       nodes.forEach(node => {
         const thumbnailUrl = getContentNodeThumbnail(node);
         node.thumbnail = thumbnailUrl;
@@ -76,6 +82,7 @@ function _fetchCarouselNodes(store) {
       });
       return nodes;
     });
+  });
 }
 
 export function showChannels(store) {
