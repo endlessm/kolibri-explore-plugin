@@ -1,15 +1,15 @@
 import { getThumbnail } from 'kolibri-api';
 import { getFirstStructuredTag } from '../../utils';
-import { MediaQuality, StructuredTags } from '../../constants';
+import { StructuredTags } from '../../constants';
 import { cardImageAspectRatio } from '../../styles.scss';
 
-import AppThumb from '../../assets/thumbnails/app.jpg';
-import AudioThumb from '../../assets/thumbnails/audio.jpg';
-import BundleThumb from '../../assets/thumbnails/bundle.jpg';
-import DocumentThumb from '../../assets/thumbnails/document.jpg';
-import ExerciseThumb from '../../assets/thumbnails/exercise.jpg';
+import AppThumb from '../../assets/thumbnails/app.png';
+import AudioThumb from '../../assets/thumbnails/audio.png';
+import BundleThumb from '../../assets/thumbnails/bundle.png';
+import DocumentThumb from '../../assets/thumbnails/document.png';
+import ExerciseThumb from '../../assets/thumbnails/exercise.png';
 import TopicThumb from '../../assets/thumbnails/topic.png';
-import VideoThumb from '../../assets/thumbnails/video.jpg';
+import VideoThumb from '../../assets/thumbnails/video.png';
 
 export default {
   data() {
@@ -82,9 +82,6 @@ export default {
           return AppThumb;
         case 'topic':
         default:
-          if (this.mediaQuality === MediaQuality.LOW) {
-            return BundleThumb;
-          }
           return TopicThumb;
       }
     },
