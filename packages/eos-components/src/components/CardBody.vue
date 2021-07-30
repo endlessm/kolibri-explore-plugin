@@ -15,7 +15,7 @@
     <p v-else class="mb-1 subtitle text-muted text-truncate">
       {{ subtitle }}
     </p>
-    <div v-if="tags.length" class="mb-3 tags text-truncate">
+    <div v-if="showTags" class="mb-3 tags text-truncate">
       <b-badge
         v-for="tag in tags"
         :key="tag"
@@ -66,6 +66,9 @@ export default {
     },
     showChannelIcon() {
       return this.node.channel;
+    },
+    showTags() {
+      return !this.showChannelIcon && this.tags.length;
     },
   },
 };
