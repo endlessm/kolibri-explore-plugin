@@ -1,4 +1,5 @@
 {
   "displayLogoInHeader": false,
-  "isEndlessApp": true
+  "isEndlessApp": true,
+  "hasDarkHeader": true
 }
