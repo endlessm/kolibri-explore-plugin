@@ -36,10 +36,16 @@
             </b-card-text>
           </div>
           <b-card-text class="my-1">
-            <ImageFilterNoneIcon />
-            <span class="ml-2 subtitle">
-              {{ subtitle }}
-            </span>
+            <div v-if="showChannelIcon" class="align-items-center d-flex">
+              <ChannelLogo class="mr-2" :channel="node.channel" size="sm" />
+              <span class="channel-title subtitle text-truncate">{{ node.channel.title }}</span>
+            </div>
+            <div v-else>
+              <ImageFilterNoneIcon />
+              <span class="ml-2 subtitle">
+                {{ subtitle }}
+              </span>
+            </div>
           </b-card-text>
         </div>
       </b-card-body>
@@ -86,6 +92,9 @@ export default {
         return 5;
       }
       return 2;
+    },
+    showChannelIcon() {
+      return this.node.channel;
     },
   },
 };
