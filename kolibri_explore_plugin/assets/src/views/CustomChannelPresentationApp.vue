@@ -62,7 +62,7 @@
           return;
         }
         if (event.data.event === 'askChannelInformation') {
-          this.sendChannelInformation(event.data.data);
+          this.sendChannelInformation();
         }
         if (event.data.event === 'goToChannelList') {
           this.goToChannelList();
@@ -71,37 +71,25 @@
           this.sendThumbnail(event.data.data);
         }
       },
-      sendChannelInformation(data) {
+      sendChannelInformation() {
         if (!this.iframeWindow) {
           return;
         }
 
-        if (data.fetchAsync) {
-          ContentNodeResource.fetchChannelAsync(this.channel.id).then(nodes => {
-            const event = 'sendChannelInformation';
-            const message = {
-              event,
-              nameSpace,
-              data: { channel: this.channel, nodes: [this.channel, ...nodes] },
-            };
-            this.iframeWindow.postMessage(message, '*');
-          });
-        } else {
-          ContentNodeResource.fetchCollection({
-            getParams: {
-              channel_id: this.channel.id,
-              user_kind: this.$store.getters.getUserKind,
-            },
-          }).then(nodes => {
-            const event = 'sendChannelInformation';
-            const message = {
-              event,
-              nameSpace,
-              data: { channel: this.channel, nodes },
-            };
-            this.iframeWindow.postMessage(message, '*');
-          });
-        }
+        ContentNodeResource.fetchCollection({
+          getParams: {
+            channel_id: this.channel.id,
+            user_kind: this.$store.getters.getUserKind,
+          },
+        }).then(nodes => {
+          const event = 'sendChannelInformation';
+          const message = {
+            event,
+            nameSpace,
+            data: { channel: this.channel, nodes },
+          };
+          this.iframeWindow.postMessage(message, '*');
+        });
       },
 
       sendThumbnail(id) {

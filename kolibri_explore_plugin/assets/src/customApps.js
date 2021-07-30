@@ -4,7 +4,6 @@ import urls from 'kolibri.urls';
 // custom-channel-presentation zip bundle
 export const CustomChannelApps = {
   e409b964366a59219c148f2aaa741f43: 'blockly-games',
-  '922e9c576c2f59e59389142b136308ff': 'career-girls',
   bbb4ea407a3c450cb18cbaa76f2d75cd: 'cspathshala-english',
   '85b42a40745f4e2392ed62e72d4dad6e': 'oceanx',
   fc47aee82e0153e2a30197d3fdee1128: 'open-stax',

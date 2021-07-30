@@ -13,13 +13,10 @@
 
 <script>
 import { askChannelInformation } from 'kolibri-api';
-import { mapMutations, mapState } from 'vuex';
+import { mapMutations } from 'vuex';
 
 export default {
   name: 'App',
-  computed: {
-    ...mapState(['fetchAsync']),
-  },
   watch: {
     $route(to) {
       // Watch the router "to" parameter, and set the navigation state accordingly.
@@ -42,7 +39,7 @@ export default {
     },
   },
   created() {
-    askChannelInformation(this.gotChannelInformation, this.fetchAsync);
+    askChannelInformation(this.gotChannelInformation);
   },
   methods: {
     ...mapMutations(['setContentNavigation', 'setSectionNavigation', 'setHomeNavigation']),

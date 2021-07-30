@@ -74,7 +74,6 @@ const initialState = {
   displayHeroContent: false,
   isEndlessApp: false,
   bundleKind: null,
-  fetchAsync: false,
 };
 
 const store = new Vuex.Store({

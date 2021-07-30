@@ -1,5 +1,3 @@
-import _ from 'underscore';
-
 import { Resource } from 'kolibri.lib.apiResource';
 import Store from 'kolibri.coreVue.vuex.store';
 
@@ -40,28 +38,6 @@ export const ContentNodeResource = new Resource({
   },
   fetchNextSteps(getParams) {
     return this.fetchDetailCollection('next_steps', Store.getters.currentUserId, getParams);
-  },
-  fetchChannelAsync(channelId, parent = null) {
-    // Fetch all content for a channel recursively, making a request to the
-    // backend for each level in the nodes tree
-    const getParams = {
-      channel_id: channelId,
-      parent: parent || channelId,
-    };
-
-    return this.fetchCollection({ getParams }).then(n => {
-      return Promise.all(n).then(nodes => {
-        const promises = nodes
-          .filter(node => node.kind === 'topic')
-          .map(node => this.fetchChannelAsync(channelId, node.id));
-
-        return Promise.all(promises).then(array => {
-          return new Promise(resolve => {
-            resolve(_.union(nodes, _.flatten(array)));
-          });
-        });
-      });
-    });
   },
 });
 
