@@ -93,15 +93,13 @@
               user_kind: this.$store.getters.getUserKind,
             },
           }).then(nodes => {
-            Promise.all(nodes).then(node => {
-              const event = 'sendChannelInformation';
-              const message = {
-                event,
-                nameSpace,
-                data: { channel: this.channel, nodes: node },
-              };
-              this.iframeWindow.postMessage(message, '*');
-            });
+            const event = 'sendChannelInformation';
+            const message = {
+              event,
+              nameSpace,
+              data: { channel: this.channel, nodes },
+            };
+            this.iframeWindow.postMessage(message, '*');
           });
         }
       },
