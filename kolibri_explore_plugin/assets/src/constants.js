@@ -39,3 +39,5 @@ export const searchTerms = new Map([
   ['Science', 'cool science sciences physics biology molecules gravity'],
   ['Sports', 'football soccer dribbling volley tennis skating'],
 ]);
+
+export const COLLECTIONS_PAGE_SIZE = 300;
