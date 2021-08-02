@@ -6,6 +6,21 @@ from rest_framework.response import Response
 
 
 class CustomContentNodeViewset(ContentNodeViewset):
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(
+            self.prefetch_queryset(self.get_queryset())
+        )
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            # FIXME paginate_queryset above is returning a list of objects,
+            # and the serialize method assumes a queryset:
+            node_ids = [n.pk for n in page]
+            page = queryset.filter(pk__in=node_ids)
+            return self.get_paginated_response(self.serialize(page))
+
+        return Response(self.serialize(queryset))
+
     def _consolidate(self, items, queryset):
         if not items:
             return []
@@ -46,4 +61,5 @@ class CustomContentNodeViewset(ContentNodeViewset):
 class CustomContentNodeSearchViewset(
     CustomContentNodeViewset, ContentNodeSearchViewset
 ):
-    pass
+    def list(self, request, **kwargs):
+        return ContentNodeSearchViewset.list(self, request, **kwargs)

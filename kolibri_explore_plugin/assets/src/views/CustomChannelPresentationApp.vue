@@ -20,7 +20,7 @@
   import axios from 'axios';
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
   import { getAppNameByID } from '../customApps';
-  import { PageNames } from '../constants';
+  import { PageNames, COLLECTIONS_PAGE_SIZE } from '../constants';
   import { ContentNodeResource } from '../apiResources.js';
 
   const nameSpace = 'hashi';
@@ -62,7 +62,7 @@
           return;
         }
         if (event.data.event === 'askChannelInformation') {
-          this.sendChannelInformation(event.data.data);
+          this.sendChannelInformation();
         }
         if (event.data.event === 'goToChannelList') {
           this.goToChannelList();
@@ -71,39 +71,38 @@
           this.sendThumbnail(event.data.data);
         }
       },
-      sendChannelInformation(data) {
+      sendChannelInformation() {
         if (!this.iframeWindow) {
           return;
         }
 
-        if (data.fetchAsync) {
-          ContentNodeResource.fetchChannelAsync(this.channel.id).then(nodes => {
-            const event = 'sendChannelInformation';
-            const message = {
-              event,
-              nameSpace,
-              data: { channel: this.channel, nodes: [this.channel, ...nodes] },
-            };
-            this.iframeWindow.postMessage(message, '*');
-          });
-        } else {
-          ContentNodeResource.fetchCollection({
+        const paginatedFetch = (page, nodes) => {
+          return ContentNodeResource.fetchCollection({
             getParams: {
+              page,
+              page_size: COLLECTIONS_PAGE_SIZE,
               channel_id: this.channel.id,
               user_kind: this.$store.getters.getUserKind,
             },
-          }).then(nodes => {
-            Promise.all(nodes).then(node => {
-              const event = 'sendChannelInformation';
-              const message = {
-                event,
-                nameSpace,
-                data: { channel: this.channel, nodes: node },
-              };
-              this.iframeWindow.postMessage(message, '*');
-            });
+          }).then(response => {
+            nodes.push(...response.results);
+            if (response.next) {
+              return paginatedFetch(page + 1, nodes);
+            } else {
+              return nodes;
+            }
           });
-        }
+        };
+
+        paginatedFetch(1, []).then(nodes => {
+          const event = 'sendChannelInformation';
+          const message = {
+            event,
+            nameSpace,
+            data: { channel: this.channel, nodes },
+          };
+          this.iframeWindow.postMessage(message, '*');
+        });
       },
 
       sendThumbnail(id) {
