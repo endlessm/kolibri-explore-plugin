@@ -4,6 +4,7 @@ import { ChannelResource } from 'kolibri.resources';
 import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 import { ContentNodeResource, ContentNodeSearchResource } from '../../apiResources';
 import { CarouselAllowedKinds, CarouselItemsLength, PageNames } from '../../constants';
+import { COLLECTIONS_PAGE_SIZE } from '../../constants';
 import { CustomChannelApps, RecommendedChannelIDs } from '../../customApps';
 import { _collectionState } from '../coreExplore/utils';
 
@@ -148,9 +149,31 @@ export function showFilteredChannels(store) {
 export function searchChannels(store, params) {
   store.commit('CORE_SET_PAGE_LOADING', true);
   store.commit('topicsRoot/SET_SEARCH_RESULT', {});
-  return ContentNodeSearchResource.fetchCollection({
-    getParams: params,
-  }).then(searchResults => {
+
+  const paginatedFetch = (page, searchResults) => {
+    return ContentNodeSearchResource.fetchCollection({
+      getParams: {
+        ...params,
+        page,
+        page_size: COLLECTIONS_PAGE_SIZE,
+      },
+    }).then(response => {
+      const { channel_ids, results } = response;
+      searchResults.channel_ids.push(...channel_ids);
+      searchResults.results.push(...results);
+      if (response.next) {
+        return paginatedFetch(page + 1, searchResults);
+      } else {
+        return searchResults;
+      }
+    });
+  };
+
+  const baseState = {
+    channel_ids: [],
+    results: [],
+  };
+  paginatedFetch(1, baseState).then(searchResults => {
     const { rootNodes } = store.state.topicsRoot;
     const { channel_ids, results } = searchResults;
     const nodes = results.map(n => ({
