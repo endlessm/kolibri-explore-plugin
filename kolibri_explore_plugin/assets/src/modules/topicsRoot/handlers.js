@@ -68,11 +68,11 @@ function _fetchCarouselNodes(store) {
         channel_id: channel.id,
       });
     })
-  ).then(results => [].concat.apply([], results));
+  ).then(results => [].concat(...results));
 
-  return carouselNodeIds.then(nodes => {
+  return carouselNodeIds.then(carouselNodes => {
     return ContentNodeResource.fetchCollection({
-      getParams: { ids: nodes.map(n => n.id) },
+      getParams: { ids: carouselNodes.map(n => n.id) },
     }).then(nodes => {
       nodes.forEach(node => {
         const thumbnailUrl = getContentNodeThumbnail(node);
