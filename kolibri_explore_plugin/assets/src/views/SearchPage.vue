@@ -62,13 +62,13 @@
       </div>
 
       <b-container class="pb-5 pt-3">
-        <div v-if="resultChannels">
+        <div v-if="resultChannels.length">
           <h4 class="text-muted">
-            {{ searchResult.channels.length }} channels related to "{{ cleanedQuery }}"
+            {{ resultChannels.length }} channels related to "{{ cleanedQuery }}"
           </h4>
           <ChannelCardGroup
             variant="smallCard"
-            :rows="resultChannels"
+            :rows="resultChannelsColumns"
             :columns="columns"
             @card-click="goToChannel"
           />
@@ -115,6 +115,8 @@
 
   import DiscoveryFooter from './DiscoveryFooter';
 
+  const kinds = Object.keys(constants.MediaTypeVerbs);
+
   export default {
     name: 'SearchPage',
     components: { DiscoveryFooter },
@@ -143,7 +145,12 @@
         return this.loading && !this.isEmpty;
       },
       isNoResults() {
-        return !this.isEmpty && !this.isLoading && !this.resultCards;
+        return (
+          !this.isEmpty &&
+          !this.isLoading &&
+          !this.resultCards.length &&
+          !this.resultChannels.length
+        );
       },
       recommended() {
         if (!this.channels || !this.channels.length) {
@@ -164,41 +171,41 @@
         return this.query.trim();
       },
       resultChannels() {
-        const { channels } = this.searchResult;
-        if (!channels || !channels.length) {
-          return null;
-        }
+        return kinds
+          .map(k => _.get(this.searchResult, [k, 'channels'], []))
+          .reduce((accumulator, value) => {
+            return _.uniq([...accumulator, ...value], false, 'id');
+          }, []);
+      },
 
-        return _.chunk(this.searchResult.channels, this.columns);
+      resultChannelsColumns() {
+        return _.chunk(this.resultChannels, this.columns);
       },
       resultCards() {
-        const { results } = this.searchResult;
-        if (!results || !results.length) {
-          return null;
-        }
+        const groups = kinds
+          .map(k => {
+            const results = _.get(this.searchResult, [k, 'results'], []);
+            // Add tags to nodes
+            const nodes = utils.parseNodes(results);
+            // Add thumbnails and links to nodes
+            nodes.forEach(node => {
+              const thumbnailUrl = getContentNodeThumbnail(node);
+              node.thumbnail = thumbnailUrl;
+              const base = `/topics/${node.channel_id}`;
+              if (node.kind === 'topic') {
+                node.nodeUrl = `${base}/t/${node.id}`;
+              } else {
+                node.nodeUrl = `${base}/c/${node.id}`;
+              }
+            });
 
-        // Add tags to nodes
-        const nodes = utils.parseNodes(results);
+            return [k, nodes];
+          })
+          // Remove empty groups
+          .filter(([, nodes]) => nodes.length > 0);
 
-        // Add thumbnails and links to nodes
-        nodes.forEach(node => {
-          const thumbnailUrl = getContentNodeThumbnail(node);
-          node.thumbnail = thumbnailUrl;
-          const base = `/topics/${node.channel_id}`;
-          if (node.kind === 'topic') {
-            node.nodeUrl = `${base}/t/${node.id}`;
-          } else {
-            node.nodeUrl = `${base}/c/${node.id}`;
-          }
-        });
-
-        // Group by content kind
-        const grouped = _.groupBy(nodes, n => n.kind);
-        // Order by number of results
-        const sortedKeys = _.sortBy(Object.keys(grouped), k => grouped[k].length).reverse();
-        const sortedValues = sortedKeys.map(k => grouped[k]);
-        const zipped = _.zip(sortedKeys, sortedValues);
-        return zipped;
+        // Sort by number of results
+        return _.sortBy(groups, ([, nodes]) => nodes.length).reverse();
       },
       columns() {
         if (this.xs) {
@@ -248,7 +255,7 @@
           return;
         }
 
-        searchChannels(this.$store, { search: query });
+        kinds.forEach(k => searchChannels(this.$store, query, k));
       },
       clearInput() {
         this.query = '';
