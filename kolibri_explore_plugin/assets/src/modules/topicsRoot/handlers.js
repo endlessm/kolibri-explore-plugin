@@ -3,8 +3,13 @@ import urls from 'kolibri.urls';
 import { ChannelResource } from 'kolibri.resources';
 import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 import { ContentNodeResource, ContentNodeSearchResource } from '../../apiResources';
-import { CarouselAllowedKinds, CarouselItemsLength, PageNames } from '../../constants';
-import { COLLECTIONS_PAGE_SIZE } from '../../constants';
+import {
+  CarouselAllowedKinds,
+  CarouselItemsLength,
+  PageNames,
+  COLLECTIONS_PAGE_SIZE,
+} from '../../constants';
+
 import { CustomChannelApps, RecommendedChannelIDs } from '../../customApps';
 import { _collectionState } from '../coreExplore/utils';
 
@@ -64,11 +69,11 @@ function _fetchCarouselNodes(store) {
         channel_id: channel.id,
       });
     })
-  ).then(results => [].concat.apply([], results));
+  ).then(results => [].concat(...results));
 
-  return carouselNodeIds.then(nodes => {
+  return carouselNodeIds.then(carouselNodes => {
     return ContentNodeResource.fetchCollection({
-      getParams: { ids: nodes.map(n => n.id) },
+      getParams: { ids: carouselNodes.map(n => n.id) },
     }).then(nodes => {
       nodes.forEach(node => {
         const thumbnailUrl = getContentNodeThumbnail(node);
@@ -150,7 +155,7 @@ export function searchChannels(store, params) {
   store.commit('CORE_SET_PAGE_LOADING', true);
   store.commit('topicsRoot/SET_SEARCH_RESULT', {});
 
-  const paginatedFetch = (page, searchResults) => {
+  function paginatedFetch(page, searchResults) {
     return ContentNodeSearchResource.fetchCollection({
       getParams: {
         ...params,
@@ -163,11 +168,10 @@ export function searchChannels(store, params) {
       searchResults.results.push(...results);
       if (response.next) {
         return paginatedFetch(page + 1, searchResults);
-      } else {
-        return searchResults;
       }
+      return searchResults;
     });
-  };
+  }
 
   const baseState = {
     channel_ids: [],
