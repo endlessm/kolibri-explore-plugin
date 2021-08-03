@@ -3,6 +3,9 @@
     <Footer>
       <template #left>
         <ChannelCard :channel="channel" variant="infoCard" />
+        <p v-if="creditsLine" class="mt-3">
+          {{ creditsLine }}
+        </p>
       </template>
       <template #right>
         <div v-if="isEndlessApp" class="endless-seal text-right">
@@ -23,9 +26,12 @@ import EndlessLogo from '@/assets/EndlessLogoFull.svg';
 export default {
   name: 'ChannelFooter',
   computed: {
-    ...mapState(['channel', 'isEndlessApp']),
+    ...mapState(['channel', 'tree', 'isEndlessApp']),
     logo() {
       return EndlessLogo;
+    },
+    creditsLine() {
+      return this.tree[0]['license_owner'];
     },
   },
 };
