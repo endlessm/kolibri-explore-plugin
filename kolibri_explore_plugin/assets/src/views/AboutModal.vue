@@ -25,18 +25,30 @@
         <b-col id="sections-column" class="sections-column" md="9" sm="12">
           <div>
             <h3 id="about-section" class="pt-3 text-primary">
-              About
+              Endless Key — learning and discovery resources, no internet required.
             </h3>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
+
+            <p>
+              The Endless Key Initiative is a project created to help offline
+              kids access great educational and learning resources, even
+              without an internet connection.
+            </p>
+
+            <p>
+              The Endless OS Foundation has partnered with Common Sense and
+              Learning Equality to launch the Endless Key initiative. The Key
+              is designed as a complement to the USA's broadband-for-all
+              rollout, and offline students' distance learning challenges.
+            </p>
+
+            <p>
+              The Endless Key is a 128 gigabyte USB drive that is designed to
+              provide a robust, engaging and safe digital learning environment,
+              with high-quality learning and discovery resources that can be
+              accessed offline (without internet) by students using Windows
+              computers.
+            </p>
+
             <hr>
             <template v-if="buildInfo">
               <h4>Release information</h4>
