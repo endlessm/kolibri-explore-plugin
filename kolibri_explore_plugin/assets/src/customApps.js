@@ -9,7 +9,7 @@ export const CustomChannelApps = {
   fc47aee82e0153e2a30197d3fdee1128: 'open-stax',
   '38eaaf9ec82a44f9ab6e7a44cb730f07': 'pbs-kids',
   '197934f144305350b5820c7c4dd8e194': 'phet-interactive-simulations',
-  '3e464ee12f6a50a781cddf59147b48b1': 'sikana-english',
+  e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy',
   '1e378725d3924b47aa5e1260628820b5': 'ted-ed-lessons',
   '3160899a73564d8a8467284d9219b91c': 'terminal-two',
   '74f36493bb475b62935fa8705ed59fed': 'thoughtful-learning',
@@ -59,7 +59,7 @@ export const RecommendedChannelIDs = [
   '79a50be66bad5eb686c42617c914fd45', // careers
   'e409b964366a59219c148f2aaa741f43', // blockly-games
   '3fcffebc58d15175b948b140434ef6e6', // sports
-  '3e464ee12f6a50a781cddf59147b48b1', // sikana-diy
+  'e9d0d54d209344849e9bed0aa8c222ad', // sikana-diy
   'bbb4ea407a3c450cb18cbaa76f2d75cd', // cspathshala-english
   '57e23812e0dc562581958e39acedd717', // gaming
   'fc47aee82e0153e2a30197d3fdee1128', // open-stax
@@ -88,7 +88,7 @@ export const ChannelCardThumbnails = {
   c9d7f950ab6b5a1199e3d6c10d7f0103: 'khan-academy.jpg',
   '1e755450dede5c40af1487e07984c260': 'techbridge-girls-home.jpg',
   e409b964366a59219c148f2aaa741f43: 'blockly-games.jpg',
-  '3e464ee12f6a50a781cddf59147b48b1': 'sikana-diy.jpg',
+  e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy.jpg',
   bbb4ea407a3c450cb18cbaa76f2d75cd: 'cspathshala-english.jpg',
   fc47aee82e0153e2a30197d3fdee1128: 'open-stax.jpg',
   '197934f144305350b5820c7c4dd8e194': 'phet-interactive-simulations.jpg',
