@@ -1,7 +1,10 @@
 // Communication with Kolibri frontend:
 
 export function getThumbnail(node) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    if (!window.frameElement) {
+      reject(new Error('Not an iframe window'));
+    }
     window.addEventListener('message', function waitThumb(event) {
       if (event.data.event && event.data.nameSpace === 'hashi'
                 && event.data.event === 'sendThumbnail'
