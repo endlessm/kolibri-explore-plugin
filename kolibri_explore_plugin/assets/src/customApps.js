@@ -61,6 +61,7 @@ export const RecommendedChannelIDs = [
   '3fcffebc58d15175b948b140434ef6e6', // sports
   '3e464ee12f6a50a781cddf59147b48b1', // sikana-diy
   'bbb4ea407a3c450cb18cbaa76f2d75cd', // cspathshala-english
+  '57e23812e0dc562581958e39acedd717', // gaming
   'fc47aee82e0153e2a30197d3fdee1128', // open-stax
   '197934f144305350b5820c7c4dd8e194', // phet-interactive-simulations
 ];
