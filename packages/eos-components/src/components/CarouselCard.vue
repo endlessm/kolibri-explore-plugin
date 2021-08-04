@@ -14,12 +14,18 @@
               {{ node.title }}
             </VClamp>
           </h4>
-          <div class="d-flex justify-content-between">
+          <div class="align-items-center d-flex justify-content-between">
             <div v-if="showChannelIcon" class="align-items-center d-flex">
               <ChannelLogo class="mr-2" :channel="node.channel" size="sm" />
-              <span class="text-muted">{{ node.channel.title }}</span>
+              <span class="d-md-block d-none pr-2 text-muted text-truncate">
+                {{ node.channel.title }}
+              </span>
             </div>
-            <p v-else class="align-self-center mb-1 subtitle text-muted text-truncate">
+            <p
+              v-else
+              :class="`align-self-center d-none d-sm-block
+                       mb-1 pr-2 subtitle text-muted text-truncate`"
+            >
               {{ subtitle }}
             </p>
             <PlayButton

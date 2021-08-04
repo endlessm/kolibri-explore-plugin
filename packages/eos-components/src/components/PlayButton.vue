@@ -3,7 +3,7 @@
     pill
     size="sm"
     :variant="`${kind}-${variant}`"
-    class="border-0 pb-1 pl-1 play-button pt-1"
+    class="border-0 pb-1 pl-1 play-button pt-1 text-nowrap"
     @click.stop="$emit('click')"
   >
     <component
