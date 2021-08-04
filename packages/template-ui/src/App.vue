@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { askChannelInformation } from 'kolibri-api';
+import { askChannelInformation, askNodes } from 'kolibri-api';
 import { mapMutations } from 'vuex';
 
 export default {
@@ -40,11 +40,15 @@ export default {
   },
   created() {
     askChannelInformation(this.gotChannelInformation);
+    askNodes(this.gotNodes);
   },
   methods: {
     ...mapMutations(['setContentNavigation', 'setSectionNavigation', 'setHomeNavigation']),
     gotChannelInformation(data) {
       this.$store.commit('setChannelInformation', data);
+    },
+    gotNodes(data) {
+      this.$store.commit('setNodes', data);
       this.$store.commit('setHomeNavigation');
       const uri = window.location.search.substring(1);
       const params = new URLSearchParams(uri);

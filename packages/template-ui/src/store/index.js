@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import _ from 'underscore';
 import { getNodesTree } from '@/utils';
 import dynamicRequireAsset from '@/dynamicRequireAsset';
 import { SEARCH_MAX_RESULTS } from '@/constants';
@@ -81,9 +82,11 @@ const store = new Vuex.Store({
   mutations: {
     setChannelInformation(state, payload) {
       state.channel = payload.channel;
+    },
+    setNodes(state, payload) {
       const parsedNodes = utils.parseNodes(payload.nodes, state.bundleKind !== null);
       if (state.hasFlatGrid) {
-        const rootNode = payload.nodes.find((n) => n.id === payload.channel.id);
+        const rootNode = payload.nodes.find((n) => n.id === state.channel.id);
         const contentNodes = parsedNodes
           .filter((n) => n.kind !== 'topic')
           .map((n) => {
@@ -127,6 +130,9 @@ const store = new Vuex.Store({
       return [];
     },
     headerDescription: (state) => {
+      if (_.isEmpty(state.section)) {
+        return state.channel.description;
+      }
       if (state.section === state.tree[0]) {
         return state.channel.description;
       }
