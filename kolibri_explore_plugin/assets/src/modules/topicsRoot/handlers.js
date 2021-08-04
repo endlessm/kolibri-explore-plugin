@@ -3,7 +3,12 @@ import urls from 'kolibri.urls';
 import { ChannelResource } from 'kolibri.resources';
 import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 import { ContentNodeResource, ContentNodeSearchResource } from '../../apiResources';
-import { CarouselAllowedKinds, CarouselItemsLength, PageNames } from '../../constants';
+import {
+  CarouselAllowedKinds,
+  CarouselItemsLength,
+  PageNames,
+  SEARCH_MAX_RESULTS,
+} from '../../constants';
 import { CustomChannelApps, RecommendedChannelIDs } from '../../customApps';
 import { _collectionState } from '../coreExplore/utils';
 
@@ -63,11 +68,11 @@ function _fetchCarouselNodes(store) {
         channel_id: channel.id,
       });
     })
-  ).then(results => [].concat.apply([], results));
+  ).then(results => [].concat(...results));
 
-  return carouselNodeIds.then(nodes => {
+  return carouselNodeIds.then(carouselNodes => {
     return ContentNodeResource.fetchCollection({
-      getParams: { ids: nodes.map(n => n.id) },
+      getParams: { ids: carouselNodes.map(n => n.id) },
     }).then(nodes => {
       nodes.forEach(node => {
         const thumbnailUrl = getContentNodeThumbnail(node);
@@ -145,11 +150,15 @@ export function showFilteredChannels(store) {
   );
 }
 
-export function searchChannels(store, params) {
+export function searchChannels(store, search, kind) {
   store.commit('CORE_SET_PAGE_LOADING', true);
   store.commit('topicsRoot/SET_SEARCH_RESULT', {});
   return ContentNodeSearchResource.fetchCollection({
-    getParams: params,
+    getParams: {
+      search,
+      kind,
+      max_results: SEARCH_MAX_RESULTS,
+    },
   }).then(searchResults => {
     const { rootNodes } = store.state.topicsRoot;
     const { channel_ids, results } = searchResults;
@@ -163,9 +172,12 @@ export function searchChannels(store, params) {
         .map(c => ({ ...c, title: c.name, order: channel_ids.indexOf(c.id) }))
         .sort((a, b) => a.order - b.order);
       store.commit('topicsRoot/SET_SEARCH_RESULT', {
-        ...searchResults,
-        channels: channels,
-        results: nodes,
+        ...store.state.topicsRoot.searchResult,
+        [kind]: {
+          ...searchResults,
+          channels: channels,
+          results: nodes,
+        },
       });
       store.commit('CORE_SET_PAGE_LOADING', false);
     });
