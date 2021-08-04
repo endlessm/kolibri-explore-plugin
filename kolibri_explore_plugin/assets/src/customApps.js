@@ -14,13 +14,18 @@ export const CustomChannelApps = {
   '3160899a73564d8a8467284d9219b91c': 'terminal-two',
   '74f36493bb475b62935fa8705ed59fed': 'thoughtful-learning',
   f62db29be20453c4a267132e93a9e602: 'wikipedia',
+  f061fce103ff5d4e9b8433e67802e666: 'arts',
+  '79a50be66bad5eb686c42617c914fd45': 'careers',
+  '79cd09863eed51e98576c35ede6f9c9d': 'cooking',
   e11462f71c6f5472b113311c69071b05: 'dance',
   '2b43973f53f1538bad5ece63ad847606': 'financial-literacy',
+  '57e23812e0dc562581958e39acedd717': 'gaming',
   efcc464be5a85ba5a58d1636b00313fc: 'gardening',
   f5f6729f95b55753badeaa066fa6e986: 'healthy-body',
   '4e413158eac55422a5343af9fcfa8d59': 'healthy-mind',
   '057f871caa405ec29d62ba0523c193d7': 'music',
   '59bb2e5a3d2e5e3b85b87d9ab4daa2f3': 'reading',
+  '3fcffebc58d15175b948b140434ef6e6': 'sports',
   '2f95235c3709511fa12d007f31ed6a7b': 'steam',
 };
 
@@ -42,15 +47,19 @@ export const RecommendedChannelIDs = [
   '2b43973f53f1538bad5ece63ad847606', // financial-literacy
   '59bb2e5a3d2e5e3b85b87d9ab4daa2f3', // reading
   '85b42a40745f4e2392ed62e72d4dad6e', // oceanx
-  '2f95235c3709511fa12d007f31ed6a7b', // steam
-  'bcc6e12a0ddf4a17a8b600c6b880e3ed', // common-sense-student-resources
+  'f061fce103ff5d4e9b8433e67802e666', // arts
+  'c9d7f950ab6b5a1199e3d6c10d7f0103', // khan-academy
   '38eaaf9ec82a44f9ab6e7a44cb730f07', // pbs-kids
   '000409f81dbe5d1ba67101cb9fed4530', // touchable-earth
   '4e413158eac55422a5343af9fcfa8d59', // healthy-mind
-  'c9d7f950ab6b5a1199e3d6c10d7f0103', // khan-academy
+  'bcc6e12a0ddf4a17a8b600c6b880e3ed', // common-sense-student-resources
   '1e755450dede5c40af1487e07984c260', // techbridge-girls-home
+  '2f95235c3709511fa12d007f31ed6a7b', // steam
+  '79cd09863eed51e98576c35ede6f9c9d', // cooking
+  '79a50be66bad5eb686c42617c914fd45', // careers
   'e409b964366a59219c148f2aaa741f43', // blockly-games
-  '3e464ee12f6a50a781cddf59147b48b1', // sikana-english
+  '3fcffebc58d15175b948b140434ef6e6', // sports
+  '3e464ee12f6a50a781cddf59147b48b1', // sikana-diy
   'bbb4ea407a3c450cb18cbaa76f2d75cd', // cspathshala-english
   'fc47aee82e0153e2a30197d3fdee1128', // open-stax
   '197934f144305350b5820c7c4dd8e194', // phet-interactive-simulations
@@ -78,10 +87,15 @@ export const ChannelCardThumbnails = {
   c9d7f950ab6b5a1199e3d6c10d7f0103: 'khan-academy.jpg',
   '1e755450dede5c40af1487e07984c260': 'techbridge-girls-home.jpg',
   e409b964366a59219c148f2aaa741f43: 'blockly-games.jpg',
-  '3e464ee12f6a50a781cddf59147b48b1': 'sikana-english.jpg',
+  '3e464ee12f6a50a781cddf59147b48b1': 'sikana-diy.jpg',
   bbb4ea407a3c450cb18cbaa76f2d75cd: 'cspathshala-english.jpg',
   fc47aee82e0153e2a30197d3fdee1128: 'open-stax.jpg',
   '197934f144305350b5820c7c4dd8e194': 'phet-interactive-simulations.jpg',
+  f061fce103ff5d4e9b8433e67802e666: 'arts.jpg',
+  '79a50be66bad5eb686c42617c914fd45': 'careers.jpg',
+  '79cd09863eed51e98576c35ede6f9c9d': 'cooking.jpg',
+  '57e23812e0dc562581958e39acedd717': 'gaming.jpg',
+  '3fcffebc58d15175b948b140434ef6e6': 'sports.jpg',
 };
 
 export const GameAppIDs = [
