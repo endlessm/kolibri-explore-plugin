@@ -4,16 +4,30 @@
       <div class="img" :style="backgroundStyle"></div>
       <b-card-text>
         <div class="card-content">
-          <h3 class="d-lg-block d-none mb-1 title">
-            <VClamp autoresize :maxLines="3">
-              {{ node.title }}
-            </VClamp>
-          </h3>
-          <h4 class="d-lg-none mb-1 title">
-            <VClamp autoresize :maxLines="4">
-              {{ node.title }}
-            </VClamp>
-          </h4>
+          <div v-if="node.description" class="head">
+            <h3 class="limit mb-1 title">
+              <VClamp autoresize :maxLines="1">
+                {{ node.title }}
+              </VClamp>
+            </h3>
+            <p class="node-description text-muted">
+              <VClamp autoresize :maxLines="3">
+                {{ node.description }}
+              </VClamp>
+            </p>
+          </div>
+          <div v-else class="head">
+            <h3 class="d-lg-block d-none mb-1 title">
+              <VClamp autoresize :maxLines="3">
+                {{ node.title }}
+              </VClamp>
+            </h3>
+            <h4 class="d-lg-none mb-1 title">
+              <VClamp autoresize :maxLines="4">
+                {{ node.title }}
+              </VClamp>
+            </h4>
+          </div>
           <div class="align-items-center d-flex justify-content-between">
             <div v-if="showChannelIcon" class="align-items-center d-flex">
               <ChannelLogo class="mr-2" :channel="node.channel" size="sm" />
@@ -122,12 +136,11 @@ export default {
   }
 }
 
-.card-content h3 {
+.card-content .head {
   min-height: 3 * ($h2-font-size * $headings-line-height);
-}
-
-.card-content h4 {
-  min-height: 4 * ($h4-font-size * $headings-line-height);
+  @include media-breakpoint-down(lg) {
+    min-height: 4 * ($h4-font-size * $headings-line-height);
+  }
 }
 
 .card-content {
