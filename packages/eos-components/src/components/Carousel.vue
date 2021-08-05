@@ -5,7 +5,7 @@
       fade
       indicators
       :interval="interval"
-      class="bg-secondary rounded-lg shadow"
+      class="bg-secondary rounded-lg with-shadow"
     >
       <b-carousel-slide
         v-for="node in nodes"
@@ -69,6 +69,14 @@ export default {
 ::v-deep .carousel-indicators li.active {
   width: $carousel-indicator-width * 2;
   background-color: $gray-900;
+}
+
+.with-shadow {
+  transition: all ease .4s;
+  box-shadow: $box-shadow-sm !important;
+  &:hover {
+    box-shadow: $box-shadow !important;
+  }
 }
 
 </style>
