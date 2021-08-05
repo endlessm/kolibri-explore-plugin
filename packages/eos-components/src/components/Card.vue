@@ -18,22 +18,22 @@ export default {
     node: Object,
     mediaQuality: String,
   },
+  data() {
+    return {
+      subtitle: '',
+    };
+  },
+  watcn: {
+    node: function() {
+      this.updateSubtitle();
+    },
+  },
   computed: {
     cardVariant() {
       if (this.node.kind !== 'topic' || this.isBundle) {
         return 'ContentCard';
       }
       return 'TopicCard';
-    },
-    subtitle() {
-      let fallback = '';
-      if (this.$store) {
-        const { state } = this.$store;
-        if (state.channel) {
-          fallback = state.channel.title;
-        }
-      }
-      return getCardSubtitle(this.node, fallback);
     },
     isBundle() {
       if ('isBundle' in this.node) {
@@ -50,8 +50,24 @@ export default {
       return false;
     },
   },
+  mounted() {
+    return new Promise((resolve) => {
+      this.updateSubtitle();
+      resolve();
+    });
+  },
   methods: {
     getNodeUrl,
+    updateSubtitle: function() {
+      let fallback = '';
+      if (this.$store) {
+        const { state } = this.$store;
+        if (state.channel) {
+          fallback = state.channel.title;
+        }
+      }
+      this.subtitle = getCardSubtitle(this.node, fallback);
+    },
   },
 };
 </script>

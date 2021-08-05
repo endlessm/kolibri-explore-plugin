@@ -64,6 +64,9 @@
         if (event.data.event === 'askChannelInformation') {
           this.sendChannelInformation();
         }
+        if (event.data.event === 'askNodes') {
+          this.sendNodes();
+        }
         if (event.data.event === 'goToChannelList') {
           this.goToChannelList();
         }
@@ -72,6 +75,20 @@
         }
       },
       sendChannelInformation() {
+        if (!this.iframeWindow) {
+          return;
+        }
+
+        const event = 'sendChannelInformation';
+        const message = {
+          event,
+          nameSpace,
+          data: { channel: this.channel },
+        };
+        this.iframeWindow.postMessage(message, '*');
+      },
+
+      sendNodes() {
         if (!this.iframeWindow) {
           return;
         }
@@ -95,7 +112,7 @@
         };
 
         paginatedFetch(1, []).then(nodes => {
-          const event = 'sendChannelInformation';
+          const event = 'sendNodes';
           const message = {
             event,
             nameSpace,

@@ -70,3 +70,22 @@ export function askChannelInformation(callback) {
   };
   window.parent.postMessage(message, '*');
 }
+
+export function askNodes(callback) {
+  window.addEventListener('message', (event) => {
+    if (event.data.event && event.data.nameSpace === 'hashi'
+              && event.data.event === 'sendNodes') {
+      callback(event.data.data);
+    }
+  });
+
+  const nameSpace = 'customChannelPresentation';
+  const event = 'askNodes';
+  const data = null;
+  const message = {
+    event,
+    data,
+    nameSpace,
+  };
+  window.parent.postMessage(message, '*');
+}
