@@ -10,7 +10,7 @@ export const CustomChannelApps = {
   '38eaaf9ec82a44f9ab6e7a44cb730f07': 'pbs-kids',
   '197934f144305350b5820c7c4dd8e194': 'phet-interactive-simulations',
   e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy',
-  '1e378725d3924b47aa5e1260628820b5': 'ted-ed-lessons',
+  '2091ca47ff544c96b4ae02b3a92346e1': 'ted-ed-lessons',
   '3160899a73564d8a8467284d9219b91c': 'terminal-two',
   '74f36493bb475b62935fa8705ed59fed': 'thoughtful-learning',
   f62db29be20453c4a267132e93a9e602: 'wikipedia',
@@ -35,12 +35,12 @@ export function getAppNameByID(id) {
 
 // The order here is important because is how they appear in the channel page.
 export const RecommendedChannelIDs = [
-  '1e378725d3924b47aa5e1260628820b5', // ted-ed-lessons
+  '2091ca47ff544c96b4ae02b3a92346e1', // ted-ed-lessons
   'e11462f71c6f5472b113311c69071b05', // dance
   '3160899a73564d8a8467284d9219b91c', // terminal-two
   '057f871caa405ec29d62ba0523c193d7', // music
   'f62db29be20453c4a267132e93a9e602', // wikipedia
-  '922e9c576c2f59e59389142b136308ff', // career-girls
+  '97111903de564de49483a9705d41a8ac', // career-girls
   'efcc464be5a85ba5a58d1636b00313fc', // gardening
   'f5f6729f95b55753badeaa066fa6e986', // healthy-body
   'e5b26962b0ee5d8487152d0987d32e44', // 49ers-edu-digital-playbook
@@ -68,12 +68,12 @@ export const RecommendedChannelIDs = [
 
 // These should match a file existing on static/thumbnails/NAME
 export const ChannelCardThumbnails = {
-  '1e378725d3924b47aa5e1260628820b5': 'ted-ed-lessons.jpg',
+  '2091ca47ff544c96b4ae02b3a92346e1': 'ted-ed-lessons.jpg',
   e11462f71c6f5472b113311c69071b05: 'dance.jpg',
   '3160899a73564d8a8467284d9219b91c': 'terminal-two.jpg',
   '057f871caa405ec29d62ba0523c193d7': 'music.jpg',
   f62db29be20453c4a267132e93a9e602: 'wikipedia.jpg',
-  '922e9c576c2f59e59389142b136308ff': 'career-girls.jpg',
+  '97111903de564de49483a9705d41a8ac': 'career-girls.jpg',
   efcc464be5a85ba5a58d1636b00313fc: 'gardening.jpg',
   f5f6729f95b55753badeaa066fa6e986: 'healthy-body.jpg',
   e5b26962b0ee5d8487152d0987d32e44: '49ers-edu-digital-playbook.jpg',
