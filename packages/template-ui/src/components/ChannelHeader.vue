@@ -14,13 +14,13 @@
             class="d-md-none h3"
             :class="{ 'text-light': hasDarkHeader }"
           >
-            {{ section.title }}
+            {{ headerTitle }}
           </h1>
           <h1
             class="d-md-block d-none"
             :class="{ 'text-light': hasDarkHeader }"
           >
-            {{ section.title }}
+            {{ headerTitle }}
           </h1>
           <div
             class="lead mb-2"
@@ -78,7 +78,7 @@ export default {
   },
   computed: {
     ...mapState(['displayLogoInHeader', 'hasDarkHeader']),
-    ...mapGetters(['headerDescription']),
+    ...mapGetters(['headerTitle', 'headerDescription']),
   },
 };
 </script>

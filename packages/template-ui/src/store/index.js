@@ -135,6 +135,12 @@ const store = new Vuex.Store({
       }
       return [];
     },
+    headerTitle: (state) => {
+      if (_.isEmpty(state.section) || state.section.id === state.channel.id) {
+        return state.channel.title;
+      }
+      return state.section.title;
+    },
     headerDescription: (state) => {
       if (_.isEmpty(state.section)) {
         return state.channel.description;
