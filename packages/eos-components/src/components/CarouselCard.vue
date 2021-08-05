@@ -28,7 +28,7 @@
               </VClamp>
             </h4>
           </div>
-          <div class="align-items-center d-flex justify-content-between">
+          <div class="align-items-center d-flex justify-content-between mt-2">
             <div v-if="showChannelIcon" class="align-items-center d-flex">
               <ChannelLogo class="mr-2" :channel="node.channel" size="sm" />
               <span class="d-md-block d-none pr-2 text-muted text-truncate">
@@ -138,8 +138,12 @@ export default {
 
 .card-content .head {
   min-height: 3 * ($h2-font-size * $headings-line-height);
+  max-width: calc(100% - 100px);
   @include media-breakpoint-down(lg) {
     min-height: 4 * ($h4-font-size * $headings-line-height);
+  }
+  @include media-breakpoint-down(md) {
+    max-width: 100%;
   }
 }
 
