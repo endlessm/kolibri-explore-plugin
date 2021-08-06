@@ -32,7 +32,7 @@
 <script>
 import VClamp from 'vue-clamp';
 import { StructuredTags } from '../constants';
-import { getFirstStructuredTag } from '../utils';
+import { getAllStructuredTags, getFirstStructuredTag } from '../utils';
 
 export default {
   name: 'CardBody',
@@ -49,7 +49,7 @@ export default {
   },
   computed: {
     subjectTags() {
-      return this.node.structuredTags[StructuredTags.SUBJECT] || [];
+      return getAllStructuredTags(this.node, StructuredTags.SUBJECT);
     },
     typeTag() {
       return getFirstStructuredTag(this.node, StructuredTags.TYPE);

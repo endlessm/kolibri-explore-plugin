@@ -1,7 +1,7 @@
 import { recursiveExistsNodes, flattenNodes } from '@/utils';
 import _ from 'underscore';
 
-import { constants } from 'eos-components';
+import { utils, constants } from 'eos-components';
 
 // ['foo', 'foo', 'bar'] => { 'foo': 2, 'bar': 1 }
 function weightOptions(options) {
@@ -34,7 +34,7 @@ function getTagOptions(node) {
 function getStructuredTagOptions(node, matchKey) {
   return flattenNodes(node)
     .filter((n) => n.kind !== 'topic')
-    .flatMap((n) => n.structuredTags[matchKey]);
+    .flatMap((n) => utils.getAllStructuredTags(n, matchKey));
 }
 
 let storeData;
@@ -181,7 +181,7 @@ export default {
         if (options && options.length) {
           filtered = filtered.filter((node) => (
             options.some((o) => recursiveExistsNodes(node,
-              (n) => matchKey in n.structuredTags && n.structuredTags[matchKey].includes(o)))
+              (n) => utils.getAllStructuredTags(n, matchKey).includes(o)))
           ));
         }
       });

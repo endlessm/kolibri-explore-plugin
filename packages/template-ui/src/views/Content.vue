@@ -53,10 +53,10 @@ export default {
     ...mapGetters(['nextNodesInTopic']),
     tags() {
       return [
-        ...this.content.structuredTags[constants.StructuredTags.SUBJECT],
-        ...this.content.structuredTags[constants.StructuredTags.TYPE],
-        ...this.content.structuredTags[constants.StructuredTags.GRADE],
-        ...this.content.structuredTags[constants.StructuredTags.LEVEL],
+        ...utils.getAllStructuredTags(this.content, constants.StructuredTags.SUBJECT),
+        ...utils.getAllStructuredTags(this.content, constants.StructuredTags.TYPE),
+        ...utils.getAllStructuredTags(this.content, constants.StructuredTags.GRADE),
+        ...utils.getAllStructuredTags(this.content, constants.StructuredTags.LEVEL),
       ];
     },
     subtitle() {
