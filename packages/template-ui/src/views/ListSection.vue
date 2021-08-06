@@ -8,10 +8,10 @@
     <div v-if="isFilterEmpty">
       <div v-if="isInlineLevel">
         <CardGrid
-          v-for="subsection in section.children"
+          v-for="subsection in getChildren(section)"
           :id="subsection.id"
           :key="subsection.id"
-          :nodes="subsection.children"
+          :nodes="getChildren(subsection)"
           :mediaQuality="mediaQuality"
           :cardColumns="cardColumns"
         >
@@ -24,7 +24,7 @@
         <CardGrid
           :id="section.id"
           :key="section.id"
-          :nodes="section.children"
+          :nodes="getChildren(section)"
           :mediaQuality="mediaQuality"
           :cardColumns="cardColumns"
           variant="collapsible"
@@ -46,6 +46,7 @@ export default {
   computed: {
     ...mapState(['section', 'cardColumns', 'mediaQuality', 'hasFilters']),
     ...mapGetters({
+      getChildren: 'getChildren',
       isInlineLevel: 'isInlineLevel',
       getAssetURL: 'getAssetURL',
       isFilterEmpty: 'filters/isEmpty',

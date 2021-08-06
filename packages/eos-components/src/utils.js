@@ -1,8 +1,6 @@
 import {
   StructuredTagsRegExp,
   StructuredTags,
-  DefaultKindLabel,
-  LabelPerKind,
 } from './constants';
 
 /** Structured tags **/
@@ -70,30 +68,9 @@ export function getNodeUrl(node, channelId) {
   return `/c/${node.id}`;
 };
 
-export function getLeaves(node) {
-  if (!node.children) {
-    if (node.kind === 'topic') {
-      return [];
-    }
-    return [node];
-  }
-  return node.children
-    .map(getLeaves)
-    .reduce((accumulator, currentValue) => accumulator.concat(currentValue), []);
-};
-
-export function getTopicCardSubtitle(node) {
-  const leaves = getLeaves(node);
-  const leavesKinds = leaves.map((leaf) => leaf.kind);
-  const uniqueLeavesKinds = new Set(leavesKinds);
-  let kindsLabel;
-  if (uniqueLeavesKinds.size > 1) {
-    kindsLabel = DefaultKindLabel;
-  } else {
-    const kind = uniqueLeavesKinds.values().next().value;
-    kindsLabel = LabelPerKind[kind] || DefaultKindLabel;
-  }
-  return `${leaves.length} ${kindsLabel}`;
+export function getTopicCardSubtitle() {
+  // FIXME
+  return 'N resources';
 };
 
 export function getCardSubtitle(node, fallback) {
@@ -122,7 +99,6 @@ export default {
   getStructuredTags,
   parseNodes,
   getNodeUrl,
-  getLeaves,
   getTopicCardSubtitle,
   getCardSubtitle,
   getSlug,

@@ -1,4 +1,3 @@
-import { recursiveExistsNodes, flattenNodes } from '@/utils';
 import _ from 'underscore';
 
 import { utils, constants } from 'eos-components';
@@ -14,27 +13,6 @@ function weightOptions(options) {
 function sortOptionsByWeight(root, getOptionsFunc) {
   const weightedOptions = weightOptions(getOptionsFunc(root));
   return Object.keys(weightedOptions).sort((a, b) => weightedOptions[b] - weightedOptions[a]);
-}
-
-function getAuthorOptions(node) {
-  return flattenNodes(node)
-    .filter((n) => n.kind !== 'topic')
-    .map((n) => n.author)
-    .filter((n) => n !== '');
-}
-
-function getTagOptions(node) {
-  return flattenNodes(node)
-    .flatMap((n) => (n.tags ? n.tags : []))
-    .filter((n) => n.kind !== 'topic')
-    .filter((t) => t !== '')
-    .filter((t) => !t.match(constants.StructuredTagsRegExp));
-}
-
-function getStructuredTagOptions(node, matchKey) {
-  return flattenNodes(node)
-    .filter((n) => n.kind !== 'topic')
-    .flatMap((n) => utils.getAllStructuredTags(n, matchKey));
 }
 
 let storeData;
@@ -139,7 +117,7 @@ export default {
       const selectedFilters = getters.getFilterOptions(filter);
       return selectedFilters.includes(option);
     },
-    filterNodes: (state, getters) => (nodes) => {
+    filterNodes: (state, getters, _rootState, rootGetters) => (nodes) => {
       // Empty filter
       if (getters.isEmpty) {
         return nodes;
@@ -150,7 +128,7 @@ export default {
 
       // Get all leaf nodes
       filtered = filtered
-        .map((n) => flattenNodes(n))
+        .map((n) => rootGetters.flattenNodes(n))
         .reduce((accumulator, item) => accumulator.concat(item), [])
         .filter((n) => n.kind !== 'topic');
 
@@ -158,21 +136,22 @@ export default {
       const mediaType = query[MediaFilterName];
       if (mediaType && mediaType.length) {
         filtered = filtered.filter((node) => (
-          mediaType.some((m) => recursiveExistsNodes(node, (n) => n.kind === m))
+          mediaType.some((m) => rootGetters.recursiveExistsNodes(node, (n) => n.kind === m))
         ));
       }
       // Filter by author
       const authors = query[AuthorFilterName];
       if (authors && authors.length) {
         filtered = filtered.filter((node) => (
-          authors.some((a) => recursiveExistsNodes(node, (n) => n.author === a))
+          authors.some((a) => rootGetters.recursiveExistsNodes(node, (n) => n.author === a))
         ));
       }
       // Filter by tag
       const tags = query[TagFilterName];
       if (tags && tags.length) {
         filtered = filtered.filter((node) => (
-          tags.some((t) => recursiveExistsNodes(node, (n) => n.tags && n.tags.includes(t)))
+          tags.some((t) => rootGetters.recursiveExistsNodes(node,
+            (n) => n.tags && n.tags.includes(t)))
         ));
       }
       // Filter by structured tags
@@ -180,7 +159,7 @@ export default {
         const options = query[matchKey];
         if (options && options.length) {
           filtered = filtered.filter((node) => (
-            options.some((o) => recursiveExistsNodes(node,
+            options.some((o) => rootGetters.recursiveExistsNodes(node,
               (n) => utils.getAllStructuredTags(n, matchKey).includes(o)))
           ));
         }
@@ -188,24 +167,42 @@ export default {
 
       return filtered;
     },
-    possibleOptions: () => (filter, root) => {
+    getAuthorOptions: (_state, _getters, _rootState, rootGetters) => (node) => {
+      return rootGetters.flattenNodes(node)
+        .filter((n) => n.kind !== 'topic')
+        .map((n) => n.author)
+        .filter((n) => n !== '');
+    },
+    getTagOptions: (_state, _getters, _rootState, rootGetters) => (node) => {
+      return rootGetters.flattenNodes(node)
+        .flatMap((n) => (n.tags ? n.tags : []))
+        .filter((n) => n.kind !== 'topic')
+        .filter((t) => t !== '')
+        .filter((t) => !t.match(constants.StructuredTagsRegExp));
+    },
+    getStructuredTagOptions: (_state, _getters, _rootState, rootGetters) => (node, matchKey) => {
+      return rootGetters.flattenNodes(node)
+      .filter((n) => n.kind !== 'topic')
+      .flatMap((n) => utils.getAllStructuredTags(n, matchKey));
+    },
+    possibleOptions: (_state, getters, _rootState, rootGetters) => (filter, root) => {
       if (Object.values(constants.StructuredTags).includes(filter.name)) {
-        const getOptionsFunc = _.partial(getStructuredTagOptions, _, filter.name);
+        const getOptionsFunc = _.partial(getters.getStructuredTagOptions, _, filter.name);
         return sortOptionsByWeight(root, getOptionsFunc);
       }
       switch (filter.name) {
         case MediaFilterName:
           return filter.options
-            .filter((m) => recursiveExistsNodes(root, (n) => n.kind === m))
+            .filter((m) => rootGetters.recursiveExistsNodes(root, (n) => n.kind === m))
             .map((k) => ({
               kind: k,
               label: contentKindToVerb(k),
             }));
         case AuthorFilterName:
-          return sortOptionsByWeight(root, getAuthorOptions);
+          return sortOptionsByWeight(root, getters.getAuthorOptions);
         case TagFilterName: {
           const { maxTags } = filter;
-          return sortOptionsByWeight(root, getTagOptions)
+          return sortOptionsByWeight(root, getters.getTagOptions)
             .slice(0, maxTags);
         }
         default:

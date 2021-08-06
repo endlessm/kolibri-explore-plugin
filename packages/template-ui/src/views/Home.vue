@@ -41,7 +41,7 @@
         >
           <CardGrid
             :id="section.id"
-            :nodes="section.children"
+            :nodes="getChildren(section)"
             :mediaQuality="mediaQuality"
             :cardColumns="cardColumns"
           >
@@ -83,6 +83,7 @@ export default {
       'displayHeroContent',
     ]),
     ...mapGetters({
+      getChildren: 'getChildren',
       mainSections: 'mainSections',
       getAssetURL: 'getAssetURL',
       isFilterEmpty: 'filters/isEmpty',
@@ -91,10 +92,10 @@ export default {
       return this.getAssetURL('homeBackgroundImage');
     },
     contentNodes() {
-      if (!this.section || !this.section.children) {
+      if (!this.section) {
         return null;
       }
-      return this.section.children.filter((n) => n.kind !== 'topic') || null;
+      return this.getChildren(this.section).filter((n) => n.kind !== 'topic') || null;
     },
     carouselNodes() {
       if (this.carouselNodeIds.length) {

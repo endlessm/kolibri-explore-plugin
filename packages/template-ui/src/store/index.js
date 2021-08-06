@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import _ from 'underscore';
-import { getNodesTree } from '@/utils';
 import dynamicRequireAsset from '@/dynamicRequireAsset';
 import { SEARCH_MAX_RESULTS } from '@/constants';
 import { utils , constants as ComponentConstants } from 'eos-components';
@@ -18,26 +17,10 @@ try {
 
 Vue.use(Vuex);
 
-function findNodeById(node, nodeId) {
-  if (node.id === nodeId) {
-    return node;
-  }
-  if (!node.children) {
-    return null;
-  }
-  let result = null;
-  node.children.some((n) => {
-    result = findNodeById(n, nodeId);
-    return result;
-  });
-  return result;
-}
-
 const initialState = {
   // Channel and nodes, as they come from kolibri:
   channel: {},
   nodes: [],
-  tree: {},
   loading: true,
 
   // Navigation state:
@@ -104,7 +87,6 @@ const store = new Vuex.Store({
       } else {
         state.nodes = parsedNodes;
       }
-      state.tree = getNodesTree(state.nodes);
       state.loading = false;
     },
     setContentNavigation(state, payload) {
@@ -113,7 +95,7 @@ const store = new Vuex.Store({
       [, state.mainSection] = state.content.ancestors;
     },
     setSectionNavigation(state, payload) {
-      const section = findNodeById(state.tree[0], payload.topicId);
+      const section = state.nodes.find((n) => n.id === payload.topicId);
       state.content = {};
       state.section = section;
       if (section.ancestors.length === 1) {
@@ -124,16 +106,30 @@ const store = new Vuex.Store({
     },
     setHomeNavigation(state) {
       state.content = {};
-      [state.section] = state.tree;
+      state.section = state.nodes.find((n) => n.id === state.channel.id);
       state.mainSection = {};
     },
   },
   getters: {
-    mainSections: (state) => {
-      if (state.tree[0]) {
-        return state.tree[0].children.filter((n) => n.kind === 'topic');
+    getChildren: (state) => (node) => {
+      return state.nodes.filter((n) => n.parent === node.id);
+    },
+    flattenNodes: (_state, getters) => (node) => {
+      const childrenNodes = getters.getChildren(node).flatMap(getters.flattenNodes);
+      return [node, ...childrenNodes];
+    },
+    recursiveExistsNodes: (_state, getters) => (node, fn) => {
+      if (fn(node)) {
+        return true;
       }
-      return [];
+      const children = getters.getChildren(node);
+      if (children.length) {
+        return children.some((leaf) => getters.recursiveExistsNodes(leaf, fn));
+      }
+      return false;
+    },
+    mainSections: (state) => {
+      return state.nodes.filter((n) => n.parent === state.channel.id && n.kind === 'topic');
     },
     headerTitle: (state) => {
       if (_.isEmpty(state.section) || state.section.id === state.channel.id) {
@@ -142,10 +138,7 @@ const store = new Vuex.Store({
       return state.section.title;
     },
     headerDescription: (state) => {
-      if (_.isEmpty(state.section)) {
-        return state.channel.description;
-      }
-      if (state.section === state.tree[0]) {
+      if (_.isEmpty(state.section) || state.section.id === state.channel.id) {
         return state.channel.description;
       }
       return state.section.description;
@@ -155,27 +148,28 @@ const store = new Vuex.Store({
       const asset = getters.getAsset(name);
       return asset ? `url(${asset})` : null;
     },
-    isInlineLevel: (state) => state.section.children.every((n) => n.kind === 'topic'),
+    isInlineLevel: (state, getters) => getters.getChildren(state.section).every((n) => n.kind === 'topic'),
     isSimpleBundle: (state) => state.bundleKind === 'simple',
-    showAsBundle: (state) => (node) => {
+    showAsBundle: (state, getters) => (node) => {
       if (state.bundleKind === null || node.kind !== 'topic') {
         return false;
       }
-      const hasChildTopics = node.children.some((n) => n.kind === 'topic');
+      const hasChildTopics = getters.getChildren(node).some((n) => n.kind === 'topic');
       return !hasChildTopics;
     },
     getLevel: () => (node) => node.ancestors.length,
     getParentNode: (state) => (node) => {
       if (node.ancestors.length) {
         const parentId = node.ancestors[node.ancestors.length - 1].id;
-        return findNodeById(state.tree[0], parentId);
+        return state.nodes.find((n) => n.id === parentId);
       }
       return null;
     },
     nextNodesInTopic: (state) => {
       const currentOrder = state.content.sort_order;
-      const parent = findNodeById(state.tree[0], state.section.id);
-      return parent.children.filter((node) => node.sort_order > currentOrder);
+      return state.nodes.filter((n) => (
+        n.parent === state.section.id &&
+        n.sort_order > currentOrder));
     },
     searchNodes: (state) => (query) => {
       // Trim whitespace and ignore case:
@@ -210,14 +204,7 @@ const store = new Vuex.Store({
         .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
         // At most N results:
         .slice(0, SEARCH_MAX_RESULTS)
-        .map(([node]) => node)
-        // Map topics to tree nodes, otherwise they won't have children:
-        .map((node) => {
-          if (node.kind !== 'topic') {
-            return node;
-          }
-          return findNodeById(state.tree[0], node.id);
-        });
+        .map(([node]) => node);
     },
   },
   modules: {

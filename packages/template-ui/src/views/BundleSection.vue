@@ -16,7 +16,7 @@
         >
           <b-row>
             <b-col
-              v-for="content in section.children"
+              v-for="content in getChildren(section)"
               :key="content.id"
               class="content-col"
               md="6"
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import { goToContent } from 'kolibri-api';
 import { utils } from 'eos-components';
 
@@ -47,6 +47,7 @@ export default {
   name: 'BundleSection',
   computed: {
     ...mapState(['section', 'channel']),
+    ...mapGetters(['getChildren']),
     subtitle() {
       return utils.getCardSubtitle(this.section, this.channel.title);
     },
