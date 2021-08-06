@@ -1,15 +1,18 @@
 <template>
-  <b-card @click="$emit('click')">
+  <b-card
+    v-b-hover="handleHover"
+    @click="$emit('click')"
+  >
     <template>
       <div class="img" :style="backgroundStyle"></div>
       <b-card-text>
         <div class="card-content">
-          <h3 class="d-lg-block d-none mb-1 title">
+          <h3 class="d-lg-block d-none mb-1 title" :class="{ 'text-primary': isHovered }">
             <VClamp autoresize :maxLines="3">
               {{ node.title }}
             </VClamp>
           </h3>
-          <h4 class="d-lg-none mb-1 title">
+          <h4 class="d-lg-none mb-1 title" :class="{ 'text-primary': isHovered }">
             <VClamp autoresize :maxLines="4">
               {{ node.title }}
             </VClamp>
@@ -59,6 +62,11 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      isHovered: false,
+    };
+  },
   computed: {
     backgroundStyle() {
       let bg = this.thumbnail;
@@ -83,6 +91,9 @@ export default {
   },
   methods: {
     goToContent,
+    handleHover(hovered) {
+      this.isHovered = hovered;
+    },
   },
 };
 </script>
@@ -136,6 +147,10 @@ export default {
 
 ::v-deep .card-media-type {
   position: inherit !important;
+}
+
+.card-content h3, .card-content h4 {
+  transition: all ease .4s;
 }
 
 </style>
