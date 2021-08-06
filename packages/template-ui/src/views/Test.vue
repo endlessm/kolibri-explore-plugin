@@ -202,7 +202,6 @@ export default {
           description: 'This is a topic.',
           useDefaultThumbnail: true,
           isBundle: false,
-          structuredTags: {},
         },
         // Topic node with long title:
         {
@@ -212,7 +211,6 @@ export default {
           description: '',
           useDefaultThumbnail: true,
           isBundle: false,
-          structuredTags: {},
         },
         // Topic node with long description:
         {
@@ -222,7 +220,6 @@ export default {
           description: lorem,
           useDefaultThumbnail: true,
           isBundle: false,
-          structuredTags: {},
         },
         // Topic node with long title and description:
         {
@@ -232,7 +229,6 @@ export default {
           description: lorem,
           useDefaultThumbnail: true,
           isBundle: false,
-          structuredTags: {},
         },
       ],
       contentNodes: [
@@ -242,7 +238,6 @@ export default {
           title: 'A video',
           author: 'Endless',
           useDefaultThumbnail: true,
-          structuredTags: {},
         },
         {
           id: 'c1',
@@ -250,7 +245,6 @@ export default {
           title: 'An app',
           author: 'Endless',
           useDefaultThumbnail: true,
-          structuredTags: {},
         },
         {
           id: 'c2',
@@ -258,7 +252,6 @@ export default {
           title: 'An exercise',
           author: 'Endless',
           useDefaultThumbnail: true,
-          structuredTags: {},
         },
         {
           id: 'c3',
@@ -266,7 +259,6 @@ export default {
           title: 'A document',
           author: 'Endless',
           useDefaultThumbnail: true,
-          structuredTags: {},
         },
         {
           id: 'c4',
@@ -276,7 +268,6 @@ export default {
           author: 'Endless',
           useDefaultThumbnail: true,
           isBundle: true,
-          structuredTags: {},
         },
         {
           id: 'c5',
@@ -284,7 +275,6 @@ export default {
           title: 'An audio',
           author: 'Endless',
           useDefaultThumbnail: true,
-          structuredTags: {},
         },
         // Content node with some tags:
         {
@@ -302,7 +292,6 @@ export default {
           title: lorem,
           author: 'Endless',
           useDefaultThumbnail: true,
-          structuredTags: {},
         },
         // Content node with channel:
         {
@@ -311,7 +300,6 @@ export default {
           title: 'Card with channel',
           author: 'Endless',
           useDefaultThumbnail: true,
-          structuredTags: {},
           channel: {'title': 'My channel'},
         },
         // Content node with long title and many tags (worst case):
