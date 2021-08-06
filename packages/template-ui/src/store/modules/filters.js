@@ -117,7 +117,7 @@ export default {
       const selectedFilters = getters.getFilterOptions(filter);
       return selectedFilters.includes(option);
     },
-    filterNodes: (state, getters, _rootState, rootGetters) => (nodes) => {
+    filterNodes: (state, getters, rootState, rootGetters) => (nodes) => {
       // Empty filter
       if (getters.isEmpty) {
         return nodes;
@@ -155,15 +155,17 @@ export default {
         ));
       }
       // Filter by structured tags
-      Object.values(constants.StructuredTags).forEach((matchKey) => {
-        const options = query[matchKey];
-        if (options && options.length) {
-          filtered = filtered.filter((node) => (
-            options.some((o) => rootGetters.recursiveExistsNodes(node,
-              (n) => utils.getAllStructuredTags(n, matchKey).includes(o)))
-          ));
-        }
-      });
+      if (rootState.isEndlessApp) {
+        Object.values(constants.StructuredTags).forEach((matchKey) => {
+          const options = query[matchKey];
+          if (options && options.length) {
+            filtered = filtered.filter((node) => (
+              options.some((o) => rootGetters.recursiveExistsNodes(node,
+                (n) => utils.getAllStructuredTags(n, matchKey).includes(o)))
+            ));
+          }
+        });
+      }
 
       return filtered;
     },
@@ -180,7 +182,10 @@ export default {
         .filter((t) => t !== '')
         .filter((t) => !t.match(constants.StructuredTagsRegExp));
     },
-    getStructuredTagOptions: (_state, _getters, _rootState, rootGetters) => (node, matchKey) => {
+    getStructuredTagOptions: (_state, _getters, rootState, rootGetters) => (node, matchKey) => {
+      if (!rootState.isEndlessApp) {
+        return [];
+      }
       return rootGetters.flattenNodes(node)
       .filter((n) => n.kind !== 'topic')
       .flatMap((n) => utils.getAllStructuredTags(n, matchKey));
