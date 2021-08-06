@@ -84,7 +84,13 @@ const store = new Vuex.Store({
       state.channel = payload.channel;
     },
     setNodes(state, payload) {
-      const parsedNodes = utils.parseNodes(payload.nodes, state.bundleKind !== null);
+      const skipParsing = !state.isEndlessApp && state.bundleKind === null;
+      const parsedNodes = (
+        skipParsing ?
+        payload.nodes
+        :
+        utils.parseNodes(payload.nodes, state.bundleKind !== null)
+      );
       if (state.hasFlatGrid) {
         const rootNode = payload.nodes.find((n) => n.id === state.channel.id);
         const contentNodes = parsedNodes
