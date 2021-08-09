@@ -84,7 +84,13 @@ const store = new Vuex.Store({
       state.channel = payload.channel;
     },
     setNodes(state, payload) {
-      const parsedNodes = utils.parseNodes(payload.nodes, state.bundleKind !== null);
+      const skipParsing = !state.isEndlessApp && state.bundleKind === null;
+      const parsedNodes = (
+        skipParsing ?
+        payload.nodes
+        :
+        utils.parseNodes(payload.nodes, state.bundleKind !== null)
+      );
       if (state.hasFlatGrid) {
         const rootNode = payload.nodes.find((n) => n.id === state.channel.id);
         const contentNodes = parsedNodes
@@ -128,6 +134,12 @@ const store = new Vuex.Store({
         return state.tree[0].children.filter((n) => n.kind === 'topic');
       }
       return [];
+    },
+    headerTitle: (state) => {
+      if (_.isEmpty(state.section) || state.section.id === state.channel.id) {
+        return state.channel.title;
+      }
+      return state.section.title;
     },
     headerDescription: (state) => {
       if (_.isEmpty(state.section)) {
@@ -180,11 +192,13 @@ const store = new Vuex.Store({
           if (regexp.test(node.author)) {
             score += 5;
           }
-          Object.values(node.structuredTags).forEach((tags) => {
-            if (tags.some((t) => regexp.test(t))) {
-              score += 5;
-            }
-          });
+          if ('structuredTags' in node) {
+            Object.values(node.structuredTags).forEach((tags) => {
+              if (tags.some((t) => regexp.test(t))) {
+                score += 5;
+              }
+            });
+          }
           if (regexp.test(node.description)) {
             score += 1;
           }

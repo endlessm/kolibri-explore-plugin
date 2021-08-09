@@ -1,3 +1,5 @@
+import _ from 'underscore';
+
 import {
   StructuredTagsRegExp,
   StructuredTags,
@@ -7,11 +9,12 @@ import {
 
 /** Structured tags **/
 
+export function getAllStructuredTags(node, matchKey) {
+  return _.get(node.structuredTags, matchKey, []);
+};
+
 export function getFirstStructuredTag(node, matchKey) {
-  if (!(matchKey in node.structuredTags)) {
-    return null;
-  }
-  const tags = node.structuredTags[matchKey];
+  const tags = getAllStructuredTags(node, matchKey);
   if (!tags.length) {
     return null;
   }
@@ -113,6 +116,7 @@ export function getSlug(title) {
 }
 
 export default {
+  getAllStructuredTags,
   getFirstStructuredTag,
   getStructuredTags,
   parseNodes,

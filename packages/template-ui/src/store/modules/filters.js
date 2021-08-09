@@ -1,7 +1,7 @@
 import { recursiveExistsNodes, flattenNodes } from '@/utils';
 import _ from 'underscore';
 
-import { constants } from 'eos-components';
+import { utils, constants } from 'eos-components';
 
 // ['foo', 'foo', 'bar'] => { 'foo': 2, 'bar': 1 }
 function weightOptions(options) {
@@ -34,7 +34,7 @@ function getTagOptions(node) {
 function getStructuredTagOptions(node, matchKey) {
   return flattenNodes(node)
     .filter((n) => n.kind !== 'topic')
-    .flatMap((n) => n.structuredTags[matchKey]);
+    .flatMap((n) => utils.getAllStructuredTags(n, matchKey));
 }
 
 let storeData;
@@ -139,7 +139,7 @@ export default {
       const selectedFilters = getters.getFilterOptions(filter);
       return selectedFilters.includes(option);
     },
-    filterNodes: (state, getters) => (nodes) => {
+    filterNodes: (state, getters, rootState) => (nodes) => {
       // Empty filter
       if (getters.isEmpty) {
         return nodes;
@@ -176,20 +176,25 @@ export default {
         ));
       }
       // Filter by structured tags
-      Object.values(constants.StructuredTags).forEach((matchKey) => {
-        const options = query[matchKey];
-        if (options && options.length) {
-          filtered = filtered.filter((node) => (
-            options.some((o) => recursiveExistsNodes(node,
-              (n) => matchKey in n.structuredTags && n.structuredTags[matchKey].includes(o)))
-          ));
-        }
-      });
+      if (rootState.isEndlessApp) {
+        Object.values(constants.StructuredTags).forEach((matchKey) => {
+          const options = query[matchKey];
+          if (options && options.length) {
+            filtered = filtered.filter((node) => (
+              options.some((o) => recursiveExistsNodes(node,
+                (n) => utils.getAllStructuredTags(n, matchKey).includes(o)))
+            ));
+          }
+        });
+      }
 
       return filtered;
     },
-    possibleOptions: () => (filter, root) => {
+    possibleOptions: (_state, _getters, rootState) => (filter, root) => {
       if (Object.values(constants.StructuredTags).includes(filter.name)) {
+        if (!rootState.isEndlessApp) {
+          return [];
+        }
         const getOptionsFunc = _.partial(getStructuredTagOptions, _, filter.name);
         return sortOptionsByWeight(root, getOptionsFunc);
       }
