@@ -38,10 +38,6 @@
         type: Object,
         required: true,
       },
-      bigThumbnail: {
-        type: String,
-        default: '',
-      },
       variant: {
         type: String,
         default: 'basicCard',
@@ -61,14 +57,14 @@
       },
       bigThumbnailStyles() {
         return {
-          background: `url(${this.bigThumbnail}) white`,
+          background: `url(${this.channel.bigThumbnail}) white`,
           backgroundSize: '100% auto',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
         };
       },
       hasBigThumbnail() {
-        return this.bigThumbnail;
+        return this.channel.bigThumbnail;
       },
       isSmall() {
         return this.variant === 'smallCard';

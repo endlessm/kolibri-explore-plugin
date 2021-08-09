@@ -48,7 +48,6 @@
           <!-- Cards with thumbnail -->
           <ChannelCardGroup
             :rows="rows.withThumbnail"
-            :getBigThumbnail="getBigThumbnail"
             :columns="columns"
             @card-click="goToChannel"
           />
@@ -78,7 +77,7 @@
   import _ from 'underscore';
   import { responsiveMixin } from 'eos-components';
   import { PageNames, searchTerms } from '../constants';
-  import { getBigThumbnail, RecommendedChannelIDs } from '../customApps';
+  import { RecommendedChannelIDs } from '../customApps';
 
   import DiscoveryFooter from './DiscoveryFooter';
 
@@ -146,7 +145,6 @@
           params: { query },
         });
       },
-      getBigThumbnail,
     },
   };
 
