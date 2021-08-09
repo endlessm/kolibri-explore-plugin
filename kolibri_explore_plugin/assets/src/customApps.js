@@ -100,6 +100,9 @@ export const ChannelCardThumbnails = {
   '3fcffebc58d15175b948b140434ef6e6': 'sports.jpg',
 };
 
+// These should match a file existing on static/icons/NAME
+export const ChannelCardIcons = {};
+
 export const GameAppIDs = [
   '3160899a73564d8a8467284d9219b91c', // Terminal Two
 ];
@@ -109,4 +112,11 @@ export function getBigThumbnail(channel) {
     return urls.static(`thumbnails/${ChannelCardThumbnails[channel.id]}`);
   }
   return null;
+}
+
+export function getChannelIcon(channel) {
+  if (channel.id in ChannelCardIcons) {
+    return urls.static(`icons/${ChannelCardIcons[channel.id]}`);
+  }
+  return channel.thumbnail;
 }

@@ -9,7 +9,12 @@ import {
   PageNames,
   SEARCH_MAX_RESULTS,
 } from '../../constants';
-import { CustomChannelApps, getBigThumbnail, RecommendedChannelIDs } from '../../customApps';
+import {
+  CustomChannelApps,
+  getBigThumbnail,
+  getChannelIcon,
+  RecommendedChannelIDs,
+} from '../../customApps';
 import { _collectionState } from '../coreExplore/utils';
 
 function _findNodes(channels, channelCollection) {
@@ -107,6 +112,7 @@ export function showChannels(store) {
         .then(rootNodes => {
           const rootNodesWithCustomIcons = rootNodes.map(n => {
             n.bigThumbnail = getBigThumbnail(n);
+            n.thumbnail = getChannelIcon(n);
             return n;
           });
           store.commit('topicsRoot/SET_STATE', { rootNodes: rootNodesWithCustomIcons });
