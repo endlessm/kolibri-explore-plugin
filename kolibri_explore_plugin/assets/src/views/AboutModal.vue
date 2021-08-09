@@ -70,32 +70,121 @@
             <h3 id="support-section" class="pt-3 text-primary">
               Support
             </h3>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
+            <p>
+              You can find more information on how to use your Endless Key on
+              <strong>The Quick Start Guide</strong> document. For more
+              information, when you have an internet connection, you can access
+              Endless Community Forum at
+              <a href="https://community.endlessos.org/c/endless-key/">
+                https://community.endlessos.org/c/endless-key/
+              </a>.
+            </p>
             <hr>
           </div>
           <div>
             <h3 id="credits-section" class="pt-3 text-primary">
-              Credits
+              Images and Icons Attribution
             </h3>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
-            <p>Placeholder text.</p>
+            <h5>Financial Literacy</h5>
+            <p>
+              Credits: logo – savings by abderraouf omara from
+              thenounproject.com; thumbnail – Photo by Sharon McCutcheon on
+              unsplash.com; background – Photo by Sharon McCutcheon on
+              unsplash.com.
+            </p>
+
+            <h5>Gardening</h5>
+            <p>
+              Credits: logo – Beetroot by dDara from thenounproject.com;
+              thumbnail – Photo by Julia Kadel on unsplash.com; background –
+              Photo by Julia Kadel on unsplash.com.
+            </p>
+
+            <h5>Healthy Mind </h5>
+            <p>
+              Credits: logo – well being by Karen Santiago from
+              thenounproject.com; thumbnail – Photo by Alejandro Piñero Amerio
+              on unsplash.com; background – Photo by Clyde RS on unsplash.com.
+            </p>
+
+            <h5>Read Along </h5>
+            <p>
+              Credits: logo – Reading by dDara from the Noun Project from
+              thenounproject.com; thumbnail – Photo by Annie Spratt on
+              unsplash.com; background – Photo by Roman Trifonov on
+              unsplash.com.
+            </p>
+
+            <h5>Music</h5>
+            <p>
+              Credits: logo – Guitar by dDara from the Noun Project from
+              thenounproject.com; thumbnail – Photo by Sigmund on unsplash.com;
+              background – Photo by Sigmund on unsplash.com.
+            </p>
+
+            <h5>Healthy Body</h5>
+            <p>
+              Credits: logo – yoga by Eucalyp from the Noun Project from
+              thenounproject.com; thumbnail – Photo by madison lavern on
+              unsplash.com; background – Photo by Conscious Design on
+              unsplash.com.
+            </p>
+
+            <h5>Dance</h5>
+            <p>
+              Credits: logo – dance by ArmOkay from thenounproject.com;
+              thumbnail – Photo by Drew Graham on unsplash.com; background –
+              Photo by Ahmad Odeh on unsplash.com.
+            </p>
+
+            <h5>STEM</h5>
+            <p>
+              Credits: logo – Science by Turkkub from thenounproject.com;
+              thumbnail – Photo by David Clode  on unsplash.com; background –
+              Photo by Joel Filipe on unsplash.com.
+            </p>
+
+            <h5>Sports</h5>
+            <p>
+              Credits: logo – Basketball by Eucalypt from thenounproject.com;
+              thumbnail – Photo by Steven Lelham on unsplash.com; background –
+              Photo by Caroline Justine on unsplash.com.
+            </p>
+
+            <h5>Arts & Crafts</h5>
+            <p>
+              Credits: logo – Scissor By Muhammad Auns from thenounproject.com;
+              thumbnail – Photo by Siora Photography on unsplash.com;
+              background – Photo by Munro Studio on unsplash.com.
+            </p>
+
+            <h5>Careers</h5>
+            <p>
+              Credits: logo – Path by Adrien Coquet from thenounproject.com;
+              thumbnail – Photo by Estee Janssens on unsplash.com; background –
+              Photo by Shane on unsplash.com.
+            </p>
+
+            <h5>Cooking</h5>
+            <p>
+              Credits: logo – Cooking Tool by Made by Made from
+              thenounproject.com; thumbnail – Photo by LUM3N on unsplash.com;
+              background – Photo by LUM3N on unsplash.com.
+            </p>
+
+            <h5>Games</h5>
+            <p>
+              Credits: logo – Games by dDara from thenounproject.com; thumbnail
+              – Screenshot from by Block of Netherite on youtube.com;
+              background – Photo by Ty Feague on unsplash.com.
+            </p>
+
+            <h5>Media Thumbnails</h5>
+            <p>
+              Icon design credits: Puzzle, Idea, Online Education, Online Test,
+              Audio Book and Book by Komkrit Noenpoempisut from
+              thenounproject.com;
+            </p>
           </div>
         </b-col>
       </b-row>
