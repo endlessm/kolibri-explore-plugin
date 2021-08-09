@@ -1,13 +1,13 @@
 <template>
   <b-card :class="variant">
     <div
-      v-if="hasThumbnail"
+      v-if="hasBigThumbnail"
       class="bigThumbnail shadow"
       :style="bigThumbnailStyles"
     >
     </div>
     <b-card-header
-      :class="{ withThumbnail: hasThumbnail, 'pb-3': !isSmall }"
+      :class="{ withBigThumbnail: hasBigThumbnail, 'pb-3': !isSmall }"
     >
       <ChannelLogo class="mr-3" :channel="channel" size="md" />
       <h6>
@@ -38,7 +38,7 @@
         type: Object,
         required: true,
       },
-      thumbnail: {
+      bigThumbnail: {
         type: String,
         default: '',
       },
@@ -61,14 +61,14 @@
       },
       bigThumbnailStyles() {
         return {
-          background: `url(${this.thumbnail}) white`,
+          background: `url(${this.bigThumbnail}) white`,
           backgroundSize: '100% auto',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
         };
       },
-      hasThumbnail() {
-        return this.thumbnail;
+      hasBigThumbnail() {
+        return this.bigThumbnail;
       },
       isSmall() {
         return this.variant === 'smallCard';
@@ -133,7 +133,7 @@
     right: 0;
   }
 
-  .withThumbnail {
+  .withBigThumbnail {
     margin-top: percentage($card-image-ar);
     padding-top: $card-spacer-y * 2;
   }

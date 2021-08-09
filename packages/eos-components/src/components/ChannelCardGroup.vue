@@ -10,7 +10,7 @@
         v-for="channel in row"
         :key="channel.id"
         :channel="channel"
-        :thumbnail="getThumbnail(channel)"
+        :bigThumbnail="getBigThumbnail(channel)"
         :variant="variant"
         @click.native="$emit('card-click', channel.id)"
       />
@@ -43,7 +43,7 @@
         type: Number,
         default: 3,
       },
-      getThumbnail: {
+      getBigThumbnail: {
         type: Function,
         default: () => '',
       },

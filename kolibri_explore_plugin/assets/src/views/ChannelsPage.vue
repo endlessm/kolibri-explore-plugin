@@ -48,7 +48,7 @@
           <!-- Cards with thumbnail -->
           <ChannelCardGroup
             :rows="rows.withThumbnail"
-            :getThumbnail="getBigThumbnail"
+            :getBigThumbnail="getBigThumbnail"
             :columns="columns"
             @card-click="goToChannel"
           />

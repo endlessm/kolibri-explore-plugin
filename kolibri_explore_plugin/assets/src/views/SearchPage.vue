@@ -89,7 +89,7 @@
         </h5>
         <ChannelCardGroup
           :rows="recommended"
-          :getThumbnail="getBigThumbnail"
+          :getBigThumbnail="getBigThumbnail"
           :columns="columns"
           @card-click="goToChannel"
         />
