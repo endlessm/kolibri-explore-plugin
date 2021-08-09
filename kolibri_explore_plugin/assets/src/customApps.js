@@ -101,7 +101,32 @@ export const ChannelCardThumbnails = {
 };
 
 // These should match a file existing on static/icons/NAME
-export const ChannelCardIcons = {};
+export const ChannelCardIcons = {
+  e11462f71c6f5472b113311c69071b05: 'dance.png',
+  '057f871caa405ec29d62ba0523c193d7': 'music.png',
+  f62db29be20453c4a267132e93a9e602: 'wikipedia.png',
+  '97111903de564de49483a9705d41a8ac': 'career-girls.png',
+  efcc464be5a85ba5a58d1636b00313fc: 'gardening.png',
+  f5f6729f95b55753badeaa066fa6e986: 'healthy-body.png',
+  e5b26962b0ee5d8487152d0987d32e44: '49ers-edu-digital-playbook.png',
+  '2b43973f53f1538bad5ece63ad847606': 'financial-literacy.png',
+  '59bb2e5a3d2e5e3b85b87d9ab4daa2f3': 'reading.png',
+  '2f95235c3709511fa12d007f31ed6a7b': 'steam.png',
+  bcc6e12a0ddf4a17a8b600c6b880e3ed: 'common-sense-student-resources.png',
+  '38eaaf9ec82a44f9ab6e7a44cb730f07': 'pbs-kids.png',
+  '000409f81dbe5d1ba67101cb9fed4530': 'touchable-earth.png',
+  '4e413158eac55422a5343af9fcfa8d59': 'healthy-mind.png',
+  '1e755450dede5c40af1487e07984c260': 'techbridge-girls-home.png',
+  e409b964366a59219c148f2aaa741f43: 'blockly-games.png',
+  e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy.png',
+  f061fce103ff5d4e9b8433e67802e666: 'arts.png',
+  '79a50be66bad5eb686c42617c914fd45': 'careers.png',
+  '79cd09863eed51e98576c35ede6f9c9d': 'cooking.png',
+  '57e23812e0dc562581958e39acedd717': 'gaming.png',
+  '3fcffebc58d15175b948b140434ef6e6': 'sports.png',
+  c8540424d77f44f8ae306e22d3b14eaf: 'coronavirus.png',
+  '3c77d9dd717341bb8fff8da6ab980df3': 'mother-goose-club.png',
+};
 
 export const GameAppIDs = [
   '3160899a73564d8a8467284d9219b91c', // Terminal Two
