@@ -15,6 +15,7 @@ export const CustomChannelApps = {
   '74f36493bb475b62935fa8705ed59fed': 'thoughtful-learning',
   f62db29be20453c4a267132e93a9e602: 'wikipedia',
   f061fce103ff5d4e9b8433e67802e666: 'arts',
+  c9d7f950ab6b5a1199e3d6c10d7f0103: 'khan-academy',
   '79a50be66bad5eb686c42617c914fd45': 'careers',
   '79cd09863eed51e98576c35ede6f9c9d': 'cooking',
   e11462f71c6f5472b113311c69071b05: 'dance',
