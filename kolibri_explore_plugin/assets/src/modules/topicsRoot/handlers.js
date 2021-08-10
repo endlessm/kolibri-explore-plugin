@@ -9,7 +9,12 @@ import {
   PageNames,
   SEARCH_MAX_RESULTS,
 } from '../../constants';
-import { CustomChannelApps, RecommendedChannelIDs } from '../../customApps';
+import {
+  CustomChannelApps,
+  getBigThumbnail,
+  getChannelIcon,
+  RecommendedChannelIDs,
+} from '../../customApps';
 import { _collectionState } from '../coreExplore/utils';
 
 function _findNodes(channels, channelCollection) {
@@ -105,7 +110,12 @@ export function showChannels(store) {
       })
         .then(collection => _findNodes(channels, collection))
         .then(rootNodes => {
-          store.commit('topicsRoot/SET_STATE', { rootNodes });
+          const rootNodesWithCustomIcons = rootNodes.map(n => {
+            n.bigThumbnail = getBigThumbnail(n);
+            n.thumbnail = getChannelIcon(n);
+            return n;
+          });
+          store.commit('topicsRoot/SET_STATE', { rootNodes: rootNodesWithCustomIcons });
           return _fetchCarouselNodes(store);
         })
         .then(carouselNodes => {
@@ -169,7 +179,12 @@ export function searchChannels(store, search, kind) {
     const promises = channel_ids.map(id => ChannelResource.fetchModel({ id }));
     Promise.all(promises).then(collection => {
       const channels = collection
-        .map(c => ({ ...c, title: c.name, order: channel_ids.indexOf(c.id) }))
+        .map(c => ({
+          ...c,
+          thumbnail: getChannelIcon(c),
+          title: c.name,
+          order: channel_ids.indexOf(c.id),
+        }))
         .sort((a, b) => a.order - b.order);
       store.commit('topicsRoot/SET_SEARCH_RESULT', {
         ...store.state.topicsRoot.searchResult,

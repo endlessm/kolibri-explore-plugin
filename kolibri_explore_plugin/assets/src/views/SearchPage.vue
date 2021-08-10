@@ -89,7 +89,6 @@
         </h5>
         <ChannelCardGroup
           :rows="recommended"
-          :getThumbnail="getBigThumbnail"
           :columns="columns"
           @card-click="goToChannel"
         />
@@ -111,7 +110,6 @@
 
   import { PageNames, searchTerms } from '../constants';
   import { searchChannels } from '../modules/topicsRoot/handlers';
-  import { getBigThumbnail } from '../customApps';
 
   import DiscoveryFooter from './DiscoveryFooter';
 
@@ -159,7 +157,7 @@
 
         // FIXME: Placeholder recommended channels, randomly selected
         const channels = [];
-        const allChannels = this.channels.filter(c => getBigThumbnail(c));
+        const allChannels = this.channels.filter(c => c.bigThumbnail !== null);
         while (channels.length < this.columns && allChannels.length > 0) {
           const index = _.random(0, allChannels.length - 1);
           const [channel] = allChannels.splice(index, 1);
@@ -262,9 +260,6 @@
       },
       groupVerb(kind) {
         return constants.MediaTypeVerbs[kind === 'topic' ? 'bundle' : kind];
-      },
-      getBigThumbnail(channel) {
-        return getBigThumbnail(channel);
       },
     },
   };

@@ -5,7 +5,7 @@ import urls from 'kolibri.urls';
 import axios from 'axios';
 import { ContentNodeResource } from '../../apiResources';
 import { PageNames } from '../../constants';
-import { getAppNameByID } from '../../customApps';
+import { getAppNameByID, getChannelIcon } from '../../customApps';
 import { normalizeContentNode, contentState } from '../coreExplore/utils';
 
 function _getAppMetadata(appName) {
@@ -93,6 +93,7 @@ export function showCustomContent(store, id) {
         router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
         return;
       }
+      currentChannel.thumbnail = getChannelIcon(currentChannel);
       store.commit('topicsTree/SET_STATE', {
         channel: currentChannel,
       });
