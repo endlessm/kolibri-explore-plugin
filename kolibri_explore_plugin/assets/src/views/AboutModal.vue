@@ -16,6 +16,7 @@
               :key="item.id"
               :active="item.id === activeItemId"
               :href="item.href"
+              class="rounded-0"
               @click="setActiveItem"
             >
               {{ item.label }}
@@ -51,15 +52,15 @@
 
             <hr>
             <template v-if="buildInfo">
-              <h4>Release information</h4>
+              <h5>Release information</h5>
               <b-list-group class="bg-light p-3 rounded-lg">
-                <b-list-group-item class="bg-light">
+                <b-list-group-item class="bg-light rounded-0">
                   Release: {{ buildInfo.last_release }}
                 </b-list-group-item>
-                <b-list-group-item class="bg-light">
+                <b-list-group-item class="bg-light rounded-0">
                   Date: {{ buildInfo.date }}
                 </b-list-group-item>
-                <b-list-group-item class="bg-light">
+                <b-list-group-item class="bg-light rounded-0">
                   Commit: {{ buildInfo.commit }}
                 </b-list-group-item>
               </b-list-group>
