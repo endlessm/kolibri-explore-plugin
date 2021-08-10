@@ -2,7 +2,13 @@
   <div class="text-muted">
     <Footer>
       <template #left>
-        <ChannelCard :channel="channel" variant="infoCard" />
+        <div class="align-items-center d-flex pb-3">
+          <ChannelLogo class="mr-3" :channel="channel" size="md" />
+          <h6>{{ channel.title }}</h6>
+        </div>
+        <p class="pt-2">
+          {{ channel.description }}
+        </p>
       </template>
       <template #right>
         <div v-if="isEndlessApp" class="endless-seal text-right">

@@ -42,7 +42,7 @@
         type: String,
         default: 'basicCard',
         validator: (value) => {
-          return ['basicCard', 'infoCard', 'smallCard'].indexOf(value) !== -1;
+          return ['basicCard', 'smallCard'].indexOf(value) !== -1;
         },
       },
     },
@@ -75,15 +75,6 @@
 
 <style lang="scss" scoped>
   @import '../styles';
-
-  .infoCard {
-    background-color: transparent !important;
-    border: 0 !important;
-  }
-
-  .infoCard .card-body {
-    padding: 0 !important;
-  }
 
   .smallCard,
   .basicCard {
