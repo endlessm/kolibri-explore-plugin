@@ -66,6 +66,9 @@
         if (this.md) {
           return 3;
         }
+        if (this.lg) {
+          return 6;
+        }
 
         return this.buttons.length;
       },
