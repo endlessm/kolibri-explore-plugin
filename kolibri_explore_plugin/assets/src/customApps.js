@@ -28,6 +28,7 @@ export const CustomChannelApps = {
   '59bb2e5a3d2e5e3b85b87d9ab4daa2f3': 'reading',
   '3fcffebc58d15175b948b140434ef6e6': 'sports',
   '2f95235c3709511fa12d007f31ed6a7b': 'steam',
+  e5b26962b0ee5d8487152d0987d32e44: '49ers-edu-digital-playbook',
 };
 
 export function getAppNameByID(id) {
