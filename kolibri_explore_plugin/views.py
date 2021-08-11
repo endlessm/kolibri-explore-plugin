@@ -146,6 +146,9 @@ class MetricsView(View):
         self.lock.release()
 
     def queue(self, request):
+        # limit the number of requests to store in DB
+        self.check_db_limits()
+
         req = MatomoRequest()
         req.data = urllib.parse.urlencode(request.GET)
         req.user_agent = request.META.get("HTTP_USER_AGENT", "")
@@ -154,6 +157,20 @@ class MetricsView(View):
         if not self.lock.locked():
             thread = threading.Thread(target=self.dequeue)
             thread.start()
+
+    def check_db_limits(self):
+        MAX_REQUESTS_IN_QUEUE = 1_000_000
+        REMOVE_SIZE = 1000
+
+        MatomoRequest.objects.filter(sent=True).delete()
+        if MatomoRequest.objects.count() < MAX_REQUESTS_IN_QUEUE:
+            return
+
+        # remove the older requests
+        to_remove = MatomoRequest.objects.all()
+        to_remove = to_remove.values_list("id", flat=True)
+        to_remove = to_remove[:REMOVE_SIZE]
+        MatomoRequest.objects.filter(pk__in=to_remove).delete()
 
     def post(self, request):
         self.queue(request)
