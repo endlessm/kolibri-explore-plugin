@@ -12,8 +12,8 @@
       </template>
       <template #right>
         <div v-if="isEndlessApp" class="endless-seal text-right">
-          <div class="font-weight-bold mb-1">
-            Endless Creator's Spotlight
+          <div class="mb-1">
+            <span class="font-weight-bold">Best of the Web</span> curated by
           </div>
           <img :src="logo" aria-hidden="true">
         </div>

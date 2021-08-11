@@ -29,15 +29,15 @@ export const CarouselItemsLength = 5;
 export const CarouselAllowedKinds = ['document', 'html5', 'video'];
 
 export const searchTerms = new Map([
-  ['Arts', 'artist music painting drawing arts'],
-  ['Careers', 'career college degrees personality'],
-  ['Cooking', 'recipes desserts meat vegetables bread culinary'],
-  ['Fitness', 'fitness yoga workout'],
-  ['Games', 'games gamers gaming the maze'],
-  ['Maths', 'mathematics'],
-  ['Music', 'blues rhythm ukulele guitar beatbox'],
-  ['Science', 'cool science sciences physics biology molecules gravity'],
-  ['Sports', 'football soccer dribbling volley tennis skating'],
+  ['Arts & Crafts', 'artist painting drawing arts crafts'],
+  ['Careers', 'careers'],
+  ['Cooking', 'cooking recipes desserts vegetables culinary'],
+  ['Fitness', 'fitness workouts stretches'],
+  ['Games', 'games gaming maze gamers minecraft'],
+  ['Math', 'math'],
+  ['Music', 'music blues rhythm ukulele guitar'],
+  ['Science', 'cool science physics biology gravity'],
+  ['Sports', 'sports soccer volleyball basketball football'],
 ]);
 
 export const COLLECTIONS_PAGE_SIZE = 300;

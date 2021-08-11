@@ -28,10 +28,10 @@
       </div>
       <div v-else>
         <h1 class="text-primary">
-          Welcome to the Endless Key Discovery
+          Welcome to the Endless Key
         </h1>
         <h4 class="font-weight-normal mt-3 text-muted">
-          Please, wait a moment while it loads
+          Please wait a moment while your discovery experience loads
         </h4>
       </div>
     </div>

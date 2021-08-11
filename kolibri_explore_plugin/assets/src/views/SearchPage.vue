@@ -23,7 +23,10 @@
         <div v-else>
           <div v-if="isNoResults" class="empty mb-4 w-50">
             <h1>Sorry, we can’t find any content that matches your search.</h1>
-            <h5>You can try to use fewer words or try one of the channel suggestions bellow.</h5>
+            <h5>
+              You can try a different search, maybe use fewer words, or try one
+              of the topic suggestions below.
+            </h5>
           </div>
           <div v-if="isEmpty || isNoResults" class="align-items-center d-flex">
             <h5 v-if="isEmpty" class="mb-0 mr-3 text-muted">
