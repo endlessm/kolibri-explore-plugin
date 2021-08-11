@@ -7,10 +7,11 @@
 
     <EmptyResultsMessage v-if="notFound" :showTopics="false">
       <h1 class="text-secondary">
-        Sorry, we can't find any content that matches your search.
+        Sorry, we can’t find any content that matches your search.
       </h1>
       <h5 class="text-muted">
-        You can try to use fewer words or browse by topics.
+        You can try a different search, maybe use fewer words, or try one
+        of the topic suggestions below.
       </h5>
     </EmptyResultsMessage>
 

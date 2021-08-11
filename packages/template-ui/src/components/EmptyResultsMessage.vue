@@ -5,10 +5,10 @@
         <b-col cols="7">
           <slot>
             <h1 class="text-secondary">
-              There are no results containing all your filter options.
+              There are no results containing all of your filter options.
             </h1>
             <h5 class="text-muted">
-              You can try different filter options, clear your filters or explore
+              You can try fewer filter options, different filter options, or explore
               the topics below.
             </h5>
           </slot>
