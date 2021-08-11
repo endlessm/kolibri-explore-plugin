@@ -65,6 +65,10 @@ export const RecommendedChannelIDs = [
   '57e23812e0dc562581958e39acedd717', // gaming
   'fc47aee82e0153e2a30197d3fdee1128', // open-stax
   '197934f144305350b5820c7c4dd8e194', // phet-interactive-simulations
+  '74f36493bb475b62935fa8705ed59fed', // thoughtful-learning
+  '0418cc231e9c5513af0fff9f227f7172', // hello-channel
+  'c8540424d77f44f8ae306e22d3b14eaf', // coronavirus
+  '3c77d9dd717341bb8fff8da6ab980df3', // mother-goose-club
 ];
 
 // These should match a file existing on static/thumbnails/NAME
@@ -98,6 +102,10 @@ export const ChannelCardThumbnails = {
   '79cd09863eed51e98576c35ede6f9c9d': 'cooking.jpg',
   '57e23812e0dc562581958e39acedd717': 'gaming.jpg',
   '3fcffebc58d15175b948b140434ef6e6': 'sports.jpg',
+  '74f36493bb475b62935fa8705ed59fed': 'thoughtful-learning.jpg',
+  '0418cc231e9c5513af0fff9f227f7172': 'hello-channel.jpg',
+  c8540424d77f44f8ae306e22d3b14eaf: 'coronavirus.jpg',
+  '3c77d9dd717341bb8fff8da6ab980df3': 'mother-goose-club.jpg',
 };
 
 // These should match a file existing on static/icons/NAME
