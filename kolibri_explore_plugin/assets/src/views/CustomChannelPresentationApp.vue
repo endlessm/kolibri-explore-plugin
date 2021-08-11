@@ -73,6 +73,13 @@
         if (event.data.event === 'getThumbnail') {
           this.sendThumbnail(event.data.data);
         }
+        if (event.data.event === 'trackEvent') {
+          this.trackEvent(event.data.data);
+        }
+      },
+      trackEvent(data) {
+        const { category, action, name } = data;
+        this.$matomo.trackEvent(category, action, name);
       },
       sendChannelInformation() {
         if (!this.iframeWindow) {
@@ -105,9 +112,8 @@
             nodes.push(...response.results);
             if (response.next) {
               return paginatedFetch(page + 1, nodes);
-            } else {
-              return nodes;
             }
+            return nodes;
           });
         };
 

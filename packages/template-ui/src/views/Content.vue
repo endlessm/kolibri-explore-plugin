@@ -43,7 +43,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { goToContent } from 'kolibri-api';
+import { goToContent, trackEvent } from 'kolibri-api';
 import { constants, utils } from 'eos-components';
 
 export default {
@@ -62,6 +62,12 @@ export default {
     subtitle() {
       return utils.getCardSubtitle(this.content, this.channel.title);
     },
+  },
+  mounted() {
+    trackEvent('Content', 'load', this.content.id);
+  },
+  updated() {
+    trackEvent('Content', 'load', this.content.id);
   },
   methods: {
     goToContent,

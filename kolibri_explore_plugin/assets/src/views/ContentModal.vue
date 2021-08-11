@@ -59,6 +59,8 @@
         this.showingModal = !!this.content.id;
       },
       showingModal() {
+        const action = this.showingModal ? 'play' : 'stop';
+        this.$matomo.trackEvent(this.content.kind, action, this.content.id);
         if (!this.showingModal) {
           this.onClose();
         }

@@ -8,6 +8,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import { trackEvent } from 'kolibri-api';
 import ListSection from '@/views/ListSection';
 import BundleSection from '@/views/BundleSection';
 
@@ -29,6 +30,12 @@ export default {
       }
       return 'ListSection';
     },
+  },
+  mounted() {
+    trackEvent('Section', 'load', this.section.id);
+  },
+  updated() {
+    trackEvent('Section', 'load', this.section.id);
   },
 };
 </script>

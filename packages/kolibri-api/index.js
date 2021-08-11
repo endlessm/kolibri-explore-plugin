@@ -89,3 +89,15 @@ export function askNodes(callback) {
   };
   window.parent.postMessage(message, '*');
 }
+
+export function trackEvent(category, action, name = '') {
+  const nameSpace = 'customChannelPresentation';
+  const event = 'trackEvent';
+  const data = { category, action, name };
+  const message = {
+    event,
+    data,
+    nameSpace,
+  };
+  window.parent.postMessage(message, '*');
+}
