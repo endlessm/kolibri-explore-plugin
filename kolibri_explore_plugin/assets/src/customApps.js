@@ -110,6 +110,7 @@ export const ChannelCardThumbnails = {
 
 // These should match a file existing on static/icons/NAME
 export const ChannelCardIcons = {
+  '2091ca47ff544c96b4ae02b3a92346e1': 'ted-ed-lessons.png',
   e11462f71c6f5472b113311c69071b05: 'dance.png',
   '057f871caa405ec29d62ba0523c193d7': 'music.png',
   f62db29be20453c4a267132e93a9e602: 'wikipedia.png',
