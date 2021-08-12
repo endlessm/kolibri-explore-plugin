@@ -116,7 +116,7 @@
 
   import DiscoveryFooter from './DiscoveryFooter';
 
-  const kinds = Object.keys(constants.MediaTypeVerbs);
+  const kinds = Object.keys(constants.MediaTypeVerbs).map(k => (k === 'bundle' ? 'topic' : k));
 
   export default {
     name: 'SearchPage',
