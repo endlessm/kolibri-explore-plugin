@@ -67,7 +67,7 @@
       <b-container class="pb-5 pt-3">
         <div v-if="resultChannels.length">
           <h4 class="text-muted">
-            {{ resultChannels.length }} Channels related to "{{ cleanedQuery }}"
+            {{ resultChannels.length }} channels related to "{{ cleanedQuery }}"
           </h4>
           <ChannelCardGroup
             variant="smallCard"
@@ -87,7 +87,7 @@
         </h3>
         <h5>
           <b-link @click="goBack">
-            See all Channels <b-icon-arrow-right />
+            See all channels <b-icon-arrow-right />
           </b-link>
         </h5>
         <ChannelCardGroup
