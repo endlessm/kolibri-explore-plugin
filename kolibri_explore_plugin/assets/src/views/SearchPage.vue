@@ -65,7 +65,7 @@
       </div>
 
       <b-container class="pb-5 pt-3">
-        <div v-if="resultChannels.length">
+        <div v-if="resultCards.length && resultChannels.length">
           <h4 class="text-muted">
             {{ resultChannels.length }} Channels related to "{{ cleanedQuery }}"
           </h4>
@@ -131,12 +131,12 @@
           lg: 3,
         },
         mediaQuality: constants.MediaQuality.REGULAR,
+        loading: false,
       };
     },
     computed: {
       ...mapState('topicsRoot', { searchResult: 'searchResult', channels: 'rootNodes' }),
       ...mapState({
-        loading: state => state.core.loading,
         searchTerm: 'searchTerm',
       }),
       isEmpty() {
@@ -256,7 +256,11 @@
           return;
         }
 
-        kinds.forEach(k => searchChannels(this.$store, query, k));
+        this.loading = true;
+        const promises = kinds.map(k => searchChannels(this.$store, query, k));
+        Promise.all(promises).then(() => {
+          this.loading = false;
+        });
       },
       clearInput() {
         this.query = '';
