@@ -29,9 +29,6 @@ export const CustomChannelApps = {
   '3fcffebc58d15175b948b140434ef6e6': 'sports',
   '2f95235c3709511fa12d007f31ed6a7b': 'steam',
   e5b26962b0ee5d8487152d0987d32e44: '49ers-edu-digital-playbook',
-  '1e755450dede5c40af1487e07984c260': 'techbridge-girls-home',
-  '97111903de564de49483a9705d41a8ac': 'career-girls',
-  bcc6e12a0ddf4a17a8b600c6b880e3ed: 'common-sense-student-resources',
 };
 
 export function getAppNameByID(id) {
