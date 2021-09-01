@@ -10,8 +10,8 @@ function defaultState() {
   return {
     channel: {},
     content: {},
-    // used to link directly to content in custom presentation
-    customAppContent: {},
+    // used to pass parameters to the custom presentation
+    customAppParameters: {},
     // used in TOPICS_TOPIC, TOPICS_CHANNEL
     contents: [],
     isRoot: null,
@@ -52,8 +52,8 @@ export default {
         }
       });
     },
-    SET_CUSTOM_APP_CONTENT(state, payload) {
-      state.customAppContent = payload;
+    SET_CUSTOM_APP_PARAMETERS(state, payload) {
+      state.customAppParameters = payload;
     },
   },
 };
