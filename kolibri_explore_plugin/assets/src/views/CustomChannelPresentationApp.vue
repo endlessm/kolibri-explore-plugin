@@ -19,6 +19,7 @@
 
   import axios from 'axios';
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
+  import plugin_data from 'plugin_data';
   import { getAppNameByID } from '../customApps';
   import { PageNames, COLLECTIONS_PAGE_SIZE } from '../constants';
   import { ContentNodeResource } from '../apiResources.js';
@@ -37,7 +38,11 @@
       rooturl() {
         const app = getAppNameByID(this.channel.id);
         const url = urls['kolibri:kolibri_explore_plugin:app_custom_presentation']({ app: app });
-        const parametersString = serializeUrlParameters(this.customAppParameters);
+        const parameters = {
+          ...this.customAppParameters,
+          isStandaloneChannel: plugin_data.showAsStandaloneChannel,
+        };
+        const parametersString = serializeUrlParameters(parameters);
         if (parametersString !== '') {
           return `${url}?${parametersString}`;
         }

@@ -20,7 +20,7 @@ export default {
   name: 'ChannelNavBar',
   mixins: [headerMixin, responsiveMixin],
   computed: {
-    ...mapState(['content']),
+    ...mapState(['content', 'isStandaloneChannel']),
     node() {
       if (this.content && Object.keys(this.content).length) {
         return this.content;
@@ -32,6 +32,9 @@ export default {
       return this.$route.name !== 'Home';
     },
     showLogo() {
+      if (this.isStandaloneChannel) {
+        return false;
+      }
       return !(this.xs && this.node.ancestors.length);
     },
   },

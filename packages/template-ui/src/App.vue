@@ -53,6 +53,10 @@ export default {
       const uri = window.location.search.substring(1);
       const params = new URLSearchParams(uri);
       // Check if we need to navigate to a specific content or topic. Content takes precedence.
+      const isStandaloneChannel = params.get('isStandaloneChannel');
+      if (isStandaloneChannel === 'true') {
+        this.$store.commit('setIsStandaloneChannel');
+      }
       const contentId = params.get('contentId');
       if (contentId) {
         this.$router.push(`/c/${contentId}`);
@@ -61,10 +65,12 @@ export default {
       const topicId = params.get('topicId');
       if (topicId) {
         this.$router.push(`/t/${topicId}`);
+        return;
       }
       const test = params.get('test');
-      if (test) {
+      if (test === 'true') {
         this.$router.push('/test');
+        return;
       }
     },
   },

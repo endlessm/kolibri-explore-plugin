@@ -39,6 +39,7 @@ const initialState = {
   nodes: [],
   tree: {},
   loading: true,
+  isStandaloneChannel: false,
 
   // Navigation state:
   content: {},
@@ -126,6 +127,9 @@ const store = new Vuex.Store({
       state.content = {};
       [state.section] = state.tree;
       state.mainSection = {};
+    },
+    setIsStandaloneChannel(state) {
+      state.isStandaloneChannel = true;
     },
   },
   getters: {
