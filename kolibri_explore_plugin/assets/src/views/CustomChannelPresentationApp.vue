@@ -19,11 +19,18 @@
 
   import axios from 'axios';
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
+  import plugin_data from 'plugin_data';
   import { getAppNameByID } from '../customApps';
   import { PageNames, COLLECTIONS_PAGE_SIZE } from '../constants';
   import { ContentNodeResource } from '../apiResources.js';
 
   const nameSpace = 'hashi';
+
+  function serializeUrlParameters(parameters) {
+    return Object.keys(parameters)
+      .map(k => k + '=' + encodeURIComponent(parameters[k]))
+      .join('&');
+  }
 
   export default {
     name: 'CustomChannelPresentationApp',
@@ -31,15 +38,17 @@
       rooturl() {
         const app = getAppNameByID(this.channel.id);
         const url = urls['kolibri:kolibri_explore_plugin:app_custom_presentation']({ app: app });
-        if (this.customAppContent.id) {
-          const { kind, id } = this.customAppContent;
-          return `${url}?${kind}Id=${id}`;
-        } else if (this.customAppContent.test) {
-          return `${url}?test=true`;
+        const parameters = {
+          ...this.customAppParameters,
+          isStandaloneChannel: plugin_data.showAsStandaloneChannel,
+        };
+        const parametersString = serializeUrlParameters(parameters);
+        if (parametersString !== '') {
+          return `${url}?${parametersString}`;
         }
         return url;
       },
-      ...mapState('topicsTree', ['channel', 'customAppContent']),
+      ...mapState('topicsTree', ['channel', 'customAppParameters']),
       iframeWindow() {
         return this.$refs.iframe.contentWindow;
       },

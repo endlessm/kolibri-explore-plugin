@@ -12,11 +12,13 @@ from kolibri.core.hooks import RoleBasedRedirectHook
 from kolibri.core.webpack import hooks as webpack_hooks
 from kolibri.plugins import KolibriPluginBase
 from kolibri.plugins.hooks import register_hook
+from kolibri.utils import conf
 
 
 class Explore(KolibriPluginBase):
     untranslated_view_urls = "api_urls"
     translated_view_urls = "urls"
+    kolibri_options = "options"
 
     @property
     def url_slug(self):
@@ -43,7 +45,11 @@ class ExploreAsset(webpack_hooks.WebpackBundleHook):
 
     @property
     def plugin_data(self):
-        return {}
+        return {
+            "showAsStandaloneChannel": conf.OPTIONS["Explore"][
+                "SHOW_AS_STANDALONE_CHANNEL"
+            ],
+        }
 
 
 @register_hook
