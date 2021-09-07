@@ -40,16 +40,8 @@ export function goToChannelList() {
 }
 
 export function goToContent(node) {
-  console.log(`Go to: ${node.title}`);
-  const nameSpace = 'customChannelPresentation';
-  const event = 'goToContent';
-  const data = node.id;
-  const message = {
-    event,
-    data,
-    nameSpace,
-  };
-  window.parent.postMessage(message, '*');
+  console.debug(`Go to: ${node.title}`);
+  window.kolibri.navigateTo(node.id);
 }
 
 export function askChannelInformation(callback) {
