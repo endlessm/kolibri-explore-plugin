@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import { askChannelInformation, askNodes } from 'kolibri-api';
 import { mapMutations } from 'vuex';
 
 export default {
@@ -39,17 +38,28 @@ export default {
     },
   },
   created() {
-    askChannelInformation(this.gotChannelInformation);
-    askNodes(this.gotNodes);
+    window.kolibri.themeRenderer({
+        appBarColor: null,
+        textColor: null,
+        backdropColor: null,
+        backgroundColor: null,
+    });
+    console.debug(`Running under Kolibri version: ${window.kolibri.version}`);
+
+    // FIXME add API to query the channel information
+    const channel = {
+      id: 123,
+      title: 'My title',
+      description: 'My description',
+    };
+    this.$store.commit('setChannelInformation', { channel });
+
+    // FIXME query main topics and store them. Then call:
+    this.handleRedirects();
   },
   methods: {
     ...mapMutations(['setContentNavigation', 'setSectionNavigation', 'setHomeNavigation']),
-    gotChannelInformation(data) {
-      this.$store.commit('setChannelInformation', data);
-    },
-    gotNodes(data) {
-      this.$store.commit('setNodes', data);
-      this.$store.commit('setHomeNavigation');
+    handleRedirects() {
       const uri = window.location.search.substring(1);
       const params = new URLSearchParams(uri);
       // Check if we need to navigate to a specific content or topic. Content takes precedence.
