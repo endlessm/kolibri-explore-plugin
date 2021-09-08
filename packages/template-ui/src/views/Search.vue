@@ -54,7 +54,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getAssetURL', 'searchNodes']),
+    ...mapGetters(['getAssetURL']),
     ...mapState(['mainSections', 'cardColumns', 'mediaQuality']),
     backgroundImageURL() {
       return this.getAssetURL('homeBackgroundImage');
@@ -79,8 +79,11 @@ export default {
   },
   methods: {
     search() {
-      this.resultNodes = this.searchNodes(this.cleanedQuery);
-      this.searching = false;
+      return window.kolibri.searchContent({ keyword: this.cleanedQuery, under: 'self' })
+        .then((page) => {
+          this.resultNodes = page.results;
+          this.searching = false;
+        });
     },
     onClearInput() {
       this.query = '';

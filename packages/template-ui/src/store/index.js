@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 import _ from 'underscore';
 import { getNodesTree } from '@/utils';
 import dynamicRequireAsset from '@/dynamicRequireAsset';
-import { SEARCH_MAX_RESULTS } from '@/constants';
 import { utils , constants as ComponentConstants } from 'eos-components';
 
 import filters from './modules/filters';
@@ -178,48 +177,6 @@ const store = new Vuex.Store({
       const currentOrder = state.content.sort_order;
       const parent = findNodeById(state.tree[0], state.section.id);
       return parent.children.filter((node) => node.sort_order > currentOrder);
-    },
-    searchNodes: (state) => (query) => {
-      // Trim whitespace and ignore case:
-      const regexp = new RegExp(query, 'i');
-      return state.nodes
-        // Discard the channel node:
-        .filter((node) => node.id !== state.channel.id)
-        // Score the nodes according to how much their metadata matches the query:
-        .map((node) => {
-          let score = 0;
-          if (regexp.test(node.title)) {
-            score += 10;
-          }
-          if (regexp.test(node.author)) {
-            score += 5;
-          }
-          if ('structuredTags' in node) {
-            Object.values(node.structuredTags).forEach((tags) => {
-              if (tags.some((t) => regexp.test(t))) {
-                score += 5;
-              }
-            });
-          }
-          if (regexp.test(node.description)) {
-            score += 1;
-          }
-          return [node, score];
-        })
-        // Remove non matching nodes:
-        .filter(([, score]) => score !== 0)
-        // Sort by score:
-        .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
-        // At most N results:
-        .slice(0, SEARCH_MAX_RESULTS)
-        .map(([node]) => node)
-        // Map topics to tree nodes, otherwise they won't have children:
-        .map((node) => {
-          if (node.kind !== 'topic') {
-            return node;
-          }
-          return findNodeById(state.tree[0], node.id);
-        });
     },
   },
   modules: {
