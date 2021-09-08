@@ -54,8 +54,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['mainSections', 'getAssetURL', 'searchNodes']),
-    ...mapState(['cardColumns', 'mediaQuality']),
+    ...mapGetters(['getAssetURL', 'searchNodes']),
+    ...mapState(['mainSections', 'cardColumns', 'mediaQuality']),
     backgroundImageURL() {
       return this.getAssetURL('homeBackgroundImage');
     },

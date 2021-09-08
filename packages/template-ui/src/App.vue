@@ -54,8 +54,13 @@ export default {
     };
     this.$store.commit('setChannelInformation', { channel });
 
-    // FIXME query main topics and store them. Then call:
-    this.handleRedirects();
+    return window.kolibri.getContentByFilter({ parent: 'self' })
+      .then((page) => {
+        // FIXME query by kind 'topic' instead of filtering results:
+        const mainSections = page.results.filter((n) => n.kind === 'topic');
+        this.$store.commit('setMainSections', { mainSections });
+        this.handleRedirects();
+      });
   },
   methods: {
     ...mapMutations(['setContentNavigation', 'setSectionNavigation', 'setHomeNavigation']),

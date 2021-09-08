@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  import { mapGetters, mapState } from 'vuex';
+  import { mapState } from 'vuex';
 
   export default {
     name: 'EmptyResultsMessage',
@@ -38,8 +38,7 @@
       },
     },
     computed: {
-      ...mapGetters(['mainSections']),
-      ...mapState(['cardColumns', 'mediaQuality']),
+      ...mapState(['mainSections', 'cardColumns', 'mediaQuality']),
     },
   };
 </script>

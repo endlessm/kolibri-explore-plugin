@@ -36,6 +36,7 @@ function findNodeById(node, nodeId) {
 const initialState = {
   // Channel and nodes, as they come from kolibri:
   channel: {},
+  mainSections: [],
   nodes: [],
   tree: {},
   loading: true,
@@ -83,6 +84,9 @@ const store = new Vuex.Store({
   mutations: {
     setChannelInformation(state, payload) {
       state.channel = payload.channel;
+    },
+    setMainSections(state, payload) {
+      state.mainSections = payload.mainSections;
     },
     setNodes(state, payload) {
       const skipParsing = !state.isEndlessApp && state.bundleKind === null;
@@ -133,12 +137,6 @@ const store = new Vuex.Store({
     },
   },
   getters: {
-    mainSections: (state) => {
-      if (state.tree[0]) {
-        return state.tree[0].children.filter((n) => n.kind === 'topic');
-      }
-      return [];
-    },
     headerTitle: (state) => {
       if (_.isEmpty(state.section) || state.section.id === state.channel.id) {
         return state.channel.title;

@@ -18,14 +18,13 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import { utils } from 'eos-components';
 
 export default {
   name: 'MainSections',
   computed: {
-    ...mapState(['section', 'mainSection', 'channel']),
-    ...mapGetters(['mainSections']),
+    ...mapState(['mainSections', 'mainSection', 'channel']),
   },
   methods: {
     getNodeUrl(node) {
