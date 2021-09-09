@@ -56,7 +56,7 @@ export default {
   methods: {
     fetchAll() {
       this.loading = true;
-      const topicId = this.$route.params.topicId;
+      const { topicId } = this.$route.params;
       return window.kolibri.getContentById(topicId)
         .then((section) => {
           this.section = section;

@@ -62,7 +62,6 @@ export default {
       const test = params.get('test');
       if (test === 'true') {
         this.$router.push('/test');
-        return;
       }
     },
   },

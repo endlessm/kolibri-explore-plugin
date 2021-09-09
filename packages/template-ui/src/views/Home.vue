@@ -120,7 +120,7 @@ export default {
       }
       this.loadingCarouselNodes = true;
       if (this.carouselNodeIds.length) {
-        return window.kolibri.getContentByFilter({ ids: this.carouselNodeIds })
+        window.kolibri.getContentByFilter({ ids: this.carouselNodeIds })
           .then((page) => {
             this.carouselNodes = page.results;
             this.loadingCarouselNodes = false;
@@ -130,7 +130,6 @@ export default {
         // FIXME add API to query random content nodes
         console.debug(`Fetch ${this.carouselSlideNumber} random content nodes`);
         this.loadingCarouselNodes = false;
-        return;
       }
     },
     fetchContentNodes() {

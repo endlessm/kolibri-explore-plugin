@@ -78,7 +78,7 @@ export default {
       if (!this.isInlineLevel) {
         return;
       }
-      return this.fetchSubsectionNodes();
+      this.fetchSubsectionNodes();
     },
   },
   methods: {

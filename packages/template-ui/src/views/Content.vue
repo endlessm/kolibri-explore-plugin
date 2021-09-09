@@ -88,7 +88,7 @@ export default {
   methods: {
     fetchAll() {
       this.loading = true;
-      const contentId = this.$route.params.contentId;
+      const { contentId } = this.$route.params;
       return window.kolibri.getContentById(contentId)
         .then((content) => {
           this.content = content;

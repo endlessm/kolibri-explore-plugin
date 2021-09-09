@@ -36,7 +36,7 @@ export default {
       return 'TopicCard';
     },
     showAsBundle() {
-      //FIXME check the children nodes to show as bundle:
+      // FIXME check the children nodes to show as bundle:
       return false;
     },
     isBundle() {
