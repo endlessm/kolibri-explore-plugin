@@ -36,12 +36,14 @@ const initialState = {
   // Channel and nodes, as they come from kolibri:
   channel: {},
   mainSections: [],
+
+  // FIXME: remove old state:
   nodes: [],
   tree: {},
-  loading: true,
+
   isStandaloneChannel: false,
 
-  // Navigation state:
+  // FIXME: remove old navigation state:
   content: {},
   section: {},
   mainSection: {},
@@ -110,27 +112,6 @@ const store = new Vuex.Store({
         state.nodes = parsedNodes;
       }
       state.tree = getNodesTree(state.nodes);
-      state.loading = false;
-    },
-    setContentNavigation(state, payload) {
-      state.content = state.nodes.find((n) => n.id === payload.contentId);
-      state.section = state.content.ancestors[state.content.ancestors.length - 1];
-      [, state.mainSection] = state.content.ancestors;
-    },
-    setSectionNavigation(state, payload) {
-      const section = findNodeById(state.tree[0], payload.topicId);
-      state.content = {};
-      state.section = section;
-      if (section.ancestors.length === 1) {
-        state.mainSection = section;
-      } else {
-        [, state.mainSection] = section.ancestors;
-      }
-    },
-    setHomeNavigation(state) {
-      state.content = {};
-      [state.section] = state.tree;
-      state.mainSection = {};
     },
     setIsStandaloneChannel(state) {
       state.isStandaloneChannel = true;

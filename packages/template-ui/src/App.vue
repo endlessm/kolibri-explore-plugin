@@ -12,31 +12,9 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
 
 export default {
   name: 'App',
-  watch: {
-    $route(to) {
-      // Watch the router "to" parameter, and set the navigation state accordingly.
-      switch (to.name) {
-        case 'Content':
-          this.setContentNavigation({
-            contentId: this.$route.params.contentId,
-          });
-          return;
-        case 'Section':
-          this.setSectionNavigation({
-            topicId: this.$route.params.topicId,
-          });
-          return;
-        case 'Home':
-        case 'Search':
-        default:
-          this.setHomeNavigation();
-      }
-    },
-  },
   created() {
     window.kolibri.themeRenderer({
         appBarColor: null,
@@ -63,7 +41,6 @@ export default {
       });
   },
   methods: {
-    ...mapMutations(['setContentNavigation', 'setSectionNavigation', 'setHomeNavigation']),
     handleRedirects() {
       const uri = window.location.search.substring(1);
       const params = new URLSearchParams(uri);
