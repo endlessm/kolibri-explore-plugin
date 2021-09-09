@@ -1,13 +1,16 @@
 <template>
   <component
     :is="sectionVariant"
+    :section="section"
+    :sectionNodes="sectionNodes"
+    :loading="loading"
   >
     <slot></slot>
   </component>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import ListSection from '@/views/ListSection';
 import BundleSection from '@/views/BundleSection';
 
@@ -17,17 +20,57 @@ export default {
     ListSection,
     BundleSection,
   },
+  data() {
+    return {
+      section: {},
+      sectionNodes: [],
+      loading: true,
+    };
+  },
   computed: {
-    ...mapState(['section']),
-    ...mapGetters({
-      isSimpleBundle: 'isSimpleBundle',
-      showAsBundle: 'showAsBundle',
-    }),
+    ...mapGetters([
+      'isSimpleBundle',
+    ]),
+    showAsBundle() {
+      if (!this.isSimpleBundle) {
+        return false;
+      }
+      const hasChildTopics = this.sectionNodes.some((n) => n.kind === 'topic');
+      return !hasChildTopics;
+    },
     sectionVariant() {
-      if (this.showAsBundle(this.section) && this.isSimpleBundle) {
+      if (this.showAsBundle) {
         return 'BundleSection';
       }
       return 'ListSection';
+    },
+  },
+  watch: {
+    $route() {
+      return this.fetchAll();
+    },
+  },
+  mounted() {
+    return this.fetchAll();
+  },
+  methods: {
+    fetchAll() {
+      this.loading = true;
+      const topicId = this.$route.params.topicId;
+      return window.kolibri.getContentById(topicId)
+        .then((section) => {
+          this.section = section;
+          return this.fetchSectionNodes();
+        })
+        .then(() => {
+          this.loading = false;
+        });
+    },
+    fetchSectionNodes() {
+      return window.kolibri.getContentByFilter({ parent: this.section.id })
+        .then((page) => {
+          this.sectionNodes = page.results;
+        });
     },
   },
 };

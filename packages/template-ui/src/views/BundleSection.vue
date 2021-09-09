@@ -16,7 +16,7 @@
         >
           <b-row>
             <b-col
-              v-for="content in section.children"
+              v-for="content in sectionNodes"
               :key="content.id"
               class="content-col"
               md="6"
@@ -45,8 +45,19 @@ import { utils } from 'eos-components';
 
 export default {
   name: 'BundleSection',
+  props: {
+    section: Object,
+    sectionNodes: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+    // FIXME use the loading prop:
+    // loading: Boolean,
+  },
   computed: {
-    ...mapState(['section', 'channel']),
+    ...mapState(['channel']),
     subtitle() {
       return utils.getCardSubtitle(this.section, this.channel.title);
     },

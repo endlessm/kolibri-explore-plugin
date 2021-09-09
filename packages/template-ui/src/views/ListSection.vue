@@ -8,10 +8,10 @@
     <div v-if="isFilterEmpty">
       <div v-if="isInlineLevel">
         <CardGrid
-          v-for="subsection in section.children"
+          v-for="subsection in sectionNodes"
           :id="subsection.id"
           :key="subsection.id"
-          :nodes="subsection.children"
+          :nodes="subsectionNodes[subsection.id]"
           :mediaQuality="mediaQuality"
           :cardColumns="cardColumns"
         >
@@ -24,7 +24,7 @@
         <CardGrid
           :id="section.id"
           :key="section.id"
-          :nodes="section.children"
+          :nodes="sectionNodes"
           :mediaQuality="mediaQuality"
           :cardColumns="cardColumns"
           variant="collapsible"
@@ -43,15 +43,56 @@ import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'ListSection',
+  props: {
+    section: Object,
+    sectionNodes: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+    // FIXME use the loading prop:
+    // loading: Boolean,
+  },
+  data() {
+    return {
+      subsectionNodes: {},
+      loadingSubsectionNodes: true,
+    };
+  },
   computed: {
-    ...mapState(['section', 'cardColumns', 'mediaQuality', 'hasFilters']),
+    ...mapState(['cardColumns', 'mediaQuality', 'hasFilters']),
     ...mapGetters({
-      isInlineLevel: 'isInlineLevel',
       getAssetURL: 'getAssetURL',
       isFilterEmpty: 'filters/isEmpty',
     }),
+    isInlineLevel() {
+      return this.sectionNodes.every((n) => n.kind === 'topic');
+    },
     backgroundImageURL() {
       return this.getAssetURL('sectionBackgroundImage');
+    },
+  },
+  watch: {
+    sectionNodes() {
+      if (!this.isInlineLevel) {
+        return;
+      }
+      return this.fetchSubsectionNodes();
+    },
+  },
+  methods: {
+    fetchSubsectionNodes() {
+      this.loadingSubsectionNodes = true;
+      this.subsectionNodes = {};
+      return Promise.all(this.sectionNodes.map((subsection) => {
+        return window.kolibri.getContentByFilter({ parent: subsection.id })
+          .then((page) => {
+            this.subsectionNodes[subsection.id] = page.results;
+          });
+      })).then(() => {
+        this.loadingSubsectionNodes = false;
+      });
     },
   },
 };

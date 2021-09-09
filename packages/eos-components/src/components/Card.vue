@@ -35,6 +35,10 @@ export default {
       }
       return 'TopicCard';
     },
+    showAsBundle() {
+      //FIXME check the children nodes to show as bundle:
+      return false;
+    },
     isBundle() {
       if ('isBundle' in this.node) {
         return this.node.isBundle;
@@ -43,7 +47,7 @@ export default {
       // Instead, we should traverse all nodes and add the isBundle flag above at load time.
       if (this.$store) {
         const { getters } = this.$store;
-        if (getters.isSimpleBundle && getters.showAsBundle(this.node)) {
+        if (getters.isSimpleBundle && this.showAsBundle) {
           return true;
         }
       }
