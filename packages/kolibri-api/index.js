@@ -40,52 +40,6 @@ export function goToChannelList() {
 }
 
 export function goToContent(node) {
-  console.log(`Go to: ${node.title}`);
-  const nameSpace = 'customChannelPresentation';
-  const event = 'goToContent';
-  const data = node.id;
-  const message = {
-    event,
-    data,
-    nameSpace,
-  };
-  window.parent.postMessage(message, '*');
-}
-
-export function askChannelInformation(callback) {
-  window.addEventListener('message', (event) => {
-    if (event.data.event && event.data.nameSpace === 'hashi'
-              && event.data.event === 'sendChannelInformation') {
-      callback(event.data.data);
-    }
-  });
-
-  const nameSpace = 'customChannelPresentation';
-  const event = 'askChannelInformation';
-  const data = null;
-  const message = {
-    event,
-    data,
-    nameSpace,
-  };
-  window.parent.postMessage(message, '*');
-}
-
-export function askNodes(callback) {
-  window.addEventListener('message', (event) => {
-    if (event.data.event && event.data.nameSpace === 'hashi'
-              && event.data.event === 'sendNodes') {
-      callback(event.data.data);
-    }
-  });
-
-  const nameSpace = 'customChannelPresentation';
-  const event = 'askNodes';
-  const data = null;
-  const message = {
-    event,
-    data,
-    nameSpace,
-  };
-  window.parent.postMessage(message, '*');
+  console.debug(`Go to: ${node.title}`);
+  window.kolibri.navigateTo(node.id);
 }

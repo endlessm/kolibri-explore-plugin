@@ -5,16 +5,20 @@
     <slot></slot>
     <SectionsSearchRow v-if="hasSectionsSearch" />
 
-    <template v-if="loading">
+    <template v-if="loadingCarouselNodes">
       <CarouselPlaceholder v-if="hasCarousel" />
-      <CardGridPlaceholder />
     </template>
-
     <template v-else>
       <Carousel v-if="hasCarousel" :nodes="carouselNodes" />
       <b-container v-if="hasCarousel">
         <hr>
       </b-container>
+    </template>
+
+    <template v-if="loadingContentNodes || loadingSectionNodes">
+      <CardGridPlaceholder />
+    </template>
+    <template v-else>
       <FilterContent v-if="hasFilters" />
 
       <div v-if="isFilterEmpty">
@@ -41,7 +45,7 @@
         >
           <CardGrid
             :id="section.id"
-            :nodes="section.children"
+            :nodes="sectionNodes[section.id]"
             :mediaQuality="mediaQuality"
             :cardColumns="cardColumns"
           >
@@ -62,18 +66,25 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import _ from 'underscore';
 import { goToContent } from 'kolibri-api';
 
 export default {
   name: 'Home',
+  data() {
+    return {
+      carouselNodes: [],
+      contentNodes: [],
+      sectionNodes: {},
+      loadingCarouselNodes: true,
+      loadingContentNodes: true,
+      loadingSectionNodes: true,
+    };
+  },
   computed: {
     ...mapState([
-      'nodes',
+      'mainSections',
       'carouselNodeIds',
       'carouselSlideNumber',
-      'section',
-      'loading',
       'cardColumns',
       'mediaQuality',
       'hasSectionsSearch',
@@ -83,37 +94,64 @@ export default {
       'displayHeroContent',
     ]),
     ...mapGetters({
-      mainSections: 'mainSections',
       getAssetURL: 'getAssetURL',
       isFilterEmpty: 'filters/isEmpty',
     }),
     backgroundImageURL() {
       return this.getAssetURL('homeBackgroundImage');
     },
-    contentNodes() {
-      if (!this.section || !this.section.children) {
-        return null;
-      }
-      return this.section.children.filter((n) => n.kind !== 'topic') || null;
-    },
-    carouselNodes() {
-      if (this.carouselNodeIds.length) {
-        return this.carouselNodesFixed(this.carouselNodeIds);
-      }
-
-      return this.carouselNodesRandom(this.carouselSlideNumber);
+  },
+  watch: {
+    mainSections() {
+      return this.fetchSectionNodes();
     },
   },
+  mounted() {
+    return Promise.all([
+      this.fetchCarouselNodes(),
+      this.fetchContentNodes(),
+      this.fetchSectionNodes(),
+    ]);
+  },
   methods: {
-    carouselNodesRandom(n) {
-      // Get n random nodes that are not topic:
-      const possibleNodes = this.nodes.filter((node) => node.kind !== 'topic');
-      return _.sample(possibleNodes, n);
+    fetchCarouselNodes() {
+      if (!this.hasCarousel) {
+        return;
+      }
+      this.loadingCarouselNodes = true;
+      if (this.carouselNodeIds.length) {
+        window.kolibri.getContentByFilter({ ids: this.carouselNodeIds })
+          .then((page) => {
+            this.carouselNodes = page.results;
+            this.loadingCarouselNodes = false;
+          });
+      }
+      else {
+        // FIXME add API to query random content nodes
+        console.debug(`Fetch ${this.carouselSlideNumber} random content nodes`);
+        this.loadingCarouselNodes = false;
+      }
     },
-    carouselNodesFixed(nodeIds) {
-      return nodeIds.map((n) => (
-        this.nodes.find((m) => m.id === n.id)
-      ));
+    fetchContentNodes() {
+      this.loadingContentNodes = true;
+      return window.kolibri.getContentByFilter({ parent: 'self' })
+        .then((page) => {
+          // FIXME query by kind all but 'topic' instead of filtering results:
+          this.contentNodes = page.results.filter((n) => n.kind !== 'topic');
+          this.loadingContentNodes = false;
+        });
+    },
+    fetchSectionNodes() {
+      this.loadingSectionNodes = true;
+      this.sectionNodes = {};
+      return Promise.all(this.mainSections.map((section) => {
+        return window.kolibri.getContentByFilter({ parent: section.id })
+          .then((page) => {
+            this.sectionNodes[section.id] = page.results;
+          });
+      })).then(() => {
+        this.loadingSectionNodes = false;
+      });
     },
     goToContent,
   },

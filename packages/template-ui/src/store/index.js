@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 import _ from 'underscore';
 import { getNodesTree } from '@/utils';
 import dynamicRequireAsset from '@/dynamicRequireAsset';
-import { SEARCH_MAX_RESULTS } from '@/constants';
 import { utils , constants as ComponentConstants } from 'eos-components';
 
 import filters from './modules/filters';
@@ -36,12 +35,15 @@ function findNodeById(node, nodeId) {
 const initialState = {
   // Channel and nodes, as they come from kolibri:
   channel: {},
+  mainSections: [],
+
+  // FIXME: remove old state:
   nodes: [],
   tree: {},
-  loading: true,
+
   isStandaloneChannel: false,
 
-  // Navigation state:
+  // FIXME: remove old navigation state:
   content: {},
   section: {},
   mainSection: {},
@@ -71,7 +73,8 @@ const initialState = {
   hasDarkHeader: false,
   hasSectionsSearch: true,
   hasCarousel: true,
-  hasFilters: true,
+  // FIXME reenable the filters and migrate them to the API:
+  hasFilters: false,
   hasFlatGrid: false,
   displayHeroContent: false,
   isEndlessApp: false,
@@ -83,6 +86,9 @@ const store = new Vuex.Store({
   mutations: {
     setChannelInformation(state, payload) {
       state.channel = payload.channel;
+    },
+    setMainSections(state, payload) {
+      state.mainSections = payload.mainSections;
     },
     setNodes(state, payload) {
       const skipParsing = !state.isEndlessApp && state.bundleKind === null;
@@ -106,39 +112,12 @@ const store = new Vuex.Store({
         state.nodes = parsedNodes;
       }
       state.tree = getNodesTree(state.nodes);
-      state.loading = false;
-    },
-    setContentNavigation(state, payload) {
-      state.content = state.nodes.find((n) => n.id === payload.contentId);
-      state.section = state.content.ancestors[state.content.ancestors.length - 1];
-      [, state.mainSection] = state.content.ancestors;
-    },
-    setSectionNavigation(state, payload) {
-      const section = findNodeById(state.tree[0], payload.topicId);
-      state.content = {};
-      state.section = section;
-      if (section.ancestors.length === 1) {
-        state.mainSection = section;
-      } else {
-        [, state.mainSection] = section.ancestors;
-      }
-    },
-    setHomeNavigation(state) {
-      state.content = {};
-      [state.section] = state.tree;
-      state.mainSection = {};
     },
     setIsStandaloneChannel(state) {
       state.isStandaloneChannel = true;
     },
   },
   getters: {
-    mainSections: (state) => {
-      if (state.tree[0]) {
-        return state.tree[0].children.filter((n) => n.kind === 'topic');
-      }
-      return [];
-    },
     headerTitle: (state) => {
       if (_.isEmpty(state.section) || state.section.id === state.channel.id) {
         return state.channel.title;
@@ -159,15 +138,7 @@ const store = new Vuex.Store({
       const asset = getters.getAsset(name);
       return asset ? `url(${asset})` : null;
     },
-    isInlineLevel: (state) => state.section.children.every((n) => n.kind === 'topic'),
     isSimpleBundle: (state) => state.bundleKind === 'simple',
-    showAsBundle: (state) => (node) => {
-      if (state.bundleKind === null || node.kind !== 'topic') {
-        return false;
-      }
-      const hasChildTopics = node.children.some((n) => n.kind === 'topic');
-      return !hasChildTopics;
-    },
     getLevel: () => (node) => node.ancestors.length,
     getParentNode: (state) => (node) => {
       if (node.ancestors.length) {
@@ -175,53 +146,6 @@ const store = new Vuex.Store({
         return findNodeById(state.tree[0], parentId);
       }
       return null;
-    },
-    nextNodesInTopic: (state) => {
-      const currentOrder = state.content.sort_order;
-      const parent = findNodeById(state.tree[0], state.section.id);
-      return parent.children.filter((node) => node.sort_order > currentOrder);
-    },
-    searchNodes: (state) => (query) => {
-      // Trim whitespace and ignore case:
-      const regexp = new RegExp(query, 'i');
-      return state.nodes
-        // Discard the channel node:
-        .filter((node) => node.id !== state.channel.id)
-        // Score the nodes according to how much their metadata matches the query:
-        .map((node) => {
-          let score = 0;
-          if (regexp.test(node.title)) {
-            score += 10;
-          }
-          if (regexp.test(node.author)) {
-            score += 5;
-          }
-          if ('structuredTags' in node) {
-            Object.values(node.structuredTags).forEach((tags) => {
-              if (tags.some((t) => regexp.test(t))) {
-                score += 5;
-              }
-            });
-          }
-          if (regexp.test(node.description)) {
-            score += 1;
-          }
-          return [node, score];
-        })
-        // Remove non matching nodes:
-        .filter(([, score]) => score !== 0)
-        // Sort by score:
-        .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
-        // At most N results:
-        .slice(0, SEARCH_MAX_RESULTS)
-        .map(([node]) => node)
-        // Map topics to tree nodes, otherwise they won't have children:
-        .map((node) => {
-          if (node.kind !== 'topic') {
-            return node;
-          }
-          return findNodeById(state.tree[0], node.id);
-        });
     },
   },
   modules: {
