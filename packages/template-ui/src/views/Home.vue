@@ -127,9 +127,16 @@ export default {
           });
       }
       else {
-        // FIXME add API to query random content nodes
         console.debug(`Fetch ${this.carouselSlideNumber} random content nodes`);
-        this.loadingCarouselNodes = false;
+
+        window.kolibri.getContentByFilter({
+          random: true,
+          onlyContent: true,
+          pageSize: 5,
+        }).then((page) => {
+          this.carouselNodes = page.results;
+          this.loadingCarouselNodes = false;
+        });
       }
     },
     fetchContentNodes() {
