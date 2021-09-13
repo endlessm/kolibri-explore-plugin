@@ -1,9 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import _ from 'underscore';
-import { getNodesTree } from '@/utils';
 import dynamicRequireAsset from '@/dynamicRequireAsset';
-import { utils , constants as ComponentConstants } from 'eos-components';
+import { constants as ComponentConstants } from 'eos-components';
 
 import filters from './modules/filters';
 
@@ -89,29 +88,6 @@ const store = new Vuex.Store({
     },
     setMainSections(state, payload) {
       state.mainSections = payload.mainSections;
-    },
-    setNodes(state, payload) {
-      const skipParsing = !state.isEndlessApp && state.bundleKind === null;
-      const parsedNodes = (
-        skipParsing ?
-        payload.nodes
-        :
-        utils.parseNodes(payload.nodes, state.bundleKind !== null)
-      );
-      if (state.hasFlatGrid) {
-        const rootNode = payload.nodes.find((n) => n.id === state.channel.id);
-        const contentNodes = parsedNodes
-          .filter((n) => n.kind !== 'topic')
-          .map((n) => {
-            n.parent = rootNode.id;
-            n.ancestors = [rootNode];
-            return n;
-          });
-        state.nodes = [rootNode, ...contentNodes];
-      } else {
-        state.nodes = parsedNodes;
-      }
-      state.tree = getNodesTree(state.nodes);
     },
     setIsStandaloneChannel(state) {
       state.isStandaloneChannel = true;

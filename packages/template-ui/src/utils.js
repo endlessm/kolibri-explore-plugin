@@ -1,9 +1,3 @@
-import arrayToTree from 'array-to-tree';
-
-export function getNodesTree(nodes) {
-  return arrayToTree(nodes, { parentProperty: 'parent' });
-}
-
 export function recursiveExistsNodes(node, fn) {
   if (fn(node)) {
     return true;
