@@ -15,6 +15,7 @@ kolibri_explore_plugin.egg-info/
 packages/*/custom-channel-ui.zip
 packages/template-ui/src/nodes.json
 packages/template-ui/*.zip
+apps-bundle.zip
 
 # Symlink to template overrides
 packages/template-ui/src/overrides
