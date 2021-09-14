@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import _ from 'underscore';
 import dynamicRequireAsset from '@/dynamicRequireAsset';
 import { constants as ComponentConstants } from 'eos-components';
 
@@ -94,21 +93,6 @@ const store = new Vuex.Store({
     },
   },
   getters: {
-    headerTitle: (state) => {
-      if (_.isEmpty(state.section) || state.section.id === state.channel.id) {
-        return state.channel.title;
-      }
-      return state.section.title;
-    },
-    headerDescription: (state) => {
-      if (_.isEmpty(state.section)) {
-        return state.channel.description;
-      }
-      if (state.section === state.tree[0]) {
-        return state.channel.description;
-      }
-      return state.section.description;
-    },
     getAsset: (state) => (name) => dynamicRequireAsset(state.assetFilenames[name]),
     getAssetURL: (_state, getters) => (name) => {
       const asset = getters.getAsset(name);
