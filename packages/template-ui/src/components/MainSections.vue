@@ -9,7 +9,6 @@
         pill
         variant="primary"
         :to="getNodeUrl(section)"
-        :active="section.id === mainSection.id"
       >
         {{ section.title }}
       </b-button>
@@ -24,7 +23,7 @@ import { utils } from 'eos-components';
 export default {
   name: 'MainSections',
   computed: {
-    ...mapState(['mainSections', 'mainSection', 'channel']),
+    ...mapState(['mainSections', 'channel']),
   },
   methods: {
     getNodeUrl(node) {

@@ -28,7 +28,6 @@ const initialState = {
   // FIXME: remove old navigation state:
   content: {},
   section: {},
-  mainSection: {},
 
   // Asset filenames that can be overriden:
   assetFilenames: {
