@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ChannelNavBar />
+    <ChannelNavBar :node="section" />
     <component
       :is="sectionVariant"
       :section="section"

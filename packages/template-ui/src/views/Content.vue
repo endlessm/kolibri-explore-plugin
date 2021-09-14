@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ChannelNavBar />
+    <ChannelNavBar :node="content" />
     <DetailView>
       <b-row class="mt-3">
         <b-col md="6" sm="12">

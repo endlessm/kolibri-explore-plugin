@@ -2,7 +2,7 @@
   <div
     :style="{ backgroundImage: backgroundImageURL }"
   >
-    <ChannelNavBar />
+    <ChannelNavBar :atHome="true" />
     <ChannelHeader />
     <SectionsSearchRow v-if="hasSectionsSearch" />
 
