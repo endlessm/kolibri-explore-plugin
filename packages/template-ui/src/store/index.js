@@ -15,21 +15,6 @@ try {
 
 Vue.use(Vuex);
 
-function findNodeById(node, nodeId) {
-  if (node.id === nodeId) {
-    return node;
-  }
-  if (!node.children) {
-    return null;
-  }
-  let result = null;
-  node.children.some((n) => {
-    result = findNodeById(n, nodeId);
-    return result;
-  });
-  return result;
-}
-
 const initialState = {
   // Channel and nodes, as they come from kolibri:
   channel: {},
@@ -37,7 +22,6 @@ const initialState = {
 
   // FIXME: remove old state:
   nodes: [],
-  tree: {},
 
   isStandaloneChannel: false,
 
@@ -99,14 +83,6 @@ const store = new Vuex.Store({
       return asset ? `url(${asset})` : null;
     },
     isSimpleBundle: (state) => state.bundleKind === 'simple',
-    getLevel: () => (node) => node.ancestors.length,
-    getParentNode: (state) => (node) => {
-      if (node.ancestors.length) {
-        const parentId = node.ancestors[node.ancestors.length - 1].id;
-        return findNodeById(state.tree[0], parentId);
-      }
-      return null;
-    },
   },
   modules: {
     filters,
