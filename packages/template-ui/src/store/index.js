@@ -47,8 +47,7 @@ const initialState = {
   hasDarkHeader: false,
   hasSectionsSearch: true,
   hasCarousel: true,
-  // FIXME reenable the filters and migrate them to the API:
-  hasFilters: false,
+  hasFilters: true,
   hasFlatGrid: false,
   displayHeroContent: false,
   isEndlessApp: false,

@@ -14,7 +14,7 @@ import { mapState } from 'vuex';
 export default {
   name: 'App',
   computed: {
-    ...mapState(['hasFlatGrid']),
+    ...mapState(['hasFilters', 'hasFlatGrid']),
   },
   created() {
     window.kolibri.themeRenderer({
@@ -24,23 +24,33 @@ export default {
         backgroundColor: null,
     });
     console.debug(`Running under Kolibri version: ${window.kolibri.version}`);
+    const promises = [];
 
     const channelPromise = window.kolibri.getChannelMetadata()
       .then((channel) => {
         this.$store.commit('setChannelInformation', { channel });
       });
+    promises.push(channelPromise);
 
-    // Flat presentations don't need the main sections:
-    if (this.hasFlatGrid) {
-      return channelPromise;
+    if (this.hasFilters) {
+      const filterOptionsPromise = window.kolibri.getChannelFilterOptions()
+        .then((filterOptions) => {
+          this.$store.commit('filters/setFilterOptions', filterOptions);
+        });
+      promises.push(filterOptionsPromise);
     }
 
-    const sectionsPromise = window.kolibri.getContentByFilter({ parent: 'self', onlyTopics: true })
-      .then((page) => {
-        this.$store.commit('setMainSections', { mainSections: page.results });
-        this.handleRedirects();
-      });
-    return Promise.all([channelPromise, sectionsPromise]);
+    // Flat presentations don't need the main sections:
+    if (!this.hasFlatGrid) {
+      const sectionsPromise = window.kolibri.getContentByFilter({ parent: 'self', onlyTopics: true })
+        .then((page) => {
+          this.$store.commit('setMainSections', { mainSections: page.results });
+          this.handleRedirects();
+        });
+      promises.push(sectionsPromise);
+    }
+
+    return Promise.all(promises);
   },
   methods: {
     handleRedirects() {
