@@ -1,12 +1,13 @@
 <template>
-  <component
-    :is="sectionVariant"
-    :section="section"
-    :sectionNodes="sectionNodes"
-    :loading="loading"
-  >
-    <slot></slot>
-  </component>
+  <div>
+    <ChannelNavBar :node="section" />
+    <component
+      :is="sectionVariant"
+      :section="section"
+      :sectionNodes="sectionNodes"
+      :loading="loading"
+    />
+  </div>
 </template>
 
 <script>

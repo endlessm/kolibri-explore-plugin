@@ -2,7 +2,7 @@
   <div
     :style="{ backgroundImage: backgroundImageURL }"
   >
-    <slot></slot>
+    <ChannelHeader :section="section" />
     <FilterContent v-if="hasFilters" />
 
     <div v-if="isFilterEmpty">

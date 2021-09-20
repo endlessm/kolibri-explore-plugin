@@ -2,7 +2,8 @@
   <div
     :style="{ backgroundImage: backgroundImageURL }"
   >
-    <slot></slot>
+    <ChannelNavBar :atHome="true" />
+    <ChannelHeader />
     <SectionsSearchRow v-if="hasSectionsSearch" />
 
     <template v-if="loadingCarouselNodes">

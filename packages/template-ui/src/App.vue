@@ -2,10 +2,7 @@
   <div id="app" class="d-flex flex-column h-100">
     <!-- Wrapper needed to fix flexbox footer positioning on IE11 -->
     <div class="flex-fill flex-shrink-0">
-      <ChannelNavBar />
-      <router-view>
-        <ChannelHeader />
-      </router-view>
+      <router-view />
     </div>
     <ChannelFooter />
   </div>

@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import VClamp from 'vue-clamp';
 
 import headerMixin from '@/components/mixins/headerMixin';
@@ -70,6 +70,9 @@ export default {
     VClamp,
   },
   mixins: [headerMixin],
+  props: {
+    section: Object,
+  },
   data() {
     return {
       maxDescriptionLines: 6,  // Actually 5. One more for the show more/less button.
@@ -78,7 +81,18 @@ export default {
   },
   computed: {
     ...mapState(['displayLogoInHeader', 'hasDarkHeader']),
-    ...mapGetters(['headerTitle', 'headerDescription']),
+    sectionOrChannel() {
+      if (this.section === undefined || this.section.id === this.channel.id) {
+        return this.channel;
+      }
+      return this.section;
+    },
+    headerTitle() {
+      return this.sectionOrChannel.title;
+    },
+    headerDescription() {
+      return this.sectionOrChannel.description;
+    },
   },
 };
 </script>

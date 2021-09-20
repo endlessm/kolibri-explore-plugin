@@ -10,7 +10,7 @@
       <ChannelLogo :channel="channel" size="sm" />
     </b-link>
     <ol
-      v-if="node.ancestors && node.ancestors.length"
+      v-if="node && node.ancestors && node.ancestors.length"
       class="bg-transparent breadcrumb flex-nowrap px-2"
     >
       <li
@@ -57,14 +57,14 @@
     >
       <li
         v-b-tooltip.hover
-        :title="node.title"
+        :title="channel.title"
         class="breadcrumb-item text-truncate"
         :class="{ 'text-light': hasDarkHeader }"
       >
         <b-link
-          :to="getNodeUrl(node)"
+          to="/"
         >
-          {{ node.title }}
+          {{ channel.title }}
         </b-link>
       </li>
     </ol>
@@ -105,9 +105,6 @@ export default {
   methods: {
     getTopicUrl(n) {
       return utils.getNodeUrl({ id: n.id, kind: 'topic' }, this.channel.id);
-    },
-    getNodeUrl(n) {
-      return utils.getNodeUrl(n, this.channel.id);
     },
   },
 };
