@@ -4,6 +4,8 @@ import json
 import os.path
 import shutil
 import subprocess
+import tempfile
+import zipfile
 
 from _common import get_available_overrides
 from _common import TEMPLATE_WORKSPACE
@@ -57,14 +59,22 @@ def copy_bundle_zip(
 
 
 parser = argparse.ArgumentParser(
-    description="Copy all ZIP bundles to the desired destination path.",
+    description="Upload all ZIP bundles to the latest release on github.",
 )
-parser.add_argument("dest_path", type=validate_dir_path)
-args = parser.parse_args()
+parser.parse_args()
 
-for workspace in get_workspaces():
-    copy_bundle_zip(workspace, args.dest_path)
+with tempfile.TemporaryDirectory() as dest_path:
+    for workspace in get_workspaces():
+        copy_bundle_zip(workspace, dest_path)
 
-for override in get_available_overrides():
-    zip_name = f"{override}.zip"
-    copy_bundle_zip(TEMPLATE_WORKSPACE, args.dest_path, override, zip_name)
+    for override in get_available_overrides():
+        zip_name = f"{override}.zip"
+        copy_bundle_zip(TEMPLATE_WORKSPACE, dest_path, override, zip_name)
+
+    with zipfile.ZipFile("apps-bundle.zip", "w") as bundle:
+        for dirname, dirs, files in os.walk(dest_path):
+            for f in files:
+                if f.endswith(".zip"):
+                    fpath = f"{dirname}/{f}"
+                    appname = "/".join(fpath.split("/")[-2:])
+                    bundle.write(fpath, arcname=f"apps/{appname}")
