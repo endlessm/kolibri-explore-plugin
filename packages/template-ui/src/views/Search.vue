@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     search() {
-      return window.kolibri.searchContent({ keyword: this.cleanedQuery, under: 'self' })
+      return window.kolibri.searchContent({ keyword: this.cleanedQuery })
         .then((page) => {
           this.resultNodes = page.results;
           this.searching = false;
