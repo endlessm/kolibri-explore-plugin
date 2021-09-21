@@ -29,11 +29,9 @@ export default {
     };
     this.$store.commit('setChannelInformation', { channel });
 
-    return window.kolibri.getContentByFilter({ parent: 'self' })
+    return window.kolibri.getContentByFilter({ parent: 'self', onlyTopics: true })
       .then((page) => {
-        // FIXME query by kind 'topic' instead of filtering results:
-        const mainSections = page.results.filter((n) => n.kind === 'topic');
-        this.$store.commit('setMainSections', { mainSections });
+        this.$store.commit('setMainSections', { mainSections: page.results });
         this.handleRedirects();
       });
   },
