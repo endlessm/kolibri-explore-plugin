@@ -128,12 +128,10 @@ export default {
           });
       }
       else {
-        console.debug(`Fetch ${this.carouselSlideNumber} random content nodes`);
-
         window.kolibri.getContentByFilter({
           random: true,
           onlyContent: true,
-          pageSize: 5,
+          pageSize: this.carouselSlideNumber,
         }).then((page) => {
           this.carouselNodes = page.results;
           this.loadingCarouselNodes = false;
