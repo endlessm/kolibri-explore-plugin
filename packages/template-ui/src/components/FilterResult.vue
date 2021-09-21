@@ -1,17 +1,19 @@
 <template>
   <div>
     <CardGridPlaceholder v-if="loading" />
-
-    <div v-if="!filteredNodes.length">
-      <EmptyResultsMessage />
+    <div v-else>
+      <div v-if="!filteredNodes.length">
+        <EmptyResultsMessage />
+      </div>
+      <CardGrid
+        v-else
+        variant="collapsible"
+        :nodes="filteredNodes"
+        :getMoreNodes="getMoreNodes"
+        :mediaQuality="mediaQuality"
+        :cardColumns="cardColumns"
+      />
     </div>
-    <CardGrid
-      v-else
-      variant="collapsible"
-      :nodes="filteredNodes"
-      :mediaQuality="mediaQuality"
-      :cardColumns="cardColumns"
-    />
   </div>
 </template>
 
@@ -25,6 +27,8 @@
       return {
         filteredNodes: [],
         loading: false,
+        page: 1,
+        lastPage: 1,
       };
     },
     computed: {
@@ -79,21 +83,23 @@
       filterNodes() {
         this.loading = true;
         this.filteredNodes = [];
-        const filter = {};
 
-        const MediaFilterName = 'Learning activity';
-        const mediaType = this.query[MediaFilterName];
-        if (mediaType && mediaType.length) {
-          filter.activityType = mediaType;
-        }
-
-        window.kolibri.getContentByFilter(filter)
+        window.kolibri.getContentByFilter(this.filterParams)
           .then((page) => {
-            // FIXME: implement the pagination
             this.filteredNodes = page.results;
+            this.lastPage = page.totalPages;
             this.loading = false;
           });
       },
+      async getMoreNodes() {
+        if (this.page === this.lastPage) {
+          return [];
+        }
+
+        this.page++;
+        const nodes = await window.kolibri.getContentByFilter(this.filterParams);
+        return nodes;
+      }
     },
   };
 </script>

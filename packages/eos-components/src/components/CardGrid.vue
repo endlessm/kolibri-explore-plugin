@@ -6,6 +6,7 @@
       :is="displayVariant"
       :id="id"
       :nodes="nodes"
+      :getMoreNodes="getMoreNodes"
       :itemsPerPage="itemsPerPage"
       :mediaQuality="mediaQuality"
       :cardColumns="cardColumns"
@@ -22,6 +23,7 @@ export default {
     id: String,
     mediaQuality: String,
     cardColumns: Object,
+    getMoreNodes: Function,
     variant: {
       type: String,
       default: 'slidable',
