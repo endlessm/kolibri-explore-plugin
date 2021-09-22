@@ -128,12 +128,10 @@ export default {
           });
       }
       else {
-        console.debug(`Fetch ${this.carouselSlideNumber} random content nodes`);
-
         window.kolibri.getContentByFilter({
           random: true,
           onlyContent: true,
-          pageSize: 5,
+          pageSize: this.carouselSlideNumber,
         }).then((page) => {
           this.carouselNodes = page.results;
           this.loadingCarouselNodes = false;
@@ -142,10 +140,9 @@ export default {
     },
     fetchContentNodes() {
       this.loadingContentNodes = true;
-      return window.kolibri.getContentByFilter({ parent: 'self' })
+      return window.kolibri.getContentByFilter({ parent: 'self', onlyContent: true })
         .then((page) => {
-          // FIXME query by kind all but 'topic' instead of filtering results:
-          this.contentNodes = page.results.filter((n) => n.kind !== 'topic');
+          this.contentNodes = page.results;
           this.loadingContentNodes = false;
         });
     },
