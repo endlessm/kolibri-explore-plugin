@@ -28,7 +28,8 @@ export const CustomChannelApps = {
   '59bb2e5a3d2e5e3b85b87d9ab4daa2f3': 'reading',
   '3fcffebc58d15175b948b140434ef6e6': 'sports',
   '2f95235c3709511fa12d007f31ed6a7b': 'steam',
-  e5b26962b0ee5d8487152d0987d32e44: '49ers-edu-digital-playbook',
+  bf0260ed911f44cda27a263db93a8512: '49ers-edu-digital-playbook',
+  '1e755450dede5c40af1487e07984c260': 'techbridge-girls-home',
 };
 
 export function getAppNameByID(id) {
@@ -39,13 +40,13 @@ export function getAppNameByID(id) {
 export const RecommendedChannelIDs = [
   '2091ca47ff544c96b4ae02b3a92346e1', // ted-ed-lessons
   'e11462f71c6f5472b113311c69071b05', // dance
-  '3160899a73564d8a8467284d9219b91c', // terminal-two
+  'bf0260ed911f44cda27a263db93a8512', // 49ers-edu-digital-playbook
   '057f871caa405ec29d62ba0523c193d7', // music
   'f62db29be20453c4a267132e93a9e602', // wikipedia
-  '97111903de564de49483a9705d41a8ac', // career-girls
+  '1e755450dede5c40af1487e07984c260', // techbridge-girls-home
+  '3160899a73564d8a8467284d9219b91c', // terminal-two
   'efcc464be5a85ba5a58d1636b00313fc', // gardening
   'f5f6729f95b55753badeaa066fa6e986', // healthy-body
-  'e5b26962b0ee5d8487152d0987d32e44', // 49ers-edu-digital-playbook
   '2b43973f53f1538bad5ece63ad847606', // financial-literacy
   '59bb2e5a3d2e5e3b85b87d9ab4daa2f3', // reading
   '85b42a40745f4e2392ed62e72d4dad6e', // oceanx
@@ -54,8 +55,8 @@ export const RecommendedChannelIDs = [
   '38eaaf9ec82a44f9ab6e7a44cb730f07', // pbs-kids
   '000409f81dbe5d1ba67101cb9fed4530', // touchable-earth
   '4e413158eac55422a5343af9fcfa8d59', // healthy-mind
+  '97111903de564de49483a9705d41a8ac', // career-girls
   'bcc6e12a0ddf4a17a8b600c6b880e3ed', // common-sense-student-resources
-  '1e755450dede5c40af1487e07984c260', // techbridge-girls-home
   '2f95235c3709511fa12d007f31ed6a7b', // steam
   '79cd09863eed51e98576c35ede6f9c9d', // cooking
   '79a50be66bad5eb686c42617c914fd45', // careers
