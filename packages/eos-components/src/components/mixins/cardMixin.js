@@ -1,4 +1,3 @@
-import { getThumbnail } from 'kolibri-api';
 import { getFirstStructuredTag } from '../../utils';
 import { StructuredTags } from '../../constants';
 import { cardImageAspectRatio } from '../../styles.scss';
@@ -37,16 +36,14 @@ export default {
         this.thumbnail = this.node.thumbnail;
         return;
       }
-      getThumbnail(this.node)
-        .then(thumbnail => {
-          if (thumbnail) {
-            this.thumbnail = thumbnail;
-          } else {
-            this.thumbnail = this.getAsset('defaultThumbnail');
-          }
-        }).catch(() => {
+      if (this.node.files) {
+        const thumbnail = this.node.files.find((f) => f.thumbnail);
+        if (thumbnail && thumbnail.storage_url) {
+          this.thumbnail = thumbnail.storage_url;
+        } else {
           this.thumbnail = this.getAsset('defaultThumbnail');
-        });
+        }
+      }
     },
     getAsset(name) {
       if (!this.$store || !this.$store.getters) {
