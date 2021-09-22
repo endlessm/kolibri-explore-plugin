@@ -1,3 +1,5 @@
 {
-  "bundleKind": "simple"
+  "hasFlatGrid": true,
+  "hasCarousel": false,
+  "hasFilters": false
 }
