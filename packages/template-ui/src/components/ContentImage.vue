@@ -5,7 +5,7 @@
     <PlayButton
       :kind="node.kind"
       class="play-button position-absolute"
-      @click="goToContent(node)"
+      @click="goToContent()"
     />
     <b-img
       fluid
@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import { goToContent } from 'kolibri-api';
 import { cardMixin } from 'eos-components';
 
 export default {
@@ -27,7 +26,9 @@ export default {
     node: Object,
   },
   methods: {
-    goToContent,
+    goToContent() {
+      window.kolibri.navigateTo(this.node.id);
+    },
   },
 };
 </script>

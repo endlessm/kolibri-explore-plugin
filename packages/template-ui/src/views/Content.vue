@@ -22,7 +22,7 @@
         </b-col>
         <b-col md="6" sm="12">
           <b-link
-            @click="goToContent(content)"
+            @click="goToContent()"
           >
             <ContentImage :node="content" />
           </b-link>
@@ -49,7 +49,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import { goToContent } from 'kolibri-api';
 import { constants, utils } from 'eos-components';
 
 export default {
@@ -107,7 +106,9 @@ export default {
           this.nextNodesInTopic = page.results.filter((node) => node.sort_order > currentOrder);
         });
     },
-    goToContent,
+    goToContent() {
+      window.kolibri.navigateTo(this.content.id);
+    },
   },
 };
 </script>

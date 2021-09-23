@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import { goToContent } from 'kolibri-api';
 import { MediaQuality } from '../constants';
 import cardMixin from './mixins/cardMixin.js';
 
@@ -69,7 +68,7 @@ export default {
       if (this.kind === 'bundle') {
         this.$router.push(this.url);
       } else {
-        goToContent(this.node);
+        window.kolibri.navigateTo(this.node.id);
       }
     },
   },
