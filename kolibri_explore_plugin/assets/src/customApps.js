@@ -29,7 +29,7 @@ export const CustomChannelApps = {
   '3fcffebc58d15175b948b140434ef6e6': 'sports',
   '2f95235c3709511fa12d007f31ed6a7b': 'steam',
   bf0260ed911f44cda27a263db93a8512: '49ers-edu-digital-playbook',
-  '1e755450dede5c40af1487e07984c260': 'techbridge-girls-home',
+  '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home',
 };
 
 export function getAppNameByID(id) {
@@ -43,7 +43,7 @@ export const RecommendedChannelIDs = [
   'bf0260ed911f44cda27a263db93a8512', // 49ers-edu-digital-playbook
   '057f871caa405ec29d62ba0523c193d7', // music
   'f62db29be20453c4a267132e93a9e602', // wikipedia
-  '1e755450dede5c40af1487e07984c260', // techbridge-girls-home
+  '9c33eb395508447d96c96682cb18c57a', // techbridge-girls-home
   '3160899a73564d8a8467284d9219b91c', // terminal-two
   'efcc464be5a85ba5a58d1636b00313fc', // gardening
   'f5f6729f95b55753badeaa066fa6e986', // healthy-body
@@ -93,7 +93,7 @@ export const ChannelCardThumbnails = {
   '000409f81dbe5d1ba67101cb9fed4530': 'touchable-earth.jpg',
   '4e413158eac55422a5343af9fcfa8d59': 'healthy-mind.jpg',
   c9d7f950ab6b5a1199e3d6c10d7f0103: 'khan-academy.jpg',
-  '1e755450dede5c40af1487e07984c260': 'techbridge-girls-home.jpg',
+  '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home.jpg',
   e409b964366a59219c148f2aaa741f43: 'blockly-games.jpg',
   e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy.jpg',
   bbb4ea407a3c450cb18cbaa76f2d75cd: 'cspathshala-english.jpg',
@@ -127,7 +127,7 @@ export const ChannelCardIcons = {
   '38eaaf9ec82a44f9ab6e7a44cb730f07': 'pbs-kids.png',
   '000409f81dbe5d1ba67101cb9fed4530': 'touchable-earth.png',
   '4e413158eac55422a5343af9fcfa8d59': 'healthy-mind.png',
-  '1e755450dede5c40af1487e07984c260': 'techbridge-girls-home.png',
+  '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home.png',
   e409b964366a59219c148f2aaa741f43: 'blockly-games.png',
   e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy.png',
   f061fce103ff5d4e9b8433e67802e666: 'arts.png',
