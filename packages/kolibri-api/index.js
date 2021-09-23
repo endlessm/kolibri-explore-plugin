@@ -12,8 +12,3 @@ export function goToChannelList() {
   };
   window.parent.postMessage(message, '*');
 }
-
-export function goToContent(node) {
-  console.debug(`Go to: ${node.title}`);
-  window.kolibri.navigateTo(node.id);
-}

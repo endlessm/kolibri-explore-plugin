@@ -67,7 +67,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { goToContent } from 'kolibri-api';
 
 export default {
   name: 'Home',
@@ -158,7 +157,9 @@ export default {
         this.loadingSectionNodes = false;
       });
     },
-    goToContent,
+    goToContent(node) {
+      window.kolibri.navigateTo(node.id);
+    },
   },
 };
 </script>

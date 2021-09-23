@@ -34,7 +34,7 @@
             <PlayButton
               class="ml-auto"
               :kind="node.kind"
-              @click="goToContent(node)"
+              @click="goToContent()"
             />
           </div>
         </div>
@@ -45,7 +45,6 @@
 
 <script>
 import VClamp from 'vue-clamp';
-import { goToContent } from 'kolibri-api';
 import { getCardSubtitle } from '../utils';
 import cardMixin from './mixins/cardMixin';
 
@@ -90,7 +89,9 @@ export default {
     },
   },
   methods: {
-    goToContent,
+    goToContent() {
+      window.kolibri.navigateTo(this.node.id);
+    },
     handleHover(hovered) {
       this.isHovered = hovered;
     },

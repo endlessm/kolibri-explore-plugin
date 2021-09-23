@@ -40,7 +40,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import { goToContent } from 'kolibri-api';
 import { utils } from 'eos-components';
 
 export default {
@@ -63,7 +62,9 @@ export default {
     },
   },
   methods: {
-    goToContent,
+    goToContent(node) {
+      window.kolibri.navigateTo(node.id);
+    },
   },
 };
 </script>
