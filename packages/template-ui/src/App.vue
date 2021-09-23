@@ -21,13 +21,10 @@ export default {
     });
     console.debug(`Running under Kolibri version: ${window.kolibri.version}`);
 
-    // FIXME add API to query the channel information
-    const channel = {
-      id: 123,
-      title: 'My title',
-      description: 'My description',
-    };
-    this.$store.commit('setChannelInformation', { channel });
+    window.kolibri.getChannelMetadata()
+      .then((channel) => {
+        this.$store.commit('setChannelInformation', { channel });
+      });
 
     return window.kolibri.getContentByFilter({ parent: 'self', onlyTopics: true })
       .then((page) => {
