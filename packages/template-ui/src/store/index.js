@@ -20,14 +20,7 @@ const initialState = {
   channel: {},
   mainSections: [],
 
-  // FIXME: remove old state:
-  nodes: [],
-
   isStandaloneChannel: false,
-
-  // FIXME: remove old navigation state:
-  content: {},
-  section: {},
 
   // Asset filenames that can be overriden:
   assetFilenames: {
