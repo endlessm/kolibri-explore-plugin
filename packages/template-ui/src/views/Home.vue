@@ -139,13 +139,18 @@ export default {
     },
     fetchContentNodes() {
       this.loadingContentNodes = true;
-      return window.kolibri.getContentByFilter({ parent: 'self', onlyContent: true })
+      const options = this.hasFlatGrid ? { onlyContent: true } : { parent: 'self', onlyContent: true }
+      return window.kolibri.getContentByFilter(options)
         .then((page) => {
           this.contentNodes = page.results;
           this.loadingContentNodes = false;
         });
     },
     fetchSectionNodes() {
+      if (this.hasFlatGrid) {
+        this.loadingSectionNodes = false;
+        return;
+      }
       this.loadingSectionNodes = true;
       this.sectionNodes = {};
       return Promise.all(this.mainSections.map((section) => {
