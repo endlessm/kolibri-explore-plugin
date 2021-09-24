@@ -58,7 +58,7 @@ export default {
   computed: {
     ...mapState(['channel']),
     subtitle() {
-      return utils.getCardSubtitle(this.section, this.channel.title);
+      return utils.getCardSubtitle(this.section, this.channel.name);
     },
   },
   methods: {

@@ -57,14 +57,14 @@
     >
       <li
         v-b-tooltip.hover
-        :title="channel.title"
+        :title="channel.name"
         class="breadcrumb-item text-truncate"
         :class="{ 'text-light': hasDarkHeader }"
       >
         <b-link
           to="/"
         >
-          {{ channel.title }}
+          {{ channel.name }}
         </b-link>
       </li>
     </ol>

@@ -71,7 +71,7 @@ export default {
       ];
     },
     subtitle() {
-      return utils.getCardSubtitle(this.content, this.channel.title);
+      return utils.getCardSubtitle(this.content, this.channel.name);
     },
     sectionTitle() {
       return this.content.ancestors[this.content.ancestors.length - 1].title;
