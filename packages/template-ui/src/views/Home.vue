@@ -22,24 +22,24 @@
     <template v-else>
       <FilterContent v-if="hasFilters" />
 
-      <div v-if="isFilterEmpty">
-        <b-container v-if="contentNodes.length && displayHeroContent">
-          <CarouselCard
-            v-for="node in contentNodes"
-            :key="'node-' + node.id"
-            :node="node"
-            class="template-ui-hero-card"
-            @click="goToContent(node)"
-          />
-        </b-container>
-        <div v-else-if="contentNodes.length">
+      <template v-if="isFilterEmpty">
+        <template v-if="contentNodes.length">
+          <b-container v-if="displayHeroContent">
+            <CarouselCard
+              v-for="node in contentNodes"
+              :key="'node-' + node.id"
+              :node="node"
+              class="template-ui-hero-card"
+              @click="goToContent(node)"
+            />
+          </b-container>
           <CardGrid
             :nodes="contentNodes"
             :variant="hasFlatGrid ? 'collapsible' : 'slidable'"
             :mediaQuality="mediaQuality"
             :cardColumns="cardColumns"
           />
-        </div>
+        </template>
         <div
           v-for="section in mainSections"
           :key="section.id"
@@ -55,11 +55,11 @@
             </b-row>
           </CardGrid>
         </div>
-      </div>
+      </template>
 
-      <div v-else>
+      <template v-else>
         <FilterResult :node="section" />
-      </div>
+      </template>
 
     </template>
   </div>
