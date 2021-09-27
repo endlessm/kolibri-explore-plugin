@@ -5,6 +5,10 @@ repos:
   hooks:
   - id: trailing-whitespace
   - id: flake8
+    args:
+      # make flake8 compatible with black:
+      - "--max-line-length=88"
+      - "--ignore=E203,W503"
   - id: check-yaml
   - id: check-added-large-files
     args: ['--maxkb=2000']
