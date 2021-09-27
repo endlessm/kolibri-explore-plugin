@@ -116,18 +116,18 @@ export default {
   methods: {
     fetchCarouselNodes() {
       if (!this.hasCarousel) {
-        return;
+        return null;
       }
       this.loadingCarouselNodes = true;
       if (this.carouselNodeIds.length) {
-        window.kolibri.getContentByFilter({ ids: this.carouselNodeIds })
+        return window.kolibri.getContentByFilter({ ids: this.carouselNodeIds })
           .then((page) => {
             this.carouselNodes = page.results;
             this.loadingCarouselNodes = false;
           });
       }
       else {
-        window.kolibri.getContentByFilter({
+        return window.kolibri.getContentByFilter({
           random: true,
           onlyContent: true,
           pageSize: this.carouselSlideNumber,
