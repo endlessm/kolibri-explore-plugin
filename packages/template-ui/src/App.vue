@@ -9,9 +9,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 
 export default {
   name: 'App',
+  computed: {
+    ...mapState(['hasFlatGrid']),
+  },
   created() {
     window.kolibri.themeRenderer({
         appBarColor: null,
@@ -21,16 +25,22 @@ export default {
     });
     console.debug(`Running under Kolibri version: ${window.kolibri.version}`);
 
-    window.kolibri.getChannelMetadata()
+    const channelPromise = window.kolibri.getChannelMetadata()
       .then((channel) => {
         this.$store.commit('setChannelInformation', { channel });
       });
 
-    return window.kolibri.getContentByFilter({ parent: 'self', onlyTopics: true })
+    // Flat presentations don't need the main sections:
+    if (this.hasFlatGrid) {
+      return channelPromise;
+    }
+
+    const sectionsPromise = window.kolibri.getContentByFilter({ parent: 'self', onlyTopics: true })
       .then((page) => {
         this.$store.commit('setMainSections', { mainSections: page.results });
         this.handleRedirects();
       });
+    return Promise.all([channelPromise, sectionsPromise]);
   },
   methods: {
     handleRedirects() {

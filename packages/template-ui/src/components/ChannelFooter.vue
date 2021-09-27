@@ -4,7 +4,7 @@
       <template #left>
         <div class="align-items-center d-flex pb-3">
           <ChannelLogo class="mr-3" :channel="channel" size="md" />
-          <h6>{{ channel.title }}</h6>
+          <h6>{{ channel.name }}</h6>
         </div>
         <p class="pt-2">
           {{ channel.description }}

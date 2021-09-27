@@ -81,17 +81,17 @@ export default {
   },
   computed: {
     ...mapState(['displayLogoInHeader', 'hasDarkHeader']),
-    sectionOrChannel() {
-      if (this.section === undefined || this.section.id === this.channel.id) {
-        return this.channel;
-      }
-      return this.section;
-    },
     headerTitle() {
-      return this.sectionOrChannel.title;
+      if (this.section === undefined || this.section.id === this.channel.id) {
+        return this.channel.name;
+      }
+      return this.section.title;
     },
     headerDescription() {
-      return this.sectionOrChannel.description;
+      if (this.section === undefined || this.section.id === this.channel.id) {
+        return this.channel.description;
+      }
+      return this.section.description;
     },
   },
 };
