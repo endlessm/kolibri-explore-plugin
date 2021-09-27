@@ -149,7 +149,7 @@ export default {
     fetchSectionNodes() {
       if (this.hasFlatGrid) {
         this.loadingSectionNodes = false;
-        return;
+        return null;
       }
       this.loadingSectionNodes = true;
       this.sectionNodes = {};
