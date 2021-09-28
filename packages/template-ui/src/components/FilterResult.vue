@@ -32,7 +32,7 @@
       };
     },
     computed: {
-      ...mapState(['cardColumns', 'filters', 'isEndlessApp', 'mediaQuality']),
+      ...mapState(['cardColumns', 'filters', 'mediaQuality']),
       query() {
         return this.filters.query;
       },
@@ -50,21 +50,6 @@
         const tags = this.query[constants.TagFilterName];
         if (tags && tags.length) {
           params.tags = tags;
-        }
-
-        // Filter by structured tags
-        if (this.isEndlessApp) {
-          Object.values(constants.StructuredTags).forEach((matchKey) => {
-            const options = this.query[matchKey];
-            if (options && options.length) {
-              if (!params.tags) {
-                params.tags = [];
-              }
-              options.forEach((option) => {
-                params.tags.push(`${matchKey}=${option}`);
-              });
-            }
-          });
         }
 
         return params;

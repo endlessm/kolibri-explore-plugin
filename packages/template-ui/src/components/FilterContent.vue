@@ -24,7 +24,7 @@ import { constants } from 'eos-components';
 export default {
   name: 'FilterContent',
   computed: {
-    ...mapState(['filters', 'isEndlessApp', 'section']),
+    ...mapState(['filters', 'section']),
     ...mapGetters({
       name: 'filters/name',
       isFiltering: 'filters/isFiltering',
@@ -57,26 +57,6 @@ export default {
       clearFilter: 'filters/clearFilterQuery',
     }),
     possibleOptions(filter) {
-      if (Object.values(constants.StructuredTags).includes(filter.name)) {
-        if (!this.isEndlessApp || !this.options.availableTags) {
-          return [];
-        }
-
-        const tags = this.sortOptionsByWeight(this.options.availableTags);
-        const structuredTags = {};
-
-        Object.values(constants.StructuredTags).forEach((matchKey) => {
-          const tagValues = tags
-            .filter((t) => t.match(constants.StructuredTagsRegExp))
-            .map((t) => t.match(constants.StructuredTagsRegExp))
-            .filter(([, key]) => key === matchKey)
-            .map(([,, value]) => value);
-          structuredTags[matchKey] = tagValues;
-        });
-
-        return structuredTags[filter.name];
-      }
-
       switch (filter.name) {
         // Media type filter, all content kinds
         case constants.MediaFilterName: {
