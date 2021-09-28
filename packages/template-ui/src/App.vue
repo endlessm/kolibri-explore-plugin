@@ -76,15 +76,16 @@ export default {
 html {
   height: 100%;
 }
-/* Always show the vertical scrollbar */
+
 body {
-  overflow-y: scroll;
-  min-height: 100vh;
+  // This is only to prevent a scrollbar to appear for a moment while hashi resizes the iframe:
+  overflow: hidden;
+  height: 100%;
 }
 
 #app {
+  height: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
 }
 </style>
