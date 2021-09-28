@@ -87,7 +87,7 @@ export default {
   methods: {
     getMore() {
       this.loading = true;
-      this.getMoreNodes()
+      return this.getMoreNodes()
         .then((nodes) => {
           const { page, totalPages, results } = nodes;
           if (results) {
