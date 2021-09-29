@@ -92,7 +92,9 @@ export function getTopicCardSubtitle(node) {
     const kind = uniqueLeavesKinds.values().next().value;
     kindsLabel = LabelPerKind[kind] || DefaultKindLabel;
   }
-  return `${leaves.length} ${kindsLabel}`;
+
+  const count = node.children_count || leaves.length;
+  return `${count} ${kindsLabel}`;
 };
 
 export function getCardSubtitle(node, fallback) {

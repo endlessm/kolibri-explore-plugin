@@ -23,11 +23,6 @@ export default {
       subtitle: '',
     };
   },
-  watcn: {
-    node: function() {
-      this.updateSubtitle();
-    },
-  },
   computed: {
     cardVariant() {
       if (this.node.kind !== 'topic' || this.isBundle) {
@@ -36,22 +31,29 @@ export default {
       return 'TopicCard';
     },
     showAsBundle() {
-      // FIXME check the children nodes to show as bundle:
-      return false;
+      // If there are no topics children we can show as bundle
+      return this.node.topic_children_count === 0;
     },
     isBundle() {
       if ('isBundle' in this.node) {
         return this.node.isBundle;
       }
-      // FIXME we shouldn't look at the store to check if this node represents a bundle.
-      // Instead, we should traverse all nodes and add the isBundle flag above at load time.
-      if (this.$store) {
-        const { getters } = this.$store;
-        if (getters.isSimpleBundle && this.showAsBundle) {
-          return true;
-        }
+      if (this.isSimpleBundle && this.showAsBundle) {
+        return true;
       }
       return false;
+    },
+    isSimpleBundle() {
+      if (this.$store) {
+        const { getters } = this.$store;
+        return getters.isSimpleBundle;
+      }
+      return false;
+    },
+  },
+  watch: {
+    node() {
+      this.updateSubtitle();
     },
   },
   mounted() {
