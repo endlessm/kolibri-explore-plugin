@@ -1,41 +1,4 @@
-import { recursiveExistsNodes, flattenNodes } from '@/utils';
-import _ from 'underscore';
-
-import { utils, constants } from 'eos-components';
-
-// ['foo', 'foo', 'bar'] => { 'foo': 2, 'bar': 1 }
-function weightOptions(options) {
-  return options.reduce((weighted, option) => ({
-    ...weighted,
-    [option]: (weighted[option] || 0) + 1,
-  }), {});
-}
-
-function sortOptionsByWeight(root, getOptionsFunc) {
-  const weightedOptions = weightOptions(getOptionsFunc(root));
-  return Object.keys(weightedOptions).sort((a, b) => weightedOptions[b] - weightedOptions[a]);
-}
-
-function getAuthorOptions(node) {
-  return flattenNodes(node)
-    .filter((n) => n.kind !== 'topic')
-    .map((n) => n.author)
-    .filter((n) => n !== '');
-}
-
-function getTagOptions(node) {
-  return flattenNodes(node)
-    .flatMap((n) => (n.tags ? n.tags : []))
-    .filter((n) => n.kind !== 'topic')
-    .filter((t) => t !== '')
-    .filter((t) => !t.match(constants.StructuredTagsRegExp));
-}
-
-function getStructuredTagOptions(node, matchKey) {
-  return flattenNodes(node)
-    .filter((n) => n.kind !== 'topic')
-    .flatMap((n) => utils.getAllStructuredTags(n, matchKey));
-}
+import { constants } from 'eos-components';
 
 let storeData;
 try {
@@ -67,9 +30,11 @@ function contentKindToVerb(value) {
   return constants.MediaTypeVerbs[value] || value;
 }
 
-const MediaFilterName = 'Learning activity';
-const AuthorFilterName = 'author';
-const TagFilterName = 'common keywords';
+const {
+  AuthorFilterName,
+  MediaFilterName,
+  TagFilterName,
+} = constants;
 
 const structuredTagsMetadata = Object.values(constants.StructuredTags)
   .filter((t) => !constants.FilterTagsBadList.includes(t))
@@ -77,6 +42,7 @@ const structuredTagsMetadata = Object.values(constants.StructuredTags)
 
 // Filter taxonomy, that can be overriden
 const initialState = {
+  filterOptions: {},
   // Object with all filters selected
   // key -> filter name
   // value -> array with all the selected options
@@ -139,86 +105,11 @@ export default {
       const selectedFilters = getters.getFilterOptions(filter);
       return selectedFilters.includes(option);
     },
-    filterNodes: (state, getters, rootState) => (nodes) => {
-      // Empty filter
-      if (getters.isEmpty) {
-        return nodes;
-      }
-
-      const { query } = state;
-      let filtered = nodes || [];
-
-      // Get all leaf nodes
-      filtered = filtered
-        .map((n) => flattenNodes(n))
-        .reduce((accumulator, item) => accumulator.concat(item), [])
-        .filter((n) => n.kind !== 'topic');
-
-      // Filter by media type
-      const mediaType = query[MediaFilterName];
-      if (mediaType && mediaType.length) {
-        filtered = filtered.filter((node) => (
-          mediaType.some((m) => recursiveExistsNodes(node, (n) => n.kind === m))
-        ));
-      }
-      // Filter by author
-      const authors = query[AuthorFilterName];
-      if (authors && authors.length) {
-        filtered = filtered.filter((node) => (
-          authors.some((a) => recursiveExistsNodes(node, (n) => n.author === a))
-        ));
-      }
-      // Filter by tag
-      const tags = query[TagFilterName];
-      if (tags && tags.length) {
-        filtered = filtered.filter((node) => (
-          tags.some((t) => recursiveExistsNodes(node, (n) => n.tags && n.tags.includes(t)))
-        ));
-      }
-      // Filter by structured tags
-      if (rootState.isEndlessApp) {
-        Object.values(constants.StructuredTags).forEach((matchKey) => {
-          const options = query[matchKey];
-          if (options && options.length) {
-            filtered = filtered.filter((node) => (
-              options.some((o) => recursiveExistsNodes(node,
-                (n) => utils.getAllStructuredTags(n, matchKey).includes(o)))
-            ));
-          }
-        });
-      }
-
-      return filtered;
-    },
-    possibleOptions: (_state, _getters, rootState) => (filter, root) => {
-      if (Object.values(constants.StructuredTags).includes(filter.name)) {
-        if (!rootState.isEndlessApp) {
-          return [];
-        }
-        const getOptionsFunc = _.partial(getStructuredTagOptions, _, filter.name);
-        return sortOptionsByWeight(root, getOptionsFunc);
-      }
-      switch (filter.name) {
-        case MediaFilterName:
-          return filter.options
-            .filter((m) => recursiveExistsNodes(root, (n) => n.kind === m))
-            .map((k) => ({
-              kind: k,
-              label: contentKindToVerb(k),
-            }));
-        case AuthorFilterName:
-          return sortOptionsByWeight(root, getAuthorOptions);
-        case TagFilterName: {
-          const { maxTags } = filter;
-          return sortOptionsByWeight(root, getTagOptions)
-            .slice(0, maxTags);
-        }
-        default:
-          return filter.options;
-      }
-    },
   },
   mutations: {
+    setFilterOptions(state, payload) {
+      state.filterOptions = payload;
+    },
     setFilterQuery(state, payload) {
       const { filter, checked, option } = payload;
       const query = state.query || {};

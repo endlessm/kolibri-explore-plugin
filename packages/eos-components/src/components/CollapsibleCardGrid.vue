@@ -8,13 +8,17 @@
 
     <b-row alignH="center">
       <b-button
-        v-if="canShowMore"
+        v-if="canShowMore || areMoreNodes"
+        :disabled="loading"
         pill
         class="mt-2"
         variant="outline-dark"
         @click="showMore"
       >
-        <span>Show more</span>
+        <b-spinner v-if="loading" label="Spinning" small />
+        <span v-else>
+          Show more
+        </span>
       </b-button>
       <b-button
         v-else-if="canShowLess"
@@ -39,6 +43,7 @@ export default {
     nodes: Array,
     mediaQuality: String,
     cardColumns: Object,
+    getMoreNodes: Function,
     itemsPerPage: {
       type: Number,
       default: 16,
@@ -48,6 +53,8 @@ export default {
     return {
       // Display 4 rows of 4 cards (16 total) in a large screen.
       rowsToShow: Math.ceil(this.itemsPerPage * this.cardColumns.lg / 12),
+      areMorePages: true,
+      loading: false,
     };
   },
   computed: {
@@ -56,6 +63,9 @@ export default {
     },
     canShowMore() {
       return (this.rowsToShow * this.columns) < this.nodes.length;
+    },
+    areMoreNodes() {
+      return this.getMoreNodes && this.areMorePages;
     },
     canShowLess() {
       return this.rowsToShow > this.initialRows;
@@ -75,8 +85,28 @@ export default {
     },
   },
   methods: {
+    getMore() {
+      this.loading = true;
+      return this.getMoreNodes()
+        .then((nodes) => {
+          const { page, totalPages, results } = nodes;
+          if (results) {
+            this.nodes = this.nodes.concat(results);
+            this.rowsToShow++;
+            if (page === totalPages) {
+              this.areMorePages = false;
+            }
+          } else {
+            this.areMorePages = false;
+          }
+          this.loading = false;
+        });
+    },
     showMore() {
       if (!this.canShowMore) {
+        if (this.getMoreNodes) {
+          this.getMore();
+        }
         return;
       }
       this.rowsToShow++;

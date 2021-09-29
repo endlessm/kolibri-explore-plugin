@@ -58,7 +58,7 @@
       </template>
 
       <template v-else>
-        <FilterResult :node="section" />
+        <FilterResult />
       </template>
 
     </template>
