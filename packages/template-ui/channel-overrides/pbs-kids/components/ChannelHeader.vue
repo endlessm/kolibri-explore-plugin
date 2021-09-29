@@ -9,7 +9,7 @@
         <b-img
           :src="logoImage"
           :width="logoWidth"
-          :alt="section.title"
+          :alt="altText"
         />
       </h1>
     </template>
@@ -23,11 +23,19 @@ import logoImage from '../assets/logo.png';
 export default {
   name: 'ChannelHeader',
   mixins: [headerMixin],
+  props: {
+    section: Object,
+  },
   data() {
     return {
       logoImage,
       logoWidth: 160,
     };
+  },
+  computed: {
+    altText() {
+      return this.section ? this.section.title : 'PBS Kids';
+    },
   },
 };
 </script>
