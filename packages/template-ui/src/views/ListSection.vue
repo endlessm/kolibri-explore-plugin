@@ -7,18 +7,31 @@
 
     <div v-if="isFilterEmpty">
       <div v-if="isInlineLevel">
-        <CardGrid
-          v-for="subsection in sectionNodes"
-          :id="subsection.id"
-          :key="subsection.id"
-          :nodes="subsectionNodes[subsection.id]"
-          :mediaQuality="mediaQuality"
-          :cardColumns="cardColumns"
-        >
-          <b-row>
-            <SectionTitle :section="subsection" />
-          </b-row>
-        </CardGrid>
+        <template v-if="loadingSubsectionNodes">
+          <CardGridPlaceholder
+            v-for="subsection in sectionNodes"
+            :id="subsection.id"
+            :key="subsection.id"
+          >
+            <b-row>
+              <SectionTitle :section="subsection" />
+            </b-row>
+          </CardGridPlaceholder>
+        </template>
+        <template v-else>
+          <CardGrid
+            v-for="subsection in sectionNodes"
+            :id="subsection.id"
+            :key="subsection.id"
+            :nodes="subsectionNodes[subsection.id]"
+            :mediaQuality="mediaQuality"
+            :cardColumns="cardColumns"
+          >
+            <b-row>
+              <SectionTitle :section="subsection" />
+            </b-row>
+          </CardGrid>
+        </template>
       </div>
       <div v-else>
         <CardGrid
@@ -75,11 +88,15 @@ export default {
   },
   watch: {
     sectionNodes() {
-      if (!this.isInlineLevel) {
-        return;
+      if (this.isInlineLevel) {
+        this.fetchSubsectionNodes();
       }
-      this.fetchSubsectionNodes();
     },
+  },
+  mounted() {
+    if (this.isInlineLevel && this.sectionNodes.length) {
+      this.fetchSubsectionNodes();
+    }
   },
   methods: {
     fetchSubsectionNodes() {

@@ -1,5 +1,6 @@
 <template>
-  <b-container class="mb-4">
+  <b-container class="mb-5 mt-4 section-container">
+    <slot></slot>
     <b-card-group :deck="true">
       <b-card
         v-for="item in items"
