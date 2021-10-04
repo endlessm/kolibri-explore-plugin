@@ -6,10 +6,12 @@
       :is="displayVariant"
       :id="id"
       :nodes="nodes"
+      :hasMoreNodes="hasMoreNodes"
       :getMoreNodes="getMoreNodes"
       :itemsPerPage="itemsPerPage"
       :mediaQuality="mediaQuality"
       :cardColumns="cardColumns"
+      @loadMoreNodes="$emit('loadMoreNodes')"
     />
   </b-container>
 </template>
@@ -19,10 +21,15 @@
 export default {
   name: 'CardGrid',
   props: {
-    nodes: Array,
     id: String,
+    nodes: Array,
+    hasMoreNodes: {
+      type: Boolean,
+      default: false,
+    },
     mediaQuality: String,
     cardColumns: Object,
+    // FIXME remove:
     getMoreNodes: Function,
     variant: {
       type: String,

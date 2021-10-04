@@ -15,7 +15,8 @@
       v-if="hasMultipleSlides"
       variant="outline-primary"
       class="next rounded-circle"
-      :class="{ invisible: isLastSlide }"
+      :disabled="loading"
+      :class="{ invisible: hideNextButton }"
       aria-controls="carousel"
       @click="next()"
     >
@@ -27,6 +28,7 @@
       ref="carousel"
       v-model="slide"
       :interval="0"
+      @sliding-end="onSlidingEnd"
     >
       <b-carousel-slide
         v-for="(slideNodes, index) in slides"
@@ -59,6 +61,7 @@
 
 <script>
 import _ from 'underscore';
+import { ItemsPerSlide } from '../constants';
 import responsiveMixin from './mixins/responsiveMixin';
 
 export default {
@@ -66,27 +69,27 @@ export default {
   mixins: [responsiveMixin],
   props: {
     nodes: Array,
-    mediaQuality: String,
-    itemsPerPage: {
-      type: Number,
-      default: 16,
+    hasMoreNodes: {
+      type: Boolean,
+      default: false,
     },
+    mediaQuality: String,
   },
   data() {
     return {
       slide: 0,
+      loading: false,
     };
   },
   computed: {
     itemsPerSlide() {
       if (this.xs) {
-        return Math.ceil(this.itemsPerPage / 16);
+        return Math.ceil(ItemsPerSlide / 4);
       }
       if (this.sm || this.md) {
-        return Math.ceil(this.itemsPerPage / 8);
+        return Math.ceil(ItemsPerSlide / 2);
       }
-
-      return Math.ceil(this.itemsPerPage / 4);
+      return Math.ceil(ItemsPerSlide);
     },
     slides() {
       return _.chunk(this.nodes, this.itemsPerSlide);
@@ -103,6 +106,14 @@ export default {
     isLastSlide() {
       return this.slide === this.slides.length - 1;
     },
+    hideNextButton() {
+      return !this.hasMoreNodes && this.isLastSlide;
+    }
+  },
+  watch: {
+    nodes() {
+      this.loading = false;
+    },
   },
   methods: {
     previous() {
@@ -110,6 +121,12 @@ export default {
     },
     next() {
       this.$refs.carousel.next();
+    },
+    onSlidingEnd() {
+      if (this.hasMoreNodes && this.isLastSlide) {
+        this.loading = true;
+        this.$emit('loadMoreNodes');
+      }
     },
   },
 };
