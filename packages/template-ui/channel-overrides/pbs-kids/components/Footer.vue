@@ -27,7 +27,6 @@
 
 <script>
   import _ from 'underscore';
-  import { mapState } from 'vuex';
   import { utils } from 'eos-components';
   import footerLogos from '../assets/footer-logos.png';
   import elinorLogo from '../assets/elinor-wonders-why.png';
@@ -54,10 +53,10 @@
     data() {
       return {
         footerLogos,
+        section: {}
       };
     },
     computed: {
-      ...mapState(['section']),
       slug() {
         if (!this.section.title) {
           return null;
@@ -75,6 +74,27 @@
           return null;
         }
         return _.get(logosPerBundle, this.slug, null);
+      },
+    },
+    watch: {
+      $route() {
+        return this.fetchSection();
+      },
+    },
+    mounted() {
+      return this.fetchSection();
+    },
+    methods: {
+      fetchSection() {
+        const { topicId } = this.$route.params;
+        if (!topicId) {
+          return Promise.resolve({});
+        }
+
+        return window.kolibri.getContentById(topicId)
+          .then((section) => {
+            this.section = section;
+          });
       },
     },
   };

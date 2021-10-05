@@ -57,7 +57,7 @@ export default {
       };
     },
     kind() {
-      if (this.isBundle) {
+      if (this.isBundle && this.node.kind === 'topic') {
         return 'bundle';
       }
       return this.node.kind;
