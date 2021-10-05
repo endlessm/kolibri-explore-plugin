@@ -60,8 +60,8 @@ export default {
       switch (filter.name) {
         // Media type filter, all content kinds
         case constants.MediaFilterName: {
-          const { availableActivityTypes } = this.options;
-          return this.sortOptionsByWeight(availableActivityTypes)
+          const { availableKinds } = this.options;
+          return this.sortOptionsByWeight(availableKinds)
             .filter((k) => k !== 'topic')
             .map((k) => ({
               kind: k,

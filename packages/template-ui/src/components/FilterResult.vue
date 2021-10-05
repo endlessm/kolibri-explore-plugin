@@ -41,7 +41,7 @@
 
         const mediaType = this.query[constants.MediaFilterName];
         if (mediaType && mediaType.length) {
-          params.activityTypes = mediaType;
+          params.kinds = mediaType;
         }
         const authors = this.query[constants.AuthorFilterName];
         if (authors && authors.length) {
