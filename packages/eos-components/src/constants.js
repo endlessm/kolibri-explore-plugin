@@ -48,11 +48,14 @@ export const ThumbnailSize = {
 
 export const CarouselInterval = 10000;
 
+export const ItemsPerSlide = 4;
+
 export default {
   AuthorFilterName,
   CarouselInterval,
   DefaultKindLabel,
   FilterTagsBadList,
+  ItemsPerSlide,
   LabelPerKind,
   MediaFilterName,
   MediaQuality,

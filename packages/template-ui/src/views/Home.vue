@@ -46,9 +46,10 @@
         >
           <CardGrid
             :id="section.id"
-            :nodes="sectionNodes[section.id]"
+            :nodes="sectionNodes[section.id].nodes"
+            :hasMoreNodes="sectionNodes[section.id].hasMoreNodes"
             :mediaQuality="mediaQuality"
-            :cardColumns="cardColumns"
+            @loadMoreNodes="onLoadMoreSectionNodes(section.id)"
           >
             <b-row>
               <SectionTitle :section="section" />
@@ -67,6 +68,9 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import { constants } from 'eos-components';
+
+const sectionPageSize = 2 * constants.ItemsPerSlide;
 
 export default {
   name: 'Home',
@@ -153,13 +157,40 @@ export default {
       }
       this.loadingSectionNodes = true;
       this.sectionNodes = {};
+
       return Promise.all(this.mainSections.map((section) => {
-        return window.kolibri.getContentByFilter({ parent: section.id })
-          .then((page) => {
-            this.sectionNodes[section.id] = page.results;
+        return window.kolibri.getContentByFilter({
+            parent: section.id,
+            page: 1,
+            pageSize: sectionPageSize,
+          })
+          .then((pageResult) => {
+            this.$set(this.sectionNodes, section.id, {
+              nodes: pageResult.results,
+              page: pageResult.page,
+              hasMoreNodes: pageResult.page < pageResult.totalPages,
+            });
           });
       })).then(() => {
         this.loadingSectionNodes = false;
+      });
+    },
+    onLoadMoreSectionNodes(sectionId) {
+      const { nodes, page, hasMoreNodes } = this.sectionNodes[sectionId];
+      if (!hasMoreNodes) {
+        return null;
+      }
+      return window.kolibri.getContentByFilter({
+        parent: sectionId,
+        page: page + 1,
+        pageSize: sectionPageSize
+      })
+      .then((pageResult) => {
+        this.$set(this.sectionNodes, sectionId, {
+          nodes: nodes.concat(pageResult.results),
+          page: pageResult.page,
+          hasMoreNodes: pageResult.page < pageResult.totalPages,
+        });
       });
     },
     goToContent(node) {

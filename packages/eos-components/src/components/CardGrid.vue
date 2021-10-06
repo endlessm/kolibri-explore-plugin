@@ -6,10 +6,11 @@
       :is="displayVariant"
       :id="id"
       :nodes="nodes"
-      :getMoreNodes="getMoreNodes"
+      :hasMoreNodes="hasMoreNodes"
       :itemsPerPage="itemsPerPage"
       :mediaQuality="mediaQuality"
       :cardColumns="cardColumns"
+      @loadMoreNodes="$emit('loadMoreNodes')"
     />
   </b-container>
 </template>
@@ -19,11 +20,14 @@
 export default {
   name: 'CardGrid',
   props: {
-    nodes: Array,
     id: String,
+    nodes: Array,
+    hasMoreNodes: {
+      type: Boolean,
+      default: false,
+    },
     mediaQuality: String,
     cardColumns: Object,
-    getMoreNodes: Function,
     variant: {
       type: String,
       default: 'slidable',

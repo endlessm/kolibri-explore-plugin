@@ -8,7 +8,7 @@
 
     <b-row alignH="center">
       <b-button
-        v-if="canShowMore || areMoreNodes"
+        v-if="canShowMore"
         :disabled="loading"
         pill
         class="mt-2"
@@ -41,9 +41,12 @@ export default {
   mixins: [responsiveMixin],
   props: {
     nodes: Array,
+    hasMoreNodes: {
+      type: Boolean,
+      default: false,
+    },
     mediaQuality: String,
     cardColumns: Object,
-    getMoreNodes: Function,
     itemsPerPage: {
       type: Number,
       default: 16,
@@ -52,8 +55,10 @@ export default {
   data() {
     return {
       // Display 4 rows of 4 cards (16 total) in a large screen.
-      rowsToShow: Math.ceil(this.itemsPerPage * this.cardColumns.lg / 12),
-      areMorePages: true,
+      rowsToShow: Math.min(
+        Math.ceil(this.itemsPerPage * this.cardColumns.lg / 12),
+        Math.ceil(this.nodes.length * this.cardColumns.lg / 12),
+      ),
       loading: false,
     };
   },
@@ -61,11 +66,14 @@ export default {
     initialRows() {
       return Math.ceil(this.itemsPerPage / this.columns);
     },
-    canShowMore() {
-      return (this.rowsToShow * this.columns) < this.nodes.length;
+    totalRows() {
+      return Math.ceil(this.nodes.length / this.columns);
     },
-    areMoreNodes() {
-      return this.getMoreNodes && this.areMorePages;
+    isLastRow() {
+      return this.rowsToShow === this.totalRows;
+    },
+    canShowMore() {
+      return !this.isLastRow || this.hasMoreNodes;
     },
     canShowLess() {
       return this.rowsToShow > this.initialRows;
@@ -84,32 +92,20 @@ export default {
       return this.nodes.slice(0, elements);
     },
   },
-  methods: {
-    getMore() {
-      this.loading = true;
-      return this.getMoreNodes()
-        .then((nodes) => {
-          const { page, totalPages, results } = nodes;
-          if (results) {
-            this.nodes = this.nodes.concat(results);
-            this.rowsToShow++;
-            if (page === totalPages) {
-              this.areMorePages = false;
-            }
-          } else {
-            this.areMorePages = false;
-          }
-          this.loading = false;
-        });
-    },
-    showMore() {
-      if (!this.canShowMore) {
-        if (this.getMoreNodes) {
-          this.getMore();
-        }
-        return;
-      }
+  watch: {
+    nodes() {
+      this.loading = false;
       this.rowsToShow++;
+    },
+  },
+  methods: {
+    showMore() {
+      if (this.hasMoreNodes && this.isLastRow) {
+        this.loading = true;
+        this.$emit('loadMoreNodes');
+      } else {
+        this.rowsToShow++;
+      }
     },
     showLess() {
       if (!this.canShowLess) {

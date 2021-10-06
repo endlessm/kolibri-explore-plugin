@@ -9,9 +9,10 @@
         v-else
         variant="collapsible"
         :nodes="filteredNodes"
-        :getMoreNodes="getMoreNodes"
+        :hasMoreNodes="hasMoreNodes"
         :mediaQuality="mediaQuality"
         :cardColumns="cardColumns"
+        @loadMoreNodes="onLoadMoreNodes"
       />
     </div>
   </div>
@@ -28,7 +29,7 @@
         filteredNodes: [],
         loading: false,
         page: 1,
-        lastPage: 1,
+        hasMoreNodes: false,
       };
     },
     computed: {
@@ -37,11 +38,11 @@
         return this.filters.query;
       },
       filterParams() {
-        const params = { page: this.page };
+        const params = { page: this.page, pageSize: 16 };
 
-        const mediaType = this.query[constants.MediaFilterName];
-        if (mediaType && mediaType.length) {
-          params.kinds = mediaType;
+        const kinds = this.query[constants.MediaFilterName];
+        if (kinds && kinds.length) {
+          params.kinds = kinds;
         }
         const authors = this.query[constants.AuthorFilterName];
         if (authors && authors.length) {
@@ -69,22 +70,21 @@
         this.loading = true;
         this.filteredNodes = [];
 
-        window.kolibri.getContentByFilter(this.filterParams)
-          .then((page) => {
-            this.filteredNodes = page.results;
-            this.lastPage = page.totalPages;
-            this.loading = false;
-          });
+        return window.kolibri.getContentByFilter(this.filterParams)
+        .then((pageResult) => {
+          this.filteredNodes = pageResult.results;
+          this.hasMoreNodes = pageResult.page < pageResult.totalPages;
+          this.loading = false;
+        });
       },
-      async getMoreNodes() {
-        if (this.page === this.lastPage) {
-          return [];
-        }
-
+      onLoadMoreNodes() {
         this.page++;
-        const nodes = await window.kolibri.getContentByFilter(this.filterParams);
-        return nodes;
-      }
+        return window.kolibri.getContentByFilter(this.filterParams)
+        .then((pageResult) => {
+          this.filteredNodes = this.filteredNodes.concat(pageResult.results);
+          this.hasMoreNodes = pageResult.page < pageResult.totalPages;
+        });
+      },
     },
   };
 </script>
