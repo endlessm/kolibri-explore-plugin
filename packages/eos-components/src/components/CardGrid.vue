@@ -7,7 +7,6 @@
       :id="id"
       :nodes="nodes"
       :hasMoreNodes="hasMoreNodes"
-      :getMoreNodes="getMoreNodes"
       :itemsPerPage="itemsPerPage"
       :mediaQuality="mediaQuality"
       :cardColumns="cardColumns"
@@ -29,8 +28,6 @@ export default {
     },
     mediaQuality: String,
     cardColumns: Object,
-    // FIXME remove:
-    getMoreNodes: Function,
     variant: {
       type: String,
       default: 'slidable',
