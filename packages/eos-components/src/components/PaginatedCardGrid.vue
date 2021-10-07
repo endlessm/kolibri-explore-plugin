@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { ItemsPerPage } from '../constants';
 
 export default {
   name: 'PaginatedCardGrid',
@@ -22,7 +23,7 @@ export default {
     cardColumns: Object,
     itemsPerPage: {
       type: Number,
-      default: 16,
+      default: ItemsPerPage,
     },
   },
   data() {

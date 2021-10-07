@@ -6,6 +6,7 @@
       :section="section"
       :sectionNodes="sectionNodes"
       :loading="loading"
+      @loadMoreNodes="onLoadMoreSectionNodes()"
     />
   </div>
 </template>
@@ -14,6 +15,7 @@
 import { mapGetters } from 'vuex';
 import ListSection from '@/views/ListSection';
 import BundleSection from '@/views/BundleSection';
+import { constants } from 'eos-components';
 
 export default {
   name: 'Section',
@@ -24,7 +26,7 @@ export default {
   data() {
     return {
       section: {},
-      sectionNodes: [],
+      sectionNodes: { nodes: [], hasMoreNodes: false },
       loading: true,
     };
   },
@@ -36,8 +38,7 @@ export default {
       if (!this.isSimpleBundle) {
         return false;
       }
-      const hasChildTopics = this.sectionNodes.some((n) => n.kind === 'topic');
-      return !hasChildTopics;
+      return this.node.topic_children_count === 0;
     },
     sectionVariant() {
       if (this.showAsBundle) {
@@ -68,10 +69,36 @@ export default {
         });
     },
     fetchSectionNodes() {
-      return window.kolibri.getContentByFilter({ parent: this.section.id })
-        .then((page) => {
-          this.sectionNodes = page.results;
+      return window.kolibri.getContentByFilter({
+        parent: this.section.id,
+        page: 1,
+        pageSize: constants.ItemsPerPage,
+      })
+        .then((pageResult) => {
+          this.sectionNodes = {
+            nodes: pageResult.results,
+            page: pageResult.page,
+            hasMoreNodes: pageResult.page < pageResult.totalPages,
+          };
         });
+    },
+    onLoadMoreSectionNodes() {
+      const { nodes, page, hasMoreNodes } = this.sectionNodes;
+      if (!hasMoreNodes) {
+        return null;
+      }
+      return window.kolibri.getContentByFilter({
+        parent: this.section.id,
+        page: page + 1,
+        pageSize: constants.ItemsPerPage,
+      })
+      .then((pageResult) => {
+        this.sectionNodes = {
+          nodes: nodes.concat(pageResult.results),
+          page: pageResult.page,
+          hasMoreNodes: pageResult.page < pageResult.totalPages,
+        };
+      });
     },
   },
 };

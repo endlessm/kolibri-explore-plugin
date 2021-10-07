@@ -9,7 +9,7 @@
       <div v-if="isInlineLevel">
         <template v-if="loadingSubsectionNodes">
           <CardGridPlaceholder
-            v-for="subsection in sectionNodes"
+            v-for="subsection in sectionNodes.nodes"
             :id="subsection.id"
             :key="subsection.id"
           >
@@ -20,13 +20,13 @@
         </template>
         <template v-else>
           <CardGrid
-            v-for="subsection in sectionNodes"
+            v-for="subsection in sectionNodes.nodes"
             :id="subsection.id"
             :key="subsection.id"
-            :nodes="subsectionNodes[subsection.id].nodes"
+            :nodes="getSubsectionNodes(subsection.id).nodes"
             :mediaQuality="mediaQuality"
             :cardColumns="cardColumns"
-            :hasMoreNodes="subsectionNodes[subsection.id].hasMoreNodes"
+            :hasMoreNodes="getSubsectionNodes(subsection.id).hasMoreNodes"
             @loadMoreNodes="onLoadMoreSubsectionNodes(subsection.id)"
           >
             <b-row>
@@ -39,10 +39,12 @@
         <CardGrid
           :id="section.id"
           :key="section.id"
-          :nodes="sectionNodes"
+          :nodes="sectionNodes.nodes"
           :mediaQuality="mediaQuality"
           :cardColumns="cardColumns"
           variant="collapsible"
+          :hasMoreNodes="sectionNodes.hasMoreNodes"
+          @loadMoreNodes="$emit('loadMoreNodes')"
         />
       </div>
     </div>
@@ -64,9 +66,9 @@ export default {
   props: {
     section: Object,
     sectionNodes: {
-      type: Array,
+      type: Object,
       default() {
-        return [];
+        return { nodes: [], hasMoreNodes: false };
       },
     },
     // FIXME use the loading prop:
@@ -74,7 +76,7 @@ export default {
   },
   data() {
     return {
-      subsectionNodes: {},
+      subsectionNodes: { nodes: [], hasMoreNodes: false },
       loadingSubsectionNodes: true,
     };
   },
@@ -85,7 +87,7 @@ export default {
       isFilterEmpty: 'filters/isEmpty',
     }),
     isInlineLevel() {
-      return this.sectionNodes.every((n) => n.kind === 'topic');
+      return this.section.children_count === this.section.topic_children_count;
     },
     backgroundImageURL() {
       return this.getAssetURL('sectionBackgroundImage');
@@ -94,20 +96,29 @@ export default {
   watch: {
     sectionNodes() {
       if (this.isInlineLevel) {
-        this.fetchSubsectionNodes();
+        this.loadInlineLevel();
       }
     },
   },
   mounted() {
-    if (this.isInlineLevel && this.sectionNodes.length) {
-      this.fetchSubsectionNodes();
+    if (this.isInlineLevel) {
+      this.loadInlineLevel();
     }
   },
   methods: {
+    loadInlineLevel() {
+      // Load all nodes pages if it's an inline level
+      if (this.sectionNodes.hasMoreNodes) {
+        this.$emit('loadMoreNodes');
+      }
+      else if (this.sectionNodes.nodes.length) {
+        this.fetchSubsectionNodes();
+      }
+    },
     fetchSubsectionNodes() {
       this.loadingSubsectionNodes = true;
-      this.subsectionNodes = {};
-      return Promise.all(this.sectionNodes.map((subsection) => {
+      this.subsectionNodes = { nodes: [], hasMoreNodes: false };
+      return Promise.all(this.sectionNodes.nodes.map((subsection) => {
         return window.kolibri.getContentByFilter({
           parent: subsection.id,
           page: 1,
@@ -141,6 +152,14 @@ export default {
           hasMoreNodes: pageResult.page < pageResult.totalPages,
         });
       });
+    },
+    getSubsectionNodes(sectionId) {
+      const subsection = this.subsectionNodes[sectionId];
+      if (!subsection) {
+        return { nodes: [], hasMoreNodes: false };
+      }
+
+      return subsection;
     },
   },
 };

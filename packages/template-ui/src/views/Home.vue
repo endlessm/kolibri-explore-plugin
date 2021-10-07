@@ -23,10 +23,10 @@
       <FilterContent v-if="hasFilters" />
 
       <template v-if="isFilterEmpty">
-        <template v-if="contentNodes.length">
+        <template v-if="contentNodes.nodes.length">
           <b-container v-if="displayHeroContent">
             <CarouselCard
-              v-for="node in contentNodes"
+              v-for="node in contentNodes.nodes"
               :key="'node-' + node.id"
               :node="node"
               class="template-ui-hero-card"
@@ -34,10 +34,12 @@
             />
           </b-container>
           <CardGrid
-            :nodes="contentNodes"
+            :nodes="contentNodes.nodes"
             :variant="hasFlatGrid ? 'collapsible' : 'slidable'"
             :mediaQuality="mediaQuality"
             :cardColumns="cardColumns"
+            :hasMoreNodes="contentNodes.hasMoreNodes"
+            @loadMoreNodes="onLoadMoreContentNodes()"
           />
         </template>
         <div
@@ -77,7 +79,7 @@ export default {
   data() {
     return {
       carouselNodes: [],
-      contentNodes: [],
+      contentNodes: { nodes: [], hasMoreNodes: false },
       sectionNodes: {},
       loadingCarouselNodes: true,
       loadingContentNodes: true,
@@ -143,10 +145,18 @@ export default {
     },
     fetchContentNodes() {
       this.loadingContentNodes = true;
-      const options = this.hasFlatGrid ? { onlyContent: true } : { parent: 'self', onlyContent: true }
-      return window.kolibri.getContentByFilter(options)
-        .then((page) => {
-          this.contentNodes = page.results;
+      const options = this.hasFlatGrid ? { onlyContent: true } : { parent: 'self', onlyContent: true };
+      return window.kolibri.getContentByFilter({
+        ...options,
+          page: 1,
+          pageSize: constants.ItemsPerPage,
+      })
+        .then((pageResult) => {
+          this.contentNodes = {
+            nodes: pageResult.results,
+            page: pageResult.page,
+            hasMoreNodes: pageResult.page < pageResult.totalPages,
+          };
           this.loadingContentNodes = false;
         });
     },
@@ -191,6 +201,25 @@ export default {
           page: pageResult.page,
           hasMoreNodes: pageResult.page < pageResult.totalPages,
         });
+      });
+    },
+    onLoadMoreContentNodes() {
+      const { nodes, page, hasMoreNodes } = this.contentNodes;
+      if (!hasMoreNodes) {
+        return null;
+      }
+      const options = this.hasFlatGrid ? { onlyContent: true } : { parent: 'self', onlyContent: true };
+      return window.kolibri.getContentByFilter({
+        ...options,
+        page: page + 1,
+        pageSize: constants.ItemsPerPage,
+      })
+      .then((pageResult) => {
+        this.contentNodes = {
+          nodes: nodes.concat(pageResult.results),
+          page: pageResult.page,
+          hasMoreNodes: pageResult.page < pageResult.totalPages,
+        };
       });
     },
     goToContent(node) {

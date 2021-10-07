@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { ItemsPerPage } from '../constants';
 
 export default {
   name: 'CardGrid',
@@ -38,7 +39,7 @@ export default {
     },
     itemsPerPage: {
       type: Number,
-      default: 16,
+      default: ItemsPerPage,
     },
   },
   computed: {
