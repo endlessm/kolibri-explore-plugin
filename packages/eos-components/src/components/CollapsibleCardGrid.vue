@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { ItemsPerPage } from '../constants';
 import responsiveMixin from './mixins/responsiveMixin';
 
 export default {
@@ -49,7 +50,7 @@ export default {
     cardColumns: Object,
     itemsPerPage: {
       type: Number,
-      default: 16,
+      default: ItemsPerPage,
     },
   },
   data() {

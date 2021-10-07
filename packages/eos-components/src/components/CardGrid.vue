@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { ItemsPerPage } from '../constants';
 
 export default {
   name: 'CardGrid',
@@ -33,19 +34,17 @@ export default {
       default: 'slidable',
       validator(value) {
         // The value must match one of these strings
-        return ['paginated', 'collapsible', 'slidable'].includes(value);
+        return ['collapsible', 'slidable'].includes(value);
       },
     },
     itemsPerPage: {
       type: Number,
-      default: 16,
+      default: ItemsPerPage,
     },
   },
   computed: {
     displayVariant() {
       switch (this.variant) {
-        case 'paginated':
-          return 'PaginatedCardGrid';
         case 'collapsible':
           return 'CollapsibleCardGrid';
         case 'slidable':

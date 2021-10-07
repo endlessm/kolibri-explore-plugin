@@ -16,7 +16,7 @@
         >
           <b-row>
             <b-col
-              v-for="content in sectionNodes"
+              v-for="content in sectionNodes.nodes"
               :key="content.id"
               class="content-col"
               md="6"
@@ -47,9 +47,9 @@ export default {
   props: {
     section: Object,
     sectionNodes: {
-      type: Array,
+      type: Object,
       default() {
-        return [];
+        return { nodes: [], hasMoreNodes: false };
       },
     },
     // FIXME use the loading prop:
@@ -61,7 +61,21 @@ export default {
       return utils.getCardSubtitle(this.section, this.channel.name);
     },
   },
+  watch: {
+    sectionNodes() {
+      this.loadBundle();
+    },
+  },
+  mounted() {
+    this.loadBundle();
+  },
   methods: {
+    loadBundle() {
+      // Load all nodes
+      if (this.sectionNodes.hasMoreNodes) {
+        this.$emit('loadMoreNodes');
+      }
+    },
     goToContent(node) {
       window.kolibri.navigateTo(node.id);
     },
