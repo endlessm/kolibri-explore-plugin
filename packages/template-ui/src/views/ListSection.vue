@@ -23,9 +23,11 @@
             v-for="subsection in sectionNodes"
             :id="subsection.id"
             :key="subsection.id"
-            :nodes="subsectionNodes[subsection.id]"
+            :nodes="subsectionNodes[subsection.id].nodes"
             :mediaQuality="mediaQuality"
             :cardColumns="cardColumns"
+            :hasMoreNodes="subsectionNodes[subsection.id].hasMoreNodes"
+            @loadMoreNodes="onLoadMoreSubsectionNodes(subsection.id)"
           >
             <b-row>
               <SectionTitle :section="subsection" />
@@ -53,6 +55,9 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import { constants } from 'eos-components';
+
+const sectionPageSize = 2 * constants.ItemsPerSlide;
 
 export default {
   name: 'ListSection',
@@ -103,12 +108,38 @@ export default {
       this.loadingSubsectionNodes = true;
       this.subsectionNodes = {};
       return Promise.all(this.sectionNodes.map((subsection) => {
-        return window.kolibri.getContentByFilter({ parent: subsection.id })
-          .then((page) => {
-            this.subsectionNodes[subsection.id] = page.results;
+        return window.kolibri.getContentByFilter({
+          parent: subsection.id,
+          page: 1,
+          pageSize: sectionPageSize,
+        })
+          .then((pageResult) => {
+            this.$set(this.subsectionNodes, subsection.id, {
+              nodes: pageResult.results,
+              page: pageResult.page,
+              hasMoreNodes: pageResult.page < pageResult.totalPages,
+            });
           });
       })).then(() => {
         this.loadingSubsectionNodes = false;
+      });
+    },
+    onLoadMoreSubsectionNodes(sectionId) {
+      const { nodes, page, hasMoreNodes } = this.subsectionNodes[sectionId];
+      if (!hasMoreNodes) {
+        return null;
+      }
+      return window.kolibri.getContentByFilter({
+        parent: sectionId,
+        page: page + 1,
+        pageSize: sectionPageSize
+      })
+      .then((pageResult) => {
+        this.$set(this.subsectionNodes, sectionId, {
+          nodes: nodes.concat(pageResult.results),
+          page: pageResult.page,
+          hasMoreNodes: pageResult.page < pageResult.totalPages,
+        });
       });
     },
   },
