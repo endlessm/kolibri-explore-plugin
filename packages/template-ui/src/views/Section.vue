@@ -38,7 +38,9 @@ export default {
       if (!this.isSimpleBundle) {
         return false;
       }
-      return this.node.topic_children_count === 0;
+      // FIXME: Use API to query the amount of subtopics:
+      const hasChildTopics = this.sectionNodes.some((n) => n.kind === 'topic');
+      return !hasChildTopics;
     },
     sectionVariant() {
       if (this.showAsBundle) {

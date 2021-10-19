@@ -87,7 +87,8 @@ export default {
       isFilterEmpty: 'filters/isEmpty',
     }),
     isInlineLevel() {
-      return this.section.children_count === this.section.topic_children_count;
+      // FIXME: Use API to query the amount of subtopics:
+      return this.sectionNodes.nodes.every((n) => n.kind === 'topic');
     },
     backgroundImageURL() {
       return this.getAssetURL('sectionBackgroundImage');
