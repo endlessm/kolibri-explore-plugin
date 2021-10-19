@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       carouselNodes: [],
-      contentNodes: { nodes: [], hasMoreNodes: false },
+      contentNodes: { nodes: [], hasMoreNodes: null },
       sectionNodes: {},
       loadingCarouselNodes: true,
       loadingContentNodes: true,
@@ -136,7 +136,7 @@ export default {
         return window.kolibri.getContentByFilter({
           random: true,
           onlyContent: true,
-          pageSize: this.carouselSlideNumber,
+          maxResults: this.carouselSlideNumber,
         }).then((page) => {
           this.carouselNodes = page.results;
           this.loadingCarouselNodes = false;
@@ -148,14 +148,12 @@ export default {
       const options = this.hasFlatGrid ? { onlyContent: true } : { parent: 'self', onlyContent: true };
       return window.kolibri.getContentByFilter({
         ...options,
-          page: 1,
-          pageSize: constants.ItemsPerPage,
+          maxResults: constants.ItemsPerPage,
       })
         .then((pageResult) => {
           this.contentNodes = {
             nodes: pageResult.results,
-            page: pageResult.page,
-            hasMoreNodes: pageResult.page < pageResult.totalPages,
+            hasMoreNodes: pageResult.more,
           };
           this.loadingContentNodes = false;
         });
@@ -171,14 +169,12 @@ export default {
       return Promise.all(this.mainSections.map((section) => {
         return window.kolibri.getContentByFilter({
             parent: section.id,
-            page: 1,
-            pageSize: sectionPageSize,
+            maxResults: sectionPageSize,
           })
           .then((pageResult) => {
             this.$set(this.sectionNodes, section.id, {
               nodes: pageResult.results,
-              page: pageResult.page,
-              hasMoreNodes: pageResult.page < pageResult.totalPages,
+              hasMoreNodes: pageResult.more,
             });
           });
       })).then(() => {
@@ -186,39 +182,37 @@ export default {
       });
     },
     onLoadMoreSectionNodes(sectionId) {
-      const { nodes, page, hasMoreNodes } = this.sectionNodes[sectionId];
+      const { nodes, hasMoreNodes } = this.sectionNodes[sectionId];
       if (!hasMoreNodes) {
         return null;
       }
       return window.kolibri.getContentByFilter({
         parent: sectionId,
-        page: page + 1,
-        pageSize: sectionPageSize
+        maxResults: sectionPageSize,
+        cursor: hasMoreNodes.cursor,
       })
       .then((pageResult) => {
         this.$set(this.sectionNodes, sectionId, {
           nodes: nodes.concat(pageResult.results),
-          page: pageResult.page,
-          hasMoreNodes: pageResult.page < pageResult.totalPages,
+          hasMoreNodes: pageResult.more,
         });
       });
     },
     onLoadMoreContentNodes() {
-      const { nodes, page, hasMoreNodes } = this.contentNodes;
+      const { nodes, hasMoreNodes } = this.contentNodes;
       if (!hasMoreNodes) {
         return null;
       }
       const options = this.hasFlatGrid ? { onlyContent: true } : { parent: 'self', onlyContent: true };
       return window.kolibri.getContentByFilter({
         ...options,
-        page: page + 1,
-        pageSize: constants.ItemsPerPage,
+        maxResults: constants.ItemsPerPage,
+        cursor: hasMoreNodes.cursor,
       })
       .then((pageResult) => {
         this.contentNodes = {
           nodes: nodes.concat(pageResult.results),
-          page: pageResult.page,
-          hasMoreNodes: pageResult.page < pageResult.totalPages,
+          hasMoreNodes: pageResult.more,
         };
       });
     },

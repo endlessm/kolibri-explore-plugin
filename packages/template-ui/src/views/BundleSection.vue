@@ -49,7 +49,7 @@ export default {
     sectionNodes: {
       type: Object,
       default() {
-        return { nodes: [], hasMoreNodes: false };
+        return { nodes: [], hasMoreNodes: null };
       },
     },
     // FIXME use the loading prop:

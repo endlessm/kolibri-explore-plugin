@@ -71,32 +71,29 @@ export default {
     fetchSectionNodes() {
       return window.kolibri.getContentByFilter({
         parent: this.section.id,
-        page: 1,
-        pageSize: constants.ItemsPerPage,
+        maxResults: constants.ItemsPerPage,
       })
         .then((pageResult) => {
           this.sectionNodes = {
             nodes: pageResult.results,
-            page: pageResult.page,
-            hasMoreNodes: pageResult.page < pageResult.totalPages,
+            hasMoreNodes: pageResult.more,
           };
         });
     },
     onLoadMoreSectionNodes() {
-      const { nodes, page, hasMoreNodes } = this.sectionNodes;
+      const { nodes, hasMoreNodes } = this.sectionNodes;
       if (!hasMoreNodes) {
         return null;
       }
       return window.kolibri.getContentByFilter({
         parent: this.section.id,
-        page: page + 1,
-        pageSize: constants.ItemsPerPage,
+        cursor: hasMoreNodes.cursor,
+        maxResults: constants.ItemsPerPage,
       })
       .then((pageResult) => {
         this.sectionNodes = {
           nodes: nodes.concat(pageResult.results),
-          page: pageResult.page,
-          hasMoreNodes: pageResult.page < pageResult.totalPages,
+          hasMoreNodes: pageResult.more,
         };
       });
     },
