@@ -28,8 +28,7 @@
       return {
         filteredNodes: [],
         loading: false,
-        page: 1,
-        hasMoreNodes: false,
+        hasMoreNodes: null,
       };
     },
     computed: {
@@ -37,8 +36,18 @@
       query() {
         return this.filters.query;
       },
+      pageCursor() {
+        if (!this.hasMoreNodes) {
+          return null;
+        }
+
+        return this.hasMoreNodes.cursor;
+      },
       filterParams() {
-        const params = { page: this.page, pageSize: 16 };
+        const params = {
+          cursor: this.pageCursor,
+          maxResults: constants.ItemsPerPage,
+        };
 
         const kinds = this.query[constants.MediaFilterName];
         if (kinds && kinds.length) {
@@ -58,7 +67,7 @@
     },
     watch: {
       query() {
-        this.page = 1;
+        this.hasMoreNodes = null;
         this.filterNodes();
       },
     },
@@ -73,16 +82,15 @@
         return window.kolibri.getContentByFilter(this.filterParams)
         .then((pageResult) => {
           this.filteredNodes = pageResult.results;
-          this.hasMoreNodes = pageResult.page < pageResult.totalPages;
+          this.hasMoreNodes = pageResult.more;
           this.loading = false;
         });
       },
       onLoadMoreNodes() {
-        this.page++;
         return window.kolibri.getContentByFilter(this.filterParams)
         .then((pageResult) => {
           this.filteredNodes = this.filteredNodes.concat(pageResult.results);
-          this.hasMoreNodes = pageResult.page < pageResult.totalPages;
+          this.hasMoreNodes = pageResult.more;
         });
       },
     },

@@ -68,7 +68,7 @@ export default {
     sectionNodes: {
       type: Object,
       default() {
-        return { nodes: [], hasMoreNodes: false };
+        return { nodes: [], hasMoreNodes: null };
       },
     },
     // FIXME use the loading prop:
@@ -76,7 +76,7 @@ export default {
   },
   data() {
     return {
-      subsectionNodes: { nodes: [], hasMoreNodes: false },
+      subsectionNodes: { nodes: [], hasMoreNodes: null },
       loadingSubsectionNodes: true,
     };
   },
@@ -87,7 +87,8 @@ export default {
       isFilterEmpty: 'filters/isEmpty',
     }),
     isInlineLevel() {
-      return this.section.children_count === this.section.topic_children_count;
+      // FIXME: Use API to query the amount of subtopics:
+      return this.sectionNodes.nodes.every((n) => n.kind === 'topic');
     },
     backgroundImageURL() {
       return this.getAssetURL('sectionBackgroundImage');
@@ -121,14 +122,12 @@ export default {
       return Promise.all(this.sectionNodes.nodes.map((subsection) => {
         return window.kolibri.getContentByFilter({
           parent: subsection.id,
-          page: 1,
-          pageSize: sectionPageSize,
+          maxResults: sectionPageSize,
         })
           .then((pageResult) => {
             this.$set(this.subsectionNodes, subsection.id, {
               nodes: pageResult.results,
-              page: pageResult.page,
-              hasMoreNodes: pageResult.page < pageResult.totalPages,
+              hasMoreNodes: pageResult.more,
             });
           });
       })).then(() => {
@@ -136,27 +135,26 @@ export default {
       });
     },
     onLoadMoreSubsectionNodes(sectionId) {
-      const { nodes, page, hasMoreNodes } = this.subsectionNodes[sectionId];
+      const { nodes, hasMoreNodes } = this.subsectionNodes[sectionId];
       if (!hasMoreNodes) {
         return null;
       }
       return window.kolibri.getContentByFilter({
         parent: sectionId,
-        page: page + 1,
-        pageSize: sectionPageSize
+        maxResults: sectionPageSize,
+        cursor: hasMoreNodes.cursor,
       })
       .then((pageResult) => {
         this.$set(this.subsectionNodes, sectionId, {
           nodes: nodes.concat(pageResult.results),
-          page: pageResult.page,
-          hasMoreNodes: pageResult.page < pageResult.totalPages,
+          hasMoreNodes: pageResult.more,
         });
       });
     },
     getSubsectionNodes(sectionId) {
       const subsection = this.subsectionNodes[sectionId];
       if (!subsection) {
-        return { nodes: [], hasMoreNodes: false };
+        return { nodes: [], hasMoreNodes: null };
       }
 
       return subsection;
