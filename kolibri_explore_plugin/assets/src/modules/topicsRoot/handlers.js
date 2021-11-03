@@ -1,4 +1,3 @@
-import _ from 'underscore';
 import urls from 'kolibri.urls';
 import { ChannelResource } from 'kolibri.resources';
 import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
@@ -9,12 +8,7 @@ import {
   PageNames,
   SEARCH_MAX_RESULTS,
 } from '../../constants';
-import {
-  CustomChannelApps,
-  getBigThumbnail,
-  getChannelIcon,
-  RecommendedChannelIDs,
-} from '../../customApps';
+import { CustomChannelApps, getBigThumbnail, getChannelIcon } from '../../customApps';
 import { _collectionState } from '../coreExplore/utils';
 
 function _findNodes(channels, channelCollection) {
@@ -64,21 +58,14 @@ function _filterCustomApp(channel) {
 
 function _fetchCarouselNodes(store) {
   const { rootNodes } = store.state.topicsRoot;
-  const availableRecommendedChannels = rootNodes.filter(c => RecommendedChannelIDs.includes(c.id));
-  const carouselChannels = _.sample(availableRecommendedChannels, CarouselItemsLength);
-  const carouselNodeIds = Promise.all(
-    carouselChannels.map(channel => {
-      return ContentNodeResource.fetchRandomFromChannel({
-        kind_in: CarouselAllowedKinds,
-        channel_id: channel.id,
-      });
+  return window.kolibri
+    .getContentByFilter({
+      random: true,
+      kinds: CarouselAllowedKinds,
+      maxResults: CarouselItemsLength,
     })
-  ).then(results => [].concat(...results));
-
-  return carouselNodeIds.then(carouselNodes => {
-    return ContentNodeResource.fetchCollection({
-      getParams: { ids: carouselNodes.map(n => n.id) },
-    }).then(nodes => {
+    .then(page => {
+      const nodes = page.results;
       nodes.forEach(node => {
         const thumbnailUrl = getContentNodeThumbnail(node);
         node.thumbnail = thumbnailUrl;
@@ -90,9 +77,9 @@ function _fetchCarouselNodes(store) {
           node.nodeUrl = `${base}/c/${node.id}`;
         }
       });
+
       return nodes;
     });
-  });
 }
 
 export function showChannels(store) {
