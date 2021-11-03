@@ -22,7 +22,7 @@ class Explore(KolibriPluginBase):
 
     @property
     def url_slug(self):
-        return r"learn/"
+        return r"explore/"
 
 
 @register_hook
