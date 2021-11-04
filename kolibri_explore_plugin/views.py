@@ -3,7 +3,6 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import os
-import zipfile
 
 import requests
 from django.http import FileResponse
@@ -58,10 +57,7 @@ class AppView(AppBase):
     def get(self, request, app, path=""):
         filename = self._get_file(app, "custom-channel-ui.zip")
 
-        with zipfile.ZipFile(filename) as zf:
-            response = get_embedded_file(
-                request, zf, filename, path, skip_hashi=True
-            )
+        response = get_embedded_file(filename, filename, path)
 
         response["Accept-Ranges"] = "none"
         add_security_headers(request, response)

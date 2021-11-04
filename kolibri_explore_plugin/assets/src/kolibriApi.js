@@ -1,4 +1,4 @@
-import { ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
+import { ChannelResource, ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
 
 import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
 import urls from 'kolibri.urls';
@@ -6,6 +6,29 @@ import urls from 'kolibri.urls';
 const allButTopicTypes = Object.values(ContentNodeKinds).filter(v => v !== ContentNodeKinds.TOPIC);
 
 class KolibriApi {
+  constructor(channelId) {
+    this.channelId = channelId;
+  }
+
+  themeRenderer() {
+    // Doing nothing
+    console.log('theme renderer');
+  }
+
+  getChannelMetadata() {
+    return ChannelResource.fetchModel({ id: this.channelId });
+  }
+
+  getChannelFilterOptions() {
+    return ChannelResource.fetchFilterOptions(this.channelId).then(response => {
+      return {
+        availableAuthors: response.data.available_authors,
+        availableTags: response.data.available_tags,
+        availableKinds: response.data.available_kinds,
+      };
+    });
+  }
+
   navigateTo(nodeId) {
     const nodeUrl = urls['kolibri:kolibri.plugins.learn:learn']({});
     const path = `/topics/c/${nodeId}`;
@@ -25,7 +48,8 @@ class KolibriApi {
         ids: options.ids,
         authors: options.authors,
         tags: options.tags,
-        parent: options.parent === 'self' ? this.topic.id : options.parent,
+        channel_id: this.channelId,
+        parent: options.parent === 'self' ? this.channelId : options.parent,
         max_results: options.maxResults ? options.maxResults : 50,
         cursor: options.cursor,
         kind: onlyTopics ? ContentNodeKinds.TOPIC : undefined,
@@ -57,7 +81,10 @@ class KolibriApi {
       });
     } else {
       searchPromise = ContentNodeSearchResource.fetchCollection({
-        getParams: { search: keyword },
+        getParams: {
+          search: keyword,
+          channel_id: this.channelId,
+        },
       }).then(searchResults => {
         return {
           results: searchResults.results,
@@ -69,4 +96,6 @@ class KolibriApi {
   }
 }
 
-export default new KolibriApi();
+const kolibriApi = new KolibriApi();
+
+export { KolibriApi, kolibriApi as default };
