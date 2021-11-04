@@ -1,13 +1,15 @@
 import { ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
 
 import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
+import urls from 'kolibri.urls';
 
 const allButTopicTypes = Object.values(ContentNodeKinds).filter(v => v !== ContentNodeKinds.TOPIC);
 
 class KolibriApi {
   navigateTo(nodeId) {
-    // TODO: Link to the learn plugin
-    console.log(`show node id ${nodeId}`);
+    const nodeUrl = urls['kolibri:kolibri.plugins.learn:learn']({});
+    const path = `/topics/c/${nodeId}`;
+    window.location.href = `${nodeUrl}#${path}`;
   }
 
   getContentByFilter(options) {
