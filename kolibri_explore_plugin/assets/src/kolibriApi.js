@@ -1,7 +1,9 @@
 import { ChannelResource, ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
 
 import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
-import urls from 'kolibri.urls';
+
+import Store from 'kolibri.coreVue.vuex.store';
+import { showTopicsContentInLightbox } from './modules/topicsTree/handlers';
 
 const allButTopicTypes = Object.values(ContentNodeKinds).filter(v => v !== ContentNodeKinds.TOPIC);
 
@@ -30,9 +32,7 @@ class KolibriApi {
   }
 
   navigateTo(nodeId) {
-    const nodeUrl = urls['kolibri:kolibri.plugins.learn:learn']({});
-    const path = `/topics/c/${nodeId}`;
-    window.location.href = `${nodeUrl}#${path}`;
+    showTopicsContentInLightbox(Store, nodeId);
   }
 
   getContentByFilter(options) {
