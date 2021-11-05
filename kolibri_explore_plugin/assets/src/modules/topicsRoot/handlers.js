@@ -1,5 +1,5 @@
 import urls from 'kolibri.urls';
-import { ChannelResource , ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
+import { ChannelResource, ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
 import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 
 import {
@@ -59,8 +59,7 @@ function _filterCustomApp(channel) {
 function _fetchCarouselNodes(store) {
   const { rootNodes } = store.state.topicsRoot;
   return window.kolibri
-    .getContentByFilter({
-      random: true,
+    .getRandomNodes({
       kinds: CarouselAllowedKinds,
       maxResults: CarouselItemsLength,
     })

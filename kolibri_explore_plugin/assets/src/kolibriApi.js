@@ -54,8 +54,6 @@ class KolibriApi {
         cursor: options.cursor,
         kind: onlyTopics ? ContentNodeKinds.TOPIC : undefined,
         kind_in: onlyContent ? allButTopicTypes : kinds,
-        // Using timestamp to avoid cache
-        random: options.random ? Date.now().toString() : undefined,
       },
     }).then(contentNodes => {
       return {
@@ -93,6 +91,26 @@ class KolibriApi {
     }
 
     return searchPromise;
+  }
+
+  getRandomNodes(options) {
+    const { kinds, onlyContent } = options;
+
+    return ContentNodeResource.fetchRandomCollection({
+      getParams: {
+        parent: options.parent === 'self' ? this.channelId : options.parent,
+        channel_id: this.channelId,
+        max_results: options.maxResults ? options.maxResults : 10,
+        kind_in: onlyContent ? allButTopicTypes : kinds,
+        // Time seed to avoid cache
+        seed: Date.now().toString(),
+      },
+    }).then(response => {
+      return {
+        maxResults: options.maxResults ? options.maxResults : 10,
+        results: response.data,
+      };
+    });
   }
 }
 
