@@ -1,7 +1,7 @@
 import urls from 'kolibri.urls';
-import { ChannelResource } from 'kolibri.resources';
+import { ChannelResource , ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
 import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
-import { ContentNodeResource, ContentNodeSearchResource } from '../../apiResources';
+
 import {
   CarouselAllowedKinds,
   CarouselItemsLength,

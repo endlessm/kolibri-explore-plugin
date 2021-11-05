@@ -16,7 +16,6 @@ from kolibri.utils import conf
 
 
 class Explore(KolibriPluginBase):
-    untranslated_view_urls = "api_urls"
     translated_view_urls = "urls"
     kolibri_options = "options"
 
