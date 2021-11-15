@@ -133,8 +133,7 @@ export default {
           });
       }
       else {
-        return window.kolibri.getContentByFilter({
-          random: true,
+        return window.kolibri.getRandomNodes({
           onlyContent: true,
           maxResults: this.carouselSlideNumber,
         }).then((page) => {
