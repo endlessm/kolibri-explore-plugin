@@ -51,7 +51,6 @@ class KolibriApi {
         channel_id: this.channelId,
         parent: options.parent === 'self' ? this.channelId : options.parent,
         max_results: options.maxResults ? options.maxResults : 50,
-        cursor: options.cursor,
         kind: onlyTopics ? ContentNodeKinds.TOPIC : undefined,
         kind_in: onlyContent ? allButTopicTypes : kinds,
       },
@@ -63,6 +62,22 @@ class KolibriApi {
       };
     });
   }
+
+  getContentPage(options) {
+    return ContentNodeResource.fetchCollection({
+      getParams: {
+        cursor: options.cursor,
+        max_results: options.maxResults ? options.maxResults : 50,
+      },
+    }).then(contentNodes => {
+      return {
+        maxResults: options.maxResults ? options.maxResults : 50,
+        more: contentNodes.more,
+        results: contentNodes.results,
+      };
+    });
+  }
+
 
   getContentById(id) {
     return ContentNodeResource.fetchModel({ id: id });

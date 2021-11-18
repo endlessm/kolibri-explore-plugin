@@ -87,8 +87,7 @@ export default {
       if (!hasMoreNodes) {
         return null;
       }
-      return window.kolibri.getContentByFilter({
-        parent: this.section.id,
+      return window.kolibri.getContentPage({
         cursor: hasMoreNodes.cursor,
         maxResults: constants.ItemsPerPage,
       })
