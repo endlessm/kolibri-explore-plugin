@@ -64,7 +64,10 @@ const sectionPageSize = 2 * constants.ItemsPerSlide;
 export default {
   name: 'ListSection',
   props: {
-    section: Object,
+    section: {
+      type: Object,
+      required: true,
+    },
     sectionNodes: {
       type: Object,
       default() {

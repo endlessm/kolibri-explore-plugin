@@ -33,7 +33,10 @@ import { getNodeUrl } from '../utils';
 export default {
   name: 'Carousel',
   props: {
-    nodes: Array,
+    nodes: {
+      type: Array,
+      required: true,
+    },
     showChannelIcon: {
       type: Boolean,
       default: false,

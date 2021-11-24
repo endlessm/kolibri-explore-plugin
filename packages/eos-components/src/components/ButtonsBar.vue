@@ -52,8 +52,16 @@
     name: 'ButtonsBar',
     mixins: [responsiveMixin],
     props: {
-      buttons: Array,
-      title: String,
+      buttons: {
+        type: Array,
+        default() {
+          return [];
+        },
+      },
+      title: {
+        type: String,
+        required: true,
+      },
     },
     computed: {
       numberOfButtons() {

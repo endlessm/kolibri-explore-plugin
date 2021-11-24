@@ -23,7 +23,10 @@ export default {
   name: 'ContentImage',
   mixins: [cardMixin],
   props: {
-    node: Object,
+    node: {
+      type: Object,
+      required: true,
+    },
   },
   methods: {
     goToContent() {

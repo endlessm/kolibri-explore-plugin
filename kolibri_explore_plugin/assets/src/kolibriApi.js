@@ -78,7 +78,6 @@ class KolibriApi {
     });
   }
 
-
   getContentById(id) {
     return ContentNodeResource.fetchModel({ id: id });
   }

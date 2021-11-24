@@ -67,10 +67,22 @@ export default {
   },
   mixins: [cardMixin],
   props: {
-    node: Object,
-    subtitle: String,
-    url: String,
-    mediaQuality: String,
+    node: {
+      type: Object,
+      required: true,
+    },
+    subtitle: {
+      type: String,
+      default: '',
+    },
+    url: {
+      type: String,
+      default: '',
+    },
+    mediaQuality: {
+      type: String,
+      default: MediaQuality.REGULAR,
+    },
   },
   data() {
     return {

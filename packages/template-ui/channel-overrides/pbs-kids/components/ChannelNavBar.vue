@@ -18,7 +18,10 @@ export default {
   name: 'ChannelNavBar',
   mixins: [headerMixin, responsiveMixin],
   props: {
-    node: Object,
+    node: {
+      type: Object,
+      default: null,
+    },
     atHome: {
       type: Boolean,
       default: false,
@@ -26,7 +29,7 @@ export default {
   },
   computed: {
     showLogo() {
-      return !(this.xs && this.node.ancestors.length);
+      return !(this.xs && this.node && this.node.ancestors.length);
     },
     headerColor() {
       const defaultColor = '#93cb00';

@@ -34,20 +34,31 @@
 </template>
 
 <script>
-import { ItemsPerPage } from '../constants';
+import { ItemsPerPage, MediaQuality } from '../constants';
 import responsiveMixin from './mixins/responsiveMixin';
 
 export default {
   name: 'CollapsibleCardGrid',
   mixins: [responsiveMixin],
   props: {
-    nodes: Array,
+    nodes: {
+      type: Array,
+      required: true,
+    },
     hasMoreNodes: {
       type: Boolean,
       default: false,
     },
-    mediaQuality: String,
-    cardColumns: Object,
+    mediaQuality: {
+      type: String,
+      default: MediaQuality.REGULAR,
+    },
+    cardColumns: {
+      type: Object,
+      default() {
+        return { cols: 6, md: 4, lg: 3 };
+      },
+    },
     itemsPerPage: {
       type: Number,
       default: ItemsPerPage,

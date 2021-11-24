@@ -80,7 +80,10 @@ export default {
   name: 'Breadcrumb',
   mixins: [responsiveMixin],
   props: {
-    node: Object,
+    node: {
+      type: Object,
+      required: true,
+    },
   },
   data() {
     return {

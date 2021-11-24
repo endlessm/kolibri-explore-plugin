@@ -10,13 +10,20 @@
 </template>
 
 <script>
+import { MediaQuality } from '../constants';
 import { getNodeUrl, getCardSubtitle } from '../utils';
 
 export default {
   name: 'Card',
   props: {
-    node: Object,
-    mediaQuality: String,
+    node: {
+      type: Object,
+      required: true,
+    },
+    mediaQuality: {
+      type: String,
+      default: MediaQuality.REGULAR,
+    },
   },
   data() {
     return {

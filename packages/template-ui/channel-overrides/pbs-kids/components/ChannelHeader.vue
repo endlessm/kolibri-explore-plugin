@@ -4,7 +4,7 @@
     :style="{ backgroundImage: headerImageURL }"
     class="mb-0"
   >
-    <template v-slot:default>
+    <template #default>
       <h1>
         <b-img
           :src="logoImage"
@@ -24,7 +24,10 @@ export default {
   name: 'ChannelHeader',
   mixins: [headerMixin],
   props: {
-    section: Object,
+    section: {
+      type: Object,
+      default: null,
+    },
   },
   data() {
     return {
