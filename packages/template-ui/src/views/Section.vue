@@ -39,7 +39,8 @@ export default {
         return false;
       }
       // FIXME: Use API to query the amount of subtopics:
-      const hasChildTopics = this.sectionNodes.some((n) => n.kind === 'topic');
+      const { nodes } = this.sectionNodes;
+      const hasChildTopics = nodes.some((n) => n.kind === 'topic');
       return !hasChildTopics;
     },
     sectionVariant() {
