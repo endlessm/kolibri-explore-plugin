@@ -16,8 +16,9 @@
     name: 'SearchButton',
     props: {
       to: {
-        type: String,
+        type: [Object, String],
         required: false,
+        default: null,
       },
     },
   };

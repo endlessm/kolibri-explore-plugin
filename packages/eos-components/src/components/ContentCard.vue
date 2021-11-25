@@ -36,11 +36,26 @@ export default {
   name: 'ContentCard',
   mixins: [cardMixin],
   props: {
-    node: Object,
-    subtitle: String,
-    isBundle: Boolean,
-    url: String,
-    mediaQuality: String,
+    node: {
+      type: Object,
+      required: true,
+    },
+    subtitle: {
+      type: String,
+      default: '',
+    },
+    isBundle: {
+      type: Boolean,
+      default: false,
+    },
+    url: {
+      type: String,
+      default: '',
+    },
+    mediaQuality: {
+      type: String,
+      default: MediaQuality.REGULAR,
+    },
   },
   data() {
     return {

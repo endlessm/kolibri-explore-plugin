@@ -16,13 +16,12 @@ from kolibri.utils import conf
 
 
 class Explore(KolibriPluginBase):
-    untranslated_view_urls = "api_urls"
     translated_view_urls = "urls"
     kolibri_options = "options"
 
     @property
     def url_slug(self):
-        return r"learn/"
+        return r"explore/"
 
 
 @register_hook

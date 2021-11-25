@@ -58,7 +58,10 @@
   export default {
     name: 'FilterDropDown',
     props: {
-      filter: Object,
+      filter: {
+        type: Object,
+        required: true,
+      },
     },
     computed: {
       ...mapGetters({

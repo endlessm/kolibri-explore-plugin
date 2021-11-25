@@ -39,7 +39,8 @@ export default {
         return false;
       }
       // FIXME: Use API to query the amount of subtopics:
-      const hasChildTopics = this.sectionNodes.some((n) => n.kind === 'topic');
+      const { nodes } = this.sectionNodes;
+      const hasChildTopics = nodes.some((n) => n.kind === 'topic');
       return !hasChildTopics;
     },
     sectionVariant() {
@@ -87,8 +88,7 @@ export default {
       if (!hasMoreNodes) {
         return null;
       }
-      return window.kolibri.getContentByFilter({
-        parent: this.section.id,
+      return window.kolibri.getContentPage({
         cursor: hasMoreNodes.cursor,
         maxResults: constants.ItemsPerPage,
       })

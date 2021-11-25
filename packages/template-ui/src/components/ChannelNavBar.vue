@@ -20,7 +20,10 @@ export default {
   name: 'ChannelNavBar',
   mixins: [headerMixin, responsiveMixin],
   props: {
-    node: Object,
+    node: {
+      type: Object,
+      default: null,
+    },
     atHome: {
       type: Boolean,
       default: false,

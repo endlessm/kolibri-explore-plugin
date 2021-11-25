@@ -40,12 +40,18 @@ export default {
     VClamp,
   },
   props: {
-    node: Object,
+    node: {
+      type: Object,
+      required: true,
+    },
     titleLines: {
       type: Number,
       default: 3,
     },
-    subtitle: String,
+    subtitle: {
+      type: String,
+      default: '',
+    },
   },
   computed: {
     subjectTags() {

@@ -61,19 +61,25 @@
 
 <script>
 import _ from 'underscore';
-import { ItemsPerSlide } from '../constants';
+import { ItemsPerSlide, MediaQuality } from '../constants';
 import responsiveMixin from './mixins/responsiveMixin';
 
 export default {
   name: 'SlidableCardGrid',
   mixins: [responsiveMixin],
   props: {
-    nodes: Array,
+    nodes: {
+      type: Array,
+      required: true,
+    },
     hasMoreNodes: {
       type: Boolean,
       default: false,
     },
-    mediaQuality: String,
+    mediaQuality: {
+      type: String,
+      default: MediaQuality.REGULAR,
+    },
   },
   data() {
     return {

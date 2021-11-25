@@ -133,8 +133,7 @@ export default {
           });
       }
       else {
-        return window.kolibri.getContentByFilter({
-          random: true,
+        return window.kolibri.getRandomNodes({
           onlyContent: true,
           maxResults: this.carouselSlideNumber,
         }).then((page) => {
@@ -186,8 +185,7 @@ export default {
       if (!hasMoreNodes) {
         return null;
       }
-      return window.kolibri.getContentByFilter({
-        parent: sectionId,
+      return window.kolibri.getContentPage({
         maxResults: sectionPageSize,
         cursor: hasMoreNodes.cursor,
       })
@@ -203,9 +201,7 @@ export default {
       if (!hasMoreNodes) {
         return null;
       }
-      const options = this.hasFlatGrid ? { onlyContent: true } : { parent: 'self', onlyContent: true };
-      return window.kolibri.getContentByFilter({
-        ...options,
+      return window.kolibri.getContentPage({
         maxResults: constants.ItemsPerPage,
         cursor: hasMoreNodes.cursor,
       })

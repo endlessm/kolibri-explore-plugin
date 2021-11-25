@@ -64,7 +64,10 @@ const sectionPageSize = 2 * constants.ItemsPerSlide;
 export default {
   name: 'ListSection',
   props: {
-    section: Object,
+    section: {
+      type: Object,
+      required: true,
+    },
     sectionNodes: {
       type: Object,
       default() {
@@ -139,8 +142,7 @@ export default {
       if (!hasMoreNodes) {
         return null;
       }
-      return window.kolibri.getContentByFilter({
-        parent: sectionId,
+      return window.kolibri.getContentPage({
         maxResults: sectionPageSize,
         cursor: hasMoreNodes.cursor,
       })

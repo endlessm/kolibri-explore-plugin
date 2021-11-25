@@ -55,7 +55,10 @@ export default {
   },
   mixins: [cardMixin],
   props: {
-    node: Object,
+    node: {
+      type: Object,
+      required: true,
+    },
     showChannelIcon: {
       type: Boolean,
       default: false,

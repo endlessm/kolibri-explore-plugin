@@ -4,7 +4,6 @@
 
     <component
       :is="displayVariant"
-      :id="id"
       :nodes="nodes"
       :hasMoreNodes="hasMoreNodes"
       :itemsPerPage="itemsPerPage"
@@ -16,19 +15,29 @@
 </template>
 
 <script>
-import { ItemsPerPage } from '../constants';
+import { ItemsPerPage, MediaQuality } from '../constants';
 
 export default {
   name: 'CardGrid',
   props: {
-    id: String,
-    nodes: Array,
+    nodes: {
+      type: Array,
+      required: true,
+    },
     hasMoreNodes: {
       type: Boolean,
       default: false,
     },
-    mediaQuality: String,
-    cardColumns: Object,
+    mediaQuality: {
+      type: String,
+      default: MediaQuality.REGULAR,
+    },
+    cardColumns: {
+      type: Object,
+      default() {
+        return { cols: 6, md: 4, lg: 3 };
+      },
+    },
     variant: {
       type: String,
       default: 'slidable',

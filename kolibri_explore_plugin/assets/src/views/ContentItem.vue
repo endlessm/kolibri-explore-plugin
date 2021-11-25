@@ -6,21 +6,8 @@
         v-if="!content.assessment"
         class="content-renderer"
         :class="{ 'without-fullscreen-bar': withoutFullscreenBar }"
-        :kind="content.kind"
-        :lang="content.lang"
-        :files="content.files"
-        :options="content.options"
-        :available="content.available"
-        :extraFields="extraFields"
-        :progress="summaryProgress"
-        :userId="currentUserId"
-        :userFullName="fullName"
-        :timeSpent="summaryTimeSpent"
-        @startTracking="startTracking"
-        @stopTracking="stopTracking"
-        @updateProgress="updateProgress"
-        @addProgress="addProgress"
-        @updateContentState="updateContentState"
+        v-bind="contentProps"
+        v-on="contentHandlers"
       />
 
       <AssessmentWrapper
@@ -28,23 +15,8 @@
         :id="content.id"
         class="content-renderer"
         :class="{ 'without-fullscreen-bar': withoutFullscreenBar }"
-        :kind="content.kind"
-        :files="content.files"
-        :lang="content.lang"
-        :randomize="content.randomize"
-        :masteryModel="content.masteryModel"
-        :assessmentIds="content.assessmentIds"
-        :channelId="channelId"
-        :available="content.available"
-        :extraFields="extraFields"
-        :progress="summaryProgress"
-        :userId="currentUserId"
-        :userFullName="fullName"
-        :timeSpent="summaryTimeSpent"
-        @startTracking="startTracking"
-        @stopTracking="stopTracking"
-        @updateProgress="updateExerciseProgress"
-        @updateContentState="updateContentState"
+        v-bind="exerciseProps"
+        v-on="contentHandlers"
       />
     </template>
     <div v-else class="text-center">
@@ -60,6 +32,7 @@
 
   import { mapState, mapGetters, mapActions } from 'vuex';
   import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
+  import { assessmentMetaDataState } from 'kolibri.coreVue.vuex.mappers';
   import { updateContentNodeProgress } from '../modules/coreExplore/utils';
   import { GameAppIDs } from '../customApps';
   import AssessmentWrapper from './AssessmentWrapper';
@@ -88,79 +61,105 @@
       };
     },
     computed: {
-      ...mapGetters(['isUserLoggedIn', 'currentUserId']),
+      ...mapGetters(['currentUserId']),
       ...mapState({
-        masteryAttempts: state => state.core.logging.mastery.totalattempts,
-        summaryProgress: state => state.core.logging.summary.progress,
-        summaryTimeSpent: state => state.core.logging.summary.time_spent,
-        sessionProgress: state => state.core.logging.session.progress,
-        extraFields: state => state.core.logging.summary.extra_fields,
+        progress: state => state.core.logging.progress,
+        timeSpent: state => state.core.logging.time_spent,
+        extraFields: state => state.core.logging.extra_fields,
         fullName: state => state.core.session.full_name,
       }),
-      progress() {
-        if (this.isUserLoggedIn) {
-          // if there no attempts for this exercise, there is no progress
-          if (this.content.kind === ContentNodeKinds.EXERCISE && this.masteryAttempts === 0) {
-            return null;
-          }
-          return this.summaryProgress;
-        }
-        return this.sessionProgress;
-      },
       withoutFullscreenBar() {
         return GameAppIDs.includes(this.content.channel_id);
+      },
+      contentNode() {
+        return this.content;
+      },
+      contentIsExercise() {
+        return this.contentNode.kind === ContentNodeKinds.EXERCISE;
+      },
+      contentHandlers() {
+        return {
+          startTracking: this.startTracking,
+          stopTracking: this.stopTracking,
+          updateProgress: this.updateProgress,
+          addProgress: this.addProgress,
+          updateContentState: this.updateContentState,
+        };
+      },
+      contentProps() {
+        if (this.contentIsExercise) {
+          return {};
+        }
+        return {
+          kind: this.contentNode.kind,
+          lang: this.contentNode.lang,
+          files: this.contentNode.files,
+          options: this.contentNode.options,
+          available: this.contentNode.available,
+          extraFields: this.extraFields,
+          progress: this.progress,
+          userId: this.currentUserId,
+          userFullName: this.fullName,
+          timeSpent: this.timeSpent,
+        };
+      },
+      exerciseProps() {
+        if (!this.contentIsExercise) {
+          return {};
+        }
+        const assessment = assessmentMetaDataState(this.contentNode);
+        return {
+          kind: this.contentNode.kind,
+          files: this.contentNode.files,
+          lang: this.contentNode.lang,
+          randomize: this.contentNode.randomize,
+          masteryModel: assessment.masteryModel,
+          assessmentIds: assessment.assessmentIds,
+          available: this.contentNode.available,
+          extraFields: this.extraFields,
+          progress: this.progress,
+          userId: this.currentUserId,
+          userFullName: this.fullName,
+          timeSpent: this.timeSpent,
+        };
       },
     },
     created() {
       return this.initSessionAction({
-        channelId: this.content.channel_id,
-        contentId: this.content.content_id,
-        contentKind: this.content.kind,
+        nodeId: this.content.id,
       }).then(() => {
         this.sessionReady = true;
         this.setWasIncomplete();
       });
     },
+
     beforeDestroy() {
       this.stopTracking();
     },
     methods: {
       ...mapActions({
         initSessionAction: 'initContentSession',
-        updateProgressAction: 'updateProgress',
-        addProgressAction: 'addProgress',
+        updateContentSession: 'updateContentSession',
         startTracking: 'startTrackingProgress',
         stopTracking: 'stopTrackingProgress',
-        updateContentNodeState: 'updateContentState',
       }),
       setWasIncomplete() {
         this.wasIncomplete = this.progress < 1;
       },
-      updateProgress(progressPercent, forceSave = false) {
-        this.updateProgressAction({ progressPercent, forceSave }).then(updatedProgressPercent =>
-          updateContentNodeProgress(
-            this.content.channel_id,
-            this.content.id,
-            updatedProgressPercent
-          )
+      updateProgress(progress) {
+        this.updateContentSession({ progress }).then(() =>
+          updateContentNodeProgress(this.content.id, this.progress)
         );
-        this.$emit('updateProgress', progressPercent);
+        this.$emit('updateProgress', this.progress);
       },
-      addProgress(progressPercent, forceSave = false) {
-        this.addProgressAction({ progressPercent, forceSave }).then(updatedProgressPercent =>
-          updateContentNodeProgress(
-            this.content.channel_id,
-            this.content.id,
-            updatedProgressPercent
-          )
+      addProgress(progressDelta) {
+        this.updateContentSession({ progressDelta }).then(() =>
+          updateContentNodeProgress(this.content.id, this.progress)
         );
-        this.$emit('addProgress', progressPercent);
+        this.$emit('addProgress', this.progress);
       },
-      updateExerciseProgress(progressPercent) {
-        this.$emit('updateProgress', progressPercent);
-      },
-      updateContentState(contentState, forceSave = true) {
-        this.updateContentNodeState({ contentState, forceSave });
+      updateContentState(contentState) {
+        this.updateContentSession({ contentState });
       },
     },
   };

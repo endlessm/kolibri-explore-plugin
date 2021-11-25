@@ -3,7 +3,6 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import os
-import zipfile
 
 import requests
 from django.http import FileResponse
@@ -15,8 +14,8 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 from kolibri.core.content.api import cache_forever
-from kolibri.core.content.decorators import add_security_headers
-from kolibri.core.content.views import get_embedded_file
+from kolibri.core.content.zip_wsgi import add_security_headers
+from kolibri.core.content.zip_wsgi import get_embedded_file
 from kolibri.core.decorators import cache_no_user_data
 
 
@@ -32,7 +31,6 @@ class ExploreView(TemplateView):
 
 class AppBase(View):
     @xframe_options_exempt
-    @add_security_headers
     def options(self, request, *args, **kwargs):
         """
         Handles OPTIONS requests which may be sent as "preflight CORS" requests
@@ -56,16 +54,13 @@ class AppBase(View):
 class AppView(AppBase):
     @cache_forever
     @xframe_options_exempt
-    @add_security_headers
     def get(self, request, app, path=""):
         filename = self._get_file(app, "custom-channel-ui.zip")
 
-        with zipfile.ZipFile(filename) as zf:
-            response = get_embedded_file(
-                request, zf, filename, path, skip_hashi=True
-            )
+        response = get_embedded_file(filename, filename, path)
 
         response["Accept-Ranges"] = "none"
+        add_security_headers(request, response)
 
         return response
 
@@ -84,15 +79,15 @@ class AppViewDev(AppBase):
 
 class AppFileView(AppBase):
     @xframe_options_exempt
-    @add_security_headers
     def get(self, request, app, filename):
         full_filename = self._get_file(app, filename)
-        return FileResponse(open(full_filename, "rb"))
+        response = FileResponse(open(full_filename, "rb"))
+        add_security_headers(request, response)
+        return response
 
 
 class AppMetadataView(AppBase):
     @xframe_options_exempt
-    @add_security_headers
     def get(self, request, app):
         filename = self._get_file(app, "metadata.json")
         with open(filename) as json_file:

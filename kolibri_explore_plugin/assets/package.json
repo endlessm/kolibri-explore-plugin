@@ -10,6 +10,6 @@
     "underscore": "^1.13.1"
   },
   "devDependencies": {
-    "kolibri-tools": "0.14.5-dev.4"
+    "kolibri-tools": "0.15.0-dev.4"
   }
 }

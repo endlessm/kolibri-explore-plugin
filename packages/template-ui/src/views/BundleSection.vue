@@ -45,7 +45,10 @@ import { utils } from 'eos-components';
 export default {
   name: 'BundleSection',
   props: {
-    section: Object,
+    section: {
+      type: Object,
+      required: true,
+    },
     sectionNodes: {
       type: Object,
       default() {

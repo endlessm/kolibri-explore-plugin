@@ -18,7 +18,10 @@ import { mapState } from 'vuex';
 export default {
   name: 'SectionTitle',
   props: {
-    section: Object,
+    section: {
+      type: Object,
+      required: true,
+    },
   },
   computed: {
     ...mapState(['channel']),

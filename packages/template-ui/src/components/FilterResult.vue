@@ -87,8 +87,10 @@
         });
       },
       onLoadMoreNodes() {
-        return window.kolibri.getContentByFilter(this.filterParams)
-        .then((pageResult) => {
+        return window.kolibri.getContentPage({
+          cursor: this.pageCursor,
+          maxResults: constants.ItemsPerPage,
+        }).then((pageResult) => {
           this.filteredNodes = this.filteredNodes.concat(pageResult.results);
           this.hasMoreNodes = pageResult.more;
         });

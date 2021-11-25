@@ -35,8 +35,14 @@ export default {
     VideoIcon,
   },
   props: {
-    kind: String,
-    label: String,
+    kind: {
+      type: String,
+      required: true,
+    },
+    label: {
+      type: String,
+      default: '',
+    },
     variant: {
       type: String,
       default: 'primary',

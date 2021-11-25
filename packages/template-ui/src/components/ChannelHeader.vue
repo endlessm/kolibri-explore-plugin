@@ -5,7 +5,7 @@
     class="mb-0"
     :class="{ 'full-height': isDescriptionExpanded, 'has-image': hasHeaderImage }"
   >
-    <template v-slot:default>
+    <template #default>
       <div class="align-items-start d-flex justify-content-between mt-3">
       </div>
       <b-row>
@@ -71,7 +71,10 @@ export default {
   },
   mixins: [headerMixin],
   props: {
-    section: Object,
+    section: {
+      type: Object,
+      default: null,
+    },
   },
   data() {
     return {
@@ -82,13 +85,13 @@ export default {
   computed: {
     ...mapState(['displayLogoInHeader', 'hasDarkHeader']),
     headerTitle() {
-      if (this.section === undefined || this.section.id === this.channel.id) {
+      if (!this.section || this.section.id === this.channel.id) {
         return this.channel.name;
       }
       return this.section.title;
     },
     headerDescription() {
-      if (this.section === undefined || this.section.id === this.channel.id) {
+      if (!this.section || this.section.id === this.channel.id) {
         return this.channel.description;
       }
       return this.section.description;
