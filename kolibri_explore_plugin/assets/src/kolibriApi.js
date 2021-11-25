@@ -5,8 +5,6 @@ import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
 import Store from 'kolibri.coreVue.vuex.store';
 import { showTopicsContentInLightbox } from './modules/topicsTree/handlers';
 
-const allButTopicTypes = Object.values(ContentNodeKinds).filter(v => v !== ContentNodeKinds.TOPIC);
-
 class KolibriApi {
   constructor(channelId) {
     this.channelId = channelId;
@@ -42,6 +40,7 @@ class KolibriApi {
       const err = new Error('onlyContent and onlyTopics can not be used at the same time');
       throw err;
     }
+    const kind = onlyContent ? 'content' : onlyTopics ? ContentNodeKinds.TOPIC : undefined;
 
     return ContentNodeResource.fetchCollection({
       getParams: {
@@ -51,8 +50,8 @@ class KolibriApi {
         channel_id: this.channelId,
         parent: options.parent === 'self' ? this.channelId : options.parent,
         max_results: options.maxResults ? options.maxResults : 50,
-        kind: onlyTopics ? ContentNodeKinds.TOPIC : undefined,
-        kind_in: onlyContent ? allButTopicTypes : kinds,
+        kind: kind,
+        kind_in: kinds,
       },
     }).then(contentNodes => {
       return {
@@ -115,7 +114,8 @@ class KolibriApi {
         parent: options.parent === 'self' ? this.channelId : options.parent,
         channel_id: this.channelId,
         max_results: options.maxResults ? options.maxResults : 10,
-        kind_in: onlyContent ? allButTopicTypes : kinds,
+        kind: onlyContent ? 'content' : undefined,
+        kind_in: kinds,
         // Time seed to avoid cache
         seed: Date.now().toString(),
       },
