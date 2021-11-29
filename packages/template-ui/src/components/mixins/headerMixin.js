@@ -10,7 +10,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['channel', 'section']),
+    ...mapState(['channel']),
     ...mapGetters(['getAssetURL']),
     sectionImageURL() {
       if (!this.section || !this.section.title) {

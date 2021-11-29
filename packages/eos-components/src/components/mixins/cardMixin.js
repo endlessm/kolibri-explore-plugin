@@ -1,4 +1,3 @@
-import { getThumbnail } from 'kolibri-api';
 import { getFirstStructuredTag } from '../../utils';
 import { StructuredTags } from '../../constants';
 import { cardImageAspectRatio } from '../../styles.scss';
@@ -29,40 +28,11 @@ export default {
   },
   methods: {
     getThumbnail() {
-      if (!this.node.thumbnail && this.node.useDefaultThumbnail) {
-        this.thumbnail = this.getAsset('defaultThumbnail');
+      if (!this.node.thumbnail || this.node.useDefaultThumbnail) {
+        this.thumbnail = this.fallbackGetAsset();
         return;
       }
-      if (this.node.thumbnail) {
-        this.thumbnail = this.node.thumbnail;
-        return;
-      }
-      getThumbnail(this.node)
-        .then(thumbnail => {
-          if (thumbnail) {
-            this.thumbnail = thumbnail;
-          } else {
-            this.thumbnail = this.getAsset('defaultThumbnail');
-          }
-        }).catch(() => {
-          this.thumbnail = this.getAsset('defaultThumbnail');
-        });
-    },
-    getAsset(name) {
-      if (!this.$store || !this.$store.getters) {
-        return this.fallbackGetAsset(name);
-      }
-
-      const { getAsset } = this.$store.getters;
-      if (!getAsset) {
-        return this.fallbackGetAsset(name);
-      }
-      const fn = getAsset(this.$store.state);
-      if (!fn) {
-        return this.fallbackGetAsset(name);
-      }
-
-      return fn(name);
+      this.thumbnail = this.node.thumbnail;
     },
     fallbackGetAsset() {
       if (this.isBundle) {

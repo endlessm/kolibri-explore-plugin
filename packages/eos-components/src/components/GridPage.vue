@@ -13,13 +13,23 @@
 </template>
 
 <script>
+import { MediaQuality } from '../constants';
 
 export default {
   name: 'GridPage',
   props: {
-    nodes: Array,
-    mediaQuality: String,
-    cardColumns: Object,
+    nodes: {
+      type: Array,
+      required: true,
+    },
+    cardColumns: {
+      type: Object,
+      required: true,
+    },
+    mediaQuality: {
+      type: String,
+      default: MediaQuality.REGULAR,
+    },
   },
 };
 </script>

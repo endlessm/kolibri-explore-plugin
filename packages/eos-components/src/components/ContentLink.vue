@@ -13,7 +13,10 @@
 export default {
   name: 'ContentLink',
   props: {
-    url: String,
+    url: {
+      type: String,
+      required: true,
+    },
   },
   emits: ['isHovered'],
   methods: {

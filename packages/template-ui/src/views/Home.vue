@@ -2,59 +2,67 @@
   <div
     :style="{ backgroundImage: backgroundImageURL }"
   >
-    <slot></slot>
+    <ChannelNavBar :atHome="true" />
+    <ChannelHeader />
     <SectionsSearchRow v-if="hasSectionsSearch" />
 
-    <template v-if="loading">
+    <template v-if="loadingCarouselNodes">
       <CarouselPlaceholder v-if="hasCarousel" />
-      <CardGridPlaceholder />
     </template>
-
     <template v-else>
       <Carousel v-if="hasCarousel" :nodes="carouselNodes" />
       <b-container v-if="hasCarousel">
         <hr>
       </b-container>
+    </template>
+
+    <template v-if="loadingContentNodes || loadingSectionNodes">
+      <CardGridPlaceholder />
+    </template>
+    <template v-else>
       <FilterContent v-if="hasFilters" />
 
-      <div v-if="isFilterEmpty">
-        <b-container v-if="contentNodes.length && displayHeroContent">
-          <CarouselCard
-            v-for="node in contentNodes"
-            :key="'node-' + node.id"
-            :node="node"
-            class="template-ui-hero-card"
-            @click="goToContent(node)"
-          />
-        </b-container>
-        <div v-else-if="contentNodes.length">
+      <template v-if="isFilterEmpty">
+        <template v-if="contentNodes.nodes.length">
+          <b-container v-if="displayHeroContent">
+            <CarouselCard
+              v-for="node in contentNodes.nodes"
+              :key="'node-' + node.id"
+              :node="node"
+              class="template-ui-hero-card"
+              @click="goToContent(node)"
+            />
+          </b-container>
           <CardGrid
-            :nodes="contentNodes"
+            :nodes="contentNodes.nodes"
             :variant="hasFlatGrid ? 'collapsible' : 'slidable'"
             :mediaQuality="mediaQuality"
             :cardColumns="cardColumns"
+            :hasMoreNodes="contentNodes.hasMoreNodes"
+            @loadMoreNodes="onLoadMoreContentNodes()"
           />
-        </div>
+        </template>
         <div
           v-for="section in mainSections"
           :key="section.id"
         >
           <CardGrid
             :id="section.id"
-            :nodes="section.children"
+            :nodes="sectionNodes[section.id].nodes"
+            :hasMoreNodes="sectionNodes[section.id].hasMoreNodes"
             :mediaQuality="mediaQuality"
-            :cardColumns="cardColumns"
+            @loadMoreNodes="onLoadMoreSectionNodes(section.id)"
           >
             <b-row>
               <SectionTitle :section="section" />
             </b-row>
           </CardGrid>
         </div>
-      </div>
+      </template>
 
-      <div v-else>
-        <FilterResult :node="section" />
-      </div>
+      <template v-else>
+        <FilterResult />
+      </template>
 
     </template>
   </div>
@@ -62,18 +70,27 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import _ from 'underscore';
-import { goToContent } from 'kolibri-api';
+import { constants } from 'eos-components';
+
+const sectionPageSize = 2 * constants.ItemsPerSlide;
 
 export default {
   name: 'Home',
+  data() {
+    return {
+      carouselNodes: [],
+      contentNodes: { nodes: [], hasMoreNodes: null },
+      sectionNodes: {},
+      loadingCarouselNodes: true,
+      loadingContentNodes: true,
+      loadingSectionNodes: true,
+    };
+  },
   computed: {
     ...mapState([
-      'nodes',
+      'mainSections',
       'carouselNodeIds',
       'carouselSlideNumber',
-      'section',
-      'loading',
       'cardColumns',
       'mediaQuality',
       'hasSectionsSearch',
@@ -83,39 +100,121 @@ export default {
       'displayHeroContent',
     ]),
     ...mapGetters({
-      mainSections: 'mainSections',
       getAssetURL: 'getAssetURL',
       isFilterEmpty: 'filters/isEmpty',
     }),
     backgroundImageURL() {
       return this.getAssetURL('homeBackgroundImage');
     },
-    contentNodes() {
-      if (!this.section || !this.section.children) {
-        return null;
-      }
-      return this.section.children.filter((n) => n.kind !== 'topic') || null;
-    },
-    carouselNodes() {
-      if (this.carouselNodeIds.length) {
-        return this.carouselNodesFixed(this.carouselNodeIds);
-      }
-
-      return this.carouselNodesRandom(this.carouselSlideNumber);
+  },
+  watch: {
+    mainSections() {
+      return this.fetchSectionNodes();
     },
   },
+  mounted() {
+    return Promise.all([
+      this.fetchCarouselNodes(),
+      this.fetchContentNodes(),
+      this.fetchSectionNodes(),
+    ]);
+  },
   methods: {
-    carouselNodesRandom(n) {
-      // Get n random nodes that are not topic:
-      const possibleNodes = this.nodes.filter((node) => node.kind !== 'topic');
-      return _.sample(possibleNodes, n);
+    fetchCarouselNodes() {
+      if (!this.hasCarousel) {
+        return null;
+      }
+      this.loadingCarouselNodes = true;
+      if (this.carouselNodeIds.length) {
+        return window.kolibri.getContentByFilter({ ids: this.carouselNodeIds })
+          .then((page) => {
+            this.carouselNodes = page.results;
+            this.loadingCarouselNodes = false;
+          });
+      }
+      else {
+        return window.kolibri.getRandomNodes({
+          onlyContent: true,
+          maxResults: this.carouselSlideNumber,
+        }).then((page) => {
+          this.carouselNodes = page.results;
+          this.loadingCarouselNodes = false;
+        });
+      }
     },
-    carouselNodesFixed(nodeIds) {
-      return nodeIds.map((n) => (
-        this.nodes.find((m) => m.id === n.id)
-      ));
+    fetchContentNodes() {
+      this.loadingContentNodes = true;
+      const options = this.hasFlatGrid ? { onlyContent: true } : { parent: 'self', onlyContent: true };
+      return window.kolibri.getContentByFilter({
+        ...options,
+          maxResults: constants.ItemsPerPage,
+      })
+        .then((pageResult) => {
+          this.contentNodes = {
+            nodes: pageResult.results,
+            hasMoreNodes: pageResult.more,
+          };
+          this.loadingContentNodes = false;
+        });
     },
-    goToContent,
+    fetchSectionNodes() {
+      if (this.hasFlatGrid) {
+        this.loadingSectionNodes = false;
+        return null;
+      }
+      this.loadingSectionNodes = true;
+      this.sectionNodes = {};
+
+      return Promise.all(this.mainSections.map((section) => {
+        return window.kolibri.getContentByFilter({
+            parent: section.id,
+            maxResults: sectionPageSize,
+          })
+          .then((pageResult) => {
+            this.$set(this.sectionNodes, section.id, {
+              nodes: pageResult.results,
+              hasMoreNodes: pageResult.more,
+            });
+          });
+      })).then(() => {
+        this.loadingSectionNodes = false;
+      });
+    },
+    onLoadMoreSectionNodes(sectionId) {
+      const { nodes, hasMoreNodes } = this.sectionNodes[sectionId];
+      if (!hasMoreNodes) {
+        return null;
+      }
+      return window.kolibri.getContentPage({
+        maxResults: sectionPageSize,
+        cursor: hasMoreNodes.cursor,
+      })
+      .then((pageResult) => {
+        this.$set(this.sectionNodes, sectionId, {
+          nodes: nodes.concat(pageResult.results),
+          hasMoreNodes: pageResult.more,
+        });
+      });
+    },
+    onLoadMoreContentNodes() {
+      const { nodes, hasMoreNodes } = this.contentNodes;
+      if (!hasMoreNodes) {
+        return null;
+      }
+      return window.kolibri.getContentPage({
+        maxResults: constants.ItemsPerPage,
+        cursor: hasMoreNodes.cursor,
+      })
+      .then((pageResult) => {
+        this.contentNodes = {
+          nodes: nodes.concat(pageResult.results),
+          hasMoreNodes: pageResult.more,
+        };
+      });
+    },
+    goToContent(node) {
+      window.kolibri.navigateTo(node.id);
+    },
   },
 };
 </script>

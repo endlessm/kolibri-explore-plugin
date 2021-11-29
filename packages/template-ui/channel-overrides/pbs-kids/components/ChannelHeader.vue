@@ -4,12 +4,12 @@
     :style="{ backgroundImage: headerImageURL }"
     class="mb-0"
   >
-    <template v-slot:default>
+    <template #default>
       <h1>
         <b-img
           :src="logoImage"
           :width="logoWidth"
-          :alt="section.title"
+          :alt="altText"
         />
       </h1>
     </template>
@@ -23,11 +23,22 @@ import logoImage from '../assets/logo.png';
 export default {
   name: 'ChannelHeader',
   mixins: [headerMixin],
+  props: {
+    section: {
+      type: Object,
+      default: null,
+    },
+  },
   data() {
     return {
       logoImage,
       logoWidth: 160,
     };
+  },
+  computed: {
+    altText() {
+      return this.section ? this.section.title : 'PBS Kids';
+    },
   },
 };
 </script>

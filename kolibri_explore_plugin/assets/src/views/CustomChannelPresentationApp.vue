@@ -17,14 +17,10 @@
   import { mapState } from 'vuex';
   import urls from 'kolibri.urls';
 
-  import axios from 'axios';
-  import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
   import plugin_data from 'plugin_data';
   import { getAppNameByID } from '../customApps';
-  import { PageNames, COLLECTIONS_PAGE_SIZE } from '../constants';
-  import { ContentNodeResource } from '../apiResources.js';
-
-  const nameSpace = 'hashi';
+  import { PageNames } from '../constants';
+  import { KolibriApi } from '../kolibriApi';
 
   function serializeUrlParameters(parameters) {
     return Object.keys(parameters)
@@ -53,6 +49,11 @@
         return this.$refs.iframe.contentWindow;
       },
     },
+    watch: {
+      channel() {
+        this.iframeWindow.kolibri = new KolibriApi(this.channel.id);
+      },
+    },
     mounted() {
       window.addEventListener('message', this.onMessage);
       this.$emit('loading');
@@ -70,102 +71,10 @@
         ) {
           return;
         }
-        if (event.data.event === 'askChannelInformation') {
-          this.sendChannelInformation();
-        }
-        if (event.data.event === 'askNodes') {
-          this.sendNodes();
-        }
         if (event.data.event === 'goToChannelList') {
           this.goToChannelList();
         }
-        if (event.data.event === 'getThumbnail') {
-          this.sendThumbnail(event.data.data);
-        }
       },
-      sendChannelInformation() {
-        if (!this.iframeWindow) {
-          return;
-        }
-
-        const event = 'sendChannelInformation';
-        const message = {
-          event,
-          nameSpace,
-          data: { channel: this.channel },
-        };
-        this.iframeWindow.postMessage(message, '*');
-      },
-
-      sendNodes() {
-        if (!this.iframeWindow) {
-          return;
-        }
-
-        const paginatedFetch = (page, nodes) => {
-          return ContentNodeResource.fetchCollection({
-            getParams: {
-              page,
-              page_size: COLLECTIONS_PAGE_SIZE,
-              channel_id: this.channel.id,
-              user_kind: this.$store.getters.getUserKind,
-            },
-          }).then(response => {
-            nodes.push(...response.results);
-            if (response.next) {
-              return paginatedFetch(page + 1, nodes);
-            } else {
-              return nodes;
-            }
-          });
-        };
-
-        paginatedFetch(1, []).then(nodes => {
-          const event = 'sendNodes';
-          const message = {
-            event,
-            nameSpace,
-            data: { channel: this.channel, nodes },
-          };
-          this.iframeWindow.postMessage(message, '*');
-        });
-      },
-
-      sendThumbnail(id) {
-        if (!this.iframeWindow) {
-          return;
-        }
-
-        const event = 'sendThumbnail';
-        ContentNodeResource.fetchModel({ id }).then(node => {
-          const thumbnailUrl = getContentNodeThumbnail(node);
-          if (!thumbnailUrl) {
-            const message = {
-              event,
-              nameSpace,
-              data: { id, thumbnail: null },
-            };
-            this.iframeWindow.postMessage(message, '*');
-            return;
-          }
-          const promise = axios
-            .get(thumbnailUrl, { responseType: 'arraybuffer' })
-            .then(response => {
-              const returnedB64 = Buffer.from(response.data).toString('base64');
-              const thumbnail = `data:${response.headers['content-type']};base64,${returnedB64}`;
-              return thumbnail;
-            });
-          promise.then(thumbnail => {
-            const message = {
-              event,
-              nameSpace,
-              data: { id, thumbnail },
-            };
-            this.iframeWindow.postMessage(message, '*');
-          });
-        });
-      },
-
       goToChannelList() {
         this.$router.push({
           name: PageNames.ROOT,

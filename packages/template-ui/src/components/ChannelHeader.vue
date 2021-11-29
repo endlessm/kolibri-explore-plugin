@@ -5,7 +5,7 @@
     class="mb-0"
     :class="{ 'full-height': isDescriptionExpanded, 'has-image': hasHeaderImage }"
   >
-    <template v-slot:default>
+    <template #default>
       <div class="align-items-start d-flex justify-content-between mt-3">
       </div>
       <b-row>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import VClamp from 'vue-clamp';
 
 import headerMixin from '@/components/mixins/headerMixin';
@@ -70,6 +70,12 @@ export default {
     VClamp,
   },
   mixins: [headerMixin],
+  props: {
+    section: {
+      type: Object,
+      default: null,
+    },
+  },
   data() {
     return {
       maxDescriptionLines: 6,  // Actually 5. One more for the show more/less button.
@@ -78,7 +84,18 @@ export default {
   },
   computed: {
     ...mapState(['displayLogoInHeader', 'hasDarkHeader']),
-    ...mapGetters(['headerTitle', 'headerDescription']),
+    headerTitle() {
+      if (!this.section || this.section.id === this.channel.id) {
+        return this.channel.name;
+      }
+      return this.section.title;
+    },
+    headerDescription() {
+      if (!this.section || this.section.id === this.channel.id) {
+        return this.channel.description;
+      }
+      return this.section.description;
+    },
   },
 };
 </script>

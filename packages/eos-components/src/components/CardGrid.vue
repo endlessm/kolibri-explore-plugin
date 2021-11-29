@@ -4,42 +4,56 @@
 
     <component
       :is="displayVariant"
-      :id="id"
       :nodes="nodes"
+      :hasMoreNodes="hasMoreNodes"
       :itemsPerPage="itemsPerPage"
       :mediaQuality="mediaQuality"
       :cardColumns="cardColumns"
+      @loadMoreNodes="$emit('loadMoreNodes')"
     />
   </b-container>
 </template>
 
 <script>
+import { ItemsPerPage, MediaQuality } from '../constants';
 
 export default {
   name: 'CardGrid',
   props: {
-    nodes: Array,
-    id: String,
-    mediaQuality: String,
-    cardColumns: Object,
+    nodes: {
+      type: Array,
+      required: true,
+    },
+    hasMoreNodes: {
+      type: Boolean,
+      default: false,
+    },
+    mediaQuality: {
+      type: String,
+      default: MediaQuality.REGULAR,
+    },
+    cardColumns: {
+      type: Object,
+      default() {
+        return { cols: 6, md: 4, lg: 3 };
+      },
+    },
     variant: {
       type: String,
       default: 'slidable',
       validator(value) {
         // The value must match one of these strings
-        return ['paginated', 'collapsible', 'slidable'].includes(value);
+        return ['collapsible', 'slidable'].includes(value);
       },
     },
     itemsPerPage: {
       type: Number,
-      default: 16,
+      default: ItemsPerPage,
     },
   },
   computed: {
     displayVariant() {
       switch (this.variant) {
-        case 'paginated':
-          return 'PaginatedCardGrid';
         case 'collapsible':
           return 'CollapsibleCardGrid';
         case 'slidable':

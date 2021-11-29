@@ -2,54 +2,58 @@
   <div id="app" class="d-flex flex-column h-100">
     <!-- Wrapper needed to fix flexbox footer positioning on IE11 -->
     <div class="flex-fill flex-shrink-0">
-      <ChannelNavBar />
-      <router-view>
-        <ChannelHeader />
-      </router-view>
+      <router-view />
     </div>
     <ChannelFooter />
   </div>
 </template>
 
 <script>
-import { askChannelInformation, askNodes } from 'kolibri-api';
-import { mapMutations } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
   name: 'App',
-  watch: {
-    $route(to) {
-      // Watch the router "to" parameter, and set the navigation state accordingly.
-      switch (to.name) {
-        case 'Content':
-          this.setContentNavigation({
-            contentId: this.$route.params.contentId,
-          });
-          return;
-        case 'Section':
-          this.setSectionNavigation({
-            topicId: this.$route.params.topicId,
-          });
-          return;
-        case 'Home':
-        case 'Search':
-        default:
-          this.setHomeNavigation();
-      }
-    },
+  computed: {
+    ...mapState(['hasFilters', 'hasFlatGrid']),
   },
   created() {
-    askChannelInformation(this.gotChannelInformation);
-    askNodes(this.gotNodes);
+    window.kolibri.themeRenderer({
+        appBarColor: null,
+        textColor: null,
+        backdropColor: null,
+        backgroundColor: null,
+    });
+    console.debug(`Running under Kolibri version: ${window.kolibri.version}`);
+    const promises = [];
+
+    const channelPromise = window.kolibri.getChannelMetadata()
+      .then((channel) => {
+        this.$store.commit('setChannelInformation', { channel });
+      });
+    promises.push(channelPromise);
+
+    if (this.hasFilters) {
+      const filterOptionsPromise = window.kolibri.getChannelFilterOptions()
+        .then((filterOptions) => {
+          this.$store.commit('filters/setFilterOptions', filterOptions);
+        });
+      promises.push(filterOptionsPromise);
+    }
+
+    // Flat presentations don't need the main sections:
+    if (!this.hasFlatGrid) {
+      const sectionsPromise = window.kolibri.getContentByFilter({ parent: 'self', onlyTopics: true })
+        .then((page) => {
+          this.$store.commit('setMainSections', { mainSections: page.results });
+          this.handleRedirects();
+        });
+      promises.push(sectionsPromise);
+    }
+
+    return Promise.all(promises);
   },
   methods: {
-    ...mapMutations(['setContentNavigation', 'setSectionNavigation', 'setHomeNavigation']),
-    gotChannelInformation(data) {
-      this.$store.commit('setChannelInformation', data);
-    },
-    gotNodes(data) {
-      this.$store.commit('setNodes', data);
-      this.$store.commit('setHomeNavigation');
+    handleRedirects() {
       const uri = window.location.search.substring(1);
       const params = new URLSearchParams(uri);
       // Check if we need to navigate to a specific content or topic. Content takes precedence.
@@ -70,7 +74,6 @@ export default {
       const test = params.get('test');
       if (test === 'true') {
         this.$router.push('/test');
-        return;
       }
     },
   },

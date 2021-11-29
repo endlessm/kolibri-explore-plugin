@@ -7,6 +7,7 @@ import RootVue from './views/ExploreIndex';
 import routes from './routes';
 import { setFacilitiesAndConfig } from './modules/coreExplore/actions';
 import pluginModule from './modules/pluginModule';
+import kolibriApi from './kolibriApi';
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
@@ -62,6 +63,8 @@ class ExploreModule extends KolibriApp {
         false
       );
     }
+
+    window.kolibri = kolibriApi;
   }
 }
 

@@ -5,36 +5,38 @@
     :showLogo="showLogo"
     @click-logo="goToChannelList"
   >
-    <Breadcrumb v-if="notAtHome" :node="node" />
+    <Breadcrumb v-if="!atHome" :node="node" />
   </Header>
 </template>
 
 <script>
 import { responsiveMixin } from 'eos-components';
-import { mapState } from 'vuex';
 import headerMixin from '@/components/mixins/headerMixin';
 import { goToChannelList } from 'kolibri-api';
 
 export default {
   name: 'ChannelNavBar',
   mixins: [headerMixin, responsiveMixin],
+  props: {
+    node: {
+      type: Object,
+      default: null,
+    },
+    atHome: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
-    ...mapState(['content', 'mainSection']),
-    node() {
-      if (this.content && Object.keys(this.content).length) {
-        return this.content;
-      }
-
-      return this.section;
-    },
-    notAtHome() {
-      return this.$route.name !== 'Home';
-    },
     showLogo() {
-      return !(this.xs && this.node.ancestors.length);
+      return !(this.xs && this.node && this.node.ancestors.length);
     },
     headerColor() {
-      switch (this.mainSection.id) {
+      const defaultColor = '#93cb00';
+      if (!this.node) {
+        return defaultColor;
+      }
+      switch (this.node.id) {
         // PreK - Kindergarten
         case '2d67696f13b64a7e9b74f45ab5ae6d97':
           return '#00bbf5';
@@ -44,7 +46,7 @@ export default {
         // Home:
         case undefined:
         default:
-          return '#93cb00';
+          return defaultColor;
       }
     },
   },

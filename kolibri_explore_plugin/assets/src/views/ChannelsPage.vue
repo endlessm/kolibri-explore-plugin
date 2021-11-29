@@ -6,7 +6,7 @@
         Endless Discovery
       </b-nav-text>
 
-      <template v-slot:right>
+      <template #right>
         <ButtonsBar
           class="mr-3 mt-1"
           title="More Topics"

@@ -8,6 +8,10 @@ export const MediaTypeVerbs = {
   'zim': 'Interact',
 };
 
+export const MediaFilterName = 'Learning activity';
+export const AuthorFilterName = 'author';
+export const TagFilterName = 'common keywords';
+
 export const MediaQuality = {
   LOW: 'low',
   REGULAR: 'regular',
@@ -44,14 +48,22 @@ export const ThumbnailSize = {
 
 export const CarouselInterval = 10000;
 
+export const ItemsPerSlide = 4;
+export const ItemsPerPage = 16;
+
 export default {
+  AuthorFilterName,
   CarouselInterval,
   DefaultKindLabel,
   FilterTagsBadList,
+  ItemsPerPage,
+  ItemsPerSlide,
   LabelPerKind,
+  MediaFilterName,
   MediaQuality,
   MediaTypeVerbs,
   StructuredTags,
   StructuredTagsRegExp,
+  TagFilterName,
   ThumbnailSize,
 };

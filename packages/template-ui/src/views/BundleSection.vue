@@ -16,7 +16,7 @@
         >
           <b-row>
             <b-col
-              v-for="content in section.children"
+              v-for="content in sectionNodes.nodes"
               :key="content.id"
               class="content-col"
               md="6"
@@ -40,19 +40,48 @@
 
 <script>
 import { mapState } from 'vuex';
-import { goToContent } from 'kolibri-api';
 import { utils } from 'eos-components';
 
 export default {
   name: 'BundleSection',
+  props: {
+    section: {
+      type: Object,
+      required: true,
+    },
+    sectionNodes: {
+      type: Object,
+      default() {
+        return { nodes: [], hasMoreNodes: null };
+      },
+    },
+    // FIXME use the loading prop:
+    // loading: Boolean,
+  },
   computed: {
-    ...mapState(['section', 'channel']),
+    ...mapState(['channel']),
     subtitle() {
-      return utils.getCardSubtitle(this.section, this.channel.title);
+      return utils.getCardSubtitle(this.section, this.channel.name);
     },
   },
+  watch: {
+    sectionNodes() {
+      this.loadBundle();
+    },
+  },
+  mounted() {
+    this.loadBundle();
+  },
   methods: {
-    goToContent,
+    loadBundle() {
+      // Load all nodes
+      if (this.sectionNodes.hasMoreNodes) {
+        this.$emit('loadMoreNodes');
+      }
+    },
+    goToContent(node) {
+      window.kolibri.navigateTo(node.id);
+    },
   },
 };
 </script>

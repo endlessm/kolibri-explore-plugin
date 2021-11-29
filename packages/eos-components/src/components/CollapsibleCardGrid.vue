@@ -9,12 +9,16 @@
     <b-row alignH="center">
       <b-button
         v-if="canShowMore"
+        :disabled="loading"
         pill
         class="mt-2"
         variant="outline-dark"
         @click="showMore"
       >
-        <span>Show more</span>
+        <b-spinner v-if="loading" label="Spinning" small />
+        <span v-else>
+          Show more
+        </span>
       </b-button>
       <b-button
         v-else-if="canShowLess"
@@ -30,32 +34,58 @@
 </template>
 
 <script>
+import { ItemsPerPage, MediaQuality } from '../constants';
 import responsiveMixin from './mixins/responsiveMixin';
 
 export default {
   name: 'CollapsibleCardGrid',
   mixins: [responsiveMixin],
   props: {
-    nodes: Array,
-    mediaQuality: String,
-    cardColumns: Object,
+    nodes: {
+      type: Array,
+      required: true,
+    },
+    hasMoreNodes: {
+      type: Boolean,
+      default: false,
+    },
+    mediaQuality: {
+      type: String,
+      default: MediaQuality.REGULAR,
+    },
+    cardColumns: {
+      type: Object,
+      default() {
+        return { cols: 6, md: 4, lg: 3 };
+      },
+    },
     itemsPerPage: {
       type: Number,
-      default: 16,
+      default: ItemsPerPage,
     },
   },
   data() {
     return {
       // Display 4 rows of 4 cards (16 total) in a large screen.
-      rowsToShow: Math.ceil(this.itemsPerPage * this.cardColumns.lg / 12),
+      rowsToShow: Math.min(
+        Math.ceil(this.itemsPerPage * this.cardColumns.lg / 12),
+        Math.ceil(this.nodes.length * this.cardColumns.lg / 12),
+      ),
+      loading: false,
     };
   },
   computed: {
     initialRows() {
       return Math.ceil(this.itemsPerPage / this.columns);
     },
+    totalRows() {
+      return Math.ceil(this.nodes.length / this.columns);
+    },
+    isLastRow() {
+      return this.rowsToShow === this.totalRows;
+    },
     canShowMore() {
-      return (this.rowsToShow * this.columns) < this.nodes.length;
+      return !this.isLastRow || this.hasMoreNodes;
     },
     canShowLess() {
       return this.rowsToShow > this.initialRows;
@@ -74,12 +104,20 @@ export default {
       return this.nodes.slice(0, elements);
     },
   },
+  watch: {
+    nodes() {
+      this.loading = false;
+      this.rowsToShow++;
+    },
+  },
   methods: {
     showMore() {
-      if (!this.canShowMore) {
-        return;
+      if (this.hasMoreNodes && this.isLastRow) {
+        this.loading = true;
+        this.$emit('loadMoreNodes');
+      } else {
+        this.rowsToShow++;
       }
-      this.rowsToShow++;
     },
     showLess() {
       if (!this.canShowLess) {

@@ -11,7 +11,10 @@
   export default {
     name: 'ChannelLogo',
     props: {
-      channel: Object,
+      channel: {
+        type: Object,
+        required: true,
+      },
       size: {
         type: String,
         default: 'sm',

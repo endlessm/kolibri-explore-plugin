@@ -6,7 +6,7 @@
     :showLogo="showLogo"
     @click-logo="goToChannelList"
   >
-    <Breadcrumb v-if="notAtHome" :node="node" />
+    <Breadcrumb v-if="!atHome" :node="node" />
   </Header>
 </template>
 
@@ -19,23 +19,23 @@ import { goToChannelList } from 'kolibri-api';
 export default {
   name: 'ChannelNavBar',
   mixins: [headerMixin, responsiveMixin],
+  props: {
+    node: {
+      type: Object,
+      default: null,
+    },
+    atHome: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
-    ...mapState(['content', 'isStandaloneChannel']),
-    node() {
-      if (this.content && Object.keys(this.content).length) {
-        return this.content;
-      }
-
-      return this.section;
-    },
-    notAtHome() {
-      return this.$route.name !== 'Home';
-    },
+    ...mapState(['isStandaloneChannel']),
     showLogo() {
       if (this.isStandaloneChannel) {
         return false;
       }
-      return !(this.xs && this.node.ancestors.length);
+      return !(this.xs && this.node && this.node.ancestors.length);
     },
   },
   methods: {

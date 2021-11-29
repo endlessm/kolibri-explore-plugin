@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import { goToContent } from 'kolibri-api';
 import { MediaQuality } from '../constants';
 import cardMixin from './mixins/cardMixin.js';
 
@@ -37,11 +36,26 @@ export default {
   name: 'ContentCard',
   mixins: [cardMixin],
   props: {
-    node: Object,
-    subtitle: String,
-    isBundle: Boolean,
-    url: String,
-    mediaQuality: String,
+    node: {
+      type: Object,
+      required: true,
+    },
+    subtitle: {
+      type: String,
+      default: '',
+    },
+    isBundle: {
+      type: Boolean,
+      default: false,
+    },
+    url: {
+      type: String,
+      default: '',
+    },
+    mediaQuality: {
+      type: String,
+      default: MediaQuality.REGULAR,
+    },
   },
   data() {
     return {
@@ -58,7 +72,7 @@ export default {
       };
     },
     kind() {
-      if (this.isBundle) {
+      if (this.isBundle && this.node.kind === 'topic') {
         return 'bundle';
       }
       return this.node.kind;
@@ -69,7 +83,7 @@ export default {
       if (this.kind === 'bundle') {
         this.$router.push(this.url);
       } else {
-        goToContent(this.node);
+        window.kolibri.navigateTo(this.node.id);
       }
     },
   },

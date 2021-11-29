@@ -47,6 +47,7 @@
         validator(arr) {
           return arr.every(val => ['right', 'wrong', 'hint', 'rectified'].includes(val));
         },
+        default: () => [],
       },
     },
     computed: {

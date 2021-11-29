@@ -125,6 +125,7 @@ oriented data synchronization.
       },
       lang: {
         type: Object,
+        default: null,
       },
       kind: {
         type: String,
@@ -167,12 +168,15 @@ oriented data synchronization.
       // An identifier for the user interacting with this content
       userId: {
         type: String,
+        default: '',
       },
       userFullName: {
         type: String,
+        default: '',
       },
       timeSpent: {
         type: Number,
+        default: 0,
       },
     },
     data() {

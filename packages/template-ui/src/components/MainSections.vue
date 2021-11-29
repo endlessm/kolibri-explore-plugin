@@ -9,7 +9,6 @@
         pill
         variant="primary"
         :to="getNodeUrl(section)"
-        :active="section.id === mainSection.id"
       >
         {{ section.title }}
       </b-button>
@@ -18,14 +17,13 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import { utils } from 'eos-components';
 
 export default {
   name: 'MainSections',
   computed: {
-    ...mapState(['section', 'mainSection', 'channel']),
-    ...mapGetters(['mainSections']),
+    ...mapState(['mainSections', 'channel']),
   },
   methods: {
     getNodeUrl(node) {

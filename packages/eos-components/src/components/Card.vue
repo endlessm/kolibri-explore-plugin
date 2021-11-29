@@ -10,23 +10,25 @@
 </template>
 
 <script>
+import { MediaQuality } from '../constants';
 import { getNodeUrl, getCardSubtitle } from '../utils';
 
 export default {
   name: 'Card',
   props: {
-    node: Object,
-    mediaQuality: String,
+    node: {
+      type: Object,
+      required: true,
+    },
+    mediaQuality: {
+      type: String,
+      default: MediaQuality.REGULAR,
+    },
   },
   data() {
     return {
       subtitle: '',
     };
-  },
-  watcn: {
-    node: function() {
-      this.updateSubtitle();
-    },
   },
   computed: {
     cardVariant() {
@@ -35,19 +37,30 @@ export default {
       }
       return 'TopicCard';
     },
+    showAsBundle() {
+      // If there are no topics children we can show as bundle
+      return this.node.topic_children_count === 0;
+    },
     isBundle() {
       if ('isBundle' in this.node) {
         return this.node.isBundle;
       }
-      // FIXME we shouldn't look at the store to check if this node represents a bundle.
-      // Instead, we should traverse all nodes and add the isBundle flag above at load time.
-      if (this.$store) {
-        const { getters } = this.$store;
-        if (getters.isSimpleBundle && getters.showAsBundle(this.node)) {
-          return true;
-        }
+      if (this.isSimpleBundle && this.showAsBundle) {
+        return true;
       }
       return false;
+    },
+    isSimpleBundle() {
+      if (this.$store) {
+        const { getters } = this.$store;
+        return getters.isSimpleBundle;
+      }
+      return false;
+    },
+  },
+  watch: {
+    node() {
+      this.updateSubtitle();
     },
   },
   mounted() {
