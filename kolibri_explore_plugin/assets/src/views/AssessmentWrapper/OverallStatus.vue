@@ -1,6 +1,6 @@
 <template>
 
-  <div class="overall-container" :style="{ color: $themeTokens.text }">
+  <div class="overall-container">
     <div class="overall-status">
       <span>
         {{ $tr('goal', { count: totalCorrectRequiredM }) }}
@@ -52,7 +52,7 @@
 
 <style lang="scss" scoped>
 
-  @import '~kolibri-design-system/lib/styles/definitions';
+  @import '../../styles';
 
   .overall-status {
     display: inline-block;

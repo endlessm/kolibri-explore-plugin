@@ -47,15 +47,17 @@ oriented data synchronization.
       </template>
     </LessonMasteryBar>
     <div>
-      <UiAlert v-if="itemError" :dismissible="false" type="error">
+      <b-alert v-if="itemError" variant="danger">
         {{ $tr('itemError') }}
-        <KButton
-          appearance="basic-link"
-          :text="$tr('tryDifferentQuestion')"
+        <b-button
+          variant="link"
           @click="nextQuestion"
-        />
-      </UiAlert>
-      <div class="content-wrapper" :style="{ backgroundColor: this.$themePalette.grey.v_100 }">
+        >
+          {{ $tr('tryDifferentQuestion') }}
+        </b-button>
+      </b-alert>
+
+      <div class="bg-light px-2">
         <KContentRenderer
           ref="contentRenderer"
           :kind="kind"
@@ -79,17 +81,14 @@ oriented data synchronization.
         />
       </div>
 
-      <BottomAppBar
+      <div
         class="attempts-container"
         :class="{ 'mobile': windowIsSmall }"
       >
-        <div class="overall-status" :style="{ color: $themeTokens.text }">
-          <KIcon
-            icon="mastered"
-            :color="success ? $themeTokens.mastered : $themePalette.grey.v_200"
-          />
+        <div class="overall-status">
+          <b-icon-star-fill :variant="success ? 'primary' : none" />
           <div class="overall-status-text">
-            <span v-if="success" class="completed" :style="{ color: $themeTokens.annotation }">
+            <span v-if="success" class="completed">
               {{ coreString('completedLabel') }}
             </span>
             <span>
@@ -97,26 +96,28 @@ oriented data synchronization.
             </span>
           </div>
         </div>
-        <div class="table">
+        <div class="m-2 table">
           <div class="row">
             <div class="left">
               <transition mode="out-in">
-                <KButton
+                <b-button
                   v-if="!complete"
-                  appearance="raised-button"
-                  :text="$tr('check')"
-                  :primary="true"
+                  variant="primary"
+                  pill
                   :class="{ shaking: shake }"
                   :disabled="checkingAnswer"
                   @click="checkAnswer"
-                />
-                <KButton
+                >
+                  {{ $tr('check') }}
+                </b-button>
+                <b-button
                   v-else
-                  appearance="raised-button"
-                  :text="$tr('next')"
-                  :primary="true"
+                  variant="primary"
+                  pill
                   @click="nextQuestion"
-                />
+                >
+                  {{ $tr('next') }}
+                </b-button>
               </transition>
             </div>
 
@@ -132,7 +133,7 @@ oriented data synchronization.
             </div>
           </div>
         </div>
-      </BottomAppBar>
+      </div>
     </div>
 
   </div>
@@ -146,9 +147,7 @@ oriented data synchronization.
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import { MasteryModelGenerators } from 'kolibri.coreVue.vuex.constants';
   import shuffled from 'kolibri.utils.shuffled';
-  import UiAlert from 'kolibri-design-system/lib/keen/UiAlert';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
-  import BottomAppBar from 'kolibri.coreVue.components.BottomAppBar';
   import CoreInfoIcon from 'kolibri.coreVue.components.CoreInfoIcon';
   import { createTranslator } from 'kolibri.utils.i18n';
   import { defaultLanguage } from 'kolibri-design-system/lib/utils/i18n';
@@ -175,8 +174,6 @@ oriented data synchronization.
     name: 'AssessmentWrapper',
     components: {
       ExerciseAttempts,
-      UiAlert,
-      BottomAppBar,
       LessonMasteryBar,
       CoreInfoIcon,
     },
@@ -528,10 +525,25 @@ oriented data synchronization.
 
 <style lang="scss" scoped>
 
-  @import '~kolibri-design-system/lib/styles/definitions';
+  @import '../../styles';
+
+  /*
+    Copied from: '~kolibri-design-system/lib/styles/definitions'
+
+    Use of this mixin can help prompt the browser to use the GPU for certain DOM elements.
+    This can help with certain CSS animations and other transitions.
+
+    For details, see https://www.smashingmagazine.com/2016/12/gpu-animation-doing-it-right/
+  */
+  %enable-gpu-acceleration {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 10000px;
+  }
 
   .attempts-container {
     height: 111px;
+    color: $white;
     text-align: left;
   }
 
@@ -542,10 +554,6 @@ oriented data synchronization.
   .overall-status-text {
     display: inline-block;
     margin-left: 4px;
-  }
-
-  .completed {
-    font-size: 12px;
   }
 
   .table {
@@ -597,8 +605,8 @@ oriented data synchronization.
   }
 
   .current-status {
-    height: 18px;
     margin: 0;
+    color: $white;
   }
 
   .hint-btn-container {
@@ -608,14 +616,14 @@ oriented data synchronization.
     font-size: medium;
 
     // Ensures the tooltip is visible on the screen in RTL and LTR
-    /deep/ &.rtl {
-      /deep/ .k-tooltip {
+    ::v-deep &.rtl {
+      ::v-deep .k-tooltip {
         right: auto !important;
         left: 0 !important;
       }
     }
 
-    /deep/ .k-tooltip {
+    ::v-deep .k-tooltip {
       right: 0 !important;
       left: auto !important;
       transform: translate3d(0, 23px, 0) !important;
@@ -626,7 +634,7 @@ oriented data synchronization.
     padding: 0 4px; // Space from btn in RTL and LTR
     vertical-align: text-bottom;
 
-    /deep/ .link-text {
+    ::v-deep .link-text {
       text-align: right;
     }
   }
