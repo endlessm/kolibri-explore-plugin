@@ -15,6 +15,7 @@
       v-for="i in numSpaces"
       :key="`placeholder-${i}`"
       class="placeholder"
+      :style="{ borderBottom: `2px solid ${$themeTokens.annotation}` }"
     >
     </div>
   </div>
@@ -44,10 +45,10 @@
       // ordered from first to last
       log: {
         type: Array,
+        default: () => [],
         validator(arr) {
           return arr.every(val => ['right', 'wrong', 'hint', 'rectified'].includes(val));
         },
-        default: () => [],
       },
     },
     computed: {
@@ -93,8 +94,6 @@
 
 <style lang="scss" scoped>
 
-  @import '../../../styles';
-
   $size: 30px;
   $margin: 4px;
 
@@ -111,7 +110,6 @@
     width: $size;
     height: $size;
     margin: $margin;
-    border-bottom: 2px solid $white;
   }
 
   .attempt {
