@@ -10,92 +10,132 @@ oriented data synchronization.
 <template v-if="ready">
 
   <div>
-    <b-alert v-if="itemError" variant="danger">
-      {{ $tr('itemError') }}
-      <b-button
-        variant="link"
-        @click="nextQuestion"
-      >
-        {{ $tr('tryDifferentQuestion') }}
-      </b-button>
-    </b-alert>
-    <div class="bg-light px-2">
-      <KContentRenderer
-        ref="contentRenderer"
-        :kind="kind"
-        :lang="lang"
-        :files="files"
-        :available="available"
-        :extraFields="extraFields"
-        :assessment="true"
-        :itemId="itemId"
-        :progress="progress"
-        :userId="userId"
-        :userFullName="userFullName"
-        :timeSpent="timeSpent"
-        @answerGiven="answerGiven"
-        @hintTaken="hintTaken"
-        @itemError="handleItemError"
-        @startTracking="startTracking"
-        @stopTracking="stopTracking"
-        @updateProgress="updateProgress"
-        @updateContentState="updateContentState"
-      />
-    </div>
-
-    <div
-      class="attempts-container"
-      :class="{ 'mobile': windowIsSmall }"
+    <LessonMasteryBar
+      data-test="lessonMasteryBar"
+      :availableHintsMessage="hint$tr('hint', { hintsLeft: availableHints })"
+      @takeHint="takeHint"
     >
-      <div class="overall-status">
-        <b-icon-star-fill :variant="success ? 'primary' : none" />
-        <div class="overall-status-text">
-          <span v-if="success" class="completed">
-            {{ coreString('completedLabel') }}
-          </span>
-          <span>
-            {{ $tr('goal', { count: totalCorrectRequiredM }) }}
-          </span>
+      <template #hint>
+        <div
+          v-if="totalHints > 0"
+          class="hint-btn-container"
+          :class="{ 'rtl': isRtl }"
+        >
+          <KButton
+            v-if="availableHints > 0"
+            class="hint-btn"
+            appearance="basic-link"
+            :text="hint$tr('hint', { hintsLeft: availableHints })"
+            :primary="false"
+            @click="takeHint"
+          />
+          <KButton
+            v-else
+            class="hint-btn"
+            appearance="basic-link"
+            :text="hint$tr('noMoreHint')"
+            :primary="false"
+            :disabled="true"
+          />
+          <CoreInfoIcon
+            class="info-icon"
+            tooltipPlacement="bottom left"
+            :iconAriaLabel="hint$tr('hintExplanation')"
+            :tooltipText="hint$tr('hintExplanation')"
+          />
         </div>
-      </div>
-      <div class="m-2 table">
-        <div class="row">
-          <div class="left">
-            <transition mode="out-in">
-              <b-button
-                v-if="!complete"
-                variant="primary"
-                pill
-                :class="{ shaking: shake }"
-                :disabled="checkingAnswer"
-                @click="checkAnswer"
-              >
-                {{ $tr('check') }}
-              </b-button>
-              <b-button
-                v-else
-                variant="primary"
-                pill
-                @click="nextQuestion"
-              >
-                {{ $tr('next') }}
-              </b-button>
-            </transition>
-          </div>
+      </template>
+    </LessonMasteryBar>
+    <div>
+      <b-alert v-if="itemError" variant="danger">
+        {{ $tr('itemError') }}
+        <b-button
+          variant="link"
+          @click="nextQuestion"
+        >
+          {{ $tr('tryDifferentQuestion') }}
+        </b-button>
+      </b-alert>
 
-          <div class="right">
-            <ExerciseAttempts
-              :waitingForAttempt="firstAttemptAtQuestion || itemError"
-              :numSpaces="attemptsWindowN"
-              :log="recentAttempts"
-            />
-            <p class="current-status">
-              {{ currentStatus }}
-            </p>
+      <div class="bg-light px-2">
+        <KContentRenderer
+          ref="contentRenderer"
+          :kind="kind"
+          :lang="lang"
+          :files="files"
+          :available="available"
+          :extraFields="extraFields"
+          :assessment="true"
+          :itemId="itemId"
+          :progress="progress"
+          :userId="userId"
+          :userFullName="userFullName"
+          :timeSpent="timeSpent"
+          @answerGiven="answerGiven"
+          @hintTaken="hintTaken"
+          @itemError="handleItemError"
+          @startTracking="startTracking"
+          @stopTracking="stopTracking"
+          @updateProgress="updateProgress"
+          @updateContentState="updateContentState"
+        />
+      </div>
+
+      <div
+        class="attempts-container"
+        :class="{ 'mobile': windowIsSmall }"
+      >
+        <div class="overall-status">
+          <b-icon-star-fill :variant="success ? 'primary' : none" />
+          <div class="overall-status-text">
+            <span v-if="success" class="completed">
+              {{ coreString('completedLabel') }}
+            </span>
+            <span>
+              {{ $tr('goal', { count: totalCorrectRequiredM }) }}
+            </span>
+          </div>
+        </div>
+        <div class="m-2 table">
+          <div class="row">
+            <div class="left">
+              <transition mode="out-in">
+                <b-button
+                  v-if="!complete"
+                  variant="primary"
+                  pill
+                  :class="{ shaking: shake }"
+                  :disabled="checkingAnswer"
+                  @click="checkAnswer"
+                >
+                  {{ $tr('check') }}
+                </b-button>
+                <b-button
+                  v-else
+                  variant="primary"
+                  pill
+                  @click="nextQuestion"
+                >
+                  {{ $tr('next') }}
+                </b-button>
+              </transition>
+            </div>
+
+            <div class="right">
+              <ExerciseAttempts
+                :waitingForAttempt="firstAttemptAtQuestion || itemError"
+                :numSpaces="attemptsWindowN"
+                :log="recentAttempts"
+              />
+              <p class="current-status">
+                {{ currentStatus }}
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
   </div>
 
 </template>
@@ -103,29 +143,45 @@ oriented data synchronization.
 
 <script>
 
-  import { mapState, mapGetters, mapActions } from 'vuex';
+  import { mapState, mapActions } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
-  import { InteractionTypes, MasteryModelGenerators } from 'kolibri.coreVue.vuex.constants';
+  import { MasteryModelGenerators } from 'kolibri.coreVue.vuex.constants';
   import shuffled from 'kolibri.utils.shuffled';
-  import { now } from 'kolibri.utils.serverClock';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
-  import { updateContentNodeProgress } from '../../modules/coreExplore/utils';
+  import CoreInfoIcon from 'kolibri.coreVue.components.CoreInfoIcon';
+  import { createTranslator } from 'kolibri.utils.i18n';
+  import { defaultLanguage } from 'kolibri-design-system/lib/utils/i18n';
+  import LessonMasteryBar from './LessonMasteryBar';
   import ExerciseAttempts from './ExerciseAttempts';
+
+  const hintTranslator = createTranslator('PerseusRendererIndex', {
+    hint: {
+      message: 'Use a hint ({hintsLeft, number} left)',
+      context:
+        'A hint is a suggestion to help learners solve a problem. This phrase tells the learner how many hints they have left to use.',
+    },
+    hintExplanation: {
+      message: 'If you use a hint, this question will not be added to your progress',
+      context: 'A hint is a suggestion to help learners solve a problem.',
+    },
+    noMoreHint: {
+      message: 'No more hints',
+      context: 'A hint is a suggestion to help learners solve a problem.',
+    },
+  });
 
   export default {
     name: 'AssessmentWrapper',
     components: {
       ExerciseAttempts,
+      LessonMasteryBar,
+      CoreInfoIcon,
     },
     mixins: [commonCoreStrings, responsiveWindowMixin],
     props: {
-      id: {
-        type: String,
-        required: true,
-      },
       lang: {
         type: Object,
-        default: null,
+        default: () => defaultLanguage,
       },
       kind: {
         type: String,
@@ -134,10 +190,6 @@ oriented data synchronization.
       files: {
         type: Array,
         default: () => [],
-      },
-      channelId: {
-        type: String,
-        default: '',
       },
       available: {
         type: Boolean,
@@ -157,7 +209,7 @@ oriented data synchronization.
       },
       extraFields: {
         type: Object,
-        default: () => {},
+        default: () => ({}),
       },
       // An explicit record of the current progress through this
       // piece of content.
@@ -168,20 +220,20 @@ oriented data synchronization.
       // An identifier for the user interacting with this content
       userId: {
         type: String,
-        default: '',
+        default: null,
       },
       userFullName: {
         type: String,
-        default: '',
+        default: null,
       },
       timeSpent: {
         type: Number,
-        default: 0,
+        default: null,
       },
     },
     data() {
       return {
-        ready: false,
+        mounted: false,
         itemId: '',
         shake: false,
         firstAttemptAtQuestion: true,
@@ -192,25 +244,20 @@ oriented data synchronization.
         // Attempted fix for #1725
         checkingAnswer: false,
         checkWasAttempted: false,
+        startTime: null,
       };
     },
     computed: {
-      ...mapGetters(['isUserLoggedIn']),
       ...mapState({
-        mastered: state => state.core.logging.mastery.complete,
-        currentInteractions: state =>
-          state.core.logging.attempt.interaction_history
-            ? state.core.logging.attempt.interaction_history.length
-            : 0,
-        totalattempts: state => state.core.logging.mastery.totalattempts,
-        pastattempts: state =>
-          (state.core.logging.mastery.pastattempts || []).filter(attempt => attempt.error !== true),
+        pastattempts: state => (state.core.logging.pastattempts || []).filter(a => !a.error),
+        mastered: state => state.core.logging.complete,
+        totalattempts: state => state.core.logging.totalattempts,
         userid: state => state.core.session.user_id,
       }),
+      currentattempt() {
+        return !this.firstAttemptAtQuestion ? this.pastattempts[0] : null;
+      },
       recentAttempts() {
-        if (!this.pastattempts) {
-          return [];
-        }
         return this.pastattempts
           .map((attempt, index) => {
             // if first item and not a current attempt
@@ -246,32 +293,8 @@ oriented data synchronization.
       attemptsWindowN() {
         return this.mOfNMasteryModel.n;
       },
-      exerciseProgress() {
-        if (this.mastered) {
-          return 1;
-        }
-        if (this.pastattempts.length) {
-          let calculatedMastery;
-          if (this.pastattempts.length > this.attemptsWindowN) {
-            calculatedMastery = Math.min(
-              this.pastattempts.slice(0, this.attemptsWindowN).reduce((a, b) => a + b.correct, 0) /
-                this.totalCorrectRequiredM,
-              1
-            );
-          } else {
-            calculatedMastery = Math.min(
-              this.pastattempts.reduce((a, b) => a + b.correct, 0) / this.totalCorrectRequiredM,
-              1
-            );
-          }
-          // If there are any attempts at all, set some progress on the exercise
-          // because they have now started the exercise.
-          return Math.max(calculatedMastery, 0.001);
-        }
-        return 0;
-      },
       success() {
-        return this.exerciseProgress === 1;
+        return this.mastered;
       },
       currentStatus() {
         if (this.itemError) {
@@ -293,74 +316,54 @@ oriented data synchronization.
         }
         return null;
       },
-    },
-    watch: {
-      exerciseProgress() {
-        this.updateExerciseProgressMethod();
+      renderer() {
+        // TODO: rtibbles - update the KContentRenderer API to expose hint info
+        // and add takeHint public method
+        return (
+          this.mounted && this.$refs.contentRenderer && this.$refs.contentRenderer.$refs.contentView
+        );
+      },
+      availableHints() {
+        return (this.renderer && this.renderer.availableHints) || 0;
+      },
+      totalHints() {
+        return (this.renderer && this.renderer.totalHints) || 0;
       },
     },
-    beforeDestroy() {
-      if (this.currentInteractions > 0) {
-        this.saveAttemptLogMasterLog(false);
-      }
-    },
     created() {
-      if (this.isUserLoggedIn) {
-        this.callInitMasteryLog();
-      } else {
-        this.createDummyMasteryLog();
-      }
       this.nextQuestion();
     },
     methods: {
-      ...mapActions([
-        'createAttemptLog',
-        'createDummyMasteryLog',
-        'initMasteryLog',
-        'saveAndStoreAttemptLog',
-        'saveAndStoreMasteryLog',
-        'saveAttemptLog',
-        'saveMasteryLog',
-        'setMasteryLogComplete',
-        'updateAttemptLogInteractionHistory',
-        'updateExerciseProgress',
-        'updateMasteryAttemptState',
-      ]),
-      updateAttemptLogMasteryLog({
-        correct,
-        complete,
-        firstAttempt = false,
-        hinted,
-        answerState,
-        simpleAnswer,
-        error,
-      }) {
-        this.updateMasteryAttemptState({
-          currentTime: now(),
-          correct,
-          complete,
-          firstAttempt,
-          hinted,
-          answerState,
-          simpleAnswer,
-          error,
-        });
+      ...mapActions(['updateContentSession']),
+      takeHint() {
+        this.renderer && this.renderer.takeHint();
       },
-      saveAttemptLogMasterLog(updateStore = true) {
-        if (updateStore) {
-          this.saveAndStoreAttemptLog().then(() => {
-            if (this.isUserLoggedIn && this.success) {
-              this.setMasteryLogComplete(now());
-              this.saveAndStoreMasteryLog();
-            }
-          });
-        } else {
-          this.saveAttemptLog().then(() => {
-            if (this.isUserLoggedIn && this.success) {
-              this.saveMasteryLog();
-            }
-          });
+      exerciseProgress(submittingAttempt) {
+        if (this.mastered) {
+          return 1;
         }
+        const pastAttempts = submittingAttempt
+          ? [submittingAttempt].concat(this.pastattempts)
+          : this.pastattempts;
+        if (pastAttempts.length) {
+          let calculatedMastery;
+          if (pastAttempts.length > this.attemptsWindowN) {
+            calculatedMastery = Math.min(
+              pastAttempts.slice(0, this.attemptsWindowN).reduce((a, b) => a + b.correct, 0) /
+                this.totalCorrectRequiredM,
+              1
+            );
+          } else {
+            calculatedMastery = Math.min(
+              pastAttempts.reduce((a, b) => a + b.correct, 0) / this.totalCorrectRequiredM,
+              1
+            );
+          }
+          // If there are any attempts at all, set some progress on the exercise
+          // because they have now started the exercise.
+          return Math.max(calculatedMastery, 0.001);
+        }
+        return 0;
       },
       checkAnswer() {
         this.checkWasAttempted = true;
@@ -385,58 +388,38 @@ oriented data synchronization.
             this.shake = true;
           }
         }
-        this.updateAttemptLogInteractionHistory({
-          type: InteractionTypes.answer,
-          answer: answerState,
-          correct,
-        });
         this.complete = correct === 1;
-        if (this.firstAttemptAtQuestion) {
-          this.firstAttemptAtQuestion = false;
-          this.updateAttemptLogMasteryLog({
-            correct,
-            complete: this.complete,
-            answerState,
-            simpleAnswer,
-            firstAttempt: true,
-          });
-          // Save attempt log on first attempt
-          this.saveAttemptLogMasterLog();
-          // Update exercise progress when the first answer is given
-          this.updateExerciseProgressMethod();
-        } else {
-          this.updateAttemptLogMasteryLog({
-            complete: this.complete,
-          });
-          if (this.complete) {
-            // Otherwise only save if the attempt is now complete
-            this.saveAttemptLogMasterLog();
-          } else if (this.currentInteractions % 4 === 0) {
-            // After every 4 interactions in this exercise, update the attemptlog
-            // so needsHelp notification can be triggered
-            this.saveAttemptLogMasterLog();
-          }
-        }
+        this.updateAttempt({ answerState, simpleAnswer });
       },
       hintTaken({ answerState }) {
-        this.updateAttemptLogInteractionHistory({
-          type: InteractionTypes.hint,
-          answer: answerState,
-        });
-        if (this.firstAttemptAtQuestion) {
-          this.updateAttemptLogMasteryLog({
-            correct: 0,
-            complete: false,
-            firstAttempt: true,
-            hinted: true,
-            answerState,
-            simpleAnswer: '',
-          });
-          this.firstAttemptAtQuestion = false;
-          // Only save if this was the first attempt to capture this
-          this.saveAttemptLogMasterLog();
-        }
         this.hintWasTaken = true;
+        this.updateAttempt({ answerState });
+      },
+      updateAttempt({ answerState, simpleAnswer } = {}) {
+        const interaction = {
+          complete: this.complete,
+          time_spent: (new Date() - this.startTime) / 1000,
+          correct: this.correct,
+          hinted: this.hintWasTaken,
+          error: this.itemError,
+          item: this.itemId,
+        };
+        if (answerState) {
+          interaction.answer = answerState;
+        }
+        if (simpleAnswer) {
+          interaction.simple_answer = simpleAnswer;
+        }
+        let progress;
+        if (this.firstAttemptAtQuestion) {
+          // Only update progress on first attempt at question
+          // as cannot change progress on subsequent attempts.
+          progress = this.exerciseProgress(interaction);
+          this.firstAttemptAtQuestion = false;
+        } else {
+          interaction.id = this.currentattempt.id;
+        }
+        this.updateContentSession({ progress, interaction });
       },
       setItemId() {
         const index = this.totalattempts % this.assessmentIds.length;
@@ -453,44 +436,15 @@ oriented data synchronization.
         this.firstAttemptAtQuestion = true;
         this.correct = 0;
         this.itemError = false;
-        this.setItemId();
-        this.callCreateAttemptLog();
         this.checkWasAttempted = false;
-      },
-      callInitMasteryLog() {
-        this.initMasteryLog({
-          masterySpacingTime: this.masterySpacingTime,
-          masteryCriterion: this.masteryModel,
-        });
-      },
-      callCreateAttemptLog() {
-        this.ready = false;
-        this.createAttemptLog(this.itemId);
-        this.ready = true;
-      },
-      updateExerciseProgressMethod() {
-        this.updateExerciseProgress({ progressPercent: this.exerciseProgress });
-        updateContentNodeProgress(this.channelId, this.id, this.exerciseProgress);
-        this.$emit('updateProgress', this.exerciseProgress);
+        this.startTime = new Date();
+        this.hintWasTaken = false;
+        this.setItemId();
       },
       handleItemError() {
         this.itemError = true;
-        this.updateAttemptLogInteractionHistory({
-          type: InteractionTypes.error,
-        });
         this.complete = true;
-        if (this.firstAttemptAtQuestion) {
-          this.updateAttemptLogMasteryLog({
-            correct: 0,
-            complete: this.complete,
-            firstAttempt: true,
-            error: true,
-          });
-          this.firstAttemptAtQuestion = false;
-        } else {
-          this.updateAttemptLogMasteryLog({ complete: this.complete });
-        }
-        this.saveAttemptLogMasterLog();
+        this.updateAttempt();
       },
       updateProgress(...args) {
         this.$emit('updateProgress', ...args);
@@ -499,28 +453,70 @@ oriented data synchronization.
         this.$emit('updateContentState', ...args);
       },
       startTracking(...args) {
+        this.mounted = true;
         this.$emit('startTracking', ...args);
       },
       stopTracking(...args) {
         this.$emit('stopTracking', ...args);
+      },
+      hint$tr(msgId, options) {
+        return hintTranslator.$tr(msgId, options);
       },
     },
     $trs: {
       goal: {
         message: 'Get {count, number, integer} {count, plural, other {correct}}',
         context:
-          '\nMessage that indicates to the learner how many correct answers they need to give in order to master the given topic, and for the exercise to be considered completed.',
+          'Message that indicates to the learner how many correct answers they need to give in order to master the given topic, and for the exercise to be considered completed.',
       },
-      tryAgain: 'Try again',
-      correct: 'Correct!',
-      check: 'Check',
-      next: 'Next',
-      itemError: 'There was an error showing this item',
-      inputAnswer: 'Please enter an answer above',
-      hintUsed: 'Hint used',
-      greatKeepGoing: 'Great! Keep going',
-      tryDifferentQuestion: 'Try a different question',
-      tryNextQuestion: 'Try next question',
+      tryAgain: {
+        message: 'Try again',
+        context:
+          "If a learner answers a question incorrectly, the message 'Try again' displays. They can then attempt to answer again.",
+      },
+      correct: {
+        message: 'Correct!',
+        context: "An answer that the learner got right will be marked as 'Correct!'.",
+      },
+      check: {
+        message: 'Check',
+        context:
+          "Learners use the 'CHECK' button when doing an exercise to check if they have answered a question correctly or not.",
+      },
+      next: {
+        message: 'Next',
+        context: 'Button that takes user to next question.',
+      },
+      itemError: {
+        message: 'There was an error showing this question',
+        context:
+          'Error message a user sees if there was a problem accessing a learning resource. This may be because the resource has been removed, for example.',
+      },
+      inputAnswer: {
+        message: 'Please enter an answer above',
+        context:
+          'Message that a learner sees if they try to check their answer without answering the question.',
+      },
+      hintUsed: {
+        message: 'Hint used',
+        context:
+          "Some exercises can offer hints. These can be suggestions to help learners solve a problem.\n\nIf the learner uses a hint, the text 'Hint used' appears in the exercise.",
+      },
+      greatKeepGoing: {
+        message: 'Great! Keep going',
+        context:
+          'Message of encouragement that learner is shown when they answer a question incorrectly but then on a further attempt they get it correct.',
+      },
+      tryDifferentQuestion: {
+        message: 'Try a different question',
+        context:
+          'Message that displays if learner answers a question incorrectly multiple times. It allows them to try a new question.',
+      },
+      tryNextQuestion: {
+        message: 'Try next question',
+        context:
+          'Message that displays if learner answers a question incorrectly multiple times. It allows them to move on to the next question.\n',
+      },
     },
   };
 
@@ -549,10 +545,6 @@ oriented data synchronization.
     height: 111px;
     color: $white;
     text-align: left;
-  }
-
-  .mobile {
-    padding: 8px;
   }
 
   .overall-status {
@@ -615,6 +607,36 @@ oriented data synchronization.
   .current-status {
     margin: 0;
     color: $white;
+  }
+
+  .hint-btn-container {
+    display: flex;
+    align-items: center;
+    padding-right: 8px !important;
+    font-size: medium;
+
+    // Ensures the tooltip is visible on the screen in RTL and LTR
+    ::v-deep &.rtl {
+      ::v-deep .k-tooltip {
+        right: auto !important;
+        left: 0 !important;
+      }
+    }
+
+    ::v-deep .k-tooltip {
+      right: 0 !important;
+      left: auto !important;
+      transform: translate3d(0, 23px, 0) !important;
+    }
+  }
+
+  .hint-btn {
+    padding: 0 4px; // Space from btn in RTL and LTR
+    vertical-align: text-bottom;
+
+    ::v-deep .link-text {
+      text-align: right;
+    }
   }
 
 </style>

@@ -4,7 +4,7 @@
     <div ref="icon" class="icon">
       <span
         v-if="answer === 'right'"
-        v-b-tooltip.hover.right
+        v-b-tooltip:hover.right
         class="text-success"
         :title="tooltipText"
       >
@@ -12,21 +12,21 @@
       </span>
       <span
         v-else-if="answer === 'wrong'"
-        v-b-tooltip.hover.right
+        v-b-tooltip:hover.right
         :title="tooltipText"
       >
         <b-icon-x />
       </span>
       <span
         v-else-if="answer === 'hint'"
-        v-b-tooltip.hover.right
+        v-b-tooltip:hover.right
         :title="tooltipText"
       >
         <b-icon-info-circle-fill />
       </span>
       <span
         v-else-if="answer === 'rectified'"
-        v-b-tooltip.hover.right
+        v-b-tooltip:hover.right
         :title="tooltipText"
       >
         <b-icon-record-fill />
@@ -67,10 +67,24 @@
       },
     },
     $trs: {
-      correct: 'Correct',
-      incorrect: 'Incorrect',
-      hintUsed: 'Hint used',
-      incorrectFirstTry: 'Incorrect first try',
+      correct: {
+        message: 'Correct',
+        context: 'Indicates if the learner answered the question correctly.',
+      },
+      incorrect: {
+        message: 'Incorrect',
+        context: 'Indicates if the learner answered the question incorrectly.',
+      },
+      hintUsed: {
+        message: 'Hint used',
+        context:
+          "Some exercises can offer hints. These can be suggestions to help learners solve a problem.\n\nIf the learner uses a hint, the text 'Hint used' appears in the exercise.",
+      },
+      incorrectFirstTry: {
+        message: 'Incorrect first try',
+        context:
+          'Indicates if the learner answered a question incorrectly on the first attempt at answering it.\n',
+      },
     },
   };
 
