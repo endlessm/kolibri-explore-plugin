@@ -24,6 +24,12 @@
 
   export default {
     name: 'FilterResult',
+    props: {
+      node: {
+        type: Object,
+        default: null,
+      },
+    },
     data() {
       return {
         filteredNodes: [],
@@ -47,6 +53,7 @@
         const params = {
           cursor: this.pageCursor,
           maxResults: constants.ItemsPerPage,
+          withinDescendant: this.node,
         };
 
         const kinds = this.query[constants.MediaFilterName];
