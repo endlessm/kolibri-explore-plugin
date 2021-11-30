@@ -26,7 +26,7 @@ export default {
   data() {
     return {
       section: {},
-      sectionNodes: { nodes: [], hasMoreNodes: false },
+      sectionNodes: { nodes: [], hasMoreNodes: false, pagination: null },
       loading: true,
     };
   },
@@ -79,23 +79,25 @@ export default {
         .then((pageResult) => {
           this.sectionNodes = {
             nodes: pageResult.results,
-            hasMoreNodes: pageResult.more,
+            hasMoreNodes: pageResult.more !== null,
+            pagination: pageResult.more,
           };
         });
     },
     onLoadMoreSectionNodes() {
-      const { nodes, hasMoreNodes } = this.sectionNodes;
+      const { nodes, hasMoreNodes, pagination } = this.sectionNodes;
       if (!hasMoreNodes) {
         return null;
       }
       return window.kolibri.getContentPage({
-        cursor: hasMoreNodes.cursor,
+        cursor: pagination.cursor,
         maxResults: constants.ItemsPerPage,
       })
       .then((pageResult) => {
         this.sectionNodes = {
           nodes: nodes.concat(pageResult.results),
-          hasMoreNodes: pageResult.more,
+          hasMoreNodes: pageResult.more !== null,
+          pagination: pageResult.more,
         };
       });
     },

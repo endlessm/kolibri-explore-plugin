@@ -71,7 +71,7 @@ export default {
     sectionNodes: {
       type: Object,
       default() {
-        return { nodes: [], hasMoreNodes: null };
+        return { nodes: [], hasMoreNodes: false, cursor: null };
       },
     },
     // FIXME use the loading prop:
@@ -79,7 +79,7 @@ export default {
   },
   data() {
     return {
-      subsectionNodes: { nodes: [], hasMoreNodes: null },
+      subsectionNodes: { nodes: [], hasMoreNodes: false, pagination: null },
       loadingSubsectionNodes: true,
     };
   },
@@ -121,7 +121,7 @@ export default {
     },
     fetchSubsectionNodes() {
       this.loadingSubsectionNodes = true;
-      this.subsectionNodes = { nodes: [], hasMoreNodes: false };
+      this.subsectionNodes = { nodes: [], hasMoreNodes: false, pagination: null };
       return Promise.all(this.sectionNodes.nodes.map((subsection) => {
         return window.kolibri.getContentByFilter({
           parent: subsection.id,
@@ -130,7 +130,8 @@ export default {
           .then((pageResult) => {
             this.$set(this.subsectionNodes, subsection.id, {
               nodes: pageResult.results,
-              hasMoreNodes: pageResult.more,
+              hasMoreNodes: pageResult.more !== null,
+              pagination: pageResult.more,
             });
           });
       })).then(() => {
@@ -138,25 +139,26 @@ export default {
       });
     },
     onLoadMoreSubsectionNodes(sectionId) {
-      const { nodes, hasMoreNodes } = this.subsectionNodes[sectionId];
+      const { nodes, pagination, hasMoreNodes } = this.subsectionNodes[sectionId];
       if (!hasMoreNodes) {
         return null;
       }
       return window.kolibri.getContentPage({
         maxResults: sectionPageSize,
-        cursor: hasMoreNodes.cursor,
+        cursor: pagination.cursor,
       })
       .then((pageResult) => {
         this.$set(this.subsectionNodes, sectionId, {
           nodes: nodes.concat(pageResult.results),
-          hasMoreNodes: pageResult.more,
+          hasMoreNodes: pageResult.more !== null,
+          pagination: pageResult.more,
         });
       });
     },
     getSubsectionNodes(sectionId) {
       const subsection = this.subsectionNodes[sectionId];
       if (!subsection) {
-        return { nodes: [], hasMoreNodes: null };
+        return { nodes: [], hasMoreNodes: false, pagination: null};
       }
 
       return subsection;

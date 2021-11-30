@@ -52,7 +52,7 @@ export default {
     sectionNodes: {
       type: Object,
       default() {
-        return { nodes: [], hasMoreNodes: null };
+        return { nodes: [], hasMoreNodes: false };
       },
     },
     // FIXME use the loading prop:
