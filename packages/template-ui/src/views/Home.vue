@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       carouselNodes: [],
-      contentNodes: { nodes: [], hasMoreNodes: null },
+      contentNodes: { nodes: [], hasMoreNodes: false, pagination: null },
       sectionNodes: {},
       loadingCarouselNodes: true,
       loadingContentNodes: true,
@@ -152,7 +152,8 @@ export default {
         .then((pageResult) => {
           this.contentNodes = {
             nodes: pageResult.results,
-            hasMoreNodes: pageResult.more,
+            hasMoreNodes: pageResult.more !== null,
+            pagination: pageResult.more,
           };
           this.loadingContentNodes = false;
         });
@@ -173,7 +174,8 @@ export default {
           .then((pageResult) => {
             this.$set(this.sectionNodes, section.id, {
               nodes: pageResult.results,
-              hasMoreNodes: pageResult.more,
+              hasMoreNodes: pageResult.more !== null,
+              pagination: pageResult.more,
             });
           });
       })).then(() => {
@@ -181,34 +183,36 @@ export default {
       });
     },
     onLoadMoreSectionNodes(sectionId) {
-      const { nodes, hasMoreNodes } = this.sectionNodes[sectionId];
+      const { nodes, hasMoreNodes, pagination } = this.sectionNodes[sectionId];
       if (!hasMoreNodes) {
         return null;
       }
       return window.kolibri.getContentPage({
         maxResults: sectionPageSize,
-        cursor: hasMoreNodes.cursor,
+        cursor: pagination.cursor,
       })
       .then((pageResult) => {
         this.$set(this.sectionNodes, sectionId, {
           nodes: nodes.concat(pageResult.results),
-          hasMoreNodes: pageResult.more,
+          hasMoreNodes: pageResult.more !== null,
+          pagination: pageResult.more,
         });
       });
     },
     onLoadMoreContentNodes() {
-      const { nodes, hasMoreNodes } = this.contentNodes;
+      const { nodes, hasMoreNodes, pagination } = this.contentNodes;
       if (!hasMoreNodes) {
         return null;
       }
       return window.kolibri.getContentPage({
         maxResults: constants.ItemsPerPage,
-        cursor: hasMoreNodes.cursor,
+        cursor: pagination.cursor,
       })
       .then((pageResult) => {
         this.contentNodes = {
           nodes: nodes.concat(pageResult.results),
-          hasMoreNodes: pageResult.more,
+          hasMoreNodes: pageResult.more !== null,
+          pagination: pageResult.more,
         };
       });
     },

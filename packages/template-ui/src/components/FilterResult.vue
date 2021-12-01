@@ -24,11 +24,17 @@
 
   export default {
     name: 'FilterResult',
+    props: {
+      node: {
+        type: Object,
+        default: null,
+      },
+    },
     data() {
       return {
         filteredNodes: [],
         loading: false,
-        hasMoreNodes: null,
+        pagination: null,
       };
     },
     computed: {
@@ -41,12 +47,13 @@
           return null;
         }
 
-        return this.hasMoreNodes.cursor;
+        return this.pagination.cursor;
       },
       filterParams() {
         const params = {
           cursor: this.pageCursor,
           maxResults: constants.ItemsPerPage,
+          withinDescendant: this.node,
         };
 
         const kinds = this.query[constants.MediaFilterName];
@@ -64,10 +71,13 @@
 
         return params;
       },
+      hasMoreNodes() {
+        return this.pagination !== null;
+      },
     },
     watch: {
       query() {
-        this.hasMoreNodes = null;
+        this.pagination = null;
         this.filterNodes();
       },
     },
@@ -82,7 +92,7 @@
         return window.kolibri.getContentByFilter(this.filterParams)
         .then((pageResult) => {
           this.filteredNodes = pageResult.results;
-          this.hasMoreNodes = pageResult.more;
+          this.pagination = pageResult.more;
           this.loading = false;
         });
       },
@@ -92,7 +102,7 @@
           maxResults: constants.ItemsPerPage,
         }).then((pageResult) => {
           this.filteredNodes = this.filteredNodes.concat(pageResult.results);
-          this.hasMoreNodes = pageResult.more;
+          this.pagination = pageResult.more;
         });
       },
     },
