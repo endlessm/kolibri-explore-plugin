@@ -42,9 +42,18 @@
             </div>
             <div v-else>
               <ImageFilterNoneIcon />
+              <!-- FIXME: Show the number of resources in the Topic when it's
+                  possible. This is commented right now because it's always
+                  '0 resources'.
+
+                  Right now this information is not in the node and the only
+                  way to get this information is doing a new query to the
+                  backend, that could be a performance issue.
+
               <span class="ml-2 subtitle">
                 {{ subtitle }}
               </span>
+              -->
             </div>
           </b-card-text>
         </div>
@@ -71,10 +80,13 @@ export default {
       type: Object,
       required: true,
     },
+    /** FIXME: bring back the subtitle property when we've useful information
+        to show
     subtitle: {
       type: String,
       default: '',
     },
+    **/
     url: {
       type: String,
       default: '',
