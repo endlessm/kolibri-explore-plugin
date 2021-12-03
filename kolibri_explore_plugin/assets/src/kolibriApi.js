@@ -34,7 +34,7 @@ class KolibriApi {
   }
 
   getContentByFilter(options) {
-    const { kinds, onlyContent, onlyTopics, withinDescendant } = options;
+    const { kinds, onlyContent, onlyTopics } = options;
 
     if (onlyContent && onlyTopics) {
       const err = new Error('onlyContent and onlyTopics can not be used at the same time');
@@ -42,25 +42,18 @@ class KolibriApi {
     }
     const kind = onlyContent ? 'content' : onlyTopics ? ContentNodeKinds.TOPIC : undefined;
 
-    const getParams = {
-      ids: options.ids,
-      authors: options.authors,
-      tags: options.tags,
-      channel_id: this.channelId,
-      parent: options.parent === 'self' ? this.channelId : options.parent,
-      max_results: options.maxResults ? options.maxResults : 50,
-      kind: kind,
-      kind_in: kinds,
-    };
-
-    if (withinDescendant) {
-      getParams.tree_id = withinDescendant.tree_id;
-      getParams.lft__gt = withinDescendant.lft;
-      getParams.rght__lt = withinDescendant.rght;
-    }
-
     return ContentNodeResource.fetchCollection({
-      getParams,
+      getParams: {
+        ids: options.ids,
+        authors: options.authors,
+        tags: options.tags,
+        channel_id: this.channelId,
+        parent: options.parent === 'self' ? this.channelId : options.parent,
+        max_results: options.maxResults ? options.maxResults : 50,
+        kind: kind,
+        kind_in: kinds,
+        descendant_of: options.descendantOf,
+      },
     }).then(contentNodes => {
       return {
         maxResults: options.maxResults ? options.maxResults : 50,
