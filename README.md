@@ -24,7 +24,13 @@ kolibri plugin enable kolibri_explore_plugin
 kolibri plugin disable kolibri.plugins.learn
 ```
 
-Now in Kolibri you should be able to navigate to a Explore tab.
+Download the `apps-bundle.zip` from the [GitHub releases
+page](https://github.com/endlessm/kolibri-explore-plugin/releases) and
+extract them to the `kolibri_explore_plugin/apps` folder.  Note that
+this is not ideal, because you should know where has `pip` installed
+the plugin.
+
+Now start Kolibri.  You should be able to navigate to a Explore tab.
 
 ## Setup
 
@@ -38,27 +44,14 @@ Just like kolibri, we use a Python virtual environment along with Node
 to obtain the exact same dependencies.
 
 ## Building
-### Bundling custom channel presentations
-
-All custom presentation app bundles should be added in the
-`kolibri_explore_plugin/apps` directory to have this fully
-working. The zip bundle should be named custom-channel-ui.zip and it
-should be placed inside the corresponding app folder.
-
-You can find the custom channel presentation vue applications in this
-repository: https://github.com/endlessm/kolibri-channel-custom-web-app
-
 ### Creating the `.whl` file
 
-With all dependencies installed and all the zips in place, it's now
-possible to build for distribution running:
+With all the dependencies installed, it's now possible to build for
+distribution running:
 
 ```
 yarn build-dist
 ```
-
-**Note: Before calling `yarn build-dist` you need to bundle all custom
-channel presentations!**
 
 An installable `.whl` file will be created in the `dist/` folder.
 
@@ -90,6 +83,19 @@ yarn run devserver-hot
 Which should pick the plugin. And you can edit both the plugin and
 Kolibri in live mode. Further, you can also edit a custom channel
 presentation in another Terminal tab following the section below.
+
+### Bundling custom channel presentations
+
+This is done automatically on each release. To do it yourself:
+
+```
+yarn build:apps
+```
+
+All custom presentation app bundles should be added in the
+`kolibri_explore_plugin/apps` directory to have this fully working.
+The zip bundle should be named `custom-channel-ui.zip` and it should
+be placed inside the corresponding app folder.
 
 ### Using real content while developing a custom channel presentation
 
