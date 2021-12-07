@@ -53,7 +53,7 @@
         const params = {
           cursor: this.pageCursor,
           maxResults: constants.ItemsPerPage,
-          withinDescendant: this.node,
+          descendantOf: this.node ? this.node.id : null,
         };
 
         const kinds = this.query[constants.MediaFilterName];
