@@ -1,40 +1,37 @@
 <template>
 
   <div>
-    <div ref="icon">
-      <KIcon
+    <div ref="icon" class="icon">
+      <span
         v-if="answer === 'right'"
-        icon="correct"
-        class="correct"
-        :color="$themeTokens.correct"
-        style="top: 0; width: 24px; height: 24px;"
-      />
-      <KIcon
+        v-b-tooltip:hover.right
+        class="text-success"
+        :title="tooltipText"
+      >
+        <b-icon-check-circle-fill />
+      </span>
+      <span
         v-else-if="answer === 'wrong'"
-        icon="incorrect"
-        style="top: 0; width: 24px; height: 24px;"
-        :color="$themeTokens.annotation"
-      />
-      <KIcon
+        v-b-tooltip:hover.right
+        :title="tooltipText"
+      >
+        <b-icon-x />
+      </span>
+      <span
         v-else-if="answer === 'hint'"
-        icon="hint"
-        style="top: 0; width: 24px; height: 24px;"
-        :color="$themeTokens.annotation"
-      />
-      <KIcon
+        v-b-tooltip:hover.right
+        :title="tooltipText"
+      >
+        <b-icon-info-circle-fill />
+      </span>
+      <span
         v-else-if="answer === 'rectified'"
-        icon="rectified"
-        class="rectified"
-        :color="$themeTokens.annotation"
-      />
+        v-b-tooltip:hover.right
+        :title="tooltipText"
+      >
+        <b-icon-record-fill />
+      </span>
     </div>
-    <KTooltip
-      reference="icon"
-      :refs="$refs"
-      placement="right"
-    >
-      {{ tooltipText }}
-    </KTooltip>
   </div>
 
 </template>
@@ -96,15 +93,15 @@
 
 <style lang="scss" scoped>
 
-  @import '~kolibri-design-system/lib/styles/definitions';
+  // Copied from: '~kolibri-design-system/lib/styles/definitions'
+  $core-time: 0.25s;
 
-  svg {
-    height: 30px;
-    transition: transform $core-time ease-in;
+  .icon {
+    color: white;
   }
 
-  .rectified {
-    width: 12px;
+  svg {
+    transition: transform $core-time ease-in;
   }
 
 </style>

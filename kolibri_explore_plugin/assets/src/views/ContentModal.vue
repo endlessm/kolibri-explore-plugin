@@ -116,6 +116,7 @@
     display: none;
   }
 
+  ::v-deep .modal-content .requirements,
   ::v-deep .modal-content .paragraph {
     color: $gray-700 !important;
   }
