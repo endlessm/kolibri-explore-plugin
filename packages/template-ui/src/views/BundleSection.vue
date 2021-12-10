@@ -61,7 +61,12 @@ export default {
   computed: {
     ...mapState(['channel']),
     subtitle() {
-      return utils.getCardSubtitle(this.section, this.channel.name);
+      const bundle = {
+        ...this.section,
+        // Adding section nodes to calculate the number of resources
+        children: this.sectionNodes.nodes,
+      };
+      return utils.getCardSubtitle(bundle, this.channel.name);
     },
   },
   watch: {
