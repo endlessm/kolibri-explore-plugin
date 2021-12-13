@@ -146,4 +146,15 @@
     }
   }
 
+  ::v-deep .modal-content .framework-perseus {
+    padding-bottom: 0;
+  }
+
+  ::v-deep .modal-content .perseus {
+    // Don't show two columns layout on custom modal
+    .pure-u-12-24 {
+      width: 100%;
+    }
+  }
+
 </style>
