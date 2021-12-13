@@ -19,10 +19,15 @@
 <script>
 
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
+  /** FIXME: Use kolibri core classes when it's available in npm module
   import BaseToolbar from 'kolibri.coreVue.components.BaseToolbar';
   import TextTruncatorCss from 'kolibri.coreVue.components.TextTruncatorCss';
+  **/
   import KResponsiveWindowMixin from 'kolibri-design-system/lib/KResponsiveWindowMixin';
   import { crossComponentTranslator } from 'kolibri.utils.i18n';
+  import BaseToolbar from './BaseToolbar.vue';
+  import TextTruncatorCss from './TextTruncatorCss.vue';
+
   import OverallStatus from './OverallStatus.vue';
 
   const overallStatusStrings = crossComponentTranslator(OverallStatus);
