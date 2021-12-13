@@ -2,6 +2,14 @@
 
 List of the most important changes for each release.
 
+## v2.0.3
+
+- Backport AssessmentWrapper view.
+
+## v2.0.2
+
+- Sync filtering API with upstream.
+
 ## v2.0.1
 
 - Don't display "N resources" in topic cards for now.
