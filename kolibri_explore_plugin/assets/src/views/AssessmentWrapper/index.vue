@@ -82,7 +82,7 @@ oriented data synchronization.
         :class="{ 'mobile': windowIsSmall }"
       >
         <div class="overall-status">
-          <b-icon-star-fill :variant="success ? 'primary' : none" />
+          <b-icon-star-fill :variant="success ? 'primary' : 'default'" />
           <div class="overall-status-text">
             <span v-if="success" class="completed">
               {{ coreString('completedLabel') }}
