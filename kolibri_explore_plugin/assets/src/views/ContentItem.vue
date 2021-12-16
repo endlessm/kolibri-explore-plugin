@@ -3,7 +3,7 @@
   <div class="content-item" :class="{ 'content-item--dark': isDark }">
     <template v-if="sessionReady">
       <KContentRenderer
-        v-if="!content.assessment"
+        v-if="!assessment"
         class="content-renderer"
         :class="{ 'without-fullscreen-bar': withoutFullscreenBar }"
         v-bind="contentProps"
@@ -30,20 +30,45 @@
 
 <script>
 
-  import { mapState, mapGetters, mapActions } from 'vuex';
-  import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
+  import { mapState, mapGetters } from 'vuex';
   import { assessmentMetaDataState } from 'kolibri.coreVue.vuex.mappers';
-  import { updateContentNodeProgress } from '../modules/coreExplore/utils';
+  import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
+  import { setContentNodeProgress } from '../composables/useContentNodeProgress';
+  import useProgressTracking from '../composables/useProgressTracking';
   import { GameAppIDs } from '../customApps';
   import AssessmentWrapper from './AssessmentWrapper';
-  import commonExploreStrings from './commonExploreStrings';
 
   export default {
     name: 'ContentItem',
     components: {
       AssessmentWrapper,
     },
-    mixins: [commonExploreStrings],
+    setup() {
+      const {
+        progress,
+        time_spent,
+        extra_fields,
+        pastattempts,
+        complete,
+        totalattempts,
+        initContentSession,
+        updateContentSession,
+        startTrackingProgress,
+        stopTrackingProgress,
+      } = useProgressTracking();
+      return {
+        progress,
+        time_spent,
+        extra_fields,
+        pastattempts,
+        complete,
+        totalattempts,
+        initContentSession,
+        updateContentSession,
+        startTracking: startTrackingProgress,
+        stopTracking: stopTrackingProgress,
+      };
+    },
     props: {
       content: {
         type: Object,
@@ -63,9 +88,6 @@
     computed: {
       ...mapGetters(['currentUserId']),
       ...mapState({
-        progress: state => state.core.logging.progress,
-        timeSpent: state => state.core.logging.time_spent,
-        extraFields: state => state.core.logging.extra_fields,
         fullName: state => state.core.session.full_name,
       }),
       withoutFullscreenBar() {
@@ -84,6 +106,7 @@
           updateProgress: this.updateProgress,
           addProgress: this.addProgress,
           updateContentState: this.updateContentState,
+          updateInteraction: this.updateInteraction,
         };
       },
       contentProps() {
@@ -100,7 +123,7 @@
           progress: this.progress,
           userId: this.currentUserId,
           userFullName: this.fullName,
-          timeSpent: this.timeSpent,
+          timeSpent: this.time_spent,
         };
       },
       exerciseProps() {
@@ -116,47 +139,60 @@
           masteryModel: assessment.masteryModel,
           assessmentIds: assessment.assessmentIds,
           available: this.contentNode.available,
-          extraFields: this.extraFields,
+          extraFields: this.extra_fields,
           progress: this.progress,
           userId: this.currentUserId,
           userFullName: this.fullName,
-          timeSpent: this.timeSpent,
+          timeSpent: this.time_spent,
+          pastattempts: this.pastattempts,
+          mastered: this.complete,
+          totalattempts: this.totalattempts,
         };
+      },
+      contentNodeId() {
+        return this.contentNode.id;
+      },
+      assessment() {
+        if (this.contentNode.kind !== ContentNodeKinds.EXERCISE) {
+          return null;
+        } else {
+          return assessmentMetaDataState(this.contentNode);
+        }
       },
     },
     created() {
-      return this.initSessionAction({
-        nodeId: this.content.id,
+      return this.initContentSession({
+        nodeId: this.contentNodeId,
       }).then(() => {
         this.sessionReady = true;
         this.setWasIncomplete();
+        // Set progress into the content node progress store in case it was not already loaded
+        this.cacheProgress();
       });
     },
-
-    beforeDestroy() {
-      this.stopTracking();
-    },
     methods: {
-      ...mapActions({
-        initSessionAction: 'initContentSession',
-        updateContentSession: 'updateContentSession',
-        startTracking: 'startTrackingProgress',
-        stopTracking: 'stopTrackingProgress',
-      }),
       setWasIncomplete() {
         this.wasIncomplete = this.progress < 1;
       },
+      /*
+       * Update the progress of the content node in the shared progress store
+       * in the useContentNodeProgress composable. Do this to have a single
+       * source of truth for referencing progress of content nodes.
+       */
+      cacheProgress() {
+        setContentNodeProgress({ content_id: this.content.content_id, progress: this.progress });
+      },
+      updateInteraction({ progress, interaction }) {
+        this.updateContentSession({
+          interaction,
+          progress,
+        }).then(this.cacheProgress);
+      },
       updateProgress(progress) {
-        this.updateContentSession({ progress }).then(() =>
-          updateContentNodeProgress(this.content.id, this.progress)
-        );
-        this.$emit('updateProgress', this.progress);
+        this.updateContentSession({ progress }).then(this.cacheProgress);
       },
       addProgress(progressDelta) {
-        this.updateContentSession({ progressDelta }).then(() =>
-          updateContentNodeProgress(this.content.id, this.progress)
-        );
-        this.$emit('addProgress', this.progress);
+        this.updateContentSession({ progressDelta }).then(this.cacheProgress);
       },
       updateContentState(contentState) {
         this.updateContentSession({ contentState });
