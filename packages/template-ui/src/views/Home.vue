@@ -187,11 +187,7 @@ export default {
       if (!hasMoreNodes) {
         return null;
       }
-      return window.kolibri.getContentPage({
-        maxResults: sectionPageSize,
-        cursor: pagination.cursor,
-      })
-      .then((pageResult) => {
+      return window.kolibri.getContentPage(pagination).then((pageResult) => {
         this.$set(this.sectionNodes, sectionId, {
           nodes: nodes.concat(pageResult.results),
           hasMoreNodes: pageResult.more !== null,
@@ -204,11 +200,7 @@ export default {
       if (!hasMoreNodes) {
         return null;
       }
-      return window.kolibri.getContentPage({
-        maxResults: constants.ItemsPerPage,
-        cursor: pagination.cursor,
-      })
-      .then((pageResult) => {
+      return window.kolibri.getContentPage(pagination).then((pageResult) => {
         this.contentNodes = {
           nodes: nodes.concat(pageResult.results),
           hasMoreNodes: pageResult.more !== null,

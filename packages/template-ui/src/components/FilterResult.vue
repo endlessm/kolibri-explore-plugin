@@ -42,16 +42,8 @@
       query() {
         return this.filters.query;
       },
-      pageCursor() {
-        if (!this.hasMoreNodes) {
-          return null;
-        }
-
-        return this.pagination.cursor;
-      },
       filterParams() {
         const params = {
-          cursor: this.pageCursor,
           maxResults: constants.ItemsPerPage,
           descendantOf: this.node ? this.node.id : null,
         };
@@ -97,10 +89,7 @@
         });
       },
       onLoadMoreNodes() {
-        return window.kolibri.getContentPage({
-          cursor: this.pageCursor,
-          maxResults: constants.ItemsPerPage,
-        }).then((pageResult) => {
+        return window.kolibri.getContentPage(this.pagination).then((pageResult) => {
           this.filteredNodes = this.filteredNodes.concat(pageResult.results);
           this.pagination = pageResult.more;
         });

@@ -89,11 +89,7 @@ export default {
       if (!hasMoreNodes) {
         return null;
       }
-      return window.kolibri.getContentPage({
-        cursor: pagination.cursor,
-        maxResults: constants.ItemsPerPage,
-      })
-      .then((pageResult) => {
+      return window.kolibri.getContentPage(pagination).then((pageResult) => {
         this.sectionNodes = {
           nodes: nodes.concat(pageResult.results),
           hasMoreNodes: pageResult.more !== null,
