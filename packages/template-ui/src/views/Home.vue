@@ -43,7 +43,7 @@
           />
         </template>
         <div
-          v-for="section in mainSections"
+          v-for="section in mainSectionsSorted"
           :key="section.id"
         >
           <CardGrid
@@ -71,6 +71,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import { constants } from 'eos-components';
+import _ from 'underscore';
 
 const sectionPageSize = 2 * constants.ItemsPerSlide;
 
@@ -105,6 +106,9 @@ export default {
     }),
     backgroundImageURL() {
       return this.getAssetURL('homeBackgroundImage');
+    },
+    mainSectionsSorted() {
+      return _.sortBy(this.mainSections, 'title');
     },
   },
   watch: {

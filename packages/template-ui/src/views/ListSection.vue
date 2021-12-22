@@ -20,7 +20,7 @@
         </template>
         <template v-else>
           <CardGrid
-            v-for="subsection in sectionNodes.nodes"
+            v-for="subsection in sorted(sectionNodes.nodes)"
             :id="subsection.id"
             :key="subsection.id"
             :nodes="getSubsectionNodes(subsection.id).nodes"
@@ -58,6 +58,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import { constants } from 'eos-components';
+import _ from 'underscore';
 
 const sectionPageSize = 2 * constants.ItemsPerSlide;
 
@@ -158,6 +159,9 @@ export default {
       }
 
       return subsection;
+    },
+    sorted(nodes) {
+      return _.sortBy(nodes, 'title');
     },
   },
 };
