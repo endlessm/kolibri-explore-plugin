@@ -28,6 +28,8 @@ import responsiveMixin from './components/mixins/responsiveMixin.js';
 import utils from './utils.js';
 import constants from './constants.js';
 
+import EndlessLogo from './assets/EndlessLogo.svg';
+
 const components = {
   ButtonsBar,
   Card,
@@ -62,11 +64,16 @@ const plugin = {
   },
 };
 
+const assets = {
+  EndlessLogo,
+};
+
 export {
   components,
   cardMixin,
   responsiveMixin,
   utils,
   constants,
+  assets,
   plugin as default,
 };

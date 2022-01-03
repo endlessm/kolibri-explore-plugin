@@ -3,22 +3,21 @@
     class="header"
     :style="{ backgroundImage: headerImageURL }"
     :class="{ 'has-image': hasHeaderImage }"
-    :showLogo="showLogo"
     @click-logo="goToChannelList"
   >
+    <a v-if="showClose" class="mr-3" @click="goToChannelList">X</a>
     <Breadcrumb v-if="!atHome" :node="node" />
   </NavBar>
 </template>
 
 <script>
-import { responsiveMixin } from 'eos-components';
 import { mapState } from 'vuex';
 import headerMixin from '@/components/mixins/headerMixin';
 import { goToChannelList } from 'kolibri-api';
 
 export default {
   name: 'ChannelNavBar',
-  mixins: [headerMixin, responsiveMixin],
+  mixins: [headerMixin],
   props: {
     node: {
       type: Object,
@@ -31,11 +30,8 @@ export default {
   },
   computed: {
     ...mapState(['isStandaloneChannel']),
-    showLogo() {
-      if (this.isStandaloneChannel) {
-        return false;
-      }
-      return !(this.xs && this.node && this.node.ancestors.length);
+    showClose() {
+      return !this.isStandaloneChannel;
     },
   },
   methods: {
