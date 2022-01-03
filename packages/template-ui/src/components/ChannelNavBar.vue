@@ -1,8 +1,6 @@
 <template>
   <NavBar
-    class="header"
-    :style="{ backgroundImage: headerImageURL }"
-    :class="{ 'has-image': hasHeaderImage }"
+    class="channel-navbar"
     @click-logo="goToChannelList"
   >
     <a v-if="showClose" class="mr-3" @click="goToChannelList">X</a>
@@ -12,12 +10,10 @@
 
 <script>
 import { mapState } from 'vuex';
-import headerMixin from '@/components/mixins/headerMixin';
 import { goToChannelList } from 'kolibri-api';
 
 export default {
   name: 'ChannelNavBar',
-  mixins: [headerMixin],
   props: {
     node: {
       type: Object,
@@ -45,11 +41,8 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles.scss';
 
-.header {
-  @include navbar-background($header-height);
-  &.has-image {
-    background-color: $primary;
-  }
+.channel-navbar {
+  background-color: $gray-700;
 }
 
 img {

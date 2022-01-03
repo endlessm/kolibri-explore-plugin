@@ -152,18 +152,6 @@ $carousel-image-lg-width: 400px;
   }
 }
 
-// Allows reusing the same style in the header and in the navbar:
-@mixin navbar-background($header-height) {
-  background-color: $header-color;
-  background-attachment: fixed;
-  background-position: top center;
-  background-repeat: no-repeat;
-  background-size: 100% auto;
-  @include media-breakpoint-down(md) {
-    background-size: auto $header-height;
-  }
-}
-
 @import "../../template-ui/src/overrides/styles.scss";
 
 @import 'bootstrap/scss/functions';

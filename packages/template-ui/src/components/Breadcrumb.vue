@@ -15,8 +15,7 @@
     >
       <li
         v-if="isShortened"
-        class="active breadcrumb-item"
-        :class="{ 'text-light': hasDarkHeader }"
+        class="active breadcrumb-item text-light"
       >
         ...
       </li>
@@ -24,8 +23,7 @@
         <li
           v-b-tooltip.hover
           :title="parentNode.title"
-          class="breadcrumb-item text-truncate"
-          :class="{ 'text-light': hasDarkHeader }"
+          class="breadcrumb-item text-light text-truncate"
         >
           <b-link
             :to="getTopicUrl(parentNode)"
@@ -40,8 +38,7 @@
           :key="a.id"
           v-b-tooltip.hover
           :title="a.title"
-          class="breadcrumb-item text-truncate"
-          :class="{ 'text-light': hasDarkHeader }"
+          class="breadcrumb-item text-light text-truncate"
         >
           <b-link
             :to="getTopicUrl(a)"
@@ -58,8 +55,7 @@
       <li
         v-b-tooltip.hover
         :title="channel.name"
-        class="breadcrumb-item text-truncate"
-        :class="{ 'text-light': hasDarkHeader }"
+        class="breadcrumb-item text-light text-truncate"
       >
         <b-link
           to="/"
@@ -91,7 +87,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['channel', 'hasDarkHeader']),
+    ...mapState(['channel']),
     parentNode() {
       if (!this.node.ancestors || !this.node.ancestors.length) {
         return null;
