@@ -14,7 +14,7 @@ import ContentLink from './components/ContentLink.vue';
 import DummyButton from './components/DummyButton.vue';
 import Footer from './components/Footer.vue';
 import GridPage from './components/GridPage.vue';
-import Header from './components/Header.vue';
+import NavBar from './components/NavBar.vue';
 import PlayButton from './components/PlayButton.vue';
 import ContentCard from './components/ContentCard.vue';
 import SearchBar from './components/SearchBar.vue';
@@ -45,7 +45,7 @@ const components = {
   DummyButton,
   Footer,
   GridPage,
-  Header,
+  NavBar,
   PlayButton,
   ContentCard,
   SearchBar,

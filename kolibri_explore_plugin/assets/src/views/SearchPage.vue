@@ -1,14 +1,14 @@
 <template>
 
   <div class="d-flex flex-column min-vh-100 search-page">
-    <Header class="discovery-header" @click-logo="goBack">
+    <NavBar class="discovery-navbar" @click-logo="goBack">
       <b-nav-text class="btn pl-0" @click="goBack">
         <b-icon-chevron-left />
         <span class="text-primary">
           Endless Discovery
         </span>
       </b-nav-text>
-    </Header>
+    </NavBar>
 
     <div class="flex-fill main">
       <SearchBar
@@ -278,7 +278,7 @@
     background-color: $gray-300;
   }
 
-  .discovery-header {
+  .discovery-navbar {
     background: $gray-300;
     border-bottom: 1px solid $gray-400;
   }

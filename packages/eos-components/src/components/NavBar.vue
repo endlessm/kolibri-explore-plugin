@@ -1,5 +1,5 @@
 <template>
-  <b-navbar class="header px-0" :class="{ shadow: hasScrolled }" fixed="top">
+  <b-navbar class="navbar px-0" :class="{ shadow: hasScrolled }" fixed="top">
     <b-container>
       <img v-if="showLogo" class="logo mr-3" :src="logo" @click="$emit('click-logo')">
       <slot></slot>
@@ -16,7 +16,7 @@
   import EndlessLogo from '../assets/EndlessLogo.svg';
 
   export default {
-    name: 'Header',
+    name: 'NavBar',
     props: {
       showLogo: {
         type: Boolean,
@@ -52,7 +52,7 @@
 
   @import '../styles.scss';
 
-  .header {
+  .navbar {
     height: $navbar-height;
     @include transition($btn-transition);
     & .container {

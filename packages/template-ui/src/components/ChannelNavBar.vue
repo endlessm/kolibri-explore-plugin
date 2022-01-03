@@ -1,5 +1,5 @@
 <template>
-  <Header
+  <NavBar
     class="header"
     :style="{ backgroundImage: headerImageURL }"
     :class="{ 'has-image': hasHeaderImage }"
@@ -7,7 +7,7 @@
     @click-logo="goToChannelList"
   >
     <Breadcrumb v-if="!atHome" :node="node" />
-  </Header>
+  </NavBar>
 </template>
 
 <script>

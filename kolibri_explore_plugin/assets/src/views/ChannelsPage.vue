@@ -1,7 +1,7 @@
 <template>
 
   <div class="channels-page d-flex flex-column min-vh-100">
-    <Header class="discovery-header" @click-logo="goToTop">
+    <NavBar class="discovery-navbar" @click-logo="goToTop">
       <b-nav-text class="btn d-md-block d-none pl-0">
         Endless Discovery
       </b-nav-text>
@@ -15,7 +15,7 @@
         />
         <SearchButton @click="goToSearch" />
       </template>
-    </Header>
+    </NavBar>
 
     <b-container class="mb-2 mt-4">
       <h5 class="mt-2 text-muted">
@@ -159,7 +159,7 @@
     background-color: $white;
   }
 
-  .discovery-header {
+  .discovery-navbar {
     background: $gray-300;
     border-bottom: 1px solid $gray-400;
   }
