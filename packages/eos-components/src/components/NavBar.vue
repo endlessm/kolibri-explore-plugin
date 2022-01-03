@@ -1,6 +1,6 @@
 <template>
   <b-navbar class="navbar px-0" :class="{ shadow: hasScrolled }" fixed="top">
-    <b-container>
+    <b-container fluid class="mx-3">
       <img v-if="showLogo" class="logo mr-3" :src="logo" @click="$emit('click-logo')">
       <slot></slot>
 
