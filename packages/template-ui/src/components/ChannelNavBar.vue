@@ -1,5 +1,6 @@
 <template>
   <NavBar
+    alwaysCastShadow
     class="channel-navbar"
   >
     <a v-if="showClose" class="close-link mr-3" @click="goToChannelList">
