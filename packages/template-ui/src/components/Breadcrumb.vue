@@ -10,65 +10,43 @@
       <ChannelLogo :channel="channel" size="sm" />
     </b-link>
     <ol
-      v-if="node && node.ancestors && node.ancestors.length"
       class="bg-transparent breadcrumb flex-nowrap px-2"
     >
+      <!-- Possible … li for small screens or too many parents -->
       <li
         v-if="isShortened"
-        class="active breadcrumb-item text-light"
+        class="breadcrumb-item"
       >
-        ...
+        …
       </li>
-      <template v-if="xs || sm">
-        <li
-          v-b-tooltip.hover
-          :title="parentNode.title"
-          class="breadcrumb-item text-light text-truncate"
-        >
-          <b-link
-            :to="getTopicUrl(parentNode)"
-          >
-            {{ parentNode.title }}
-          </b-link>
-        </li>
-      </template>
-      <template v-else>
-        <li
-          v-for="a in node.ancestors.slice(-maxBreadcrumbs)"
-          :key="a.id"
-          v-b-tooltip.hover
-          :title="a.title"
-          class="breadcrumb-item text-light text-truncate"
-        >
-          <b-link
-            :to="getTopicUrl(a)"
-          >
-            {{ a.title }}
-          </b-link>
-        </li>
-      </template>
-    </ol>
-    <ol
-      v-else
-      class="bg-transparent breadcrumb px-2"
-    >
+      <!-- One li with link per parent item -->
       <li
+        v-for="p in parentItems"
+        :key="p.id"
         v-b-tooltip.hover
-        :title="channel.name"
+        :title="p.title"
         class="breadcrumb-item text-light text-truncate"
       >
         <b-link
-          to="/"
+          :to="getTopicUrl(p)"
         >
-          {{ channel.name }}
+          {{ p.title }}
         </b-link>
+      </li>
+      <!-- Last li, current node or Search -->
+      <li
+        v-b-tooltip.hover
+        :title="currentItem.title"
+        class="active breadcrumb-item text-light text-truncate"
+      >
+        {{ currentItem.title }}
       </li>
     </ol>
   </b-navbar-nav>
 </template>
 
 <script>
-import { utils , responsiveMixin } from 'eos-components';
+import { utils, responsiveMixin } from 'eos-components';
 import { mapState } from 'vuex';
 
 
@@ -78,7 +56,7 @@ export default {
   props: {
     node: {
       type: Object,
-      required: true,
+      default: null,
     },
   },
   data() {
@@ -88,17 +66,47 @@ export default {
   },
   computed: {
     ...mapState(['channel']),
-    parentNode() {
-      if (!this.node.ancestors || !this.node.ancestors.length) {
-        return null;
-      }
-      return this.node.ancestors[this.node.ancestors.length-1];
-    },
     isShortened() {
-      if (!this.node.ancestors || !this.node.ancestors.length) {
+      if (!this.node || !this.node.ancestors || this.node.ancestors.length < 2) {
+        // No … for the Search page or for main topics:
         return false;
       }
+      // Display … in small screens or if there are too many parents:
       return this.xs || this.sm || this.node.ancestors.length > this.maxBreadcrumbs;
+    },
+    isSearchPageCurrent() {
+      // We assume that when no node is passed, the Search page is current:
+      return !this.node;
+    },
+    parentItems() {
+      // Only the channel as parent in Search page:
+      if (this.isSearchPageCurrent) {
+        return [{
+          "id": this.channel.id,
+          "title": this.channel.name,
+          "to": "/",
+        }];
+      }
+
+      // There has to be a node with a parent to continue:
+      if (!this.node || !this.node.ancestors || this.node.ancestors.length < 1) {
+        return [];
+      }
+
+      // Only the last parent in small screens:
+      if (this.xs || this.sm) {
+        return [this.node.ancestors[this.node.ancestors.length-1]];
+      }
+
+      else {
+        return this.node.ancestors.slice(-this.maxBreadcrumbs);
+      }
+    },
+    currentItem() {
+      if (this.isSearchPageCurrent) {
+        return { "title": "Search" };
+      }
+      return this.node;
     },
   },
   methods: {
