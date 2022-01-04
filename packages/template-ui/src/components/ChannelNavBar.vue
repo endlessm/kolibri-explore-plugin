@@ -1,19 +1,24 @@
 <template>
   <NavBar
     class="channel-navbar"
-    @click-logo="goToChannelList"
   >
-    <a v-if="showClose" class="mr-3" @click="goToChannelList">X</a>
+    <a v-if="showClose" class="close-link mr-3" @click="goToChannelList">
+      <CloseIcon />
+    </a>
     <Breadcrumb v-if="!atHome" :node="node" />
   </NavBar>
 </template>
 
 <script>
+import CloseIcon from 'vue-material-design-icons/Close.vue';
 import { mapState } from 'vuex';
 import { goToChannelList } from 'kolibri-api';
 
 export default {
   name: 'ChannelNavBar',
+  components: {
+    CloseIcon,
+  },
   props: {
     node: {
       type: Object,
@@ -43,6 +48,11 @@ export default {
 
 .channel-navbar {
   background-color: $gray-700;
+}
+
+.close-link {
+  color: $gray-500;
+  cursor: pointer;
 }
 
 img {
