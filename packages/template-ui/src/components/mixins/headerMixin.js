@@ -27,8 +27,5 @@ export default {
     headerImageURL() {
       return this.sectionImageURL || this.getAssetURL('headerImage');
     },
-    hasHeaderImage() {
-      return this.headerImageURL !== null;
-    },
   },
 };
