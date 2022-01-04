@@ -4,6 +4,7 @@
     <DetailView
       :title="content.title"
       :subtitle="subtitle"
+      :node="content"
     >
       <b-row class="my-3">
         <b-col xs="12" md="6">
