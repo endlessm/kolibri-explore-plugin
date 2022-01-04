@@ -1,7 +1,7 @@
 <template>
   <div>
     <ChannelNavBar :node="content" />
-    <DetailView>
+    <DetailView :node="content">
       <b-row class="mt-3">
         <b-col md="6" sm="12">
           <h1>{{ content.title }}</h1>
