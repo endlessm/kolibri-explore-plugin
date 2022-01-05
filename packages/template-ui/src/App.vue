@@ -86,9 +86,8 @@ export default {
 html {
   height: 100%;
 }
-/* Always show the vertical scrollbar */
 body {
-  overflow-y: scroll;
+  overflow-y: $app-body-overflow;
   min-height: 100vh;
 }
 
