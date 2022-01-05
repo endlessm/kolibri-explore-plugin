@@ -11,7 +11,6 @@
       <b-row>
         <b-col xs="12" sm="8" md="9" lg="9" xl="8">
           <b-button
-            v-if="true"
             href="#"
             pill
             :variant="hasDarkHeader ? 'dark' : 'light'"
