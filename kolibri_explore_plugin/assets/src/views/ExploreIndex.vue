@@ -32,6 +32,7 @@
   import CustomChannelPresentationApp from './CustomChannelPresentationApp';
   import ContentUnavailablePage from './ContentUnavailablePage';
   import SearchPage from './SearchPage';
+  import ContentPage from './ContentPage';
   import DevTag from './DevTag';
   import ContentModal from './ContentModal';
 
@@ -41,6 +42,7 @@
     [PageNames.TOPICS_TOPIC]: CustomChannelPresentationApp,
     [PageNames.CONTENT_UNAVAILABLE]: ContentUnavailablePage,
     [PageNames.SEARCH]: SearchPage,
+    [PageNames.CONTENT]: ContentPage,
   };
 
   export default {
