@@ -4,7 +4,7 @@
     <div class="flex-fill flex-shrink-0">
       <router-view />
     </div>
-    <ChannelFooter />
+    <ChannelFooter v-if="showFooter" />
   </div>
 </template>
 
@@ -14,7 +14,7 @@ import { mapState } from 'vuex';
 export default {
   name: 'App',
   computed: {
-    ...mapState(['hasFilters', 'hasFlatGrid']),
+    ...mapState(['hasFilters', 'hasFlatGrid', 'showFooter']),
   },
   created() {
     window.kolibri.themeRenderer({

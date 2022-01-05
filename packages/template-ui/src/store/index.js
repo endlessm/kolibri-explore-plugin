@@ -52,6 +52,7 @@ const initialState = {
   displayHeroContent: false,
   isEndlessApp: false,
   bundleKind: null,
+  showFooter: true,
 };
 
 const store = new Vuex.Store({
