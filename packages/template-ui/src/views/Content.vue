@@ -1,33 +1,26 @@
 <template>
   <div>
     <ChannelNavBar :node="content" />
-    <DetailView>
-      <b-row class="mt-3">
-        <b-col md="6" sm="12">
-          <h1>{{ content.title }}</h1>
-          <p class="mb-2">
-            {{ subtitle }}
-          </p>
-          <!-- eslint-disable vue/no-v-html -->
-          <div class="description mb-2" v-html="content.description"></div>
-          <b-badge
-            v-for="tag in tags"
-            :key="tag"
-            pill
-            variant="light"
-            class="mb-1 mr-1"
-          >
-            {{ tag }}
-          </b-badge>
-        </b-col>
-        <b-col md="6" sm="12">
-          <b-link
-            @click="goToContent()"
-          >
-            <ContentImage :node="content" />
-          </b-link>
-        </b-col>
-      </b-row>
+    <DetailView
+      :title="content.title"
+      :subtitle="subtitle"
+    >
+      <!-- eslint-disable vue/no-v-html -->
+      <div class="description mb-2" v-html="content.description"></div>
+      <b-badge
+        v-for="tag in tags"
+        :key="tag"
+        pill
+        variant="light"
+        class="mb-1 mr-1"
+      >
+        {{ tag }}
+      </b-badge>
+      <b-link
+        @click="goToContent()"
+      >
+        <ContentImage :node="content" />
+      </b-link>
     </DetailView>
     <template v-if="loading">
       <CardGridPlaceholder />

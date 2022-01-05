@@ -1,6 +1,8 @@
 <template>
   <b-container class="bg-white wrapper" fluid>
     <b-container class="main-container">
+      <h1>{{ title }}</h1>
+      <p>{{ subtitle }}</p>
       <slot>
       </slot>
     </b-container>
@@ -10,6 +12,16 @@
 <script>
 export default {
   name: 'DetailView',
+  props: {
+    title: {
+      type: String,
+      default: '',
+    },
+    subtitle: {
+      type: String,
+      default: '',
+    },
+  },
 };
 </script>
 
