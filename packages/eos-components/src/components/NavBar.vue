@@ -1,9 +1,7 @@
 <template>
-  <b-navbar class="header px-0" :class="{ shadow: hasScrolled }" fixed="top">
-    <b-container>
-      <img v-if="showLogo" class="logo mr-3" :src="logo" @click="$emit('click-logo')">
+  <b-navbar class="navbar px-0" :class="{ shadow: castShadow }" fixed="top">
+    <b-container fluid class="mx-3">
       <slot></slot>
-
       <b-navbar-nav class="ml-auto">
         <slot name="right"></slot>
       </b-navbar-nav>
@@ -13,14 +11,13 @@
 
 <script>
   import _ from 'underscore';
-  import EndlessLogo from '../assets/EndlessLogo.svg';
 
   export default {
-    name: 'Header',
+    name: 'NavBar',
     props: {
-      showLogo: {
+      alwaysCastShadow: {
         type: Boolean,
-        default: true,
+        default: false,
       },
     },
     data() {
@@ -29,15 +26,21 @@
       };
     },
     computed: {
-      logo() {
-        return EndlessLogo;
+      castShadow() {
+        return this.alwaysCastShadow || this.hasScrolled;
       },
     },
     created() {
+      if (this.alwaysCastShadow) {
+        return;
+      }
       this.debouncedScroll = _.debounce(this.onScroll, 100);
       window.addEventListener('scroll', this.debouncedScroll);
     },
     destroyed() {
+      if (this.alwaysCastShadow) {
+        return;
+      }
       window.removeEventListener('scroll', this.debouncedScroll);
     },
     methods: {
@@ -52,19 +55,13 @@
 
   @import '../styles.scss';
 
-  .header {
+  .navbar {
     height: $navbar-height;
     @include transition($btn-transition);
     & .container {
       padding-right: $grid-gutter-width / 2;
       padding-left: $grid-gutter-width / 2;
     }
-  }
-
-  $logo-size: 50px;
-  .logo {
-    width: $logo-size;
-    cursor: pointer;
   }
 
 </style>

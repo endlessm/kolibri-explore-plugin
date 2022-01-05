@@ -104,7 +104,14 @@ export default {
 @import '@/styles.scss';
 
 .jumbotron {
-  @include navbar-background($header-height);
+  background-color: $header-color;
+  background-attachment: fixed;
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  @include media-breakpoint-down(md) {
+    background-size: auto $header-height;
+  }
   padding-top: $navbar-height;
   min-height: $header-height;
   padding-bottom: $navbar-height;

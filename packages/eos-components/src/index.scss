@@ -44,10 +44,13 @@
 .breadcrumb {
   font-family: $headings-font-family;
   font-weight: $headings-font-weight;
-  background-color: $header-color;
 }
+.breadcrumb-item,
 .breadcrumb-item.text-light a {
-  color: $light;
+  color: $gray-500;
+};
+.breadcrumb-item.text-light a {
+  text-decoration: underline;
 };
 
 .badge {

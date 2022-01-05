@@ -14,7 +14,7 @@ import ContentLink from './components/ContentLink.vue';
 import DummyButton from './components/DummyButton.vue';
 import Footer from './components/Footer.vue';
 import GridPage from './components/GridPage.vue';
-import Header from './components/Header.vue';
+import NavBar from './components/NavBar.vue';
 import PlayButton from './components/PlayButton.vue';
 import ContentCard from './components/ContentCard.vue';
 import SearchBar from './components/SearchBar.vue';
@@ -27,6 +27,8 @@ import responsiveMixin from './components/mixins/responsiveMixin.js';
 
 import utils from './utils.js';
 import constants from './constants.js';
+
+import EndlessLogo from './assets/EndlessLogo.svg';
 
 const components = {
   ButtonsBar,
@@ -45,7 +47,7 @@ const components = {
   DummyButton,
   Footer,
   GridPage,
-  Header,
+  NavBar,
   PlayButton,
   ContentCard,
   SearchBar,
@@ -62,11 +64,16 @@ const plugin = {
   },
 };
 
+const assets = {
+  EndlessLogo,
+};
+
 export {
   components,
   cardMixin,
   responsiveMixin,
   utils,
   constants,
+  assets,
   plugin as default,
 };

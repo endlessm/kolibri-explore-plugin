@@ -1,24 +1,25 @@
 <template>
-  <Header
-    class="header"
-    :style="{ backgroundImage: headerImageURL }"
-    :class="{ 'has-image': hasHeaderImage }"
-    :showLogo="showLogo"
-    @click-logo="goToChannelList"
+  <NavBar
+    alwaysCastShadow
+    class="channel-navbar"
   >
+    <a v-if="showClose" class="close-link mr-3" @click="goToChannelList">
+      <CloseIcon />
+    </a>
     <Breadcrumb v-if="!atHome" :node="node" />
-  </Header>
+  </NavBar>
 </template>
 
 <script>
-import { responsiveMixin } from 'eos-components';
+import CloseIcon from 'vue-material-design-icons/Close.vue';
 import { mapState } from 'vuex';
-import headerMixin from '@/components/mixins/headerMixin';
 import { goToChannelList } from 'kolibri-api';
 
 export default {
   name: 'ChannelNavBar',
-  mixins: [headerMixin, responsiveMixin],
+  components: {
+    CloseIcon,
+  },
   props: {
     node: {
       type: Object,
@@ -31,11 +32,8 @@ export default {
   },
   computed: {
     ...mapState(['isStandaloneChannel']),
-    showLogo() {
-      if (this.isStandaloneChannel) {
-        return false;
-      }
-      return !(this.xs && this.node && this.node.ancestors.length);
+    showClose() {
+      return !this.isStandaloneChannel;
     },
   },
   methods: {
@@ -49,11 +47,13 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles.scss';
 
-.header {
-  @include navbar-background($header-height);
-  &.has-image {
-    background-color: $primary;
-  }
+.channel-navbar {
+  background-color: $gray-700;
+}
+
+.close-link {
+  color: $gray-500;
+  cursor: pointer;
 }
 
 img {

@@ -3,6 +3,8 @@ import { headerLogoWidth } from '@/styles.scss';
 import { utils } from 'eos-components';
 import dynamicRequireAsset from '@/dynamicRequireAsset';
 
+// FIXME remove this headerMixin entirely,
+// because the NavBar and the Header don't share the asset anymore.
 export default {
   data() {
     return {

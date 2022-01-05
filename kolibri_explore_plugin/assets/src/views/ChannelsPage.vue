@@ -1,7 +1,8 @@
 <template>
 
   <div class="channels-page d-flex flex-column min-vh-100">
-    <Header class="discovery-header" @click-logo="goToTop">
+    <NavBar class="discovery-navbar">
+      <img class="logo mr-3" :src="logo">
       <b-nav-text class="btn d-md-block d-none pl-0">
         Endless Discovery
       </b-nav-text>
@@ -15,7 +16,7 @@
         />
         <SearchButton @click="goToSearch" />
       </template>
-    </Header>
+    </NavBar>
 
     <b-container class="mb-2 mt-4">
       <h5 class="mt-2 text-muted">
@@ -75,7 +76,7 @@
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import _ from 'underscore';
-  import { responsiveMixin } from 'eos-components';
+  import { assets, responsiveMixin } from 'eos-components';
   import { PageNames, searchTerms } from '../constants';
   import { RecommendedChannelIDs } from '../customApps';
 
@@ -88,6 +89,9 @@
     computed: {
       ...mapState('topicsRoot', { channels: 'rootNodes', carouselNodes: 'carouselNodes' }),
       ...mapState(['core']),
+      logo() {
+        return assets.EndlessLogo;
+      },
       rows() {
         let withThumbnail = [];
         let withoutThumbnail = [];
@@ -130,9 +134,10 @@
           params: { channel_id: channelId },
         });
       },
-      goToTop() {
-        window.scrollTo(0, 0);
-      },
+      // FIXME use this in https://phabricator.endlessm.com/T32922
+      // goToTop() {
+      //   window.scrollTo(0, 0);
+      // },
       goToSearch() {
         this.$router.push({
           name: PageNames.SEARCH,
@@ -159,7 +164,7 @@
     background-color: $white;
   }
 
-  .discovery-header {
+  .discovery-navbar {
     background: $gray-300;
     border-bottom: 1px solid $gray-400;
   }
@@ -170,6 +175,12 @@
 
   .placeholder {
     margin-top: $card-deck-margin * 2;
+  }
+
+  // FIXME: refactor to a new DiscoveryNavBar component
+  $logo-size: 50px;
+  .logo {
+    width: $logo-size;
   }
 
 </style>
