@@ -1,6 +1,7 @@
 <template>
 
   <div class="channels-page d-flex flex-column min-vh-100">
+    <AboutModal id="about-modal" />
     <DiscoveryNavBar />
 
     <b-container class="mb-2 mt-4">
@@ -57,8 +58,6 @@
 
     </div>
 
-    <DiscoveryFooter />
-
   </div>
 
 </template>
@@ -74,11 +73,11 @@
   import { RecommendedChannelIDs } from '../customApps';
 
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
-  import DiscoveryFooter from './DiscoveryFooter';
+  import AboutModal from '../components/AboutModal';
 
   export default {
     name: 'ChannelsPage',
-    components: { DiscoveryFooter, DiscoveryNavBar },
+    components: { AboutModal, DiscoveryNavBar },
     mixins: [commonCoreStrings, responsiveMixin],
     computed: {
       ...mapState('topicsRoot', { channels: 'rootNodes', carouselNodes: 'carouselNodes' }),

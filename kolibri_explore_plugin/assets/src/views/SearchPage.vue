@@ -1,6 +1,7 @@
 <template>
 
   <div class="d-flex flex-column min-vh-100 search-page">
+    <AboutModal id="about-modal" />
     <DiscoveryNavBar />
     <div class="flex-fill main">
       <SearchBar
@@ -90,7 +91,6 @@
       </b-container>
     </div>
 
-    <DiscoveryFooter />
   </div>
 
 </template>
@@ -107,13 +107,13 @@
   import { searchChannels } from '../modules/topicsRoot/handlers';
 
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
-  import DiscoveryFooter from './DiscoveryFooter';
+  import AboutModal from '../components/AboutModal';
 
   const kinds = Object.keys(constants.MediaTypeVerbs);
 
   export default {
     name: 'SearchPage',
-    components: { DiscoveryFooter, DiscoveryNavBar },
+    components: { AboutModal, DiscoveryNavBar },
     mixins: [responsiveMixin],
     data() {
       return {
