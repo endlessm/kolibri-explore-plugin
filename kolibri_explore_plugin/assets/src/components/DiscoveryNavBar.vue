@@ -8,6 +8,7 @@
         :class="{ active: currentIsChannels() }"
         @click="goToChannels"
       >
+        <ViewDashboardOutlineIcon />
         Channels
       </b-nav-text>
       <b-nav-text
@@ -15,6 +16,7 @@
         :class="{ active: currentIsSearch() }"
         @click="goToSearch"
       >
+        <MagnifyIcon />
         Search Keywords
       </b-nav-text>
     </b-button-group>
@@ -33,11 +35,15 @@
 
 <script>
 
+  import ViewDashboardOutlineIcon from 'vue-material-design-icons/ViewDashboardOutline.vue';
+  import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
+
   import { assets } from 'eos-components';
   import { PageNames } from '../constants';
 
   export default {
     name: 'DiscoveryNavBar',
+    components: { ViewDashboardOutlineIcon, MagnifyIcon },
     computed: {
       logo() {
         return assets.EndlessLogo;
