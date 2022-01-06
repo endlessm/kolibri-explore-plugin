@@ -1,10 +1,7 @@
 <template>
   <b-navbar class="navbar px-0" :class="{ shadow: castShadow }" fixed="top">
-    <b-container fluid class="mx-3">
+    <b-container fluid class="justify-content-start mx-3">
       <slot></slot>
-      <b-navbar-nav class="ml-auto">
-        <slot name="right"></slot>
-      </b-navbar-nav>
     </b-container>
   </b-navbar>
 </template>
@@ -58,10 +55,6 @@
   .navbar {
     height: $navbar-height;
     @include transition($btn-transition);
-    & .container {
-      padding-right: $grid-gutter-width / 2;
-      padding-left: $grid-gutter-width / 2;
-    }
   }
 
 </style>

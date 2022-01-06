@@ -2,23 +2,30 @@
 
   <NavBar class="discovery-navbar">
     <img class="logo mr-3" :src="logo">
-    <b-button-group>
-      <b-nav-text class="btn pl-0 text-primary" @click="goBack">
+    <b-button-group class="mx-auto">
+      <b-nav-text
+        class="btn discovery-tab py-3 rounded-0 text-primary"
+        :class="{ active: currentIsChannels() }"
+        @click="goToChannels"
+      >
         Channels
       </b-nav-text>
-      <b-nav-text class="btn pl-0 text-primary" @click="goToSearch">
+      <b-nav-text
+        class="btn discovery-tab py-3 rounded-0 text-primary"
+        :class="{ active: currentIsSearch() }"
+        @click="goToSearch"
+      >
         Search Keywords
       </b-nav-text>
     </b-button-group>
-
-    <template #right>
+    <b-navbar-nav>
       <b-nav-text
         v-b-modal.about-modal
-        class="btn d-md-block d-none pl-0"
+        class="btn d-md-block d-none pr-0"
       >
         About the Endless Key
       </b-nav-text>
-    </template>
+    </b-navbar-nav>
   </NavBar>
 
 </template>
@@ -37,7 +44,7 @@
       },
     },
     methods: {
-      goBack() {
+      goToChannels() {
         this.$router.push({
           name: PageNames.TOPICS_ROOT,
         });
@@ -46,6 +53,12 @@
         this.$router.push({
           name: PageNames.SEARCH,
         });
+      },
+      currentIsChannels() {
+        return this.$route.name === PageNames.TOPICS_ROOT;
+      },
+      currentIsSearch() {
+        return this.$route.name === PageNames.SEARCH;
       },
     },
   };
@@ -60,6 +73,12 @@
   .discovery-navbar {
     background: $gray-300;
     border-bottom: 1px solid $gray-400;
+  }
+
+  .discovery-tab {
+    &.active {
+      border-bottom: 2px solid $primary;
+    }
   }
 
   $logo-size: 50px;
