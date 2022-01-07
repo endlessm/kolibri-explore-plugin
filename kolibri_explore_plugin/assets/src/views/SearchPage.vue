@@ -1,16 +1,7 @@
 <template>
 
   <div class="d-flex flex-column min-vh-100 search-page">
-    <NavBar class="discovery-navbar">
-      <img class="logo mr-3" :src="logo">
-      <b-nav-text class="btn pl-0" @click="goBack">
-        <b-icon-chevron-left />
-        <span class="text-primary">
-          Endless Discovery
-        </span>
-      </b-nav-text>
-    </NavBar>
-
+    <DiscoveryNavBar />
     <div class="flex-fill main">
       <SearchBar
         v-model="query"
@@ -109,19 +100,20 @@
 
   import _ from 'underscore';
   import { mapMutations, mapState } from 'vuex';
-  import { assets, utils, constants, responsiveMixin } from 'eos-components';
+  import { utils, constants, responsiveMixin } from 'eos-components';
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 
   import { PageNames, searchTerms } from '../constants';
   import { searchChannels } from '../modules/topicsRoot/handlers';
 
+  import DiscoveryNavBar from '../components/DiscoveryNavBar';
   import DiscoveryFooter from './DiscoveryFooter';
 
   const kinds = Object.keys(constants.MediaTypeVerbs);
 
   export default {
     name: 'SearchPage',
-    components: { DiscoveryFooter },
+    components: { DiscoveryFooter, DiscoveryNavBar },
     mixins: [responsiveMixin],
     data() {
       return {
@@ -140,9 +132,6 @@
         loading: state => state.core.loading,
         searchTerm: 'searchTerm',
       }),
-      logo() {
-        return assets.EndlessLogo;
-      },
       isEmpty() {
         return !this.query.trim();
       },
@@ -301,12 +290,6 @@
 
   .empty h5 {
     color: $gray-600;
-  }
-
-  // FIXME: refactor to a new DiscoveryNavBar component
-  $logo-size: 50px;
-  .logo {
-    width: $logo-size;
   }
 
 </style>
