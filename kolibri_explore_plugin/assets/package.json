@@ -9,7 +9,8 @@
     "deep-object-diff": "^1.1.0",
     "eos-components": "^0.1.0",
     "underscore": "^1.13.1",
-    "@vueuse/core": "^4.11.1"
+    "@vueuse/core": "^4.11.1",
+    "vue-material-design-icons": "^4.12.1"
   },
   "devDependencies": {
     "kolibri-tools": "0.15.0-dev.4"

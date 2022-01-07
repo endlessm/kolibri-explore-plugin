@@ -1,22 +1,8 @@
 <template>
 
   <div class="channels-page d-flex flex-column min-vh-100">
-    <NavBar class="discovery-navbar">
-      <img class="logo mr-3" :src="logo">
-      <b-nav-text class="btn d-md-block d-none pl-0">
-        Endless Discovery
-      </b-nav-text>
-
-      <template #right>
-        <ButtonsBar
-          class="mr-3 mt-1"
-          title="More Topics"
-          :buttons="Array.from(searchTerms.keys())"
-          @click="goToTerm"
-        />
-        <SearchButton @click="goToSearch" />
-      </template>
-    </NavBar>
+    <AboutModal id="about-modal" />
+    <DiscoveryNavBar />
 
     <b-container class="mb-2 mt-4">
       <h5 class="mt-2 text-muted">
@@ -29,6 +15,14 @@
     </template>
 
     <template v-else>
+      <b-container class="mb-2 mt-2">
+        <ButtonsBar
+          class="mr-3 mt-1"
+          title="More Topics"
+          :buttons="Array.from(searchTerms.keys())"
+          @click="goToTerm"
+        />
+      </b-container>
       <Carousel class="pt-3" :nodes="carouselNodes" :showChannelIcon="true" />
     </template>
 
@@ -64,8 +58,6 @@
 
     </div>
 
-    <DiscoveryFooter />
-
   </div>
 
 </template>
@@ -76,22 +68,20 @@
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import _ from 'underscore';
-  import { assets, responsiveMixin } from 'eos-components';
+  import { responsiveMixin } from 'eos-components';
   import { PageNames, searchTerms } from '../constants';
   import { RecommendedChannelIDs } from '../customApps';
 
-  import DiscoveryFooter from './DiscoveryFooter';
+  import DiscoveryNavBar from '../components/DiscoveryNavBar';
+  import AboutModal from '../components/AboutModal';
 
   export default {
     name: 'ChannelsPage',
-    components: { DiscoveryFooter },
+    components: { AboutModal, DiscoveryNavBar },
     mixins: [commonCoreStrings, responsiveMixin],
     computed: {
       ...mapState('topicsRoot', { channels: 'rootNodes', carouselNodes: 'carouselNodes' }),
       ...mapState(['core']),
-      logo() {
-        return assets.EndlessLogo;
-      },
       rows() {
         let withThumbnail = [];
         let withoutThumbnail = [];
@@ -138,11 +128,6 @@
       // goToTop() {
       //   window.scrollTo(0, 0);
       // },
-      goToSearch() {
-        this.$router.push({
-          name: PageNames.SEARCH,
-        });
-      },
       goToTerm(term) {
         const query = searchTerms.get(term) || term;
         this.$router.push({
@@ -175,12 +160,6 @@
 
   .placeholder {
     margin-top: $card-deck-margin * 2;
-  }
-
-  // FIXME: refactor to a new DiscoveryNavBar component
-  $logo-size: 50px;
-  .logo {
-    width: $logo-size;
   }
 
 </style>
