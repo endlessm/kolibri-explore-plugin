@@ -1,7 +1,8 @@
 <template>
   <b-button
     pill
-    size="sm"
+    :size="size"
+    :block="block"
     :variant="`${kind}-${variant}`"
     class="border-0 pb-1 pl-1 play-button pt-1 text-nowrap"
     @click.stop="$emit('click')"
@@ -46,6 +47,14 @@ export default {
     variant: {
       type: String,
       default: 'primary',
+    },
+    size: {
+      type: String,
+      default: 'sm',
+    },
+    block: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
