@@ -58,8 +58,11 @@ export default [
   {
     name: PageNames.TOPICS_CONTENT,
     path: '/topics/:channel_id/c/:id',
-    handler: toRoute => {
+    handler: (toRoute, fromRoute) => {
       const { channel_id, id } = toRoute.params;
+      if (fromRoute) {
+        store.commit('topicsTree/SET_BACK_FROM_CUSTOM_PAGE', fromRoute.name);
+      }
       store.commit('topicsTree/SET_CUSTOM_APP_PARAMETERS', { contentId: id });
       showTopicsChannel(store, channel_id);
     },

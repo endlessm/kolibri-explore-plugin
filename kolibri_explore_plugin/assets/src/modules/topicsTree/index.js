@@ -12,6 +12,8 @@ function defaultState() {
     content: {},
     // used to pass parameters to the custom presentation
     customAppParameters: {},
+    // used to go back to the corresponding page from the custom presentation
+    backFromCustomPage: null,
     // used in TOPICS_TOPIC, TOPICS_CHANNEL
     contents: [],
     isRoot: null,
@@ -54,6 +56,9 @@ export default {
     },
     SET_CUSTOM_APP_PARAMETERS(state, payload) {
       state.customAppParameters = payload;
+    },
+    SET_BACK_FROM_CUSTOM_PAGE(state, payload) {
+      state.backFromCustomPage = payload;
     },
   },
 };
