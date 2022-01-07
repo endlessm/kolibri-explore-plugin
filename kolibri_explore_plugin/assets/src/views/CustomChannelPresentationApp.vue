@@ -44,7 +44,7 @@
         }
         return url;
       },
-      ...mapState('topicsTree', ['channel', 'customAppParameters']),
+      ...mapState('topicsTree', ['backFromCustomPage', 'channel', 'customAppParameters']),
       iframeWindow() {
         return this.$refs.iframe.contentWindow;
       },
@@ -77,7 +77,7 @@
       },
       goToChannelList() {
         this.$router.push({
-          name: PageNames.ROOT,
+          name: this.backFromCustomPage || PageNames.TOPICS_ROOT,
         });
       },
     },
