@@ -1,37 +1,27 @@
 <template>
   <div>
-    <DetailView>
+    <DetailView
+      :title="section.title"
+      :subtitle="subtitle"
+    >
+      <!-- eslint-disable vue/no-v-html -->
+      <div class="description mb-2" v-html="section.description"></div>
       <b-row class="mt-3">
-        <b-col md="5" sm="12">
-          <h3>{{ section.title }}</h3>
-          <p class="mb-2">
-            {{ subtitle }}
-          </p>
-          <!-- eslint-disable vue/no-v-html -->
-          <div class="description mb-2" v-html="section.description"></div>
-        </b-col>
         <b-col
-          md="7"
+          v-for="content in sectionNodes.nodes"
+          :key="content.id"
+          class="content-col"
+          md="3"
           sm="12"
         >
-          <b-row>
-            <b-col
-              v-for="content in sectionNodes.nodes"
-              :key="content.id"
-              class="content-col"
-              md="6"
-              sm="12"
-            >
-              <b-link
-                @click="goToContent(content)"
-              >
-                <ContentImage :node="content" />
-                <p class="h6 mt-2 text-dark">
-                  {{ content.title }}
-                </p>
-              </b-link>
-            </b-col>
-          </b-row>
+          <b-link
+            @click="goToContent(content)"
+          >
+            <ContentImage :node="content" />
+            <p class="h6 mt-2 text-center text-dark">
+              {{ content.title }}
+            </p>
+          </b-link>
         </b-col>
       </b-row>
     </DetailView>
