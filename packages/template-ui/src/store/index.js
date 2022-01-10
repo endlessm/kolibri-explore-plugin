@@ -49,7 +49,7 @@ const initialState = {
   hasCarousel: true,
   hasFilters: true,
   hasFlatGrid: false,
-  displayHeroContent: false,
+  defaultContentNode: null,
   isEndlessApp: false,
   bundleKind: null,
   showFooter: true,

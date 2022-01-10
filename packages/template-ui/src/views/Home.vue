@@ -88,7 +88,7 @@ export default {
       'hasCarousel',
       'hasFilters',
       'hasFlatGrid',
-      'displayHeroContent',
+      'defaultContentNode',
     ]),
     ...mapGetters({
       getAssetURL: 'getAssetURL',
@@ -109,10 +109,8 @@ export default {
       this.fetchContentNodes(),
       this.fetchSectionNodes(),
     ]).then(() => {
-      if (this.displayHeroContent) {
-        const [first] = this.contentNodes.nodes;
-        // Showing the first node
-        this.goToContent(first);
+      if (this.defaultContentNode) {
+        this.showDefaultContent();
       }
     });
   },
@@ -208,6 +206,20 @@ export default {
     goToContent(node) {
       const url = utils.getNodeUrl(node);
       this.$router.push(url);
+    },
+    showDefaultContent() {
+      const { nodes } = this.contentNodes;
+      const contentNodes = nodes.filter(n => n.id === this.defaultContentNode);
+      let [node] = contentNodes;
+
+      if (contentNodes.length === 0 && nodes.length === 1) {
+        [node] = nodes;
+      }
+
+      if (node) {
+        // Showing the first node
+        this.goToContent(node);
+      }
     },
   },
 };
