@@ -223,7 +223,6 @@
     },
     mounted() {
       this.query = this.searchTerm || '';
-      this.setSearchResult({});
     },
     methods: {
       ...mapMutations({
