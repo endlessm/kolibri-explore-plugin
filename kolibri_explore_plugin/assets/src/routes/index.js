@@ -76,6 +76,14 @@ export default [
     },
   },
   {
+    name: PageNames.CONTENT,
+    path: '/content/:content_id',
+    handler: toRoute => {
+      store.commit('SET_CONTENT_ID', toRoute.params.content_id);
+      store.commit('SET_PAGE_NAME', PageNames.CONTENT);
+    },
+  },
+  {
     path: '*',
     redirect: '/',
   },

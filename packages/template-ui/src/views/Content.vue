@@ -4,6 +4,7 @@
     <DetailView
       :title="content.title"
       :subtitle="subtitle"
+      :node="content"
     >
       <b-row class="my-3">
         <b-col xs="12" md="6">
@@ -34,7 +35,7 @@
     </template>
     <template v-else>
       <CardGrid
-        v-if="nextNodesInTopic.length"
+        v-if="nextNodesInTopic.length && showNextContent"
         :nodes="nextNodesInTopic"
         :cardColumns="cardColumns"
         class="next-grid"
@@ -61,7 +62,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['cardColumns', 'channel']),
+    ...mapState(['cardColumns', 'channel', 'showNextContent']),
     tags() {
       return [
         ...utils.getAllStructuredTags(this.content, constants.StructuredTags.SUBJECT),

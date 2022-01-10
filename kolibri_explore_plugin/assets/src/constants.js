@@ -8,6 +8,7 @@ export const PageNames = {
   TOPICS_CONTENT: 'TOPICS_CONTENT',
   CONTENT_UNAVAILABLE: 'CONTENT_UNAVAILABLE',
   SEARCH: 'SEARCH',
+  CONTENT: 'CONTENT',
 };
 
 // switch between modes

@@ -28,6 +28,9 @@ $modal-content-bg: $lightbox-background;
 $modal-content-border-width: 0;
 $modal-backdrop-opacity: 0.8;
 
+/* Always show the vertical scrollbar */
+$app-body-overflow: scroll;
+
 $theme-colors: (
   "bundle": $lavender,
   "audio": $pink,

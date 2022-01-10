@@ -24,15 +24,6 @@
 
       <template v-if="isFilterEmpty">
         <template v-if="contentNodes.nodes.length">
-          <b-container v-if="displayHeroContent">
-            <CarouselCard
-              v-for="node in contentNodes.nodes"
-              :key="'node-' + node.id"
-              :node="node"
-              class="template-ui-hero-card"
-              @click="goToContent(node)"
-            />
-          </b-container>
           <CardGrid
             :nodes="contentNodes.nodes"
             :variant="hasFlatGrid ? 'collapsible' : 'slidable'"
@@ -70,7 +61,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { constants } from 'eos-components';
+import { constants, utils } from 'eos-components';
 
 const sectionPageSize = 2 * constants.ItemsPerSlide;
 
@@ -97,7 +88,7 @@ export default {
       'hasCarousel',
       'hasFilters',
       'hasFlatGrid',
-      'displayHeroContent',
+      'defaultContentNode',
     ]),
     ...mapGetters({
       getAssetURL: 'getAssetURL',
@@ -117,7 +108,11 @@ export default {
       this.fetchCarouselNodes(),
       this.fetchContentNodes(),
       this.fetchSectionNodes(),
-    ]);
+    ]).then(() => {
+      if (this.defaultContentNode) {
+        this.showDefaultContent();
+      }
+    });
   },
   methods: {
     fetchCarouselNodes() {
@@ -209,7 +204,22 @@ export default {
       });
     },
     goToContent(node) {
-      window.kolibri.navigateTo(node.id);
+      const url = utils.getNodeUrl(node);
+      this.$router.push(url);
+    },
+    showDefaultContent() {
+      const { nodes } = this.contentNodes;
+      const contentNodes = nodes.filter(n => n.id === this.defaultContentNode);
+      let [node] = contentNodes;
+
+      if (contentNodes.length === 0 && nodes.length === 1) {
+        [node] = nodes;
+      }
+
+      if (node) {
+        // Showing the first node
+        this.goToContent(node);
+      }
     },
   },
 };

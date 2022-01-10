@@ -9,6 +9,7 @@ export default {
     return {
       pageName: '',
       searchTerm: '',
+      contentId: '',
     };
   },
   actions,
