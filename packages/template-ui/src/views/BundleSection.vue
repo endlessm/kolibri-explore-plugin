@@ -4,26 +4,29 @@
       :title="section.title"
       :subtitle="subtitle"
     >
-      <!-- eslint-disable vue/no-v-html -->
-      <div class="description mb-2" v-html="section.description"></div>
       <b-row class="mt-3">
         <b-col
           v-for="content in sectionNodes.nodes"
           :key="content.id"
           class="content-col"
-          md="3"
-          sm="12"
+          md="6"
+          xs="12"
         >
-          <b-link
-            @click="goToContent(content)"
-          >
-            <ContentImage :node="content" />
-            <p class="h6 mt-2 text-center text-dark">
-              {{ content.title }}
-            </p>
-          </b-link>
+          <ContentImage :node="content" />
+          <p class="h6 mt-2 text-center text-dark">
+            {{ content.title }}
+          </p>
         </b-col>
       </b-row>
+
+      <!-- eslint-disable vue/no-v-html -->
+      <div class="description mb-2" v-html="section.description"></div>
+
+      <div v-if="section.license_description" id="license" class="my-3 text-muted">
+        <strong>License — {{ section.license_name }}</strong>
+        <p> {{ section.license_description }} </p>
+      </div>
+
     </DetailView>
   </div>
 </template>
@@ -73,9 +76,6 @@ export default {
       if (this.sectionNodes.hasMoreNodes) {
         this.$emit('loadMoreNodes');
       }
-    },
-    goToContent(node) {
-      window.kolibri.navigateTo(node.id);
     },
   },
 };

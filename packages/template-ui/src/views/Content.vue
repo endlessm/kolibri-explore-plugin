@@ -5,8 +5,15 @@
       :title="content.title"
       :subtitle="subtitle"
     >
+      <b-row class="my-3">
+        <b-col xs="12" md="6">
+          <ContentImage :node="content" />
+        </b-col>
+      </b-row>
+
       <!-- eslint-disable vue/no-v-html -->
-      <div class="description mb-2" v-html="content.description"></div>
+      <div class="description text-muted" v-html="content.description"></div>
+
       <b-badge
         v-for="tag in tags"
         :key="tag"
@@ -16,11 +23,11 @@
       >
         {{ tag }}
       </b-badge>
-      <b-link
-        @click="goToContent()"
-      >
-        <ContentImage :node="content" />
-      </b-link>
+
+      <div v-if="content.license_description" id="license" class="my-3 text-muted">
+        <strong>License — {{ content.license_name }}</strong>
+        <p> {{ content.license_description }} </p>
+      </div>
     </DetailView>
     <template v-if="loading">
       <CardGridPlaceholder />
@@ -98,9 +105,6 @@ export default {
           // FIXME query by sort order > current order:
           this.nextNodesInTopic = page.results.filter((node) => node.sort_order > currentOrder);
         });
-    },
-    goToContent() {
-      window.kolibri.navigateTo(this.content.id);
     },
   },
 };

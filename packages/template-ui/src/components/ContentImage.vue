@@ -1,19 +1,22 @@
 <template>
-  <div
-    class="position-relative"
-  >
-    <PlayButton
-      :kind="node.kind"
-      class="play-button position-absolute"
-      @click="goToContent()"
-    />
-    <b-img
-      fluid
-      :src="thumbnail"
-      :alt="node.title"
-      class="border d-block mx-auto rounded"
-    />
-  </div>
+  <b-link @click="goToContent()">
+    <b-card class="rounded-lg">
+      <b-img
+        fluid
+        :src="thumbnail"
+        :alt="node.title"
+        class="border d-block mt-3 mx-auto rounded"
+      />
+      <PlayButton
+        v-if="node.kind"
+        size="lg"
+        block
+        :kind="node.kind"
+        class="mx-auto my-3 play-button py-2"
+        @click="goToContent()"
+      />
+    </b-card>
+  </b-link>
 </template>
 
 <script>
@@ -39,11 +42,12 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles.scss';
 
-.play-button {
-  top: 50% !important;
-  left: 50% !important;
-  position: absolute !important;
-  transform: translate(-50%,-50%) !important;
+.card {
+  box-shadow: $box-shadow;
+}
+
+a:hover {
+  text-decoration: none;
 }
 
 </style>
