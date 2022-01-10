@@ -53,6 +53,7 @@ const initialState = {
   isEndlessApp: false,
   bundleKind: null,
   showFooter: true,
+  showNextContent: true,
 };
 
 const store = new Vuex.Store({

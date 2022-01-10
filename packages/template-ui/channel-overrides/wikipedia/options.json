@@ -6,5 +6,6 @@
   "defaultContentNode": "98731f06729457ed9b6ffe154a0a78c4",
   "isEndlessApp": true,
   "bundleKind": "simple",
-  "showFooter": false
+  "showFooter": false,
+  "showNextContent": false
 }
