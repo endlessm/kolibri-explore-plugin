@@ -106,8 +106,10 @@ export default {
   },
   watch: {
     nodes() {
-      this.loading = false;
-      this.rowsToShow++;
+      if (this.loading) {
+        this.loading = false;
+        this.rowsToShow++;
+      }
     },
   },
   methods: {
