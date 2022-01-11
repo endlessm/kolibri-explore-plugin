@@ -1,6 +1,6 @@
 <template>
 
-  <div class="dev fixed-top mx-1 text-right">
+  <div v-if="!isIframe" class="dev fixed-top mx-1 text-right">
     <span v-b-modal.buildinfo class="badge badge-warning">{{ title }}</span>
 
     <b-modal
@@ -67,6 +67,9 @@
         }
 
         return 'loading...';
+      },
+      isIframe() {
+        return window.parent.location !== window.location;
       },
     },
     mounted() {
