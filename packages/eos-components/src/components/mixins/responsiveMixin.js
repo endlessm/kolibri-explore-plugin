@@ -1,5 +1,3 @@
-import { sm, md, lg, xl } from '../../styles.scss';
-
 export default {
   data() {
     return {
@@ -13,9 +11,12 @@ export default {
       mdQueryList: null,
       lgQueryList: null,
       xlQueryList: null,
+      breakpointValues: null,
     };
   },
   created() {
+    const { sm, md, lg, xl } = this.getBreakpoints();
+
     this.xsQueryList = window.matchMedia(`(max-width: ${sm})`);
     this.smQueryList = window.matchMedia(`(min-width: ${sm}) and (max-width: ${md})`);
     this.mdQueryList = window.matchMedia(`(min-width: ${md}) and (max-width: ${lg})`);
@@ -57,6 +58,21 @@ export default {
     },
     onXlChange(ev) {
       this.xl = ev.matches;
+    },
+    getBreakpoints() {
+      if (!this.breakpointValues) {
+        // Get breakpoints defined by bootstrap styles. This code is based on:
+        // https://github.com/shaack/bootstrap-detect-breakpoint/blob/master/src/bootstrap-detect-breakpoint.js
+        const breakpointNames = ['xl', 'lg', 'md', 'sm', 'xs'];
+        this.breakpointValues = {};
+        for (const breakpointName of breakpointNames) {
+          this.breakpointValues[breakpointName] = window
+            .getComputedStyle(document.documentElement)
+            .getPropertyValue('--breakpoint-' + breakpointName);
+        }
+      }
+
+      return this.breakpointValues;
     },
   },
 };
