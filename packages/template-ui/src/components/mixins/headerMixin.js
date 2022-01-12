@@ -1,6 +1,6 @@
 import { mapState, mapGetters } from 'vuex';
-import { headerLogoWidth } from '@/styles.scss';
 import { utils } from 'eos-components';
+import { headerLogoWidth } from '@/styles.scss';
 import dynamicRequireAsset from '@/dynamicRequireAsset';
 
 // FIXME remove this headerMixin entirely,
