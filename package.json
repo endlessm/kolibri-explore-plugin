@@ -27,6 +27,10 @@
   "devDependencies": {
     "lerna": "^4.0.0"
   },
+  "resolutions": {
+    "@npmcli/fs": "1.0.x",
+    "vue-demi": "0.10.x"
+  },
   "engines": {
     "node": "10.x",
     "yarn": "1.x"
