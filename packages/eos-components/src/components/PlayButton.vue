@@ -4,11 +4,12 @@
     :size="size"
     :block="block"
     :variant="`${kind}-${variant}`"
-    class="border-0 pb-1 pl-1 play-button pt-1 text-nowrap"
+    class="pb-1 pl-1 play-button pt-1 text-nowrap"
     @click.stop="$emit('click')"
   >
     <component
       :is="icon"
+      :size="iconSize"
     />
     <span class="play-button-text">
       {{ mediaInfo }}
@@ -74,6 +75,14 @@ export default {
         case 'video':
         default:
           return 'VideoIcon';
+      }
+    },
+    iconSize() {
+      switch (this.size) {
+        case 'xs':
+          return 20;
+        default:
+          return 24;
       }
     },
     mediaInfo() {

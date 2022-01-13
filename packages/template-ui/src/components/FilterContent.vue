@@ -1,9 +1,8 @@
 <template>
   <b-container v-if="availableFilters.length" class="my-5">
-    <span class="mr-4">Filter By</span>
-
+    <MediaFilterButtons v-if="flatMediaFilter" variant="flat" size="xs" :filter="mediaFilter" />
     <FilterDropDown
-      v-for="filter in availableFilters"
+      v-for="filter in dropdownFilters"
       :key="filter.name"
       :filter="filter"
     />
@@ -29,6 +28,7 @@ export default {
       name: 'filters/name',
       isFiltering: 'filters/isFiltering',
       isEmpty: 'filters/isEmpty',
+      isMediaFilter: 'filters/isMediaFilter',
     }),
     options() {
       return this.filters.filterOptions;
@@ -42,6 +42,20 @@ export default {
           options: this.possibleOptions(f),
         }
       )).filter((f) => f.options.length > 1);
+    },
+    dropdownFilters() {
+      if (this.flatMediaFilter) {
+        return this.availableFilters.filter((f) => !this.isMediaFilter(f));
+      }
+
+      return this.availableFilters;
+    },
+    mediaFilter() {
+      const [filter] = this.availableFilters.filter((f) => this.isMediaFilter(f));
+      return filter;
+    },
+    flatMediaFilter() {
+      return this.mediaFilter && this.mediaFilter.options.length < 4;
     },
   },
   watch: {
