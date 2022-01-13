@@ -23,7 +23,7 @@ import { constants } from 'eos-components';
 export default {
   name: 'FilterContent',
   computed: {
-    ...mapState(['filters', 'section']),
+    ...mapState(['filters', 'isEndlessApp', 'section']),
     ...mapGetters({
       name: 'filters/name',
       isFiltering: 'filters/isFiltering',
@@ -71,6 +71,28 @@ export default {
       clearFilter: 'filters/clearFilterQuery',
     }),
     possibleOptions(filter) {
+      // this will be superceeded by the new taxonomy being tested in
+      // https://phabricator.endlessm.com/T32647
+      if (this.isEndlessApp && Object.values(constants.StructuredTags).includes(filter.name)) {
+        if (!this.options.availableTags) {
+          return [];
+        }
+
+        const tags = this.sortOptionsByWeight(this.options.availableTags);
+        const structuredTags = {};
+
+        Object.values(constants.StructuredTags).forEach((matchKey) => {
+          const tagValues = tags
+            .filter((t) => t.match(constants.StructuredTagsRegExp))
+            .map((t) => t.match(constants.StructuredTagsRegExp))
+            .filter(([, key]) => key === matchKey)
+            .map(([,, value]) => value);
+          structuredTags[matchKey] = tagValues;
+        });
+
+        return structuredTags[filter.name];
+      }
+
       switch (filter.name) {
         // Media type filter, all content kinds
         case constants.MediaFilterName: {
