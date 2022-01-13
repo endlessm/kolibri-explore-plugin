@@ -38,6 +38,7 @@
   import ViewDashboardOutlineIcon from 'vue-material-design-icons/ViewDashboardOutline.vue';
   import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
 
+  import { mapMutations } from 'vuex';
   import { assets } from 'eos-components';
   import { PageNames } from '../constants';
 
@@ -50,15 +51,20 @@
       },
     },
     methods: {
+      ...mapMutations({
+        setSearchResult: 'topicsRoot/SET_SEARCH_RESULT',
+      }),
       goToChannels() {
         this.$router.push({
           name: PageNames.TOPICS_ROOT,
         });
       },
       goToSearch() {
-        this.$router.push({
-          name: PageNames.SEARCH,
-        });
+        // cleaning previous search
+        this.setSearchResult({}),
+          this.$router.push({
+            name: PageNames.SEARCH,
+          });
       },
       currentIsChannels() {
         return this.$route.name === PageNames.TOPICS_ROOT;

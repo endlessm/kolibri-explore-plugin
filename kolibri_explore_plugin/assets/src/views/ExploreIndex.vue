@@ -3,12 +3,14 @@
   <div>
     <ContentModal />
     <DevTag v-if="showBuildInfo" />
-    <component
-      :is="currentPage"
-      v-if="currentPage"
-      @loading="onLoading"
-      @load="onLoad"
-    />
+    <keep-alive include="SearchPage">
+      <component
+        :is="currentPage"
+        v-if="currentPage"
+        @loading="onLoading"
+        @load="onLoad"
+      />
+    </keep-alive>
     <b-overlay :show="isLoading" noWrap>
       <template #overlay>
         <img :src="loadingImg">
