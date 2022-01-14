@@ -31,6 +31,9 @@
               @click="goToTerm"
             />
           </div>
+          <div v-else>
+            <Keywords :words="keywords" @click="removeKeyword" />
+          </div>
         </div>
       </b-container>
 
@@ -215,6 +218,9 @@
       searchTerms() {
         return searchTerms;
       },
+      keywords() {
+        return this.cleanedQuery.split(/\s+/);
+      },
     },
     watch: {
       cleanedQuery() {
@@ -255,6 +261,10 @@
       },
       groupVerb(kind) {
         return constants.MediaTypeVerbs[kind === 'topic' ? 'bundle' : kind];
+      },
+      removeKeyword(keyword) {
+        const words = this.keywords.filter(k => k !== keyword);
+        this.query = words.join(' ');
       },
     },
   };
