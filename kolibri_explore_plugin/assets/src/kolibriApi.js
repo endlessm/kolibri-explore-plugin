@@ -98,10 +98,6 @@ class KolibriApi {
           search: keyword,
           channel_id: this.channelId,
         },
-      }).then(searchResults => {
-        return {
-          results: searchResults.results,
-        };
       });
     }
 

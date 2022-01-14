@@ -31,7 +31,10 @@
       :cardColumns="cardColumns"
       variant="collapsible"
     >
-      <h3>Results</h3>
+      <div class="font-weight-bold my-4 text-muted">
+        {{ totalResults }} Results
+        <Keywords :words="keywords" @click="removeKeyword" />
+      </div>
     </CardGrid>
 
   </div>
@@ -51,6 +54,7 @@ export default {
     return {
       query: '',
       resultNodes: [],
+      page: null,
       searching: false,
     };
   },
@@ -66,12 +70,23 @@ export default {
     cleanedQuery() {
       return escapeRegExp(this.query.trim());
     },
+    keywords() {
+      return this.cleanedQuery.split(/\s+/);
+    },
+    totalResults() {
+      // We have the real total results in the backend in this.page.total_results,
+      // but the search doesn't have pagination, so it shows 30 nodes at max,
+      // So for the UX it's better to show just the number of nodes returned by
+      // the search API because it's not possible to show the rest.
+      return this.resultNodes.length;
+    },
   },
   watch: {
     cleanedQuery() {
       if (this.cleanedQuery === '') {
         this.searching = false;
         this.resultNodes = [];
+        this.page = null;
         return;
       }
       this.searching = true;
@@ -82,12 +97,17 @@ export default {
     search() {
       return window.kolibri.searchContent({ keyword: this.cleanedQuery })
         .then((page) => {
+          this.page = page;
           this.resultNodes = page.results;
           this.searching = false;
         });
     },
     onClearInput() {
       this.query = '';
+    },
+    removeKeyword(keyword) {
+      const words = this.keywords.filter((k) => k !== keyword);
+      this.query = words.join(' ');
     },
   },
 };
