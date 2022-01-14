@@ -20,7 +20,6 @@ import NavBar from './components/NavBar.vue';
 import PlayButton from './components/PlayButton.vue';
 import ContentCard from './components/ContentCard.vue';
 import SearchBar from './components/SearchBar.vue';
-import SearchButton from './components/SearchButton.vue';
 import SlidableCardGrid from './components/SlidableCardGrid.vue';
 import TopicCard from './components/TopicCard.vue';
 
@@ -55,7 +54,6 @@ const components = {
   PlayButton,
   ContentCard,
   SearchBar,
-  SearchButton,
   SlidableCardGrid,
   TopicCard,
 };
