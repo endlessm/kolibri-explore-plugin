@@ -104,7 +104,7 @@ export default {
     },
     currentItem() {
       if (this.isSearchPageCurrent) {
-        return { "title": "Search" };
+        return { "title": "Search Keywords" };
       }
       return this.node;
     },

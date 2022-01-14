@@ -21,7 +21,7 @@
         <input
           ref="searchInput"
           class="form-control"
-          placeholder="Search"
+          placeholder="Type keywords to search"
           :disabled="loading"
           :value="value"
           @input="updateValue($event.target.value)"
