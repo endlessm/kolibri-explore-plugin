@@ -7,6 +7,7 @@
       <SearchBar
         v-model="query"
         :debounce="800"
+        :progress="progress"
         @clear-input="clearInput"
       />
       <b-container class="pb-5 pt-3">
@@ -127,19 +128,19 @@
           lg: 3,
         },
         mediaQuality: constants.MediaQuality.REGULAR,
+        progress: 100,
       };
     },
     computed: {
       ...mapState('topicsRoot', { searchResult: 'searchResult', channels: 'rootNodes' }),
       ...mapState({
-        loading: state => state.core.loading,
         searchTerm: 'searchTerm',
       }),
       isEmpty() {
         return !this.query.trim();
       },
       isLoading() {
-        return this.loading && !this.isEmpty;
+        return this.progress < 100 && !this.isEmpty;
       },
       isNoResults() {
         return (
@@ -254,7 +255,12 @@
           return;
         }
 
-        kinds.forEach(k => searchChannels(this.$store, query, k));
+        this.progress = 0;
+        kinds.forEach(k => {
+          searchChannels(this.$store, query, k).then(() => {
+            this.progress += 100 / kinds.length;
+          });
+        });
       },
       clearInput() {
         this.query = '';
