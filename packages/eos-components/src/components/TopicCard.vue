@@ -41,19 +41,10 @@
               <span class="channel-title subtitle text-truncate">{{ node.channel.title }}</span>
             </div>
             <div v-else>
-              <ImageFilterNoneIcon />
-              <!-- FIXME: Show the number of resources in the Topic when it's
-                  possible. This is commented right now because it's always
-                  '0 resources'.
-
-                  Right now this information is not in the node and the only
-                  way to get this information is doing a new query to the
-                  backend, that could be a performance issue.
-
-              <span class="ml-2 subtitle">
-                {{ subtitle }}
-              </span>
-              -->
+              <b-badge pill variant="primary">
+                <BundleIcon :size="20" />
+                Explore
+              </b-badge>
             </div>
           </b-card-text>
         </div>
@@ -64,14 +55,14 @@
 
 <script>
 import VClamp from 'vue-clamp';
-import ImageFilterNoneIcon from 'vue-material-design-icons/ImageFilterNone.vue';
+import BundleIcon from 'vue-material-design-icons/CubeOutline.vue';
 import { MediaQuality } from '../constants';
 import cardMixin from './mixins/cardMixin.js';
 
 export default {
   name: 'TopicCard',
   components: {
-    ImageFilterNoneIcon,
+    BundleIcon,
     VClamp,
   },
   mixins: [cardMixin],
@@ -80,13 +71,6 @@ export default {
       type: Object,
       required: true,
     },
-    /** FIXME: bring back the subtitle property when we've useful information
-        to show
-    subtitle: {
-      type: String,
-      default: '',
-    },
-    **/
     url: {
       type: String,
       default: '',
@@ -178,6 +162,14 @@ $missing-height: 2px;
   font-family: $btn-font-family;
   font-size: $btn-font-size;
   font-weight: $btn-font-weight;
+}
+
+.badge {
+  text-transform: uppercase;
+  color: $white;
+  border: 1px solid $white;
+  /** Keep in sync with the icon size **/
+  line-height: 20px;
 }
 
 </style>
