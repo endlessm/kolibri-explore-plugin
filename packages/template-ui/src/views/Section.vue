@@ -13,9 +13,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { constants } from 'eos-components';
 import ListSection from '@/views/ListSection';
 import BundleSection from '@/views/BundleSection';
-import { constants } from 'eos-components';
 
 export default {
   name: 'Section',

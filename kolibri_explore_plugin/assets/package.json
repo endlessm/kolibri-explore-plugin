@@ -14,5 +14,8 @@
   },
   "devDependencies": {
     "kolibri-tools": "0.15.0-dev.4"
+  },
+  "resolutions": {
+    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system#65ee3a69a2ab072ea92e034d95118687678b4f5f"
   }
 }
