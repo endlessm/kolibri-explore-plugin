@@ -12,6 +12,7 @@
         size="lg"
         block
         :kind="node.kind"
+        :style="buttonStyle"
         class="mx-auto my-3 play-button py-2"
         @click="goToContent()"
       />
@@ -30,6 +31,28 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  data() {
+    return {
+      buttonMaxWidth: '100%',
+    };
+  },
+  computed: {
+    buttonStyle() {
+      return {
+        maxWidth: this.buttonMaxWidth,
+        minWidth: '200px',
+      };
+    },
+  },
+  watch: {
+    thumbnail() {
+      const img = new Image();
+      img.src = this.thumbnail;
+      img.onload = () => {
+        this.buttonMaxWidth = `${img.width}px`;
+      };
+    }
   },
   methods: {
     goToContent() {
