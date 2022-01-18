@@ -2,8 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { constants as ComponentConstants } from 'eos-components';
 
-import filters from './modules/filters';
 import dynamicRequireAsset from '@/dynamicRequireAsset';
+import filters from './modules/filters';
 
 let storeData;
 try {
