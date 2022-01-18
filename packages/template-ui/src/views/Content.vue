@@ -8,7 +8,7 @@
       :node="content"
     >
       <b-row class="my-3">
-        <b-col xs="12" md="6">
+        <b-col xs="12" sm="6">
           <ContentImage :node="content" />
         </b-col>
       </b-row>
