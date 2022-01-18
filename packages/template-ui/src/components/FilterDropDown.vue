@@ -14,15 +14,7 @@
       <b-dropdown-divider class="my-1" />
       <div class="filter-content flex-fill">
         <template v-if="isMediaFilter(filter)">
-          <PlayButton
-            v-for="option in filter.options"
-            :key="option.kind"
-            class="mb-2 mr-2"
-            :kind="option.kind"
-            :label="option.label"
-            :variant="buttonVariant(filter, option.kind)"
-            @click="onClick(filter, option)"
-          />
+          <MediaFilterButtons :filter="filter" />
         </template>
         <template v-else>
           <b-btn

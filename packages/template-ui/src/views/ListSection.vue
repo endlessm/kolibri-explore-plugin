@@ -3,53 +3,47 @@
     :style="{ backgroundImage: backgroundImageURL }"
   >
     <ChannelHeader :section="section" />
-    <FilterContent v-if="hasFilters" />
 
-    <div v-if="isFilterEmpty">
-      <div v-if="isInlineLevel">
-        <template v-if="loadingSubsectionNodes">
-          <CardGridPlaceholder
-            v-for="subsection in sectionNodes.nodes"
-            :id="subsection.id"
-            :key="subsection.id"
-          >
-            <b-row>
-              <SectionTitle :section="subsection" />
-            </b-row>
-          </CardGridPlaceholder>
-        </template>
-        <template v-else>
-          <CardGrid
-            v-for="subsection in sectionNodes.nodes"
-            :id="subsection.id"
-            :key="subsection.id"
-            :nodes="getSubsectionNodes(subsection.id).nodes"
-            :mediaQuality="mediaQuality"
-            :cardColumns="cardColumns"
-            :hasMoreNodes="getSubsectionNodes(subsection.id).hasMoreNodes"
-            @loadMoreNodes="onLoadMoreSubsectionNodes(subsection.id)"
-          >
-            <b-row>
-              <SectionTitle :section="subsection" />
-            </b-row>
-          </CardGrid>
-        </template>
-      </div>
-      <div v-else>
+    <div v-if="isInlineLevel">
+      <template v-if="loadingSubsectionNodes">
+        <CardGridPlaceholder
+          v-for="subsection in sectionNodes.nodes"
+          :id="subsection.id"
+          :key="subsection.id"
+        >
+          <b-row>
+            <SectionTitle :section="subsection" />
+          </b-row>
+        </CardGridPlaceholder>
+      </template>
+      <template v-else>
         <CardGrid
-          :id="section.id"
-          :key="section.id"
-          :nodes="sectionNodes.nodes"
+          v-for="subsection in sectionNodes.nodes"
+          :id="subsection.id"
+          :key="subsection.id"
+          :nodes="getSubsectionNodes(subsection.id).nodes"
           :mediaQuality="mediaQuality"
           :cardColumns="cardColumns"
-          variant="collapsible"
-          :hasMoreNodes="sectionNodes.hasMoreNodes"
-          @loadMoreNodes="$emit('loadMoreNodes')"
-        />
-      </div>
+          :hasMoreNodes="getSubsectionNodes(subsection.id).hasMoreNodes"
+          @loadMoreNodes="onLoadMoreSubsectionNodes(subsection.id)"
+        >
+          <b-row>
+            <SectionTitle :section="subsection" />
+          </b-row>
+        </CardGrid>
+      </template>
     </div>
     <div v-else>
-      <FilterResult :node="section" />
+      <CardGrid
+        :id="section.id"
+        :key="section.id"
+        :nodes="sectionNodes.nodes"
+        :mediaQuality="mediaQuality"
+        :cardColumns="cardColumns"
+        variant="collapsible"
+        :hasMoreNodes="sectionNodes.hasMoreNodes"
+        @loadMoreNodes="$emit('loadMoreNodes')"
+      />
     </div>
 
   </div>
@@ -84,10 +78,9 @@ export default {
     };
   },
   computed: {
-    ...mapState(['cardColumns', 'mediaQuality', 'hasFilters']),
+    ...mapState(['cardColumns', 'mediaQuality']),
     ...mapGetters({
       getAssetURL: 'getAssetURL',
-      isFilterEmpty: 'filters/isEmpty',
     }),
     isInlineLevel() {
       // FIXME: Use API to query the amount of subtopics:

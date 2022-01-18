@@ -22,6 +22,7 @@
       $hover-background: $hover-value,
       $active-background: $hover-value,
       $active-border: $hover-value);
+    border: 0;
   }
 
   .btn-#{$color}-light {
@@ -29,6 +30,12 @@
       $background: $light,
       $border: $light,
       $hover-border: $value);
+    border: 0;
+  }
+
+  .btn-#{$color}-outline-dark {
+    $value: theme-color("dark");
+    @include eos-button-outline-variant($value, $color-hover: $value, $border-color: $gray-500, $active-background: transparent, $active-border: $primary);
   }
 }
 
