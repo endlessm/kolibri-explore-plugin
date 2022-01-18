@@ -53,6 +53,7 @@ class KolibriApi {
         kind: kind,
         kind_in: kinds,
         descendant_of: options.descendantOf,
+        ordering: 'lft',
       },
     }).then(contentNodes => {
       const { more, results } = contentNodes;
