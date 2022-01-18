@@ -61,7 +61,10 @@ export default {
     },
     getBreakpoints() {
       if (!this.breakpointValues) {
-        // Get breakpoints defined by bootstrap styles. This code is based on:
+        // Get breakpoints defined by bootstrap styles. Ideally we should be able to just import the variables like:
+        // import { sm, md, lg, xl } from '../../styles.scss';
+        // But unfortunately kolibri-tools is not capable of doing such import. 
+        // This code is based on:
         // https://github.com/shaack/bootstrap-detect-breakpoint/blob/master/src/bootstrap-detect-breakpoint.js
         const breakpointNames = ['xl', 'lg', 'md', 'sm', 'xs'];
         this.breakpointValues = {};
