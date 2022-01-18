@@ -2,7 +2,6 @@
   <component
     :is="cardVariant"
     :node="node"
-    :subtitle="subtitle"
     :isBundle="isBundle"
     :url="getNodeUrl(node)"
     :mediaQuality="mediaQuality"
@@ -11,7 +10,7 @@
 
 <script>
 import { MediaQuality } from '../constants';
-import { getNodeUrl, getCardSubtitle } from '../utils';
+import { getNodeUrl } from '../utils';
 
 export default {
   name: 'Card',
@@ -24,11 +23,6 @@ export default {
       type: String,
       default: MediaQuality.REGULAR,
     },
-  },
-  data() {
-    return {
-      subtitle: '',
-    };
   },
   computed: {
     cardVariant() {
@@ -58,29 +52,10 @@ export default {
       return false;
     },
   },
-  watch: {
-    node() {
-      this.updateSubtitle();
-    },
-  },
   mounted() {
-    return new Promise((resolve) => {
-      this.updateSubtitle();
-      resolve();
-    });
   },
   methods: {
     getNodeUrl,
-    updateSubtitle: function() {
-      let fallback = '';
-      if (this.$store) {
-        const { state } = this.$store;
-        if (state.channel) {
-          fallback = state.channel.title;
-        }
-      }
-      this.subtitle = getCardSubtitle(this.node, fallback);
-    },
   },
 };
 </script>

@@ -12,27 +12,19 @@
       <ChannelLogo class="mr-2" :channel="node.channel" size="sm" />
       <span class="channel-title text-muted text-truncate">{{ node.channel.title }}</span>
     </div>
-    <p v-else class="mb-1 subtitle text-muted text-truncate">
-      {{ subtitle }}
-    </p>
-    <div v-if="showTags" class="mb-3 tags text-truncate">
-      <b-badge
-        v-for="tag in tags"
-        :key="tag"
-        pill
-        variant="light"
-        class="mr-1"
+    <p v-else class="mb-1 subtitle text-muted">
+      <VClamp
+        autoresize
+        :maxLines="3"
       >
-        {{ tag }}
-      </b-badge>
-    </div>
+        {{ subtitle }}
+      </VClamp>
+    </p>
   </div>
 </template>
 
 <script>
 import VClamp from 'vue-clamp';
-import { StructuredTags } from '../constants';
-import { getAllStructuredTags, getFirstStructuredTag } from '../utils';
 
 export default {
   name: 'CardBody',
@@ -54,27 +46,8 @@ export default {
     },
   },
   computed: {
-    subjectTags() {
-      return getAllStructuredTags(this.node, StructuredTags.SUBJECT);
-    },
-    typeTag() {
-      return getFirstStructuredTag(this.node, StructuredTags.TYPE);
-    },
-    gradeOrLevelTag() {
-      return (
-        getFirstStructuredTag(this.node, StructuredTags.GRADE)
-        || getFirstStructuredTag(this.node, StructuredTags.LEVEL)
-      );
-    },
-    tags() {
-      const tags = [...this.subjectTags, this.typeTag, this.gradeOrLevelTag];
-      return tags.filter(t => t !== null);
-    },
     showChannelIcon() {
       return this.node.channel;
-    },
-    showTags() {
-      return !this.showChannelIcon && this.tags.length;
     },
   },
 };
@@ -99,5 +72,6 @@ export default {
 
 .subtitle {
   flex-grow: 3;
+  line-height: 1.1;
 }
 </style>

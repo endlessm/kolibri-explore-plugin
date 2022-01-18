@@ -30,6 +30,7 @@
 
 <script>
 import { MediaQuality } from '../constants';
+import { getCardSubtitle } from '../utils';
 import cardMixin from './mixins/cardMixin.js';
 
 export default {
@@ -39,10 +40,6 @@ export default {
     node: {
       type: Object,
       required: true,
-    },
-    subtitle: {
-      type: String,
-      default: '',
     },
     isBundle: {
       type: Boolean,
@@ -63,6 +60,13 @@ export default {
     };
   },
   computed: {
+    subtitle() {
+      const { node } = this;
+      if (this.$store && this.$store.state.isEndlessApp) {
+        return getCardSubtitle(node, '');
+      }
+      return node.description;
+    },
     isLowQuality() {
       return this.mediaQuality === MediaQuality.LOW;
     },
