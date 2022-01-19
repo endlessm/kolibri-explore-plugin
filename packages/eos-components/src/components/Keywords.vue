@@ -10,7 +10,7 @@
     >
       {{ w }}
       <slot>
-        <CloseIcon :size="20" class="ml-2" />
+        <CloseIcon :size="iconSize" class="ml-2" />
       </slot>
     </b-button>
   </span>
@@ -18,6 +18,7 @@
 
 <script>
 import CloseIcon from 'vue-material-design-icons/CloseCircle.vue';
+import { KeywordIconSize } from '../constants.js'
 
 export default {
   name: 'Keywords',
@@ -28,6 +29,11 @@ export default {
     words: {
       type: Array,
       required: true,
+    },
+  },
+  computed: {
+    iconSize() {
+      return KeywordIconSize;
     },
   },
 };
