@@ -51,6 +51,8 @@ export const CarouselInterval = 10000;
 export const ItemsPerSlide = 4;
 export const ItemsPerPage = 16;
 
+export const KeywordIconSize = 20;
+
 export default {
   AuthorFilterName,
   CarouselInterval,
@@ -58,6 +60,7 @@ export default {
   FilterTagsBadList,
   ItemsPerPage,
   ItemsPerSlide,
+  KeywordIconSize,
   LabelPerKind,
   MediaFilterName,
   MediaQuality,

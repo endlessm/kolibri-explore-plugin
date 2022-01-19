@@ -13,6 +13,8 @@
         {{ section.title }}
       </b-button>
     </b-button-group>
+    <slot>
+    </slot>
   </b-button-toolbar>
 </template>
 

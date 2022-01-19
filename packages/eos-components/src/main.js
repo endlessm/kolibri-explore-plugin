@@ -16,11 +16,11 @@ import ContentLink from './components/ContentLink.vue';
 import DummyButton from './components/DummyButton.vue';
 import Footer from './components/Footer.vue';
 import GridPage from './components/GridPage.vue';
+import Keywords from './components/Keywords.vue';
 import NavBar from './components/NavBar.vue';
 import PlayButton from './components/PlayButton.vue';
 import ContentCard from './components/ContentCard.vue';
 import SearchBar from './components/SearchBar.vue';
-import SearchButton from './components/SearchButton.vue';
 import SlidableCardGrid from './components/SlidableCardGrid.vue';
 import TopicCard from './components/TopicCard.vue';
 
@@ -51,11 +51,11 @@ const components = {
   DummyButton,
   Footer,
   GridPage,
+  Keywords,
   NavBar,
   PlayButton,
   ContentCard,
   SearchBar,
-  SearchButton,
   SlidableCardGrid,
   TopicCard,
 };
