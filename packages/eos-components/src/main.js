@@ -1,3 +1,4 @@
+import BackToTop from './components/BackToTop.vue';
 import ButtonsBar from './components/ButtonsBar.vue';
 import Card from './components/Card.vue';
 import CardBody from './components/CardBody.vue';
@@ -31,6 +32,7 @@ import constants from './constants.js';
 import EndlessLogo from './assets/EndlessLogo.svg';
 
 const components = {
+  BackToTop,
   ButtonsBar,
   Card,
   CardBody,

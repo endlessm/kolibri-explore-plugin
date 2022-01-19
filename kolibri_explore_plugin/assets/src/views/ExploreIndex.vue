@@ -1,6 +1,7 @@
 <template>
 
   <div>
+    <BackToTop />
     <ContentModal />
     <DevTag v-if="showBuildInfo" />
     <keep-alive include="SearchPage">
