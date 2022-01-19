@@ -7,16 +7,21 @@
       <div class="img" :style="backgroundStyle"></div>
       <b-card-text>
         <div class="card-content">
-          <h3 class="d-lg-block d-none mb-1 title" :class="{ 'text-primary': isHovered }">
-            <VClamp autoresize :maxLines="3">
-              {{ node.title }}
-            </VClamp>
-          </h3>
-          <h4 class="d-lg-none mb-1 title" :class="{ 'text-primary': isHovered }">
-            <VClamp autoresize :maxLines="4">
-              {{ node.title }}
-            </VClamp>
-          </h4>
+          <div class="d-lg-block d-none dh3 mb-1 title" :class="{ 'text-primary': isHovered }">
+            <CarouselCardTitle
+              :node="node"
+              :showDescription="!showChannelIcon"
+            />
+          </div>
+          <div class="d-lg-none dh4 mb-1 title" :class="{ 'text-primary': isHovered }">
+            <CarouselCardTitle
+              tag="h4"
+              :node="node"
+              :lines="3"
+              :showDescription="!showChannelIcon"
+            />
+          </div>
+
           <div class="align-items-center d-flex justify-content-between">
             <div v-if="showChannelIcon" class="align-items-center d-flex">
               <ChannelLogo class="mr-2" :channel="node.channel" size="sm" />
@@ -24,13 +29,6 @@
                 {{ node.channel.title }}
               </span>
             </div>
-            <p
-              v-else
-              :class="`align-self-center d-none d-sm-block
-                       mb-1 pr-2 subtitle text-muted text-truncate`"
-            >
-              {{ subtitle }}
-            </p>
             <PlayButton
               class="ml-auto"
               :kind="node.kind"
@@ -44,15 +42,10 @@
 </template>
 
 <script>
-import VClamp from 'vue-clamp';
-import { getCardSubtitle } from '../utils';
 import cardMixin from './mixins/cardMixin';
 
 export default {
   name: 'CarouselCard',
-  components: {
-    VClamp,
-  },
   mixins: [cardMixin],
   props: {
     node: {
@@ -79,16 +72,6 @@ export default {
       return {
         backgroundImage: `url("${bg}")`,
       };
-    },
-    subtitle() {
-      let fallback = '';
-      if (this.$store) {
-        const { state } = this.$store;
-        if (state.channel) {
-          fallback = state.channel.title;
-        }
-      }
-      return getCardSubtitle(this.node, fallback);
     },
   },
   methods: {
@@ -137,12 +120,14 @@ export default {
   }
 }
 
-.card-content h3 {
-  min-height: 3 * ($h2-font-size * $headings-line-height);
+.card-content .dh3 {
+  min-height: 2 * ($h2-font-size * $headings-line-height) +
+              2 * ($font-size-base * $line-height-base);
 }
 
-.card-content h4 {
-  min-height: 4 * ($h4-font-size * $headings-line-height);
+.card-content .dh4 {
+  min-height: 3 * ($h4-font-size * $headings-line-height) +
+              2 * ($font-size-base * $line-height-base);
 }
 
 .card-content {
@@ -153,7 +138,7 @@ export default {
   position: inherit !important;
 }
 
-.card-content h3, .card-content h4 {
+.card-content .dh3, .card-content .dh4 {
   transition: all ease .4s;
 }
 

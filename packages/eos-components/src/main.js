@@ -6,6 +6,7 @@ import CardGrid from './components/CardGrid.vue';
 import CardGridPlaceholder from './components/CardGridPlaceholder.vue';
 import Carousel from './components/Carousel.vue';
 import CarouselCard from './components/CarouselCard.vue';
+import CarouselCardTitle from './components/CarouselCardTitle.vue';
 import CarouselPlaceholder from './components/CarouselPlaceholder.vue';
 import ChannelCard from './components/ChannelCard.vue';
 import ChannelCardGroup from './components/ChannelCardGroup.vue';
@@ -40,6 +41,7 @@ const components = {
   CardGridPlaceholder,
   Carousel,
   CarouselCard,
+  CarouselCardTitle,
   CarouselPlaceholder,
   ChannelCard,
   ChannelCardGroup,
