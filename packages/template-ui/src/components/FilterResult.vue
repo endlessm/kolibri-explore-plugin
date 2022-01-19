@@ -38,7 +38,7 @@
       };
     },
     computed: {
-      ...mapState(['cardColumns', 'filters', 'mediaQuality']),
+      ...mapState(['cardColumns', 'filters', 'isEndlessApp', 'mediaQuality']),
       query() {
         return this.filters.query;
       },
@@ -59,6 +59,23 @@
         const tags = this.query[constants.TagFilterName];
         if (tags && tags.length) {
           params.tags = tags;
+        }
+
+        // Filter by structured tags
+        // this will be superceeded by the new taxonomy being tested in
+        // https://phabricator.endlessm.com/T32647
+        if (this.isEndlessApp) {
+          Object.values(constants.StructuredTags).forEach((matchKey) => {
+            const options = this.query[matchKey];
+            if (options && options.length) {
+              if (!params.tags) {
+                params.tags = [];
+              }
+              options.forEach((option) => {
+                params.tags.push(`${matchKey}=${option}`);
+              });
+            }
+          });
         }
 
         return params;
