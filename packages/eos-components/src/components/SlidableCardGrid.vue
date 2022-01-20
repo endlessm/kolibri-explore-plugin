@@ -11,6 +11,8 @@
       <span aria-hidden="true"><b-icon-chevron-left /></span>
       <span class="sr-only">Previous slide</span>
     </b-button>
+    <div id="backgroud-block-left"></div>
+    <div id="backgroud-block-right"></div>
     <b-button
       v-if="hasMultipleSlides"
       variant="outline-primary"
@@ -24,7 +26,6 @@
       <span class="sr-only">Next slide</span>
     </b-button>
     <b-carousel
-      id="carousel"
       ref="carousel"
       v-model="slide"
       :interval="0"
@@ -37,7 +38,7 @@
         <template #img>
           <b-card-group
             deck
-            class="my-2"
+            class="card-deck my-2"
           >
             <Card
               v-for="node in slideNodes"
@@ -141,29 +142,63 @@ export default {
 <style lang="scss" scoped>
 @import "../styles.scss";
 
-$button-size: 3rem;
+#backgroud-block-left, #backgroud-block-right {
+  position: absolute;
+  width: $grid-gutter-width * .5 + $circled-button-size;
+  height: 100%;
+  z-index: 3; // Less than buttons, more than cards.
+  top: 0;
+}
+
+#backgroud-block-left {
+  left: 0;
+  background: linear-gradient(90deg,
+    $gray-300 0%,
+    $gray-300 50%,
+    rgba($gray-300, 0) 100%
+  );
+}
+
+#backgroud-block-right {
+  right: 0;
+
+  background: linear-gradient(90deg,
+    rgba($gray-300, 0) 0%,
+    $gray-300 50%,
+    $gray-300 100%
+  );
+}
 
 .btn.previous, .btn.next {
   position: absolute;
   top: 50%;
-  margin-top: -$button-size / 2;
+  margin-top: -$circled-button-size / 2;
   bottom: 0;
-  width: $button-size;
-  height: $button-size;
+  width: $circled-button-size;
+  height: $circled-button-size;
   z-index: 4;
 }
 
 .btn.previous {
-  left: -($button-size + $spacer);
+  left: $grid-gutter-width * .5;
 }
 
 .btn.next {
-  right: -($button-size + $spacer);
+  right: $grid-gutter-width * .5;
 }
 
 .carousel {
   overflow: auto;
   overflow-x: hidden;
+  & ::v-deep .carousel-inner {
+    padding-right: $grid-gutter-width * .5 + $circled-button-size;
+    padding-left: $grid-gutter-width * .5 + $circled-button-size;
+  }
+}
+
+.card-deck {
+    padding-right: $grid-gutter-width * .5;
+    padding-left: $grid-gutter-width * .5;
 }
 
 </style>

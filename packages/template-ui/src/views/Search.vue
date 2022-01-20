@@ -22,7 +22,11 @@
       :mediaQuality="mediaQuality"
       :cardColumns="cardColumns"
     >
-      <h3>Explore topics</h3>
+      <b-row>
+        <b-container>
+          <h3>Explore topics</h3>
+        </b-container>
+      </b-row>
     </CardGrid>
     <CardGrid
       v-else
