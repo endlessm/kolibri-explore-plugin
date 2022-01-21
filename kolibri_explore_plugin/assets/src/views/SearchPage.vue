@@ -7,6 +7,7 @@
       <SearchBar
         v-model="query"
         :debounce="800"
+        :progress="progress"
         @clear-input="clearInput"
       />
       <b-container class="pb-5 pt-3">
@@ -30,6 +31,9 @@
               :buttons="Array.from(searchTerms.keys())"
               @click="goToTerm"
             />
+          </div>
+          <div v-else>
+            <Keywords :words="keywords" @click="removeKeyword" />
           </div>
         </div>
       </b-container>
@@ -124,19 +128,19 @@
           lg: 3,
         },
         mediaQuality: constants.MediaQuality.REGULAR,
+        progress: 100,
       };
     },
     computed: {
       ...mapState('topicsRoot', { searchResult: 'searchResult', channels: 'rootNodes' }),
       ...mapState({
-        loading: state => state.core.loading,
         searchTerm: 'searchTerm',
       }),
       isEmpty() {
         return !this.query.trim();
       },
       isLoading() {
-        return this.loading && !this.isEmpty;
+        return this.progress < 100 && !this.isEmpty;
       },
       isNoResults() {
         return (
@@ -215,6 +219,9 @@
       searchTerms() {
         return searchTerms;
       },
+      keywords() {
+        return this.cleanedQuery.split(/\s+/);
+      },
     },
     watch: {
       cleanedQuery() {
@@ -248,13 +255,22 @@
           return;
         }
 
-        kinds.forEach(k => searchChannels(this.$store, query, k));
+        this.progress = 0;
+        kinds.forEach(k => {
+          searchChannels(this.$store, query, k).then(() => {
+            this.progress += 100 / kinds.length;
+          });
+        });
       },
       clearInput() {
         this.query = '';
       },
       groupVerb(kind) {
         return constants.MediaTypeVerbs[kind === 'topic' ? 'bundle' : kind];
+      },
+      removeKeyword(keyword) {
+        const words = this.keywords.filter(k => k !== keyword);
+        this.query = words.join(' ');
       },
     },
   };

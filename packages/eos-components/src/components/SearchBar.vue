@@ -28,6 +28,13 @@
         >
       </b-input-group>
     </b-container>
+    <b-progress
+      v-if="progress < 100"
+      :value="progress"
+      :max="100"
+      height="2px"
+      variant="primary"
+    />
   </div>
 </template>
 
@@ -54,6 +61,10 @@
       loading: {
         type: Boolean,
         default: false,
+      },
+      progress: {
+        type: Number,
+        default: 100,
       },
     },
     created() {
