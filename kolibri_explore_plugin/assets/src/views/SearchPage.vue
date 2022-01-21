@@ -8,6 +8,7 @@
         v-model="query"
         :debounce="800"
         :progress="progress"
+        :loading="isLoading"
         @clear-input="clearInput"
       />
       <b-container class="pb-5 pt-3">
@@ -225,13 +226,11 @@
     },
     watch: {
       cleanedQuery() {
+        this.setSearchTerm(this.query);
         this.search(this.cleanedQuery);
       },
       searchTerm() {
         this.query = this.searchTerm || '';
-      },
-      query() {
-        this.setSearchTerm(this.query);
       },
     },
     methods: {

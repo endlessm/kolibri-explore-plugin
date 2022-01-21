@@ -4,8 +4,7 @@
       <b-input-group>
         <template #prepend>
           <b-input-group-text>
-            <b-spinner v-if="loading" small label="Spinning" />
-            <MagnifyIcon v-else />
+            <MagnifyIcon />
           </b-input-group-text>
         </template>
         <template #append>
@@ -67,6 +66,13 @@
         default: 100,
       },
     },
+    watch: {
+      loading() {
+        this.$nextTick(() => {
+          this.focusSearchInput();
+        });
+      },
+    },
     created() {
       this.updateValue = _.debounce(this.inputUpdated, this.debounce);
     },
@@ -99,6 +105,10 @@
     background-color: transparent;
     border: none;
     box-shadow: none;
+  }
+  &:disabled {
+    background-color: $white;
+    color: $text-muted;
   }
   font-size: $h5-font-size;
 }
