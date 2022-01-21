@@ -48,8 +48,24 @@ $grid-breakpoints: (
   sm: 576px,
   md: 768px,
   lg: 992px,
-  xl: 1200px,
-) !default;
+  xl: 1200px
+);
+
+// Same as default, added here because is needed to calculate the container width:
+$grid-gutter-width: 30px;
+
+// Size of circled buttons like in the row of cards.
+// This is not a Bootstrap variable, but is needed to calculate the container width:
+$circled-button-size: 46px;
+
+$container-extra-width: $grid-gutter-width * 2 + $circled-button-size * 2;
+
+$container-max-widths: (
+  sm: 540px + $container-extra-width,
+  md: 720px + $container-extra-width,
+  lg: 960px + $container-extra-width,
+  xl: 1140px + $container-extra-width
+  );
 
 $btn-font-weight: 600;
 $headings-font-weight: 600;

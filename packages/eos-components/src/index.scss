@@ -6,6 +6,28 @@
 @import "~@fontsource/lato/index.css";
 @import "~@fontsource/poppins/index.css";
 
+// Override containers mixin:
+@mixin make-container($gutter: $grid-gutter-width) {
+  width: 100%;
+  padding-right: $gutter + $circled-button-size;
+  padding-left: $gutter + $circled-button-size;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@if $enable-grid-classes {
+  // Single container class with breakpoint max-widths
+  .container,
+  // 100% wide container at all breakpoints
+  .container-fluid {
+    @include make-container();
+  }
+  .no-container-padding {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
 // Change button dark outline variant:
 .btn-outline-dark {
   $value: theme-color("dark");
