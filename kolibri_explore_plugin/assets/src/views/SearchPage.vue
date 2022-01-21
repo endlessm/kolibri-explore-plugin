@@ -227,13 +227,17 @@
       cleanedQuery() {
         this.search(this.cleanedQuery);
       },
-    },
-    mounted() {
-      this.query = this.searchTerm || '';
+      searchTerm() {
+        this.query = this.searchTerm || '';
+      },
+      query() {
+        this.setSearchTerm(this.query);
+      },
     },
     methods: {
       ...mapMutations({
         setSearchResult: 'topicsRoot/SET_SEARCH_RESULT',
+        setSearchTerm: 'SET_SEARCH_TERM',
       }),
       goBack() {
         this.$router.push({

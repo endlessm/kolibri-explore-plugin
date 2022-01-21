@@ -53,6 +53,7 @@
     methods: {
       ...mapMutations({
         setSearchResult: 'topicsRoot/SET_SEARCH_RESULT',
+        setSearchTerm: 'SET_SEARCH_TERM',
       }),
       goToChannels() {
         this.$router.push({
@@ -62,6 +63,7 @@
       goToSearch() {
         // cleaning previous search
         this.setSearchResult({}),
+          this.setSearchTerm(''),
           this.$router.push({
             name: PageNames.SEARCH,
           });
