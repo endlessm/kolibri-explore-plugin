@@ -5,7 +5,7 @@
       class="text-decoration-none text-reset"
     >
       <h5>
-        <span class="text-primary title">{{ section.title }} <b-icon-arrow-right /></span>
+        <span class="text-primary title">{{ section.title }} <ArrowRightIcon /></span>
       </h5>
     </b-link>
   </b-container>
@@ -14,9 +14,11 @@
 <script>
 import { utils } from 'eos-components';
 import { mapState } from 'vuex';
+import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue';
 
 export default {
   name: 'SectionTitle',
+  components: { ArrowRightIcon },
   props: {
     section: {
       type: Object,
