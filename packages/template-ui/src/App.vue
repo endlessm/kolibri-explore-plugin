@@ -64,17 +64,17 @@ export default {
       }
       const contentId = params.get('contentId');
       if (contentId) {
-        this.$router.push(`/c/${contentId}`);
+        this.$router.replace(`/c/${contentId}`);
         return;
       }
       const topicId = params.get('topicId');
       if (topicId) {
-        this.$router.push(`/t/${topicId}`);
+        this.$router.replace(`/t/${topicId}`);
         return;
       }
       const test = params.get('test');
       if (test === 'true') {
-        this.$router.push('/test');
+        this.$router.replace('/test');
       }
     },
   },
