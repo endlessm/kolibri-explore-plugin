@@ -1,30 +1,28 @@
 <template>
   <div class="position-relative">
-    <b-button
+    <b-link
       v-if="hasMultipleSlides"
-      variant="outline-primary"
-      class="previous rounded-circle"
+      class="link-previous"
       :class="{ invisible: isFirstSlide }"
       aria-controls="carousel"
       @click="previous()"
     >
-      <span aria-hidden="true"><b-icon-chevron-left /></span>
-      <span class="sr-only">Previous slide</span>
-    </b-button>
+      <!-- Size same as $circled-button-size -->
+      <ChevronLeftCircleOutlineIcon :size="50" />
+    </b-link>
     <div id="backgroud-block-left"></div>
     <div id="backgroud-block-right"></div>
-    <b-button
+    <b-link
       v-if="hasMultipleSlides"
-      variant="outline-primary"
-      class="next rounded-circle"
       :disabled="loading"
+      class="link-next"
       :class="{ invisible: hideNextButton }"
       aria-controls="carousel"
       @click="next()"
     >
-      <span aria-hidden="true"><b-icon-chevron-right /></span>
-      <span class="sr-only">Next slide</span>
-    </b-button>
+      <!-- Size same as $circled-button-size -->
+      <ChevronRightCircleOutlineIcon :size="50" />
+    </b-link>
     <b-carousel
       ref="carousel"
       v-model="slide"
@@ -62,11 +60,14 @@
 
 <script>
 import _ from 'underscore';
+import ChevronLeftCircleOutlineIcon from 'vue-material-design-icons/ChevronLeftCircleOutline.vue';
+import ChevronRightCircleOutlineIcon from 'vue-material-design-icons/ChevronRightCircleOutline.vue';
 import { ItemsPerSlide, MediaQuality } from '../constants';
 import responsiveMixin from './mixins/responsiveMixin';
 
 export default {
   name: 'SlidableCardGrid',
+  components: { ChevronLeftCircleOutlineIcon, ChevronRightCircleOutlineIcon },
   mixins: [responsiveMixin],
   props: {
     nodes: {
@@ -169,21 +170,20 @@ export default {
   );
 }
 
-.btn.previous, .btn.next {
+
+.link-previous, .link-next {
   position: absolute;
   top: 50%;
   margin-top: -$circled-button-size / 2;
   bottom: 0;
-  width: $circled-button-size;
-  height: $circled-button-size;
   z-index: 4;
 }
 
-.btn.previous {
+.link-previous {
   left: $grid-gutter-width * .5;
 }
 
-.btn.next {
+.link-next {
   right: $grid-gutter-width * .5;
 }
 

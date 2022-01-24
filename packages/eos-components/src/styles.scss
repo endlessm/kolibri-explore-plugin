@@ -56,7 +56,7 @@ $grid-gutter-width: 30px;
 
 // Size of circled buttons like in the row of cards.
 // This is not a Bootstrap variable, but is needed to calculate the container width:
-$circled-button-size: 46px;
+$circled-button-size: 50px;
 
 $container-extra-width: $grid-gutter-width * 2 + $circled-button-size * 2;
 
