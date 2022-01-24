@@ -30,6 +30,7 @@ export const CustomChannelApps = {
   '2f95235c3709511fa12d007f31ed6a7b': 'steam',
   bf0260ed911f44cda27a263db93a8512: '49ers-edu-digital-playbook',
   '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home',
+  '35ec8e78266d545b9449af6e2409b10d': 'wikihow',
 };
 
 export function getAppNameByID(id) {
