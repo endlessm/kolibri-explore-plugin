@@ -31,6 +31,9 @@ export const CustomChannelApps = {
   bf0260ed911f44cda27a263db93a8512: '49ers-edu-digital-playbook',
   '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home',
   '35ec8e78266d545b9449af6e2409b10d': 'wikihow',
+  '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment',
+  '69497db42937539e94fe3969f6995d2d': 'wikihow-computers-and-electronics',
+  e114fe9de66e513384e4ca2e9b529c18: 'wikihow-hobbies-and-crafts',
 };
 
 export function getAppNameByID(id) {
