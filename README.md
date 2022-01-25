@@ -134,6 +134,23 @@ pre-commit install -f --install-hooks
 There is a continuous integration tool that will run the same checks
 per pull request.
 
+### Ingesting highlighted content
+
+Make sure to have a `.env` file with the spreadsheet key as content:
+
+```
+CONTENT_SPREADSHEET_KEY=123456
+```
+
+Then run the script:
+
+```
+./scripts/ingest_highlighted.py
+```
+
+If everything goes well, the `highlighted-content.json` file will be
+updated. You then need to commit the file.
+
 ### Making a release
 
 If you are releasing a new version, first please bump to either major,

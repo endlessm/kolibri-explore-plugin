@@ -19,3 +19,6 @@ apps-bundle.zip
 
 # Symlink to template overrides
 packages/template-ui/src/overrides
+
+# Environment file with secrets
+/.env
