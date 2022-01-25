@@ -1,7 +1,8 @@
 <template>
   <div>
     <ChannelNavBar :node="content" />
-    <DetailView
+    <component
+      :is="detailVariant"
       :title="content.title"
       :subtitle="subtitle"
       :node="content"
@@ -29,7 +30,7 @@
         <strong>License — {{ content.license_name }}</strong>
         <p> {{ content.license_description }} </p>
       </div>
-    </DetailView>
+    </component>
     <template v-if="loading">
       <CardGridPlaceholder />
     </template>
@@ -62,7 +63,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['cardColumns', 'channel', 'showNextContent']),
+    ...mapState(['cardColumns', 'channel', 'showNextContent', 'showDetailViewFullScreen']),
     tags() {
       return [
         ...utils.getAllStructuredTags(this.content, constants.StructuredTags.SUBJECT),
@@ -76,6 +77,13 @@ export default {
     },
     sectionTitle() {
       return this.content.ancestors[this.content.ancestors.length - 1].title;
+    },
+    detailVariant() {
+      if (this.showDetailViewFullScreen) {
+        return 'DetailViewFullScreen';
+      }
+
+      return 'DetailView';
     },
   },
   watch: {

@@ -4,6 +4,8 @@
   "hasCarousel": false,
   "hasFilters": false,
   "defaultContentNode": "98731f06729457ed9b6ffe154a0a78c4",
+  "showDetailViewFullScreen": true,
+  "showBreadcrumb": false,
   "isEndlessApp": true,
   "bundleKind": "simple",
   "showFooter": false,

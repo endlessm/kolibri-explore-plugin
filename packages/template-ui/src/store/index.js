@@ -54,6 +54,8 @@ const initialState = {
   bundleKind: null,
   showFooter: true,
   showNextContent: true,
+  showDetailViewFullScreen: false,
+  showBreadcrumb: true,
 };
 
 const store = new Vuex.Store({

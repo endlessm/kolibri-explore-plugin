@@ -20,19 +20,21 @@
         …
       </li>
       <!-- One li with link per parent item -->
-      <li
-        v-for="p in parentItems"
-        :key="p.id"
-        v-b-tooltip.hover
-        :title="p.title"
-        class="breadcrumb-item text-light text-truncate"
-      >
-        <b-link
-          :to="getTopicUrl(p)"
+      <template v-if="showBreadcrumb">
+        <li
+          v-for="p in parentItems"
+          :key="p.id"
+          v-b-tooltip.hover
+          :title="p.title"
+          class="breadcrumb-item text-light text-truncate"
         >
-          {{ p.title }}
-        </b-link>
-      </li>
+          <b-link
+            :to="getTopicUrl(p)"
+          >
+            {{ p.title }}
+          </b-link>
+        </li>
+      </template>
       <!-- Last li, current node or Search -->
       <li
         v-b-tooltip.hover
@@ -65,7 +67,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['channel']),
+    ...mapState(['channel', 'showBreadcrumb']),
     isShortened() {
       if (!this.node || !this.node.ancestors || this.node.ancestors.length < 2) {
         // No … for the Search page or for main topics:
