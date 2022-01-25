@@ -6,6 +6,8 @@ import Section from '@/views/Section.vue';
 import Content from '@/views/Content.vue';
 import Test from '@/views/Test.vue';
 
+import store from '@/store';
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -18,6 +20,18 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+    beforeEnter: (to, from, next) => {
+      const { defaultContentNode } = store.state;
+      if (defaultContentNode) {
+        next({
+          name: 'Content',
+          params: { contentId: defaultContentNode },
+          replace: true,
+        });
+      } else {
+        next();
+      }
+    }
   },
   {
     path: '/search',
