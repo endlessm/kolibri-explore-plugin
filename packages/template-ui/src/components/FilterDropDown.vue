@@ -8,7 +8,7 @@
     :boundary="boundary"
   >
     <div class="d-flex filter-dropdown flex-column">
-      <b-dropdown-header>
+      <b-dropdown-header class="header">
         {{ filter.name }}
         <b-button-close @click="closeFilter()" />
       </b-dropdown-header>
@@ -39,7 +39,7 @@
           :disabled="clearDisabled(filter)"
           @click="clearFilter({ filter })"
         >
-          <b-icon-x-circle class="mr-1" />
+          <CloseIcon class="mr-1" />
           clear all
         </b-button>
       </b-dropdown-form>
@@ -49,9 +49,13 @@
 
 <script>
   import { mapGetters, mapMutations } from 'vuex';
+  import CloseIcon from 'vue-material-design-icons/CloseCircleOutline.vue';
 
   export default {
     name: 'FilterDropDown',
+    components: {
+      CloseIcon,
+    },
     props: {
       filter: {
         type: Object,
@@ -125,6 +129,10 @@
     ::v-deep .dropdown-toggle {
       border-radius: $rounded-pill;
     }
+  }
+
+  .header {
+    font-family: $headings-font-family;
   }
 
 </style>
