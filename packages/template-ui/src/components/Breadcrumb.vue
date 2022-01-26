@@ -75,7 +75,7 @@ export default {
         return [{
           "id": this.channel.id,
           "title": this.channel.name,
-          "to": "/",
+          "to": { name: 'Home', query: { clearFilters: true } },
         }];
       }
 
@@ -102,7 +102,11 @@ export default {
   },
   methods: {
     getTopicUrl(n) {
-      return utils.getNodeUrl({ id: n.id, kind: 'topic' }, this.channel.id);
+      const path = utils.getNodeUrl({ id: n.id, kind: 'topic' }, this.channel.id);
+      return {
+        path,
+        query: { clearFilters: path === '/' },
+      };
     },
   },
 };
