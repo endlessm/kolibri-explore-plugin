@@ -19,6 +19,7 @@ const initialState = {
   // Channel and nodes, as they come from kolibri:
   channel: {},
   mainSections: [],
+  searchQuery: '',
 
   isStandaloneChannel: false,
 
@@ -67,6 +68,9 @@ const store = new Vuex.Store({
     },
     setIsStandaloneChannel(state) {
       state.isStandaloneChannel = true;
+    },
+    setSearchQuery(state, payload) {
+      state.searchQuery = payload;
     },
   },
   getters: {

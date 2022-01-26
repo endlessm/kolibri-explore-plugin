@@ -37,6 +37,13 @@ const routes = [
     path: '/search',
     name: 'Search',
     component: Search,
+    beforeEnter(to, from, next) {
+      if (from.name === 'Home') {
+        // Clean the search query when coming from home
+        store.commit('setSearchQuery', '');
+      }
+      next();
+    },
   },
   {
     path: '/t/:topicId',
