@@ -8,8 +8,7 @@
       aria-controls="carousel"
       @click="previous()"
     >
-      <span aria-hidden="true"><b-icon-chevron-left /></span>
-      <span class="sr-only">Previous slide</span>
+      <ChevronLeftIcon title="Previous slide" />
     </b-button>
     <div id="backgroud-block-left"></div>
     <div id="backgroud-block-right"></div>
@@ -22,8 +21,7 @@
       aria-controls="carousel"
       @click="next()"
     >
-      <span aria-hidden="true"><b-icon-chevron-right /></span>
-      <span class="sr-only">Next slide</span>
+      <ChevronRightIcon title="Next slide" />
     </b-button>
     <b-carousel
       ref="carousel"
@@ -62,11 +60,14 @@
 
 <script>
 import _ from 'underscore';
+import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue';
+import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue';
 import { ItemsPerSlide, MediaQuality } from '../constants';
 import responsiveMixin from './mixins/responsiveMixin';
 
 export default {
   name: 'SlidableCardGrid',
+  components: { ChevronLeftIcon, ChevronRightIcon },
   mixins: [responsiveMixin],
   props: {
     nodes: {
@@ -169,10 +170,13 @@ export default {
   );
 }
 
+
 .btn.previous, .btn.next {
   position: absolute;
   top: 50%;
   margin-top: -$circled-button-size / 2;
+  padding: 0;
+  border-width: 2px;
   bottom: 0;
   width: $circled-button-size;
   height: $circled-button-size;
