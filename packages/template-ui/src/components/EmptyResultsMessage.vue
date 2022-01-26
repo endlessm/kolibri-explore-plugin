@@ -21,7 +21,13 @@
       :mediaQuality="mediaQuality"
       :cardColumns="cardColumns"
     >
-      <h3>Explore topics</h3>
+      <b-row>
+        <b-container>
+          <h4 class="explore-title text-dark text-truncate w-75">
+            Explore topics
+          </h4>
+        </b-container>
+      </b-row>
     </CardGrid>
   </div>
 </template>
@@ -42,3 +48,12 @@
     },
   };
 </script>
+
+<style lang="scss" scoped>
+@import '@/styles.scss';
+
+.explore-title {
+  margin-top: $big-spacer !important;
+}
+
+</style>

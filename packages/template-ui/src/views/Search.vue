@@ -24,7 +24,9 @@
     >
       <b-row>
         <b-container>
-          <h3>Explore topics</h3>
+          <h4 class="explore-title text-dark text-truncate w-75">
+            Explore topics
+          </h4>
         </b-container>
       </b-row>
     </CardGrid>
@@ -126,6 +128,10 @@ export default {
 
 .root {
   margin-top: $navbar-height;
+}
+
+.explore-title {
+  margin-top: $big-spacer !important;
 }
 
 </style>

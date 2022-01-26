@@ -189,3 +189,6 @@ $header-color: scale-color($secondary, $lightness: 50%) !default;
 $navbar-height: $navbar-brand-height +
                 $navbar-brand-padding-y * 2 +
                 $navbar-padding-y * 2;
+
+// Bigger than 3 spacer:
+$big-spacer: $spacer * 3.5;
