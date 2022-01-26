@@ -27,6 +27,10 @@ DEFAULT_OVERRIDE_PATH = os.path.join(CHANNEL_OVERRIDES_DIR, DEFAULT_OVERRIDE)
 
 DEFAULT_ZIP_NAME = "custom-channel-ui"
 
+HIGHLIGHTED_CONTENT_PATH = os.path.join(
+    PROJECT_DIR, "kolibri_explore_plugin", "static", "highlighted-content.json"
+)
+
 
 def bundle_zip(zip_name):
     shutil.make_archive(zip_name, "zip", "dist/")
