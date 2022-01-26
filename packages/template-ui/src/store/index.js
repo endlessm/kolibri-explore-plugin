@@ -55,7 +55,7 @@ const initialState = {
   showFooter: true,
   showNextContent: true,
   showDetailViewFullScreen: false,
-  showBreadcrumb: true,
+  showParentsInBreadcrumb: true,
 };
 
 const store = new Vuex.Store({

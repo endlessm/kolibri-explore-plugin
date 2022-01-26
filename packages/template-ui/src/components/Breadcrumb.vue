@@ -1,17 +1,8 @@
 <template>
-  <b-navbar-nav
-    class="mt-3"
-    aria-label="breadcrumb"
+  <ol
+    class="bg-transparent breadcrumb flex-nowrap px-2"
   >
-    <b-link
-      class="d-none d-sm-block mt-2"
-      to="/"
-    >
-      <ChannelLogo :channel="channel" size="sm" />
-    </b-link>
-    <ol
-      class="bg-transparent breadcrumb flex-nowrap px-2"
-    >
+    <template v-if="showParentsInBreadcrumb">
       <!-- Possible … li for small screens or too many parents -->
       <li
         v-if="isShortened"
@@ -20,31 +11,29 @@
         …
       </li>
       <!-- One li with link per parent item -->
-      <template v-if="showBreadcrumb">
-        <li
-          v-for="p in parentItems"
-          :key="p.id"
-          v-b-tooltip.hover
-          :title="p.title"
-          class="breadcrumb-item text-light text-truncate"
-        >
-          <b-link
-            :to="getTopicUrl(p)"
-          >
-            {{ p.title }}
-          </b-link>
-        </li>
-      </template>
-      <!-- Last li, current node or Search -->
       <li
+        v-for="p in parentItems"
+        :key="p.id"
         v-b-tooltip.hover
-        :title="currentItem.title"
-        class="active breadcrumb-item text-light text-truncate"
+        :title="p.title"
+        class="breadcrumb-item text-light text-truncate"
       >
-        {{ currentItem.title }}
+        <b-link
+          :to="getTopicUrl(p)"
+        >
+          {{ p.title }}
+        </b-link>
       </li>
-    </ol>
-  </b-navbar-nav>
+    </template>
+    <!-- Last li, current node or Search -->
+    <li
+      v-b-tooltip.hover
+      :title="currentItem.title"
+      class="active breadcrumb-item text-light text-truncate"
+    >
+      {{ currentItem.title }}
+    </li>
+  </ol>
 </template>
 
 <script>
@@ -67,7 +56,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['channel', 'showBreadcrumb']),
+    ...mapState(['channel', 'showParentsInBreadcrumb']),
     isShortened() {
       if (!this.node || !this.node.ancestors || this.node.ancestors.length < 2) {
         // No … for the Search page or for main topics:

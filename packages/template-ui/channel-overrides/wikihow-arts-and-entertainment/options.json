@@ -5,7 +5,7 @@
   "hasFilters": false,
   "defaultContentNode": "42ddd4230da75a968737261c86c98375",
   "showDetailViewFullScreen": true,
-  "showBreadcrumb": false,
+  "showParentsInBreadcrumb": false,
   "isEndlessApp": true,
   "bundleKind": "simple",
   "showFooter": false,
