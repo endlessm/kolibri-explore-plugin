@@ -1,6 +1,7 @@
 <template>
   <b-dropdown
     ref="dropdown"
+    size="sm"
     class="mr-2"
     :text="filter.prettyName"
     :variant="filter.variant"
@@ -17,22 +18,24 @@
           <MediaFilterButtons :filter="filter" />
         </template>
         <template v-else>
-          <b-btn
+          <b-button
             v-for="option in filter.options"
             :key="option"
+            size="sm"
             pill
             class="mb-2 mr-2"
             :variant="buttonVariant(filter, option)"
             @click="onClick(filter, option)"
           >
             {{ option }}
-          </b-btn>
+          </b-button>
         </template>
       </div>
       <b-dropdown-divider class="my-1" />
       <b-dropdown-form class="flex-shrink-0">
         <b-button
           variant="link"
+          size="sm"
           :disabled="clearDisabled(filter)"
           @click="clearFilter({ filter })"
         >

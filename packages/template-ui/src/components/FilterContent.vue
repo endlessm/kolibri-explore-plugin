@@ -1,6 +1,6 @@
 <template>
   <b-container v-if="availableFilters.length" class="my-5">
-    <MediaFilterButtons v-if="flatMediaFilter" variant="flat" size="xs" :filter="mediaFilter" />
+    <MediaFilterButtons v-if="flatMediaFilter" variant="flat" size="sm" :filter="mediaFilter" />
     <FilterDropDown
       v-for="filter in dropdownFilters"
       :key="filter.name"
@@ -8,6 +8,7 @@
     />
     <b-button
       v-if="!isEmpty"
+      size="sm"
       variant="link"
       @click="clearFilter({})"
     >

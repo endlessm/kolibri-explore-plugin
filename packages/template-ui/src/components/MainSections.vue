@@ -3,10 +3,12 @@
     <b-button-group
       v-for="section in mainSections"
       :key="'menu-' + section.id"
+      size="sm"
       class="mx-1 my-1"
     >
       <b-button
         pill
+        size="sm"
         variant="primary"
         :to="getNodeUrl(section)"
       >
