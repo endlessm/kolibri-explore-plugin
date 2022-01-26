@@ -6,7 +6,20 @@
     <a v-if="showClose" class="close-link mr-3" @click="goToChannelList">
       <CloseIcon />
     </a>
-    <Breadcrumb v-if="!atHome" :node="node" />
+    <template v-if="!atHome">
+      <b-navbar-nav
+        class="mt-3"
+        aria-label="breadcrumb"
+      >
+        <b-link
+          class="d-none d-sm-block mt-2"
+          to="/"
+        >
+          <ChannelLogo :channel="channel" size="sm" />
+        </b-link>
+        <Breadcrumb :node="node" />
+      </b-navbar-nav>
+    </template>
   </NavBar>
 </template>
 
@@ -31,7 +44,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(['isStandaloneChannel']),
+    ...mapState(['channel', 'isStandaloneChannel']),
     showClose() {
       return !this.isStandaloneChannel;
     },

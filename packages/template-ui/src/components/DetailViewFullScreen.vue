@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'DetailView',
+  name: 'DetailViewFullScreen',
   props: {
     node: {
       type: Object,
