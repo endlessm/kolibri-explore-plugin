@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     ...mapGetters(['getAssetURL']),
-    ...mapState(['mainSections', 'cardColumns', 'mediaQuality']),
+    ...mapState(['mainSections', 'cardColumns', 'mediaQuality', 'searchQuery']),
     backgroundImageURL() {
       return this.getAssetURL('homeBackgroundImage');
     },
@@ -87,6 +87,7 @@ export default {
   },
   watch: {
     cleanedQuery() {
+      this.$store.commit('setSearchQuery', this.cleanedQuery);
       if (this.cleanedQuery === '') {
         this.searching = false;
         this.resultNodes = [];
@@ -95,6 +96,9 @@ export default {
       }
       this.searching = true;
       this.search();
+    },
+    searchQuery() {
+      this.query = this.searchQuery;
     },
   },
   methods: {

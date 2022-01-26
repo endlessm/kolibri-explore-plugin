@@ -3,7 +3,9 @@
     <BackToTop />
     <!-- Wrapper needed to fix flexbox footer positioning on IE11 -->
     <div class="flex-fill flex-shrink-0">
-      <router-view />
+      <keep-alive include="Search,Home">
+        <router-view />
+      </keep-alive>
     </div>
     <ChannelFooter v-if="showFooter" />
   </div>
