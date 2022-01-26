@@ -9,7 +9,7 @@
     <b-card-header
       :class="{ withBigThumbnail: hasBigThumbnail, 'pb-3': !isSmall }"
     >
-      <ChannelLogo class="mr-3" :channel="channel" size="md" />
+      <ChannelLogo class="mr-3 rounded-logo" :channel="channel" size="md" />
       <h6>
         {{ channel.title }}
       </h6>
@@ -112,7 +112,6 @@
   $card-image-ar: 376 / 600;
   .bigThumbnail {
     padding-top: percentage($card-image-ar);
-    border-radius: $border-radius-lg !important;
     width: 100%;
     position: absolute;
     left: 0;
@@ -123,5 +122,9 @@
   .withBigThumbnail {
     margin-top: percentage($card-image-ar);
     padding-top: $card-spacer-y * 2;
+  }
+
+  .bigThumbnail, .rounded-logo {
+    border-radius: $border-radius-lg !important;
   }
 </style>
