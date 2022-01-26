@@ -13,7 +13,7 @@
       >
         <b-link
           class="d-none d-sm-block mt-2"
-          to="/"
+          :to="{ name: 'Home', query: { clearFilters: true } }"
         >
           <ChannelLogo :channel="channel" size="sm" />
         </b-link>

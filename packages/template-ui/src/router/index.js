@@ -28,6 +28,13 @@ const routes = [
           params: { contentId: defaultContentNode },
           replace: true,
         });
+      } else if (to.query.clearFilters) {
+        store.commit('filters/clearFilterQuery', {});
+        next({
+          name: 'Home',
+          query: {},
+          replace: true,
+        });
       } else {
         next();
       }
