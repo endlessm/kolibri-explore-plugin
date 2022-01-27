@@ -5,6 +5,8 @@ import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
 import Store from 'kolibri.coreVue.vuex.store';
 import { showTopicsContentInLightbox } from './modules/topicsTree/handlers';
 
+import { getChannelIcon } from './customApps';
+
 class KolibriApi {
   constructor(channelId) {
     this.channelId = channelId;
@@ -16,7 +18,11 @@ class KolibriApi {
   }
 
   getChannelMetadata() {
-    return ChannelResource.fetchModel({ id: this.channelId });
+    return ChannelResource.fetchModel({ id: this.channelId }).then(metadata => {
+      // Override channel icon with customApps icons
+      metadata.thumbnail = getChannelIcon(metadata);
+      return metadata;
+    });
   }
 
   getChannelFilterOptions() {
