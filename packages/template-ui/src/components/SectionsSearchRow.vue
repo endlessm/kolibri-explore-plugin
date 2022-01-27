@@ -3,6 +3,7 @@
     <MainSections>
       <b-button
         class="font-weight-bold my-1 text-nowrap"
+        size="sm"
         variant="link"
         to="/search"
       >

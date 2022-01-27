@@ -1,25 +1,32 @@
 <template>
   <transition name="fade">
-    <b-link
+    <b-button
       v-if="hasScrolled"
-      class="back-to-top"
+      v-b-hover="handleHover"
+      variant="primary"
+      class="back-to-top rounded-circle"
+      :class="{
+        'shadow-sm': !isHovered,
+        'shadow': isHovered,
+      }"
       @click="goToTop"
     >
-      <ChevronUpCircle :size="50" />
-    </b-link>
+      <ChevronUpIcon />
+    </b-button>
   </transition>
 </template>
 
 <script>
   import _ from 'underscore';
-  import ChevronUpCircle from 'vue-material-design-icons/ChevronUpCircle.vue';
+  import ChevronUpIcon from 'vue-material-design-icons/ChevronUp.vue';
 
   export default {
     name: 'BackToTop',
-    components: { ChevronUpCircle },
+    components: { ChevronUpIcon },
     data() {
       return {
         hasScrolled: false,
+        isHovered: false,
       };
     },
     created() {
@@ -31,7 +38,10 @@
     },
     methods: {
       goToTop() {
-        window.scrollTo(0, 0);
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      },
+      handleHover(hovered) {
+        this.isHovered = hovered;
       },
       onScroll() {
         this.hasScrolled = window.scrollY !== 0;
@@ -48,6 +58,10 @@
     bottom: $spacer;
     right: $spacer;
     z-index: $zindex-fixed;
+    // Remove 2px border from the actual size to match the slidable cards row:
+    width: $circled-button-size + 4px;
+    height: $circled-button-size + 4px;
+    padding: 0;
   }
 
   .fade-enter-active, .fade-leave-active {

@@ -39,7 +39,7 @@
       classes() {
         switch (this.variant) {
           case 'flat':
-            return 'mr-2 py-2';
+            return 'mr-2';
           default:
             return 'mb-2 mr-2';
         }

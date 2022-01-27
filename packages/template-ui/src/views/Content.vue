@@ -41,9 +41,13 @@
         :cardColumns="cardColumns"
         class="next-grid"
       >
-        <h4 class="next-title text-dark text-truncate w-75">
-          Next in {{ sectionTitle }}
-        </h4>
+        <b-row>
+          <b-container>
+            <h4 class="next-title text-dark text-truncate w-75">
+              Next in {{ sectionTitle }}
+            </h4>
+          </b-container>
+        </b-row>
       </CardGrid>
     </template>
   </div>
@@ -121,8 +125,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/styles.scss';
-
-$big-spacer: $spacer * 3.5;
 
 .next-grid {
   margin-top: $big-spacer !important;

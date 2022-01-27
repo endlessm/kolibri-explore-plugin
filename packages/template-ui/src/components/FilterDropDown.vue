@@ -1,13 +1,14 @@
 <template>
   <b-dropdown
     ref="dropdown"
+    size="sm"
     class="mr-2"
     :text="filter.prettyName"
     :variant="filter.variant"
     :boundary="boundary"
   >
     <div class="d-flex filter-dropdown flex-column">
-      <b-dropdown-header>
+      <b-dropdown-header class="header">
         {{ filter.name }}
         <b-button-close @click="closeFilter()" />
       </b-dropdown-header>
@@ -17,26 +18,28 @@
           <MediaFilterButtons :filter="filter" />
         </template>
         <template v-else>
-          <b-btn
+          <b-button
             v-for="option in filter.options"
             :key="option"
+            size="sm"
             pill
             class="mb-2 mr-2"
             :variant="buttonVariant(filter, option)"
             @click="onClick(filter, option)"
           >
             {{ option }}
-          </b-btn>
+          </b-button>
         </template>
       </div>
       <b-dropdown-divider class="my-1" />
       <b-dropdown-form class="flex-shrink-0">
         <b-button
           variant="link"
+          size="sm"
           :disabled="clearDisabled(filter)"
           @click="clearFilter({ filter })"
         >
-          <b-icon-x-circle class="mr-1" />
+          <CloseIcon class="mr-1" />
           clear all
         </b-button>
       </b-dropdown-form>
@@ -46,9 +49,13 @@
 
 <script>
   import { mapGetters, mapMutations } from 'vuex';
+  import CloseIcon from 'vue-material-design-icons/CloseCircleOutline.vue';
 
   export default {
     name: 'FilterDropDown',
+    components: {
+      CloseIcon,
+    },
     props: {
       filter: {
         type: Object,
@@ -122,6 +129,10 @@
     ::v-deep .dropdown-toggle {
       border-radius: $rounded-pill;
     }
+  }
+
+  .header {
+    font-family: $headings-font-family;
   }
 
 </style>

@@ -9,7 +9,7 @@
         @click="goToChannels"
       >
         <ViewDashboardOutlineIcon />
-        Channels
+        Discover
       </b-nav-text>
       <b-nav-text
         class="btn discovery-tab py-3 rounded-0 text-primary"
@@ -17,7 +17,7 @@
         @click="goToSearch"
       >
         <MagnifyIcon />
-        Search Keywords
+        Search Library
       </b-nav-text>
     </b-button-group>
     <b-navbar-nav>

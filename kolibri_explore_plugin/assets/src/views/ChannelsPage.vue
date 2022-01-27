@@ -6,7 +6,7 @@
 
     <b-container class="mb-2 mt-4">
       <h5 class="mt-2 text-muted">
-        Popular Content Suggestions
+        Content Suggestions
       </h5>
     </b-container>
 
@@ -124,10 +124,6 @@
           params: { channel_id: channelId },
         });
       },
-      // FIXME use this in https://phabricator.endlessm.com/T32922
-      // goToTop() {
-      //   window.scrollTo(0, 0);
-      // },
       goToTerm(term) {
         const query = searchTerms.get(term) || term;
         this.$router.push({
