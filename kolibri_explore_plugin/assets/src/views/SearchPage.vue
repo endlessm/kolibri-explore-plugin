@@ -3,67 +3,74 @@
   <div class="d-flex flex-column min-vh-100 search-page">
     <AboutModal id="about-modal" />
     <DiscoveryNavBar />
-    <div class="flex-fill main">
+
+    <div
+      class="flex-fill"
+      :class="{ 'gray-background': !isEmpty, 'white-background': isEmpty }"
+    >
+
       <SearchBar
         v-model="query"
+        class="search-row"
         :debounce="800"
         :progress="progress"
         :loading="isLoading"
         @clear-input="clearInput"
       />
-      <b-container class="pb-5 pt-3">
-        <div v-if="isLoading" class="placeholder">
-          <CardGridPlaceholder />
-        </div>
-        <div v-else>
-          <div v-if="isNoResults" class="empty mb-4 w-50">
-            <h1>Sorry, we can’t find any content that matches your search.</h1>
-            <h5>
-              You can try a different search, maybe use fewer words, or try one
-              of the topic suggestions below.
-            </h5>
-          </div>
-          <div v-if="isEmpty || isNoResults" class="align-items-center d-flex">
-            <h5 v-if="isEmpty" class="mb-0 mr-3 text-muted">
-              Topic Ideas
-            </h5>
-            <ButtonsBar
-              title="More Topics"
-              :buttons="Array.from(searchTerms.keys())"
-              @click="goToTerm"
-            />
-          </div>
-          <div v-else>
-            <Keywords :words="keywords" @click="removeKeyword" />
-          </div>
-        </div>
-      </b-container>
 
-      <div v-if="resultCards">
-        <div v-for="[kind, nodes] in resultCards" :key="kind">
-          <CardGrid
-            id="root"
-            variant="collapsible"
-            :itemsPerPage="4"
-            :nodes="nodes"
-            :mediaQuality="mediaQuality"
-            :cardColumns="cardColumns"
-          >
-            <div>
-              <h4 class="text-muted">
-                <span class="font-weight-normal">
-                  {{ nodes.length }} results for "{{ cleanedQuery }}"
-                </span>
-                to {{ groupVerb(kind) }}
-              </h4>
-            </div>
-          </CardGrid>
-          <hr>
-        </div>
+      <div v-if="isEmpty" class="mt-5">
+        <template v-if="core.loading">
+          <CardGridPlaceholder />
+        </template>
+        <template v-else>
+          <ChannelsList />
+        </template>
       </div>
 
-      <b-container class="pb-5 pt-3">
-        <div v-if="resultChannels.length">
+      <template v-else>
+
+        <b-container class="pb-5 pt-3">
+          <template v-if="isLoading" class="placeholder">
+            <CardGridPlaceholder />
+          </template>
+          <template v-else>
+            <template v-if="!isEmpty">
+              <Keywords :words="keywords" @click="removeKeyword" />
+            </template>
+            <div v-if="isNoResults" class="empty mb-4 mt-5 w-50">
+              <h1>Sorry, we can’t find any content that matches your search.</h1>
+              <h5>
+                You can try a different search, maybe use fewer words, or try one
+                of the topic suggestions below.
+              </h5>
+            </div>
+          </template>
+        </b-container>
+
+        <template v-if="resultCards">
+          <div v-for="[kind, nodes] in resultCards" :key="kind">
+            <CardGrid
+              id="root"
+              variant="collapsible"
+              :itemsPerPage="4"
+              :nodes="nodes"
+              :mediaQuality="mediaQuality"
+              :cardColumns="cardColumns"
+            >
+              <div>
+                <h4 class="text-muted">
+                  <span class="font-weight-normal">
+                    {{ nodes.length }} results for "{{ cleanedQuery }}"
+                  </span>
+                  to {{ groupVerb(kind) }}
+                </h4>
+              </div>
+            </CardGrid>
+            <hr>
+          </div>
+        </template>
+
+        <b-container v-if="resultChannels.length" class="pb-5 pt-3">
           <h4 class="text-muted">
             {{ resultChannels.length }} channels related to "{{ cleanedQuery }}"
           </h4>
@@ -73,27 +80,28 @@
             :columns="columns"
             @card-click="goToChannel"
           />
+        </b-container>
+
+        <div v-if="recommended && isNoResults" class="flex-shrink-0 pt-5 recommended">
+          <b-container v-if="recommended" class="pb-5 pt-3">
+            <h3 class="text-muted">
+              Explore
+            </h3>
+            <h5>
+              <b-link @click="goBack">
+                See all channels <b-icon-arrow-right />
+              </b-link>
+            </h5>
+            <ChannelCardGroup
+              :rows="recommended"
+              :columns="columns"
+              @card-click="goToChannel"
+            />
+          </b-container>
         </div>
-      </b-container>
 
-    </div>
+      </template>
 
-    <div v-if="recommended && isNoResults" class="flex-shrink-0 pt-5 recommended">
-      <b-container v-if="recommended" class="pb-5 pt-3">
-        <h3 class="text-muted">
-          Explore
-        </h3>
-        <h5>
-          <b-link @click="goBack">
-            See all channels <b-icon-arrow-right />
-          </b-link>
-        </h5>
-        <ChannelCardGroup
-          :rows="recommended"
-          :columns="columns"
-          @card-click="goToChannel"
-        />
-      </b-container>
     </div>
 
   </div>
@@ -108,9 +116,10 @@
   import { utils, constants, responsiveMixin } from 'eos-components';
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 
-  import { PageNames, searchTerms } from '../constants';
+  import { PageNames } from '../constants';
   import { searchChannels } from '../modules/topicsRoot/handlers';
 
+  import ChannelsList from '../components/ChannelsList';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
   import AboutModal from '../components/AboutModal';
 
@@ -118,7 +127,7 @@
 
   export default {
     name: 'SearchPage',
-    components: { AboutModal, DiscoveryNavBar },
+    components: { AboutModal, ChannelsList, DiscoveryNavBar },
     mixins: [responsiveMixin],
     data() {
       return {
@@ -134,6 +143,7 @@
     },
     computed: {
       ...mapState('topicsRoot', { searchResult: 'searchResult', channels: 'rootNodes' }),
+      ...mapState(['core']),
       ...mapState({
         searchTerm: 'searchTerm',
       }),
@@ -217,9 +227,6 @@
 
         return 3;
       },
-      searchTerms() {
-        return searchTerms;
-      },
       keywords() {
         return this.cleanedQuery.split(/\s+/);
       },
@@ -248,9 +255,6 @@
           name: PageNames.TOPICS_CHANNEL,
           params: { channel_id: channelId },
         });
-      },
-      goToTerm(term) {
-        this.query = searchTerms.get(term) || term;
       },
       search(query) {
         if (!query) {
@@ -285,12 +289,15 @@
 
   @import '../styles';
 
-  .main {
+  .white-background {
+    background-color: $white;
+  }
+
+  .gray-background {
     background-color: $gray-300;
   }
 
-  .discovery-navbar {
-    background: $gray-300;
+  .search-row {
     border-bottom: 1px solid $gray-400;
   }
 
