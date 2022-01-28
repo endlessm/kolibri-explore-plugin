@@ -51,6 +51,19 @@ function _filterCustomApp(channel) {
   return !!CustomChannelApps[channel.id];
 }
 
+// Borrowed from https://stackoverflow.com/a/40975730
+function getDayOfYearNumber() {
+  const date = new Date();
+  return (
+    (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) -
+      Date.UTC(date.getFullYear(), 0, 0)) /
+    24 /
+    60 /
+    60 /
+    1000
+  );
+}
+
 function _fetchCarouselNodes(store) {
   const { rootNodes } = store.state.topicsRoot;
   const highlightedContentUrl = urls.static(`highlighted-content.json`);
@@ -64,8 +77,19 @@ function _fetchCarouselNodes(store) {
       })
       // Get the set of IDs using a rotation logic:
       .then(jsonData => {
-        // FIXME rotate daily
-        return jsonData['DISCOVERY'].slice(0, CarouselItemsLength);
+        const discoveryData = jsonData['DISCOVERY'];
+
+        // How many full sets?
+        const setsNumber = Math.floor(discoveryData.length / CarouselItemsLength);
+
+        // Reduce day number to a valid index:
+        const dayNumber = getDayOfYearNumber();
+        const i = dayNumber % setsNumber;
+
+        return discoveryData.slice(
+          i * CarouselItemsLength,
+          i * CarouselItemsLength + CarouselItemsLength
+        );
       })
       // Map IDs to content nodes:
       .then(ids => {
