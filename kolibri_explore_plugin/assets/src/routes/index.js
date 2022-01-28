@@ -27,7 +27,10 @@ export default [
   {
     name: PageNames.TOPICS_ROOT,
     path: '/topics',
-    handler: () => {
+    handler: (toRoute, fromRoute) => {
+      if (fromRoute) {
+        store.commit('topicsTree/SET_BACK_FROM_CUSTOM_PAGE', fromRoute.name);
+      }
       showChannels(store);
     },
   },
@@ -51,7 +54,10 @@ export default [
   {
     name: PageNames.TOPICS_TOPIC,
     path: '/topics/:channel_id/t/:id',
-    handler: toRoute => {
+    handler: (toRoute, fromRoute) => {
+      if (fromRoute) {
+        store.commit('topicsTree/SET_BACK_FROM_CUSTOM_PAGE', fromRoute.name);
+      }
       const { channel_id, id } = toRoute.params;
       store.commit('topicsTree/SET_CUSTOM_APP_PARAMETERS', { topicId: id });
       showTopicsChannel(store, channel_id);
@@ -72,7 +78,10 @@ export default [
   {
     name: PageNames.TOPICS_CHANNEL,
     path: '/topics/:channel_id',
-    handler: toRoute => {
+    handler: (toRoute, fromRoute) => {
+      if (fromRoute) {
+        store.commit('topicsTree/SET_BACK_FROM_CUSTOM_PAGE', fromRoute.name);
+      }
       store.commit('topicsTree/SET_CUSTOM_APP_PARAMETERS', {});
       showTopicsChannel(store, toRoute.params.channel_id);
     },
