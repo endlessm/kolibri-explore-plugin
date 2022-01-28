@@ -123,8 +123,7 @@ export default {
           });
       }
       else {
-        return window.kolibri.getRandomNodes({
-          onlyContent: true,
+        return window.kolibri.getHighlightedContent({
           maxResults: this.carouselSlideNumber,
         }).then((page) => {
           this.carouselNodes = page.results;

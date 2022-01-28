@@ -1,8 +1,10 @@
+import urls from 'kolibri.urls';
 import { ChannelResource, ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
 
 import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
 
 import Store from 'kolibri.coreVue.vuex.store';
+import { utils } from 'eos-components';
 import { showTopicsContentInLightbox } from './modules/topicsTree/handlers';
 
 import { getChannelIcon } from './customApps';
@@ -108,6 +110,56 @@ class KolibriApi {
     }
 
     return searchPromise;
+  }
+
+  getHighlightedContent(options) {
+    const maxResults = options.maxResults ? options.maxResults : 10;
+    const highlightedContentUrl = urls.static(`highlighted-content.json`);
+    return (
+      fetch(highlightedContentUrl)
+        // Parse the JSON:
+        .then(response => response.json())
+        .catch(error => {
+          console.error(error);
+        })
+        // Get the set of IDs using a rotation logic:
+        .then(jsonData => {
+          if (!(this.channelId in jsonData)) {
+            return [];
+          }
+          const channelData = jsonData[this.channelId];
+
+          // How many full sets?
+          const setsNumber = Math.floor(channelData.length / maxResults);
+
+          // Reduce day number to a valid index:
+          const dayNumber = utils.getDayOfYearNumber();
+          const i = dayNumber % setsNumber;
+
+          // return jsonData[this.channelId].slice(0, maxResults);
+          return channelData.slice(i * maxResults, i * maxResults + maxResults);
+        })
+        // Map IDs to content nodes:
+        .then(ids => {
+          return Promise.all(
+            ids.map(id => {
+              return this.getContentById(id)
+                .then(node => {
+                  return node;
+                })
+                .catch(() => {
+                  return null;
+                });
+            })
+          );
+        })
+        // Filter out the content not found:
+        .then(nodes => {
+          return {
+            results: nodes.filter(n => n !== null),
+          };
+        })
+    );
   }
 
   getRandomNodes(options) {

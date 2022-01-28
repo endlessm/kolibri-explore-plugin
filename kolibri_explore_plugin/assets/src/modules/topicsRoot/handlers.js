@@ -1,4 +1,5 @@
 import urls from 'kolibri.urls';
+import { utils } from 'eos-components';
 import { ChannelResource, ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
 import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 
@@ -51,19 +52,6 @@ function _filterCustomApp(channel) {
   return !!CustomChannelApps[channel.id];
 }
 
-// Borrowed from https://stackoverflow.com/a/40975730
-function getDayOfYearNumber() {
-  const date = new Date();
-  return (
-    (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) -
-      Date.UTC(date.getFullYear(), 0, 0)) /
-    24 /
-    60 /
-    60 /
-    1000
-  );
-}
-
 function _fetchCarouselNodes(store) {
   const { rootNodes } = store.state.topicsRoot;
   const highlightedContentUrl = urls.static(`highlighted-content.json`);
@@ -83,7 +71,7 @@ function _fetchCarouselNodes(store) {
         const setsNumber = Math.floor(discoveryData.length / CarouselItemsLength);
 
         // Reduce day number to a valid index:
-        const dayNumber = getDayOfYearNumber();
+        const dayNumber = utils.getDayOfYearNumber();
         const i = dayNumber % setsNumber;
 
         return discoveryData.slice(
