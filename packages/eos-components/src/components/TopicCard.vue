@@ -15,6 +15,8 @@
           :style="cardStyle"
         >
           <span class="sr-only">{{ node.title }}</span>
+          <!-- FIXME only for debugging: -->
+          <span class="debug-node-id sr-only">{{ node.id }}</span>
         </div>
         <div class="body-wrapper">
           <div class="card-content">
