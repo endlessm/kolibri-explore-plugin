@@ -1,0 +1,13 @@
+{
+  "displayLogoInHeader": true,
+  "hasSectionsSearch": false,
+  "hasCarousel": false,
+  "hasFilters": false,
+  "defaultContentNode": "0988217d3d725f3e927efd381a63f00e",
+  "showDetailViewFullScreen": true,
+  "showParentsInBreadcrumb": false,
+  "isEndlessApp": true,
+  "bundleKind": "simple",
+  "showFooter": false,
+  "showNextContent": false
+}
