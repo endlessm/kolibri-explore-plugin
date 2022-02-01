@@ -2,6 +2,7 @@
   <b-link @click="goToContent()">
     <b-card
       class="content-image rounded-lg"
+      :class="{ 'mx-auto': isSimpleBundle }"
       :style="cardStyle"
     >
       <b-img
@@ -25,6 +26,7 @@
 
 <script>
 import { cardMixin } from 'eos-components';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'ContentImage',
@@ -41,6 +43,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters([
+      'isSimpleBundle',
+    ]),
     buttonStyle() {
       const maxWidth = this.imageSize >= 210 ? this.imageSize : 210;
       return {
