@@ -36,8 +36,11 @@ def get_rows_from_sheet():
     def strip_row_text(row):
         return row[Columns.TITLE].strip(), row[Columns.ID].strip()
 
+    def is_row_uncommented(row):
+        return not row[Columns.TITLE].strip().startswith("#")
+
     csv_iterator = csv.reader(response.text.splitlines())
-    return map(strip_row_text, csv_iterator)
+    return filter(is_row_uncommented, map(strip_row_text, csv_iterator))
 
 
 def parse_set(rows_iterator):

@@ -1,13 +1,9 @@
 import urls from 'kolibri.urls';
+import { utils } from 'eos-components';
 import { ChannelResource, ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
 import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 
-import {
-  CarouselAllowedKinds,
-  CarouselItemsLength,
-  PageNames,
-  SEARCH_MAX_RESULTS,
-} from '../../constants';
+import { CarouselItemsLength, PageNames, SEARCH_MAX_RESULTS } from '../../constants';
 import { CustomChannelApps, getBigThumbnail, getChannelIcon } from '../../customApps';
 import { _collectionState } from '../coreExplore/utils';
 
@@ -58,27 +54,66 @@ function _filterCustomApp(channel) {
 
 function _fetchCarouselNodes(store) {
   const { rootNodes } = store.state.topicsRoot;
-  return window.kolibri
-    .getRandomNodes({
-      kinds: CarouselAllowedKinds,
-      maxResults: CarouselItemsLength,
-    })
-    .then(page => {
-      const nodes = page.results;
-      nodes.forEach(node => {
-        const thumbnailUrl = getContentNodeThumbnail(node);
-        node.thumbnail = thumbnailUrl;
-        node.channel = rootNodes.find(c => c.id === node.channel_id);
-        const base = `/topics/${node.channel_id}`;
-        if (node.kind === 'topic') {
-          node.nodeUrl = `${base}/t/${node.id}`;
-        } else {
-          node.nodeUrl = `${base}/c/${node.id}`;
-        }
-      });
+  const highlightedContentUrl = urls.static(`highlighted-content.json`);
 
-      return nodes;
-    });
+  return (
+    fetch(highlightedContentUrl)
+      // Parse the JSON:
+      .then(response => response.json())
+      .catch(error => {
+        console.error(error);
+      })
+      // Get the set of IDs using a rotation logic:
+      .then(jsonData => {
+        const discoveryData = jsonData['DISCOVERY'];
+
+        // How many full sets?
+        const setsNumber = Math.floor(discoveryData.length / CarouselItemsLength);
+
+        // Reduce day number to a valid index:
+        const dayNumber = utils.getDayOfYearNumber();
+        const i = dayNumber % setsNumber;
+
+        return discoveryData.slice(
+          i * CarouselItemsLength,
+          i * CarouselItemsLength + CarouselItemsLength
+        );
+      })
+      // Map IDs to content nodes:
+      .then(ids => {
+        return Promise.all(
+          ids.map(id => {
+            return window.kolibri
+              .getContentById(id)
+              .then(node => {
+                return node;
+              })
+              .catch(() => {
+                return null;
+              });
+          })
+        );
+      })
+      // Filter out the content not found:
+      .then(nodes => {
+        return nodes.filter(n => n !== null);
+      })
+      // Mutate the nodes so they can be displayed in the carousel:
+      .then(nodes => {
+        nodes.forEach(node => {
+          const thumbnailUrl = getContentNodeThumbnail(node);
+          node.thumbnail = thumbnailUrl;
+          node.channel = rootNodes.find(c => c.id === node.channel_id);
+          const base = `/topics/${node.channel_id}`;
+          if (node.kind === 'topic') {
+            node.nodeUrl = `${base}/t/${node.id}`;
+          } else {
+            node.nodeUrl = `${base}/c/${node.id}`;
+          }
+        });
+        return nodes;
+      })
+  );
 }
 
 export function showChannels(store) {

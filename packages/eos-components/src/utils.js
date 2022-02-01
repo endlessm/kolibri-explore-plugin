@@ -117,6 +117,20 @@ export function getSlug(title) {
     .replace(/-+/g, '-');
 }
 
+// Borrowed from https://stackoverflow.com/a/40975730
+export function getDayOfYearNumber() {
+    const date = new Date();
+    return (
+        (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) -
+         Date.UTC(date.getFullYear(), 0, 0)) /
+            24 /
+            60 /
+            60 /
+            1000
+    );
+}
+
+
 export default {
   getAllStructuredTags,
   getFirstStructuredTag,
@@ -127,4 +141,5 @@ export default {
   getTopicCardSubtitle,
   getCardSubtitle,
   getSlug,
+  getDayOfYearNumber,
 };

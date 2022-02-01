@@ -40,8 +40,8 @@ const initialState = {
   },
 
   // Carousel config:
-  carouselNodeIds: [], // if empty we'll pick nodes randomly
-  carouselSlideNumber: 3, // Only used if picking randomly, defaults to 3
+  carouselNodeIds: [], // if empty we'll fetch nodes from the API
+  carouselSlideNumber: 3, // Only used if fetching nodes, defaults to 3
 
   mediaQuality: ComponentConstants.MediaQuality.REGULAR,
   displayLogoInHeader: true,
