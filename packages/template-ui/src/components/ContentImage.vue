@@ -1,11 +1,14 @@
 <template>
   <b-link @click="goToContent()">
-    <b-card class="rounded-lg">
+    <b-card
+      class="content-image rounded-lg"
+      :style="cardStyle"
+    >
       <b-img
         fluid
         :src="thumbnail"
         :alt="node.title"
-        class="border d-block mt-3 mx-auto rounded"
+        class="border d-block mx-auto rounded"
       />
       <PlayButton
         v-if="node.kind"
@@ -13,7 +16,7 @@
         block
         :kind="node.kind"
         :style="buttonStyle"
-        class="mx-auto my-3 play-button py-2"
+        class="mt-3 mx-auto play-button py-2"
         @click="goToContent()"
       />
     </b-card>
@@ -34,14 +37,20 @@ export default {
   },
   data() {
     return {
-      buttonMaxWidth: '100%',
+      imageSize: 0,
     };
   },
   computed: {
     buttonStyle() {
+      const maxWidth = this.imageSize >= 210 ? this.imageSize : 210;
       return {
-        maxWidth: this.buttonMaxWidth,
-        minWidth: '200px',
+        maxWidth: `${maxWidth}px`,
+      };
+    },
+    cardStyle() {
+      return {
+        maxWidth: `${this.imageSize + 40}px`,
+        minWidth: '300px',
       };
     },
   },
@@ -50,7 +59,7 @@ export default {
       const img = new Image();
       img.src = this.thumbnail;
       img.onload = () => {
-        this.buttonMaxWidth = `${img.width}px`;
+        this.imageSize = img.width;
       };
     }
   },
@@ -71,6 +80,11 @@ export default {
 
 a:hover {
   text-decoration: none;
+}
+
+.content-image img,
+.content-image .btn {
+  min-width: 210px;
 }
 
 </style>
