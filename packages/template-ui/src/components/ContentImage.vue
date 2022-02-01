@@ -27,6 +27,7 @@
 <script>
 import { cardMixin } from 'eos-components';
 import { mapGetters } from 'vuex';
+import { cardSpacerX, contentImageMinWidth } from '../styles.scss';
 
 export default {
   name: 'ContentImage',
@@ -47,15 +48,17 @@ export default {
       'isSimpleBundle',
     ]),
     buttonStyle() {
-      const maxWidth = this.imageSize >= 210 ? this.imageSize : 210;
+      const min = contentImageMinWidth;
+      const image = `${this.imageSize}px`;
+      const maxWidth = image >= min ? image : min;
       return {
-        maxWidth: `${maxWidth}px`,
+        maxWidth,
       };
     },
     cardStyle() {
+      const margin = cardSpacerX;
       return {
-        maxWidth: `${this.imageSize + 40}px`,
-        minWidth: '300px',
+        maxWidth: `calc(${this.imageSize}px + ${margin})`,
       };
     },
   },
@@ -81,6 +84,7 @@ export default {
 
 .card {
   box-shadow: $box-shadow;
+  min-width: $content-card-min-width;
 }
 
 a:hover {
@@ -89,7 +93,7 @@ a:hover {
 
 .content-image img,
 .content-image .btn {
-  min-width: 210px;
+  min-width: $content-image-min-width;
 }
 
 </style>
