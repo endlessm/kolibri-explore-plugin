@@ -44,9 +44,7 @@
             :mediaQuality="mediaQuality"
             @loadMoreNodes="onLoadMoreSectionNodes(section.id)"
           >
-            <b-row>
-              <SectionTitle :section="section" />
-            </b-row>
+            <SectionTitle :section="section" />
           </CardGrid>
         </div>
       </template>
