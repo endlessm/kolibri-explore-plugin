@@ -10,16 +10,7 @@
       </div>
       <b-row>
         <b-col xs="12" sm="8" md="9" lg="9" xl="8">
-          <b-button
-            href="#"
-            pill
-            :variant="hasDarkHeader ? 'dark' : 'light'"
-            size="sm"
-            class="mb-3 pl-0"
-            @click="$router.go(-1)"
-          >
-            <span><ArrowLeft />Back</span>
-          </b-button>
+          <BackButton />
           <h1
             class="d-md-none h3"
             :class="{ 'text-light': hasDarkHeader }"
@@ -71,7 +62,6 @@
 <script>
 import { mapState } from 'vuex';
 import VClamp from 'vue-clamp';
-import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue';
 
 import headerMixin from '@/components/mixins/headerMixin';
 
@@ -79,7 +69,6 @@ export default {
   name: 'ChannelHeader',
   components: {
     VClamp,
-    ArrowLeft,
   },
   mixins: [headerMixin],
   props: {
