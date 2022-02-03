@@ -177,7 +177,7 @@ export const ChannelCardIcons = {
   f5f6729f95b55753badeaa066fa6e986: 'healthy-body.png',
   '4e413158eac55422a5343af9fcfa8d59': 'healthy-mind.png',
   b40491d1ef8b5506b8c6ae861372e9de: 'jewelry-making.png',
-  '9eeebbc5140d5b98ac4a4d2ce9432135': 'lgbtq.jpg',
+  '9eeebbc5140d5b98ac4a4d2ce9432135': 'lgbtq.png',
   '057f871caa405ec29d62ba0523c193d7': 'music.png',
   '95a1ceaec2b849ed90fe0b135791b163': 'novels.png',
   '59bb2e5a3d2e5e3b85b87d9ab4daa2f3': 'reading.png',
