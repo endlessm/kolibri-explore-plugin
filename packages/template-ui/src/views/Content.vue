@@ -41,13 +41,11 @@
         :cardColumns="cardColumns"
         class="next-grid"
       >
-        <b-row>
-          <b-container>
-            <h4 class="next-title text-dark text-truncate w-75">
-              Next in {{ sectionTitle }}
-            </h4>
-          </b-container>
-        </b-row>
+        <b-container>
+          <h4 class="next-title text-dark text-truncate w-75">
+            Next in {{ sectionTitle }}
+          </h4>
+        </b-container>
       </CardGrid>
     </template>
   </div>

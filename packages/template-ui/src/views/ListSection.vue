@@ -11,9 +11,7 @@
           :id="subsection.id"
           :key="subsection.id"
         >
-          <b-row>
-            <SectionTitle :section="subsection" />
-          </b-row>
+          <SectionTitle :section="subsection" />
         </CardGridPlaceholder>
       </template>
       <template v-else>
@@ -27,9 +25,7 @@
           :hasMoreNodes="getSubsectionNodes(subsection.id).hasMoreNodes"
           @loadMoreNodes="onLoadMoreSubsectionNodes(subsection.id)"
         >
-          <b-row>
-            <SectionTitle :section="subsection" />
-          </b-row>
+          <SectionTitle :section="subsection" />
         </CardGrid>
       </template>
     </div>
