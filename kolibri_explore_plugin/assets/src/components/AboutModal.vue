@@ -76,8 +76,8 @@
               <strong>The Quick Start Guide</strong> document. For more
               information, when you have an internet connection, you can access
               Endless Community Forum at
-              <a href="https://community.endlessos.org/c/endless-key/">
-                https://community.endlessos.org/c/endless-key/
+              <a href="https://community.endlessos.com/c/endless-key/">
+                https://community.endlessos.com/c/endless-key/
               </a>.
             </p>
             <hr>
