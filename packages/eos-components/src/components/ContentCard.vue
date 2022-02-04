@@ -86,6 +86,8 @@ export default {
     onClick() {
       if (this.kind === 'bundle') {
         this.$router.push(this.url);
+      } else if (this.node.directContent) {
+        this.$router.push(this.url);
       } else {
         window.kolibri.navigateTo(this.node.id);
       }

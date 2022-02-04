@@ -18,6 +18,7 @@ function zimToNode(zimArticle, node) {
     channelId: node.channel_id,
     description: zimArticle.snippet,
     kind: 'zim',
+    directContent: true,
     nodeUrl: `/topics/${node.channel_id}/c/${node.id}?zimPath=${zimArticle.path}`,
   };
 }
