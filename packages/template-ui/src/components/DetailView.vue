@@ -1,16 +1,7 @@
 <template>
-  <b-container class="bg-white wrapper" fluid>
-    <b-container class="main-container">
-      <b-button
-        href="#"
-        pill
-        variant="light"
-        size="sm"
-        class="my-3 pl-0"
-        @click="$router.go(-1)"
-      >
-        <span><ArrowLeft />Back</span>
-      </b-button>
+  <b-container class="bg-white mt-3 wrapper" fluid>
+    <b-container class="main-container position-relative">
+      <BackButton />
       <h1>{{ title }}</h1>
       <p>{{ subtitle }}</p>
       <slot>
@@ -20,13 +11,9 @@
 </template>
 
 <script>
-import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue';
 
 export default {
   name: 'DetailView',
-  components: {
-    ArrowLeft,
-  },
   props: {
     title: {
       type: String,
