@@ -6,20 +6,17 @@
     <a v-if="showClose" class="close-link mr-3" @click="goToChannelList">
       <CloseIcon />
     </a>
-    <template v-if="!atHome">
-      <b-navbar-nav
-        class="mt-3"
-        aria-label="breadcrumb"
+    <b-navbar-nav
+      aria-label="breadcrumb"
+    >
+      <b-link
+        class="align-self-center d-none d-sm-block"
+        :to="{ name: 'Home', query: { clearFilters: true } }"
       >
-        <b-link
-          class="d-none d-sm-block mt-2"
-          :to="{ name: 'Home', query: { clearFilters: true } }"
-        >
-          <ChannelLogo :channel="channel" size="sm" />
-        </b-link>
-        <Breadcrumb :node="node" />
-      </b-navbar-nav>
-    </template>
+        <ChannelLogo :channel="channel" size="sm" />
+      </b-link>
+      <Breadcrumb v-if="!atHome" :node="node" class="mt-3" />
+    </b-navbar-nav>
   </NavBar>
 </template>
 
