@@ -1,6 +1,7 @@
 <template>
   <b-button
     class="back-button rounded-circle"
+    :class="variant"
     @click="$router.go(-1)"
   >
     <ArrowLeft />
@@ -13,6 +14,12 @@
   export default {
     name: 'BackButton',
     components: { ArrowLeft },
+    props: {
+      variant: {
+        type: String,
+        default: 'light',
+      },
+    },
   }
 </script>
 
@@ -27,13 +34,24 @@
 
     width: $circled-button-size;
     height: $circled-button-size;
+  }
 
+  .back-button.light {
     background-color: rgba($gray-700, 0.1);
     color: $gray-700;
   }
 
-  .back-button:hover {
+  .back-button.light:hover {
     background-color: rgba($gray-700, 0.2);
+  }
+
+  .back-button.dark {
+    background-color: rgba($white, 0.1);
+    color: $white;
+  }
+
+  .back-button.dark:hover {
+    background-color: rgba($white, 0.2);
   }
 
 </style>

@@ -10,7 +10,7 @@
       </div>
       <b-row>
         <b-col xs="12" sm="8" md="9" lg="9" xl="8">
-          <BackButton />
+          <BackButton :variant="hasDarkHeader ? 'dark' : 'light'" />
           <h1
             class="d-md-none h3"
             :class="{ 'text-light': hasDarkHeader }"
