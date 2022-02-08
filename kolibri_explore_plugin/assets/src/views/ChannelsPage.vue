@@ -28,12 +28,6 @@
 
     <div class="flex-fill main">
 
-      <b-container class="mb-1 mt-4">
-        <h5 class="pt-2 text-muted">
-          Discover the Channels
-        </h5>
-      </b-container>
-
       <template v-if="core.loading">
         <CardGridPlaceholder />
       </template>
