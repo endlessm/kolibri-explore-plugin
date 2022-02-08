@@ -125,7 +125,7 @@ class KolibriApi {
         // Get the set of IDs using a rotation logic:
         .then(jsonData => {
           if (!(this.channelId in jsonData)) {
-            return [];
+            throw new Error('NoHighlights');
           }
           const channelData = jsonData[this.channelId];
 
@@ -163,6 +163,13 @@ class KolibriApi {
   }
 
   getRandomNodes(options) {
+    return this.getHighlightedContent(options).catch(() => {
+      return this.getRandomNodesReal(options);
+    });
+  }
+
+  // This is the upstream API:
+  getRandomNodesReal(options) {
     const { kinds, onlyContent } = options;
 
     return ContentNodeResource.fetchRandomCollection({
