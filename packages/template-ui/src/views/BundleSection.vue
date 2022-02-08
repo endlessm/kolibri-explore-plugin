@@ -9,7 +9,7 @@
           v-for="content in sectionNodes.nodes"
           :key="content.id"
           class="content-col"
-          md="6"
+          sm="6"
           xs="12"
         >
           <ContentImage :node="content" />

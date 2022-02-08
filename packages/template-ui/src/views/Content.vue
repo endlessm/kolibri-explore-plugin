@@ -7,14 +7,10 @@
       :subtitle="subtitle"
       :node="content"
     >
-      <b-row class="my-3">
-        <b-col xs="12" md="6">
-          <ContentImage :node="content" />
-        </b-col>
-      </b-row>
+      <ContentImage :node="content" />
 
       <!-- eslint-disable vue/no-v-html -->
-      <div class="description text-muted" v-html="content.description"></div>
+      <div class="description mt-5 text-muted" v-html="content.description"></div>
 
       <b-badge
         v-for="tag in tags"
