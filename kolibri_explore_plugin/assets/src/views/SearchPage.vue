@@ -51,6 +51,7 @@
         <template>
           <div v-for="[title, nodes] in resultZim" :key="title">
             <CardGrid
+              v-if="nodes.length"
               variant="collapsible"
               :itemsPerPage="4"
               :nodes="nodes"
@@ -249,7 +250,10 @@
         return this.cleanedQuery.split(/\s+/);
       },
       totalSearchSections() {
-        return kinds.length + Object.keys(ZimSearchChannels).length;
+        const zimSections = Object.keys(ZimSearchChannels)
+          .map(g => ZimSearchChannels[g].length)
+          .reduce((total, n) => total + n, 0);
+        return kinds.length + zimSections;
       },
     },
     watch: {
@@ -305,14 +309,19 @@
         // TODO: integrate this with search results
         this.resultZim = [];
         for (const group in ZimSearchChannels) {
-          wikiChannelSearch(ZimSearchChannels[group], query)
-            .then(results => {
-              this.resultZim.push([group, results]);
-              this.progress += 100 / this.totalSearchSections;
-            })
-            .catch(() => {
-              this.progress += 100 / this.totalSearchSections;
-            });
+          const articles = [];
+          this.resultZim.push([group, articles]);
+          const groupChannels = ZimSearchChannels[group];
+          groupChannels.forEach(channel => {
+            wikiChannelSearch(channel, query)
+              .then(results => {
+                articles.push(...results);
+                this.progress += 100 / this.totalSearchSections;
+              })
+              .catch(() => {
+                this.progress += 100 / this.totalSearchSections;
+              });
+          });
         }
       },
       clearInput() {
