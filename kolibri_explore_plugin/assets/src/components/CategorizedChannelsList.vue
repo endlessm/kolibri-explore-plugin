@@ -1,18 +1,32 @@
 <template>
 
-  <b-container class="channels pb-5">
-    <div v-for="{ name, channels } in categories" :key="name">
-      <h5 class="pt-4 text-muted">
-        {{ name }}
-      </h5>
-      <ChannelCardGroup
-        class="pb-4"
-        :rows="chunk(channels)"
-        :columns="columns"
-        @card-click="goToChannel"
-      />
+  <div id="categorized-channels" class="pt-4">
+    <div
+      v-for="{ name, channels } in categories"
+      :key="name"
+      class="pb-4 pt-4"
+    >
+      <b-container class="pb-4">
+        <h5 class="text-muted">
+          {{ name }}
+        </h5>
+      </b-container>
+      <b-container class="no-container-padding">
+        <SlidableGrid
+          v-slot="slotProps"
+          :nodes="channels"
+          :hasWhiteBackground="true"
+        >
+          <ChannelCard
+            v-for="channel in slotProps.slideNodes"
+            :key="channel.id"
+            :channel="channel"
+            @click.native="goToChannel(channel.id)"
+          />
+        </SlidableGrid>
+      </b-container>
     </div>
-  </b-container>
+  </div>
 
 </template>
 
@@ -20,15 +34,11 @@
 <script>
 
   import { mapState } from 'vuex';
-  import _ from 'underscore';
-  import { responsiveMixin } from 'eos-components';
   import { PageNames } from '../constants';
   import { CategorizedChannelIds } from '../customApps';
 
   export default {
     name: 'CategorizedChannelsList',
-    mixins: [responsiveMixin],
-
     computed: {
       ...mapState('topicsRoot', { rootNodes: 'rootNodes' }),
       categories() {
@@ -74,23 +84,9 @@
 
         return [...channelsPerCategory, remainingCategory];
       },
-      columns() {
-        if (this.xs) {
-          return 1;
-        }
-
-        if (this.sm || this.md) {
-          return 2;
-        }
-
-        return 3;
-      },
     },
 
     methods: {
-      chunk(channels) {
-        return _.chunk(channels, this.columns);
-      },
       goToChannel(channelId) {
         this.$router.push({
           name: PageNames.TOPICS_CHANNEL,
