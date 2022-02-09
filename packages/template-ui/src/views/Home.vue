@@ -121,7 +121,8 @@ export default {
           });
       }
       else {
-        return window.kolibri.getHighlightedContent({
+        return window.kolibri.getRandomNodes({
+          onlyContent: true,
           maxResults: this.carouselSlideNumber,
         }).then((page) => {
           this.carouselNodes = page.results;
