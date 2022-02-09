@@ -26,7 +26,7 @@
   import { CategorizedChannelIds } from '../customApps';
 
   export default {
-    name: 'ChannelsList',
+    name: 'CategorizedChannelsList',
     mixins: [responsiveMixin],
 
     computed: {
