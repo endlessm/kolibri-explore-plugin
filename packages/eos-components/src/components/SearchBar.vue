@@ -23,6 +23,7 @@
           placeholder="Type keywords to search"
           :disabled="loading"
           :value="value"
+          @keyup.enter="inputUpdated($event.target.value)"
           @input="updateValue($event.target.value)"
         >
       </b-input-group>

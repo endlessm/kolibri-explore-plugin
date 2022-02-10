@@ -12,7 +12,7 @@
       <SearchBar
         v-model="query"
         class="search-row"
-        :debounce="800"
+        :debounce="2000"
         :progress="progress"
         :loading="isLoading"
         @clear-input="clearInput"
