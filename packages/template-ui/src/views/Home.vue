@@ -80,6 +80,7 @@ export default {
       'mainSections',
       'carouselNodeIds',
       'carouselSlideNumber',
+      'carouselKinds',
       'cardColumns',
       'mediaQuality',
       'hasSectionsSearch',
@@ -123,6 +124,7 @@ export default {
       else {
         return window.kolibri.getRandomNodes({
           onlyContent: true,
+          kinds: this.carouselKinds,
           maxResults: this.carouselSlideNumber,
         }).then((page) => {
           this.carouselNodes = page.results;
