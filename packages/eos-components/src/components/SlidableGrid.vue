@@ -77,6 +77,18 @@ export default {
       type: Boolean,
       default: false,
     },
+    itemsPerSlideSmall: {
+      type: Number,
+      default: Math.ceil(ItemsPerSlide / 4),
+    },
+    itemsPerSlideMedium: {
+      type: Number,
+      default: Math.ceil(ItemsPerSlide / 2),
+    },
+    itemsPerSlideLarge: {
+      type: Number,
+      default: Math.ceil(ItemsPerSlide),
+    },
   },
   data() {
     return {
@@ -87,12 +99,12 @@ export default {
   computed: {
     itemsPerSlide() {
       if (this.xs) {
-        return Math.ceil(ItemsPerSlide / 4);
+        return this.itemsPerSlideSmall;
       }
       if (this.sm || this.md) {
-        return Math.ceil(ItemsPerSlide / 2);
+        return this.itemsPerSlideMedium;
       }
-      return Math.ceil(ItemsPerSlide);
+      return this.itemsPerSlideLarge;
     },
     slides() {
       return _.chunk(this.nodes, this.itemsPerSlide);

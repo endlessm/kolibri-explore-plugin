@@ -16,6 +16,9 @@
           v-slot="slotProps"
           :nodes="channels"
           :hasWhiteBackground="true"
+          :itemsPerSlideLarge="3"
+          :itemsPerSlideMedium="2"
+          :itemsPerSlideSmall="1"
         >
           <ChannelCard
             v-for="channel in slotProps.slideNodes"
