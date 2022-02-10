@@ -16,6 +16,7 @@ export const CustomChannelApps = {
   '3160899a73564d8a8467284d9219b91c': 'terminal-two',
   '74f36493bb475b62935fa8705ed59fed': 'thoughtful-learning',
   bf0260ed911f44cda27a263db93a8512: '49ers-edu-digital-playbook',
+  c8540424d77f44f8ae306e22d3b14eaf: 'coronavirus',
   // Endless curated content (mostly Youtube content based)
   f061fce103ff5d4e9b8433e67802e666: 'arts',
   '4968191fba07548c9592fc174a70b5d6': 'beauty',

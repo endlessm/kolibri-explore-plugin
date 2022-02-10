@@ -42,6 +42,7 @@ const initialState = {
   // Carousel config:
   carouselNodeIds: [], // if empty we'll fetch nodes from the API
   carouselSlideNumber: 3, // Only used if fetching nodes, defaults to 3
+  carouselKinds: [], // Array of content kinds. If empty any kinds will be fetched.
 
   mediaQuality: ComponentConstants.MediaQuality.REGULAR,
   displayLogoInHeader: true,
