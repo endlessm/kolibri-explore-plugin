@@ -4,7 +4,10 @@
     :style="{ backgroundImage: backgroundImageURL }"
   >
     <ChannelNavBar />
-    <SearchBar v-model="query" @clear-input="onClearInput" />
+    <SearchBar
+      v-model="query"
+      @clear-input="onClearInput"
+    />
 
     <EmptyResultsMessage v-if="notFound" :showTopics="false">
       <h1 class="text-secondary">
