@@ -34,6 +34,7 @@ export const CustomChannelApps = {
   '95a1ceaec2b849ed90fe0b135791b163': 'novels',
   '59bb2e5a3d2e5e3b85b87d9ab4daa2f3': 'reading',
   '3fcffebc58d15175b948b140434ef6e6': 'sports',
+  '92e96efc082e5c62b0aac3847bdcdb33': 'staff-playlist',
   '2f95235c3709511fa12d007f31ed6a7b': 'steam',
   '1520f018610256549c98ca0140cceebe': 'virtual-field-trips',
   // Zim file based channels
@@ -133,6 +134,7 @@ export const ChannelCardThumbnails = {
   '95a1ceaec2b849ed90fe0b135791b163': 'novels.jpg',
   '59bb2e5a3d2e5e3b85b87d9ab4daa2f3': 'reading.jpg',
   '3fcffebc58d15175b948b140434ef6e6': 'sports.jpg',
+  '92e96efc082e5c62b0aac3847bdcdb33': 'staff-playlist.jpg',
   '2f95235c3709511fa12d007f31ed6a7b': 'steam.jpg',
   '1520f018610256549c98ca0140cceebe': 'virtual-field-trips.jpg',
   // Zim file based channels
@@ -182,6 +184,7 @@ export const ChannelCardIcons = {
   '95a1ceaec2b849ed90fe0b135791b163': 'novels.png',
   '59bb2e5a3d2e5e3b85b87d9ab4daa2f3': 'reading.png',
   '3fcffebc58d15175b948b140434ef6e6': 'sports.png',
+  '92e96efc082e5c62b0aac3847bdcdb33': 'staff-playlist.png',
   '2f95235c3709511fa12d007f31ed6a7b': 'steam.png',
   '1520f018610256549c98ca0140cceebe': 'virtual-field-trips.png',
   // Zim file based channels
