@@ -42,6 +42,7 @@
   import _ from 'underscore';
   import CloseIcon from 'vue-material-design-icons/CloseCircleOutline.vue';
   import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
+  import { SearchBarDebounce } from '../constants.js';
 
   export default {
     name: 'SearchBar',
@@ -56,7 +57,7 @@
       },
       debounce: {
         type: Number,
-        default: 500,
+        default: SearchBarDebounce,
       },
       loading: {
         type: Boolean,

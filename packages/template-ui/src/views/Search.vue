@@ -6,7 +6,6 @@
     <ChannelNavBar />
     <SearchBar
       v-model="query"
-      :debounce="2000"
       @clear-input="onClearInput"
     />
 

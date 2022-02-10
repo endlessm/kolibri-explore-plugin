@@ -52,6 +52,7 @@ export const ItemsPerSlide = 4;
 export const ItemsPerPage = 16;
 
 export const KeywordIconSize = 20;
+export const SearchBarDebounce = 2000;
 
 export default {
   AuthorFilterName,
@@ -65,6 +66,7 @@ export default {
   MediaFilterName,
   MediaQuality,
   MediaTypeVerbs,
+  SearchBarDebounce,
   StructuredTags,
   StructuredTagsRegExp,
   TagFilterName,
