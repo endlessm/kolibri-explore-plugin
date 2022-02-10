@@ -28,17 +28,11 @@
 
     <div class="flex-fill main">
 
-      <b-container class="mb-1 mt-4">
-        <h5 class="pt-2 text-muted">
-          Discover the Channels
-        </h5>
-      </b-container>
-
       <template v-if="core.loading">
         <CardGridPlaceholder />
       </template>
       <template v-else>
-        <ChannelsList />
+        <CategorizedChannelsList />
       </template>
 
     </div>
@@ -54,13 +48,13 @@
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import { PageNames, searchTerms } from '../constants';
 
-  import ChannelsList from '../components/ChannelsList';
+  import CategorizedChannelsList from '../components/CategorizedChannelsList';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
   import AboutModal from '../components/AboutModal';
 
   export default {
     name: 'ChannelsPage',
-    components: { AboutModal, ChannelsList, DiscoveryNavBar },
+    components: { AboutModal, CategorizedChannelsList, DiscoveryNavBar },
     mixins: [commonCoreStrings],
     computed: {
       ...mapState('topicsRoot', { carouselNodes: 'carouselNodes' }),

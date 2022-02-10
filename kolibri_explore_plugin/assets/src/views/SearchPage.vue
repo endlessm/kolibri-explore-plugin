@@ -23,7 +23,7 @@
           <CardGridPlaceholder />
         </template>
         <template v-else>
-          <ChannelsList />
+          <AlphabeticalChannelsList />
         </template>
       </div>
 
@@ -119,7 +119,7 @@
   import { PageNames } from '../constants';
   import { searchChannels } from '../modules/topicsRoot/handlers';
 
-  import ChannelsList from '../components/ChannelsList';
+  import AlphabeticalChannelsList from '../components/AlphabeticalChannelsList';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
   import AboutModal from '../components/AboutModal';
 
@@ -127,7 +127,7 @@
 
   export default {
     name: 'SearchPage',
-    components: { AboutModal, ChannelsList, DiscoveryNavBar },
+    components: { AboutModal, AlphabeticalChannelsList, DiscoveryNavBar },
     mixins: [responsiveMixin],
     data() {
       return {

@@ -59,40 +59,114 @@ export function getAppNameByID(id) {
 }
 
 // The order here is important because is how they appear in the channel page.
-export const RecommendedChannelIDs = [
-  '2091ca47ff544c96b4ae02b3a92346e1', // ted-ed-lessons
-  'e11462f71c6f5472b113311c69071b05', // dance
-  'bf0260ed911f44cda27a263db93a8512', // 49ers-edu-digital-playbook
-  '057f871caa405ec29d62ba0523c193d7', // music
-  'f62db29be20453c4a267132e93a9e602', // wikipedia
-  '9c33eb395508447d96c96682cb18c57a', // techbridge-girls-home
-  '3160899a73564d8a8467284d9219b91c', // terminal-two
-  'efcc464be5a85ba5a58d1636b00313fc', // gardening
-  'f5f6729f95b55753badeaa066fa6e986', // healthy-body
-  '2b43973f53f1538bad5ece63ad847606', // financial-literacy
-  '59bb2e5a3d2e5e3b85b87d9ab4daa2f3', // reading
-  '85b42a40745f4e2392ed62e72d4dad6e', // oceanx
-  'f061fce103ff5d4e9b8433e67802e666', // arts
-  'c9d7f950ab6b5a1199e3d6c10d7f0103', // khan-academy
-  '38eaaf9ec82a44f9ab6e7a44cb730f07', // pbs-kids
-  '000409f81dbe5d1ba67101cb9fed4530', // touchable-earth
-  '4e413158eac55422a5343af9fcfa8d59', // healthy-mind
-  '97111903de564de49483a9705d41a8ac', // career-girls
-  'bcc6e12a0ddf4a17a8b600c6b880e3ed', // common-sense-student-resources
-  '2f95235c3709511fa12d007f31ed6a7b', // steam
-  '79cd09863eed51e98576c35ede6f9c9d', // cooking
-  '79a50be66bad5eb686c42617c914fd45', // careers
-  'e409b964366a59219c148f2aaa741f43', // blockly-games
-  '3fcffebc58d15175b948b140434ef6e6', // sports
-  'e9d0d54d209344849e9bed0aa8c222ad', // sikana-diy
-  'bbb4ea407a3c450cb18cbaa76f2d75cd', // cspathshala-english
-  '57e23812e0dc562581958e39acedd717', // gaming
-  'fc47aee82e0153e2a30197d3fdee1128', // open-stax
-  '197934f144305350b5820c7c4dd8e194', // phet-interactive-simulations
-  '74f36493bb475b62935fa8705ed59fed', // thoughtful-learning
-  '0418cc231e9c5513af0fff9f227f7172', // hello-channel
-  'c8540424d77f44f8ae306e22d3b14eaf', // coronavirus
-  '3c77d9dd717341bb8fff8da6ab980df3', // mother-goose-club
+export const CategorizedChannelIds = [
+  {
+    name: 'Curiosity and Reference',
+    channels: [
+      '2091ca47ff544c96b4ae02b3a92346e1', // ted-ed-lessons
+      '1520f018610256549c98ca0140cceebe', // virtual-field-trips
+      'f62db29be20453c4a267132e93a9e602', // wikipedia
+      '85b42a40745f4e2392ed62e72d4dad6e', // oceanx
+      '000409f81dbe5d1ba67101cb9fed4530', // touchable-earth
+    ],
+  },
+  {
+    name: 'Arts',
+    channels: [
+      '057f871caa405ec29d62ba0523c193d7', // music
+      'f061fce103ff5d4e9b8433e67802e666', // arts
+      'e11462f71c6f5472b113311c69071b05', // dance
+    ],
+  },
+  {
+    name: 'Science and Experiments',
+    channels: [
+      'bf0260ed911f44cda27a263db93a8512', // 49ers-edu-digital-playbook
+      '2f95235c3709511fa12d007f31ed6a7b', // steam
+      '9c33eb395508447d96c96682cb18c57a', // techbridge-girls-home
+      '197934f144305350b5820c7c4dd8e194', // phet-interactive-simulations
+    ],
+  },
+  {
+    name: 'Games & Gaming',
+    channels: [
+      '3160899a73564d8a8467284d9219b91c', // terminal-two
+      '38eaaf9ec82a44f9ab6e7a44cb730f07', // pbs-kids
+      '57e23812e0dc562581958e39acedd717', // gaming
+      'e409b964366a59219c148f2aaa741f43', // blockly-games
+    ],
+  },
+  {
+    name: 'Health and Fitness',
+    channels: [
+      'f5f6729f95b55753badeaa066fa6e986', // healthy-body
+      '4e413158eac55422a5343af9fcfa8d59', // healthy-mind
+      '3fcffebc58d15175b948b140434ef6e6', // sports
+      'c8540424d77f44f8ae306e22d3b14eaf', // coronavirus
+    ],
+  },
+  {
+    name: 'Life and Skills',
+    channels: [
+      '97111903de564de49483a9705d41a8ac', // career-girls
+      '2b43973f53f1538bad5ece63ad847606', // financial-literacy
+      '9eeebbc5140d5b98ac4a4d2ce9432135', // lgbtq
+      '79a50be66bad5eb686c42617c914fd45', // careers
+    ],
+  },
+  {
+    name: 'DIY and Healthy Eating',
+    channels: [
+      'efcc464be5a85ba5a58d1636b00313fc', // gardening
+      'e9d0d54d209344849e9bed0aa8c222ad', // sikana-diy
+      '79cd09863eed51e98576c35ede6f9c9d', // cooking
+    ],
+  },
+  {
+    name: 'Literature and Language Arts',
+    channels: [
+      '59bb2e5a3d2e5e3b85b87d9ab4daa2f3', // reading
+      '95a1ceaec2b849ed90fe0b135791b163', // novels
+      '0418cc231e9c5513af0fff9f227f7172', // hello-channel
+      '74f36493bb475b62935fa8705ed59fed', // thoughtful-learning
+    ],
+  },
+  {
+    name: 'Educational Resources',
+    channels: [
+      'c9d7f950ab6b5a1199e3d6c10d7f0103', // khan-academy
+      'bcc6e12a0ddf4a17a8b600c6b880e3ed', // common-sense-student-resources
+      '3c77d9dd717341bb8fff8da6ab980df3', // mother-goose-club
+      'bbb4ea407a3c450cb18cbaa76f2d75cd', // cspathshala-english
+      'fc47aee82e0153e2a30197d3fdee1128', // open-stax
+    ],
+  },
+  {
+    name: 'Fashion and Beauty',
+    channels: [
+      'bf36d8e7e1ee56b194fe52cafbfd9db3', // fashion
+      '4968191fba07548c9592fc174a70b5d6', // beauty
+      'b40491d1ef8b5506b8c6ae861372e9de', // jewelry-making
+    ],
+  },
+  {
+    name: 'How to’s',
+    channels: [
+      '9c494b7b879e512f96f60176df85968c', // wikihow-holidays-and-traditions
+      'e4e4d0e342f951b09aa9ef1622f5301f', // wikihow-work-world
+      '69497db42937539e94fe3969f6995d2d', // wikihow-computers-and-electronics
+      'b9fe8fe9b92b5af5964feccdadb78413', // wikihow-food-and-entertaining
+      '304d529d4b1c597ea7d3c59b30ac3c14', // wikihow-home-and-garden
+      '6f6dd2720bd2574fa70a069ac9b75046', // wikihow-youth
+      // FIXME without order in Figma design:
+      '58828121cc115549bda7fb3f71f4795e', // wikihow-arts-and-entertainment
+      '05a4060cf5175df78edec8dc09e396a1', // wikihow-cars-and-other-vehicles
+      '00b0d8dff13e518d801ef816227b2691', // wikihow-education-and-communications
+      'e114fe9de66e513384e4ca2e9b529c18', // wikihow-hobbies-and-crafts
+      'afbf0498da3c5db3947c291ddda8e21a', // wikihow-personal-care-and-style
+      '146efed5aa585229a49513219e73af66', // wikihow-sports-and-fitness
+    ],
+  },
 ];
 
 // These should match a file existing on static/thumbnails/NAME
