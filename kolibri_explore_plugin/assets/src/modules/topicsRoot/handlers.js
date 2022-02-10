@@ -183,7 +183,6 @@ export function showFilteredChannels(store) {
 
 export function searchChannels(store, search, kind) {
   store.commit('CORE_SET_PAGE_LOADING', true);
-  store.commit('topicsRoot/SET_SEARCH_RESULT', {});
   return ContentNodeSearchResource.fetchCollection({
     getParams: {
       search,

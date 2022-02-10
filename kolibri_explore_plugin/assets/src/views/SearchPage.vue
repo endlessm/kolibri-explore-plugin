@@ -19,33 +19,10 @@
       />
 
       <div v-if="isEmpty" class="mt-5">
-        <template v-if="core.loading">
-          <CardGridPlaceholder />
-        </template>
-        <template v-else>
-          <ChannelsList />
-        </template>
+        <ChannelsList />
       </div>
 
       <template v-else>
-
-        <b-container class="pb-5 pt-3">
-          <template v-if="isLoading" class="placeholder">
-            <CardGridPlaceholder />
-          </template>
-          <template v-else>
-            <template v-if="!isEmpty">
-              <Keywords :words="keywords" @click="removeKeyword" />
-            </template>
-            <div v-if="isNoResults" class="empty mb-4 mt-5 w-50">
-              <h1>Sorry, we can’t find any content that matches your search.</h1>
-              <h5>
-                You can try a different search, maybe use fewer words, or try one
-                of the topic suggestions below.
-              </h5>
-            </div>
-          </template>
-        </b-container>
 
         <template v-if="resultCards">
           <div v-for="[kind, nodes] in resultCards" :key="kind">
@@ -69,6 +46,24 @@
             <hr>
           </div>
         </template>
+
+        <b-container class="pb-5 pt-3">
+          <template v-if="isLoading" class="placeholder">
+            <CardGridPlaceholder />
+          </template>
+          <template v-else>
+            <template v-if="!isEmpty">
+              <Keywords :words="keywords" @click="removeKeyword" />
+            </template>
+            <div v-if="isNoResults" class="empty mb-4 mt-5 w-50">
+              <h1>Sorry, we can’t find any content that matches your search.</h1>
+              <h5>
+                You can try a different search, maybe use fewer words, or try one
+                of the topic suggestions below.
+              </h5>
+            </div>
+          </template>
+        </b-container>
 
         <b-container v-if="resultChannels.length" class="pb-5 pt-3">
           <h4 class="text-muted">
@@ -139,11 +134,11 @@
         },
         mediaQuality: constants.MediaQuality.REGULAR,
         progress: 100,
+        resultKinds: [],
       };
     },
     computed: {
       ...mapState('topicsRoot', { searchResult: 'searchResult', channels: 'rootNodes' }),
-      ...mapState(['core']),
       ...mapState({
         searchTerm: 'searchTerm',
       }),
@@ -180,7 +175,7 @@
         return this.query.trim();
       },
       resultChannels() {
-        return kinds
+        return this.resultKinds
           .map(k => _.get(this.searchResult, [k, 'channels'], []))
           .reduce((accumulator, value) => {
             return _.uniq([...accumulator, ...value], false, 'id');
@@ -191,7 +186,7 @@
         return _.chunk(this.resultChannels, this.columns);
       },
       resultCards() {
-        const groups = kinds
+        const groups = this.resultKinds
           .map(k => {
             const results = _.get(this.searchResult, [k, 'results'], []);
             // Add tags to nodes
@@ -213,8 +208,7 @@
           // Remove empty groups
           .filter(([, nodes]) => nodes.length > 0);
 
-        // Sort by number of results
-        return _.sortBy(groups, ([, nodes]) => nodes.length).reverse();
+        return groups;
       },
       columns() {
         if (this.xs) {
@@ -257,14 +251,16 @@
         });
       },
       search(query) {
+        this.setSearchResult({});
+        this.resultKinds = [];
         if (!query) {
-          this.setSearchResult({});
           return;
         }
 
         this.progress = 0;
         kinds.forEach(k => {
           searchChannels(this.$store, query, k).then(() => {
+            this.resultKinds.push(k);
             this.progress += 100 / kinds.length;
           });
         });
