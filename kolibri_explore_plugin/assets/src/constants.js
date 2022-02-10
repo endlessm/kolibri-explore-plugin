@@ -42,4 +42,4 @@ export const searchTerms = new Map([
 ]);
 
 export const COLLECTIONS_PAGE_SIZE = 300;
-export const SEARCH_MAX_RESULTS = 100;
+export const SEARCH_MAX_RESULTS = 32;
