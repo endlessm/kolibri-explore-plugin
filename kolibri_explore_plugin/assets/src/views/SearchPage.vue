@@ -17,12 +17,14 @@
         :loading="isLoading"
         @clear-input="clearInput"
       />
-
       <div v-if="isEmpty" class="mt-5">
         <AlphabeticalChannelsList />
       </div>
 
       <template v-else>
+        <b-container>
+          <Keywords :words="keywords" @click="removeKeyword" />
+        </b-container>
 
         <template v-if="resultCards">
           <div v-for="[kind, nodes] in resultCards" :key="kind">
@@ -47,14 +49,12 @@
           </div>
         </template>
 
-        <b-container class="pb-5 pt-3">
-          <template v-if="isLoading" class="placeholder">
-            <CardGridPlaceholder />
-          </template>
-          <template v-else>
-            <template v-if="!isEmpty">
-              <Keywords :words="keywords" @click="removeKeyword" />
-            </template>
+        <template v-if="isLoading" class="placeholder">
+          <CardGridPlaceholder />
+        </template>
+
+        <b-container class="pb-5">
+          <template v-if="!isLoading">
             <div v-if="isNoResults" class="empty mb-4 mt-5 w-50">
               <h1>Sorry, we can’t find any content that matches your search.</h1>
               <h5>
