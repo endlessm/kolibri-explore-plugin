@@ -71,9 +71,8 @@
               if (!params.tags) {
                 params.tags = [];
               }
-              options.forEach((option) => {
-                params.tags.push(`${matchKey}=${option}`);
-              });
+              const structuredTags = options.map((option) => `${matchKey}=${option}`);
+              params.tags = [...params.tags, ...structuredTags];
             }
           });
         }
