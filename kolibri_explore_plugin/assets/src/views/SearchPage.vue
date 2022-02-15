@@ -1,7 +1,6 @@
 <template>
 
   <div class="d-flex flex-column min-vh-100 search-page">
-    <AboutModal id="about-modal" />
     <DiscoveryNavBar />
 
     <div
@@ -115,13 +114,12 @@
 
   import AlphabeticalChannelsList from '../components/AlphabeticalChannelsList';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
-  import AboutModal from '../components/AboutModal';
 
   const kinds = Object.keys(constants.MediaTypeVerbs);
 
   export default {
     name: 'SearchPage',
-    components: { AboutModal, AlphabeticalChannelsList, DiscoveryNavBar },
+    components: { AlphabeticalChannelsList, DiscoveryNavBar },
     mixins: [responsiveMixin],
     data() {
       return {
