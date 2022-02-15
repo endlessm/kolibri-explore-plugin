@@ -38,9 +38,9 @@ export const CustomChannelApps = {
   '92e96efc082e5c62b0aac3847bdcdb33': 'staff-playlist',
   '2f95235c3709511fa12d007f31ed6a7b': 'steam',
   '1520f018610256549c98ca0140cceebe': 'virtual-field-trips',
+  '59b8deeb90f544da923187e77c8d3820': 'wikihow',
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia',
-  '35ec8e78266d545b9449af6e2409b10d': 'wikihow',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment',
   '05a4060cf5175df78edec8dc09e396a1': 'wikihow-cars-and-other-vehicles',
   '69497db42937539e94fe3969f6995d2d': 'wikihow-computers-and-electronics',
@@ -153,6 +153,7 @@ export const CategorizedChannelIds = [
   {
     name: 'How to’s',
     channels: [
+      '59b8deeb90f544da923187e77c8d3820', // wikihow PDF based channel
       '9c494b7b879e512f96f60176df85968c', // wikihow-holidays-and-traditions
       'e4e4d0e342f951b09aa9ef1622f5301f', // wikihow-work-world
       '69497db42937539e94fe3969f6995d2d', // wikihow-computers-and-electronics
@@ -212,6 +213,7 @@ export const ChannelCardThumbnails = {
   '92e96efc082e5c62b0aac3847bdcdb33': 'staff-playlist.jpg',
   '2f95235c3709511fa12d007f31ed6a7b': 'steam.jpg',
   '1520f018610256549c98ca0140cceebe': 'virtual-field-trips.jpg',
+  '59b8deeb90f544da923187e77c8d3820': 'wikihow.jpg',
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.jpg',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment.jpg',
@@ -262,6 +264,7 @@ export const ChannelCardIcons = {
   '92e96efc082e5c62b0aac3847bdcdb33': 'staff-playlist.png',
   '2f95235c3709511fa12d007f31ed6a7b': 'steam.png',
   '1520f018610256549c98ca0140cceebe': 'virtual-field-trips.png',
+  '59b8deeb90f544da923187e77c8d3820': 'wikihow.png',
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.png',
 };
