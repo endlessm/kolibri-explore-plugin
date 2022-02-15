@@ -6,7 +6,7 @@
     size="xl"
     centered
   >
-    <b-container class="bg-white text-dark">
+    <div class="bg-white text-dark wrapper">
       <b-row>
         <b-col class="pt-3" md="3" sm="12">
           <b-list-group v-b-scrollspy:sections-column>
@@ -189,7 +189,7 @@
           </div>
         </b-col>
       </b-row>
-    </b-container>
+    </div>
   </b-modal>
 
 </template>
@@ -259,9 +259,15 @@
 
   @import '../styles';
 
+  .wrapper {
+    padding-right: $spacer;
+    padding-left: $grid-gutter-width + $circled-button-size;
+  }
+
   .sections-column {
     position: relative;
     height: 75vh;
+    padding-right: $grid-gutter-width + $circled-button-size;
     overflow-y: scroll;
   }
 
