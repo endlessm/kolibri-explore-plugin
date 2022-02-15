@@ -41,6 +41,7 @@ export default {
   data() {
     return {
       imageSize: 0,
+      image: new Image(),
     };
   },
   computed: {
@@ -64,10 +65,12 @@ export default {
   },
   watch: {
     thumbnail() {
-      const img = new Image();
-      img.src = this.thumbnail;
-      img.onload = () => {
-        this.imageSize = img.width;
+      // Cancel previous onload events
+      this.image.onload = null;
+      this.image.src = this.thumbnail;
+      // Wait for thumbnail to load to get the image width
+      this.image.onload = () => {
+        this.imageSize = this.image.width;
       };
     }
   },
