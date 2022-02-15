@@ -40,7 +40,13 @@
 
   .thumbnail {
     transition: background 0.2s ease;
-    background-size: 100% auto;
+    /**
+     * Set the background size to 101% to avoid white margin when zooming
+     * the content in Chrome to 90%
+     *
+     * See https://phabricator.endlessm.com/T33056
+     **/
+    background-size: 101% auto;
     background-position: center;
     background-repeat: no-repeat;
   }
