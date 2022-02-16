@@ -1,4 +1,20 @@
+$default-gray-500: $gray-500;
+
 $primary: #a220df;
 $gray-400: #f5f6f6;
 $gray-500: #eaeaea;
 $header-height: 240px;
+
+/**
+ *  Use the default breadcrumb link color even after updating the $gray-500
+ *  variable:
+ *  packages/eos-components/src/index.scss
+**/
+.breadcrumb-item,
+.breadcrumb-item.text-light a {
+  color: $default-gray-500;
+}
+
+.close-link {
+  color: $default-gray-500 !important;
+}
