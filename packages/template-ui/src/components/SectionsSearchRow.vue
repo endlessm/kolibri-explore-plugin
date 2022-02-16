@@ -7,7 +7,7 @@
         variant="link"
         to="/search"
       >
-        <MagnifyIcon class="mr-1" />
+        <MagnifyIcon :size="iconSize" class="mr-1" />
         Search Keywords
       </b-button>
     </MainSections>
@@ -16,9 +16,15 @@
 
 <script>
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
+import { constants } from 'eos-components';
 
 export default {
   name: 'SectionsSearchRow',
   components: { MagnifyIcon },
+  computed: {
+    iconSize() {
+      return constants.KeywordIconSize;
+    },
+  },
 };
 </script>
