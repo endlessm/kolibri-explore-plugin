@@ -1,7 +1,6 @@
 <template>
 
   <div class="channels-page d-flex flex-column min-vh-100">
-    <AboutModal id="about-modal" />
     <DiscoveryNavBar />
 
     <b-container class="mb-2 mt-4">
@@ -50,11 +49,10 @@
 
   import CategorizedChannelsList from '../components/CategorizedChannelsList';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
-  import AboutModal from '../components/AboutModal';
 
   export default {
     name: 'ChannelsPage',
-    components: { AboutModal, CategorizedChannelsList, DiscoveryNavBar },
+    components: { CategorizedChannelsList, DiscoveryNavBar },
     mixins: [commonCoreStrings],
     computed: {
       ...mapState('topicsRoot', { carouselNodes: 'carouselNodes' }),

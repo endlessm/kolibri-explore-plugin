@@ -3,6 +3,7 @@
   <div>
     <BackToTop />
     <ContentModal />
+    <AboutModal id="about-modal" />
     <DevTag v-if="showBuildInfo" />
     <keep-alive include="SearchPage">
       <component
@@ -30,6 +31,7 @@
   import LoadingImage from 'eos-components/src/assets/loading-animation.gif';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
   import { PageNames } from '../constants';
+  import AboutModal from '../components/AboutModal';
   import commonExploreStrings from './commonExploreStrings';
   import ChannelsPage from './ChannelsPage';
   import CustomChannelPresentationApp from './CustomChannelPresentationApp';
@@ -50,7 +52,7 @@
 
   export default {
     name: 'ExploreIndex',
-    components: { ContentModal, DevTag },
+    components: { AboutModal, ContentModal, DevTag },
     mixins: [commonCoreStrings, commonExploreStrings, responsiveWindowMixin],
     data() {
       return {
