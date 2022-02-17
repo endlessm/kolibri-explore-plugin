@@ -61,12 +61,15 @@
         });
       },
       goToSearch() {
-        // cleaning previous search
-        this.setSearchResult({}),
-          this.setSearchTerm(''),
-          this.$router.push({
-            name: PageNames.SEARCH,
-          });
+        // Cleaning previous search:
+        this.setSearchResult({});
+        this.setSearchTerm('');
+        // Scroll to top. For some reason this is not needed when going to channels:
+        window.scrollTo({ top: 0 });
+        // Then go:
+        this.$router.push({
+          name: PageNames.SEARCH,
+        });
       },
       currentIsChannels() {
         return this.$route.name === PageNames.TOPICS_ROOT;
