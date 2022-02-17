@@ -86,106 +86,169 @@
             <h3 id="credits-section" class="pt-3 text-primary">
               Images and Icons Attribution
             </h3>
+
             <h5>Financial Literacy</h5>
             <p>
               Credits: logo – savings by abderraouf omara from
-              thenounproject.com; thumbnail – Photo by Sharon McCutcheon on
-              unsplash.com; background – Photo by Sharon McCutcheon on
-              unsplash.com.
+              NounProject.com; thumbnail – Photo by Sharon McCutcheon
+              on unsplash.com; background – Photo by Sharon McCutcheon
+              on unsplash.com.
             </p>
 
             <h5>Gardening</h5>
             <p>
-              Credits: logo – Beetroot by dDara from thenounproject.com;
-              thumbnail – Photo by Julia Kadel on unsplash.com; background –
-              Photo by Julia Kadel on unsplash.com.
+              Credits: logo – Beetroot by dDara from NounProject.com;
+              thumbnail – Photo by Julia Kadel on unsplash.com;
+              background – Photo by Julia Kadel on unsplash.com.
             </p>
 
             <h5>Healthy Mind </h5>
             <p>
               Credits: logo – well being by Karen Santiago from
-              thenounproject.com; thumbnail – Photo by Alejandro Piñero Amerio
-              on unsplash.com; background – Photo by Clyde RS on unsplash.com.
+              NounProject.com; thumbnail – Photo by Alejandro Piñero
+              Amerio on unsplash.com; background – Photo by Clyde RS
+              on unsplash.com.
             </p>
 
             <h5>Read Along </h5>
             <p>
-              Credits: logo – Reading by dDara from the Noun Project from
-              thenounproject.com; thumbnail – Photo by Annie Spratt on
-              unsplash.com; background – Photo by Roman Trifonov on
+              Credits: logo – Reading by dDara from the Noun Project
+              from NounProject.com; thumbnail – Photo by Annie Spratt
+              on unsplash.com; background – Photo by Roman Trifonov on
               unsplash.com.
             </p>
 
             <h5>Music</h5>
             <p>
-              Credits: logo – Guitar by dDara from the Noun Project from
-              thenounproject.com; thumbnail – Photo by Sigmund on unsplash.com;
-              background – Photo by Sigmund on unsplash.com.
+              Credits: logo – Guitar by dDara from the Noun Project
+              from NounProject.com; thumbnail – Photo by Sigmund on
+              unsplash.com; background – Photo by Sigmund on
+              unsplash.com.
             </p>
 
             <h5>Healthy Body</h5>
             <p>
-              Credits: logo – yoga by Eucalyp from the Noun Project from
-              thenounproject.com; thumbnail – Photo by madison lavern on
-              unsplash.com; background – Photo by Conscious Design on
-              unsplash.com.
+              Credits: logo – yoga by Eucalyp from the Noun Project
+              from NounProject.com; thumbnail – Photo by madison
+              lavern on unsplash.com; background – Photo by Conscious
+              Design on unsplash.com.
             </p>
 
             <h5>Dance</h5>
             <p>
-              Credits: logo – dance by ArmOkay from thenounproject.com;
-              thumbnail – Photo by Drew Graham on unsplash.com; background –
-              Photo by Ahmad Odeh on unsplash.com.
+              Credits: logo – dance by ArmOkay from NounProject.com;
+              thumbnail – Photo by Drew Graham on unsplash.com;
+              background – Photo by Ahmad Odeh on unsplash.com.
             </p>
 
-            <h5>STEM</h5>
+            <h5>STEAM</h5>
             <p>
-              Credits: logo – Science by Turkkub from thenounproject.com;
-              thumbnail – Photo by David Clode  on unsplash.com; background –
-              Photo by Joel Filipe on unsplash.com.
+              Credits: logo – Science by Turkkub from NounProject.com;
+              thumbnail – Photo by David Clode on unsplash.com;
+              background – Photo by Joel Filipe on unsplash.com.
             </p>
 
             <h5>Sports</h5>
             <p>
-              Credits: logo – Basketball by Eucalypt from thenounproject.com;
-              thumbnail – Photo by Steven Lelham on unsplash.com; background –
-              Photo by Caroline Justine on unsplash.com.
+              Credits: logo – Basketball by Eucalypt from
+              NounProject.com; thumbnail – Photo by Steven Lelham on
+              unsplash.com; background – Photo by Caroline Justine on
+              unsplash.com.
             </p>
 
             <h5>Arts & Crafts</h5>
             <p>
-              Credits: logo – Scissor By Muhammad Auns from thenounproject.com;
-              thumbnail – Photo by Siora Photography on unsplash.com;
-              background – Photo by Munro Studio on unsplash.com.
+              Credits: logo – Scissor By Muhammad Auns from
+              NounProject.com; thumbnail – Photo by Siora Photography
+              on unsplash.com; background – Photo by Munro Studio on
+              unsplash.com.
             </p>
 
             <h5>Careers</h5>
             <p>
-              Credits: logo – Path by Adrien Coquet from thenounproject.com;
-              thumbnail – Photo by Estee Janssens on unsplash.com; background –
-              Photo by Shane on unsplash.com.
+              Credits: logo – Path by Adrien Coquet from
+              NounProject.com; thumbnail – Photo by Estee Janssens on
+              unsplash.com; background – Photo by Shane on
+              unsplash.com.
             </p>
 
             <h5>Cooking</h5>
             <p>
               Credits: logo – Cooking Tool by Made by Made from
-              thenounproject.com; thumbnail – Photo by LUM3N on unsplash.com;
-              background – Photo by LUM3N on unsplash.com.
+              NounProject.com; thumbnail – Photo by LUM3N on
+              unsplash.com; background – Photo by LUM3N on
+              unsplash.com.
             </p>
 
             <h5>Games</h5>
             <p>
-              Credits: logo – Games by dDara from thenounproject.com; thumbnail
-              – Screenshot from by Block of Netherite on youtube.com;
-              background – Photo by Ty Feague on unsplash.com.
+              Credits: logo – Games by dDara from NounProject.com;
+              thumbnail – Screenshot from by Block of Netherite on
+              youtube.com; background – Photo by Ty Feague on
+              unsplash.com.
             </p>
 
             <h5>Media Thumbnails</h5>
             <p>
-              Icon design credits: Puzzle, Idea, Online Education, Online Test,
-              Audio Book and Book by Komkrit Noenpoempisut from
-              thenounproject.com;
+              Icon design credits: Puzzle, Idea, Online Education,
+              Online Test, Audio Book and Book by Komkrit
+              Noenpoempisut from NounProject.com;
             </p>
+
+            <h5>Fashion</h5>
+            <p>
+              Credits: logo – sneakers by Smalllike from
+              NounProject.com; thumbnail – Screenshot from Vanessa
+              Sirias, Fly With Johnny Thai and SuppleChicTV on
+              youtube.com; background – Photo by Francesco Cavallini
+              on unsplash.com.
+            </p>
+
+            <h5>Jewelry Making</h5>
+            <p>
+              Credits: logo – earrings by Eucalyp from
+              NounProject.com; thumbnail and background – Photos by
+              FLY:D on unsplash.com.
+            </p>
+
+            <h5>Gender Identity</h5>
+            <p>
+              Credits: thumbnail – Screenshot from Angel and Nicole on
+              youtube.com; background – Photo by Cecilie Johnsen on
+              unsplash.com.
+            </p>
+
+            <h5>Beauty</h5>
+            <p>
+              Credits: logo – Beauty by ferdizzimo from
+              NounProject.com; thumbnail – Photo by Siora Photography
+              on unsplash.com; background – Photo by Valeriia Kogan on
+              unsplash.com.
+            </p>
+
+            <h5>Virtual Field Trips</h5>
+            <p>
+              Credits: logo – Map by Eucalyp from NounProject.com;
+              thumbnail – Photo by Juan Ordonez on unsplash.com;
+              background – Photo by Jad Limcaco on unsplash.com.
+            </p>
+
+            <h5>Chapter Books</h5>
+            <p>
+              Credits: logo – Map by Eucalyp from NounProject.com;
+              thumbnail – Photo by Ed Robertson on unsplash.com;
+              background – Photo by Gulfer Ergin on unsplash.com. All
+              book thumbnails are taken from the original book covers
+              (fair use) or Public Domain original artwork.
+            </p>
+
+            <h5>Staff Playlist</h5>
+            <p>
+              Credits: logo – feedback by Andi from NounProject.com;
+              thumbnail – Photo by Sharon Mccutcheon on unsplash.com;
+              background – Photo by Sharon Mccutcheon on unsplash.com.
+            </p>
+
           </div>
         </b-col>
       </b-row>
