@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import headerMixin from '@/components/mixins/headerMixin';
 import logoImage from '../assets/logo.png';
+import headerMixin from '@/components/mixins/headerMixin';
 
 export default {
   name: 'ChannelHeader',
