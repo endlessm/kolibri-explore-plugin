@@ -5,7 +5,7 @@
     :block="block"
     :variant="`${kind}-${variant}`"
     class="pb-1 pl-1 play-button pt-1 text-nowrap"
-    @click.stop="$emit('click')"
+    @click.stop.prevent="$emit('click')"
   >
     <component
       :is="icon"
