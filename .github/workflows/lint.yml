@@ -20,7 +20,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install pre-commit
         pre-commit install -f --install-hooks
-        yarn global add @vue/cli
+        yarn global add @vue/cli@v4.5.15
         yarn install
 
     - name: Lint
