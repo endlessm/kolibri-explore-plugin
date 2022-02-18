@@ -231,6 +231,9 @@
         this.query = this.searchTerm || '';
       },
     },
+    created() {
+      this.query = this.searchTerm || '';
+    },
     methods: {
       ...mapMutations({
         setSearchResult: 'topicsRoot/SET_SEARCH_RESULT',
