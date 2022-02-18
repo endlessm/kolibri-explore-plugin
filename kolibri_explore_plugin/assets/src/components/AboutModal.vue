@@ -75,9 +75,9 @@
               You can find more information on how to use your Endless Key on
               <strong>The Quick Start Guide</strong> document. For more
               information, when you have an internet connection, you can access
-              Endless Community Forum at
-              <a href="https://community.endlessos.com/c/endless-key/">
-                https://community.endlessos.com/c/endless-key/
+              Endless Support Site at
+              <a href="https://support.endlessos.org/en/endless-key">
+                https://support.endlessos.org/en/endless-key
               </a>.
             </p>
             <hr>
