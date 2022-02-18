@@ -67,7 +67,6 @@ export const CategorizedChannelIds = [
       '2091ca47ff544c96b4ae02b3a92346e1', // ted-ed-lessons
       '1520f018610256549c98ca0140cceebe', // virtual-field-trips
       'f62db29be20453c4a267132e93a9e602', // wikipedia
-      '85b42a40745f4e2392ed62e72d4dad6e', // oceanx
       '000409f81dbe5d1ba67101cb9fed4530', // touchable-earth
     ],
   },
@@ -86,6 +85,7 @@ export const CategorizedChannelIds = [
       '2f95235c3709511fa12d007f31ed6a7b', // steam
       '9c33eb395508447d96c96682cb18c57a', // techbridge-girls-home
       '197934f144305350b5820c7c4dd8e194', // phet-interactive-simulations
+      '85b42a40745f4e2392ed62e72d4dad6e', // oceanx
     ],
   },
   {
@@ -148,25 +148,6 @@ export const CategorizedChannelIds = [
       'bf36d8e7e1ee56b194fe52cafbfd9db3', // fashion
       '4968191fba07548c9592fc174a70b5d6', // beauty
       'b40491d1ef8b5506b8c6ae861372e9de', // jewelry-making
-    ],
-  },
-  {
-    name: 'How to’s',
-    channels: [
-      '59b8deeb90f544da923187e77c8d3820', // wikihow PDF based channel
-      '9c494b7b879e512f96f60176df85968c', // wikihow-holidays-and-traditions
-      'e4e4d0e342f951b09aa9ef1622f5301f', // wikihow-work-world
-      '69497db42937539e94fe3969f6995d2d', // wikihow-computers-and-electronics
-      'b9fe8fe9b92b5af5964feccdadb78413', // wikihow-food-and-entertaining
-      '304d529d4b1c597ea7d3c59b30ac3c14', // wikihow-home-and-garden
-      '6f6dd2720bd2574fa70a069ac9b75046', // wikihow-youth
-      // FIXME without order in Figma design:
-      '58828121cc115549bda7fb3f71f4795e', // wikihow-arts-and-entertainment
-      '05a4060cf5175df78edec8dc09e396a1', // wikihow-cars-and-other-vehicles
-      '00b0d8dff13e518d801ef816227b2691', // wikihow-education-and-communications
-      'e114fe9de66e513384e4ca2e9b529c18', // wikihow-hobbies-and-crafts
-      'afbf0498da3c5db3947c291ddda8e21a', // wikihow-personal-care-and-style
-      '146efed5aa585229a49513219e73af66', // wikihow-sports-and-fitness
     ],
   },
 ];
