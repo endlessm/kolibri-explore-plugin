@@ -67,7 +67,6 @@ export const CategorizedChannelIds = [
       '2091ca47ff544c96b4ae02b3a92346e1', // ted-ed-lessons
       '1520f018610256549c98ca0140cceebe', // virtual-field-trips
       'f62db29be20453c4a267132e93a9e602', // wikipedia
-      '85b42a40745f4e2392ed62e72d4dad6e', // oceanx
       '000409f81dbe5d1ba67101cb9fed4530', // touchable-earth
     ],
   },
@@ -86,6 +85,7 @@ export const CategorizedChannelIds = [
       '2f95235c3709511fa12d007f31ed6a7b', // steam
       '9c33eb395508447d96c96682cb18c57a', // techbridge-girls-home
       '197934f144305350b5820c7c4dd8e194', // phet-interactive-simulations
+      '85b42a40745f4e2392ed62e72d4dad6e', // oceanx
     ],
   },
   {
