@@ -123,6 +123,9 @@
     mixins: [responsiveMixin],
     data() {
       return {
+        searchQueryIndex: 0,
+        searchResult: [],
+        resultChannels: [],
         query: '',
         cardColumns: {
           cols: 6,
@@ -131,11 +134,10 @@
         },
         mediaQuality: constants.MediaQuality.REGULAR,
         progress: 100,
-        resultKinds: [],
       };
     },
     computed: {
-      ...mapState('topicsRoot', { searchResult: 'searchResult', channels: 'rootNodes' }),
+      ...mapState('topicsRoot', { channels: 'rootNodes' }),
       ...mapState({
         searchTerm: 'searchTerm',
       }),
@@ -171,25 +173,16 @@
       cleanedQuery() {
         return this.query.trim();
       },
-      resultChannels() {
-        return this.resultKinds
-          .map(k => _.get(this.searchResult, [k, 'channels'], []))
-          .reduce((accumulator, value) => {
-            return _.uniq([...accumulator, ...value], false, 'id');
-          }, []);
-      },
-
       resultChannelsColumns() {
         return _.chunk(this.resultChannels, this.columns);
       },
       resultCards() {
-        const groups = this.resultKinds
-          .map(k => {
-            const results = _.get(this.searchResult, [k, 'results'], []);
+        const groups = this.searchResult
+          .map(({ nodes, kind }) => {
             // Add tags to nodes
-            const nodes = utils.parseNodes(results);
+            const parsedNodes = utils.parseNodes(nodes);
             // Add thumbnails and links to nodes
-            nodes.forEach(node => {
+            parsedNodes.forEach(node => {
               const thumbnailUrl = getContentNodeThumbnail(node);
               node.thumbnail = thumbnailUrl;
               const base = `/topics/${node.channel_id}`;
@@ -200,10 +193,10 @@
               }
             });
 
-            return [k, nodes];
+            return [kind, parsedNodes];
           })
           // Remove empty groups
-          .filter(([, nodes]) => nodes.length > 0);
+          .filter(([, parsedNodes]) => parsedNodes.length > 0);
 
         return groups;
       },
@@ -236,7 +229,6 @@
     },
     methods: {
       ...mapMutations({
-        setSearchResult: 'topicsRoot/SET_SEARCH_RESULT',
         setSearchTerm: 'SET_SEARCH_TERM',
       }),
       goBack() {
@@ -251,17 +243,28 @@
         });
       },
       search(query) {
-        this.setSearchResult({});
-        this.resultKinds = [];
+        this.searchResult = [];
+        this.resultChannels = [];
+        this.progress = 0;
+        this.searchQueryIndex = this.searchQueryIndex + 1;
         if (!query) {
           return;
         }
 
-        this.progress = 0;
         kinds.forEach(k => {
-          searchChannels(this.$store, query, k).then(() => {
-            this.resultKinds.push(k);
-            this.progress += 100 / kinds.length;
+          const queryIndex = this.searchQueryIndex;
+          searchChannels(this.$store, query, k).then(result => {
+            // Drop results for old searches
+            if (queryIndex === this.searchQueryIndex) {
+              this.searchResult.push(result);
+              // Getting the channel list, without duplicates
+              const channels = result.channels.filter(
+                c => !this.resultChannels.some(sc => sc.id == c.id)
+              );
+              this.resultChannels = [...this.resultChannels, ...channels];
+
+              this.progress += 100 / kinds.length;
+            }
           });
         });
       },

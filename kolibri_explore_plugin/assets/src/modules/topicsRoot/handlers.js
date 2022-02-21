@@ -197,7 +197,7 @@ export function searchChannels(store, search, kind) {
       channel: rootNodes.find(c => c.id === n.channel_id),
     }));
     const promises = channel_ids.map(id => ChannelResource.fetchModel({ id }));
-    Promise.all(promises).then(collection => {
+    return Promise.all(promises).then(collection => {
       const channels = collection
         .map(c => ({
           ...c,
@@ -206,15 +206,9 @@ export function searchChannels(store, search, kind) {
           order: channel_ids.indexOf(c.id),
         }))
         .sort((a, b) => a.order - b.order);
-      store.commit('topicsRoot/SET_SEARCH_RESULT', {
-        ...store.state.topicsRoot.searchResult,
-        [kind]: {
-          ...searchResults,
-          channels: channels,
-          results: nodes,
-        },
-      });
+
       store.commit('CORE_SET_PAGE_LOADING', false);
+      return { kind, channels, nodes };
     });
   });
 }

@@ -52,7 +52,6 @@
     },
     methods: {
       ...mapMutations({
-        setSearchResult: 'topicsRoot/SET_SEARCH_RESULT',
         setSearchTerm: 'SET_SEARCH_TERM',
       }),
       goToChannels() {
@@ -61,8 +60,6 @@
         });
       },
       goToSearch() {
-        // Cleaning previous search:
-        this.setSearchResult({});
         this.setSearchTerm('');
         // Scroll to top. For some reason this is not needed when going to channels:
         window.scrollTo({ top: 0 });

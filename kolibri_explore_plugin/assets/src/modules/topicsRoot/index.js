@@ -2,7 +2,6 @@ export default {
   namespaced: true,
   state: {
     rootNodes: [],
-    searchResult: {},
     carouselNodes: [],
   },
   mutations: {
@@ -11,9 +10,6 @@ export default {
     },
     RESET_STATE(state) {
       state.rootNodes = [];
-    },
-    SET_SEARCH_RESULT(state, payload) {
-      state.searchResult = payload;
     },
     SET_CAROUSEL_NODES(state, payload) {
       state.carouselNodes = payload;
