@@ -110,7 +110,7 @@
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 
   import { PageNames } from '../constants';
-  import { searchChannels } from '../modules/topicsRoot/handlers';
+  import { searchChannelsOnce } from '../modules/topicsRoot/handlers';
 
   import AlphabeticalChannelsList from '../components/AlphabeticalChannelsList';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
@@ -234,6 +234,11 @@
     created() {
       this.query = this.searchTerm || '';
     },
+    deactivated() {
+      // Clear progress and ignore any incoming search promises:
+      this.progress = 0;
+      this.$store.commit('topicsRoot/RESET_LAST_SEARCH_PROMISES');
+    },
     methods: {
       ...mapMutations({
         setSearchResult: 'topicsRoot/SET_SEARCH_RESULT',
@@ -259,7 +264,7 @@
 
         this.progress = 0;
         kinds.forEach(k => {
-          searchChannels(this.$store, query, k).then(() => {
+          searchChannelsOnce(this.$store, query, k).then(() => {
             this.resultKinds.push(k);
             this.progress += 100 / kinds.length;
           });

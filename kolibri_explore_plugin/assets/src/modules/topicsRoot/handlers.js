@@ -181,40 +181,55 @@ export function showFilteredChannels(store) {
   );
 }
 
-export function searchChannels(store, search, kind) {
-  store.commit('CORE_SET_PAGE_LOADING', true);
-  return ContentNodeSearchResource.fetchCollection({
+export function searchChannelsOnce(store, search, kind) {
+  const searchPromise = ContentNodeSearchResource.fetchCollection({
     getParams: {
       search,
       kind,
       max_results: SEARCH_MAX_RESULTS,
     },
-  }).then(searchResults => {
-    const { rootNodes } = store.state.topicsRoot;
-    const { channel_ids, results } = searchResults;
-    const nodes = results.map(n => ({
-      ...n,
-      channel: rootNodes.find(c => c.id === n.channel_id),
-    }));
-    const promises = channel_ids.map(id => ChannelResource.fetchModel({ id }));
-    Promise.all(promises).then(collection => {
-      const channels = collection
-        .map(c => ({
-          ...c,
-          thumbnail: getChannelIcon(c),
-          title: c.name,
-          order: channel_ids.indexOf(c.id),
-        }))
-        .sort((a, b) => a.order - b.order);
-      store.commit('topicsRoot/SET_SEARCH_RESULT', {
-        ...store.state.topicsRoot.searchResult,
-        [kind]: {
-          ...searchResults,
-          channels: channels,
-          results: nodes,
-        },
-      });
-      store.commit('CORE_SET_PAGE_LOADING', false);
+  });
+  store.commit('topicsRoot/SET_LAST_SEARCH_PROMISE', { kind, searchPromise });
+  return new Promise((resolve, reject) => {
+    searchPromise.then(searchResults => {
+      const { lastSearchPromises } = store.state.topicsRoot;
+      if (searchPromise == lastSearchPromises[kind]) {
+        store.commit('topicsRoot/SET_LAST_SEARCH_PROMISE', { kind, searchPromise: null });
+        setSearchResults(store, searchResults, kind);
+        resolve(searchResults);
+      } else {
+        reject(new Error('Dropping a previous fetch while searching.'));
+      }
     });
+  });
+}
+
+function setSearchResults(store, searchResults, kind) {
+  store.commit('CORE_SET_PAGE_LOADING', true);
+  const { rootNodes } = store.state.topicsRoot;
+  const { channel_ids, results } = searchResults;
+  const nodes = results.map(n => ({
+    ...n,
+    channel: rootNodes.find(c => c.id === n.channel_id),
+  }));
+  const promises = channel_ids.map(id => ChannelResource.fetchModel({ id }));
+  Promise.all(promises).then(collection => {
+    const channels = collection
+      .map(c => ({
+        ...c,
+        thumbnail: getChannelIcon(c),
+        title: c.name,
+        order: channel_ids.indexOf(c.id),
+      }))
+      .sort((a, b) => a.order - b.order);
+    store.commit('topicsRoot/SET_SEARCH_RESULT', {
+      ...store.state.topicsRoot.searchResult,
+      [kind]: {
+        ...searchResults,
+        channels: channels,
+        results: nodes,
+      },
+    });
+    store.commit('CORE_SET_PAGE_LOADING', false);
   });
 }
