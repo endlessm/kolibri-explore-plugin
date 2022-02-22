@@ -83,6 +83,11 @@
         this.focusSearchInput();
       });
     },
+    activated() {
+      this.$nextTick(() => {
+        this.focusSearchInput();
+      });
+    },
     methods: {
       inputUpdated(value) {
         this.$emit('input', value);
