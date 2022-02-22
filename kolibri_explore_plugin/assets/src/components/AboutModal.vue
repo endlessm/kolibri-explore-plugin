@@ -76,7 +76,7 @@
               <strong>The Quick Start Guide</strong> document. For more
               information, when you have an internet connection, you can access
               Endless Support Site at
-              <a href="https://support.endlessos.org/en/endless-key">
+              <a href="https://support.endlessos.org/en/endless-key" target="_blank">
                 https://support.endlessos.org/en/endless-key
               </a>.
             </p>
