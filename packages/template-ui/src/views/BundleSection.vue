@@ -20,7 +20,7 @@
       </b-row>
 
       <!-- eslint-disable vue/no-v-html -->
-      <div class="description mb-2" v-html="section.description"></div>
+      <div class="description mb-2 w-50" v-html="section.description"></div>
 
       <div v-if="section.license_description" id="license" class="my-3 text-muted">
         <strong>License — {{ section.license_name }}</strong>
