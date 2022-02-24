@@ -2,6 +2,16 @@
 
 List of the most important changes for each release.
 
+## v2.0.12
+
+- Discovery: Fix global search results coming from previous async calls.
+- Discovery: Fix focusing the search bar when user navigates to the search page.
+- Discovery: Fix opening the support link in an external browser.
+- Channels: Make description in bundles 50% wide.
+- Content: Switch to a new Chapter Books channel.
+- Content: Optimize the size in bytes of header background assets.
+- Maintenance: Bump url-parse dependency because of a security vulnerability.
+
 ## v2.0.10
 
 - Discovery: Fix margins in the About modal.
