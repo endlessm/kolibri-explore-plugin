@@ -32,7 +32,7 @@ export const CustomChannelApps = {
   b40491d1ef8b5506b8c6ae861372e9de: 'jewelry-making',
   '9eeebbc5140d5b98ac4a4d2ce9432135': 'lgbtq',
   '057f871caa405ec29d62ba0523c193d7': 'music',
-  '95a1ceaec2b849ed90fe0b135791b163': 'novels',
+  '914fee213ee146de869016c287116b23': 'novels',
   '59bb2e5a3d2e5e3b85b87d9ab4daa2f3': 'reading',
   '3fcffebc58d15175b948b140434ef6e6': 'sports',
   '92e96efc082e5c62b0aac3847bdcdb33': 'staff-playlist',
@@ -127,7 +127,7 @@ export const CategorizedChannelIds = [
     name: 'Literature and Language Arts',
     channels: [
       '59bb2e5a3d2e5e3b85b87d9ab4daa2f3', // reading
-      '95a1ceaec2b849ed90fe0b135791b163', // novels
+      '914fee213ee146de869016c287116b23', // novels
       '0418cc231e9c5513af0fff9f227f7172', // hello-channel
       '74f36493bb475b62935fa8705ed59fed', // thoughtful-learning
     ],
@@ -188,7 +188,7 @@ export const ChannelCardThumbnails = {
   b40491d1ef8b5506b8c6ae861372e9de: 'jewelry-making.jpg',
   '9eeebbc5140d5b98ac4a4d2ce9432135': 'lgbtq.jpg',
   '057f871caa405ec29d62ba0523c193d7': 'music.jpg',
-  '95a1ceaec2b849ed90fe0b135791b163': 'novels.jpg',
+  '914fee213ee146de869016c287116b23': 'novels.jpg',
   '59bb2e5a3d2e5e3b85b87d9ab4daa2f3': 'reading.jpg',
   '3fcffebc58d15175b948b140434ef6e6': 'sports.jpg',
   '92e96efc082e5c62b0aac3847bdcdb33': 'staff-playlist.jpg',
@@ -239,7 +239,7 @@ export const ChannelCardIcons = {
   b40491d1ef8b5506b8c6ae861372e9de: 'jewelry-making.png',
   '9eeebbc5140d5b98ac4a4d2ce9432135': 'lgbtq.png',
   '057f871caa405ec29d62ba0523c193d7': 'music.png',
-  '95a1ceaec2b849ed90fe0b135791b163': 'novels.png',
+  '914fee213ee146de869016c287116b23': 'novels.png',
   '59bb2e5a3d2e5e3b85b87d9ab4daa2f3': 'reading.png',
   '3fcffebc58d15175b948b140434ef6e6': 'sports.png',
   '92e96efc082e5c62b0aac3847bdcdb33': 'staff-playlist.png',
