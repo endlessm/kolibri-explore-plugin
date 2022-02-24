@@ -4,6 +4,7 @@ export default {
     rootNodes: [],
     searchResult: {},
     carouselNodes: [],
+    lastSearchPromises: {},
   },
   mutations: {
     SET_STATE(state, payload) {
@@ -17,6 +18,12 @@ export default {
     },
     SET_CAROUSEL_NODES(state, payload) {
       state.carouselNodes = payload;
+    },
+    SET_LAST_SEARCH_PROMISE(state, payload) {
+      state.lastSearchPromises[payload.kind] = payload.searchPromise;
+    },
+    RESET_LAST_SEARCH_PROMISES(state) {
+      state.lastSearchPromises = {};
     },
   },
 };
