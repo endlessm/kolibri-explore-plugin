@@ -279,6 +279,7 @@
       removeKeyword(keyword) {
         const words = this.keywords.filter(k => k !== keyword);
         this.query = words.join(' ');
+        this.$router.push({ params: { query: this.query } });
       },
     },
   };
