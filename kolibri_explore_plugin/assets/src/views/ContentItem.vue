@@ -119,7 +119,7 @@
           files: this.contentNode.files,
           options: this.contentNode.options,
           available: this.contentNode.available,
-          extraFields: this.extraFields,
+          extraFields: this.extra_fields,
           progress: this.progress,
           userId: this.currentUserId,
           userFullName: this.fullName,
