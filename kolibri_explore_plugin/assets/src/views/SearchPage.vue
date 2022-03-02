@@ -236,7 +236,7 @@
     },
     deactivated() {
       // Clear progress and ignore any incoming search promises:
-      this.progress = 0;
+      this.progress = 100;
       this.$store.commit('topicsRoot/RESET_LAST_SEARCH_PROMISES');
     },
     methods: {
