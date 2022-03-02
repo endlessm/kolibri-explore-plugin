@@ -97,6 +97,7 @@
       },
       clearSearchInput() {
         this.$emit('clear-input');
+        this.focusSearchInput();
       }
     },
   };
