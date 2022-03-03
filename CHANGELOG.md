@@ -2,6 +2,15 @@
 
 List of the most important changes for each release.
 
+## v2.0.13
+
+- Discovery: Fix focus in search bar after clicking the clear button.
+- Discovery: Fix progress when navigating out of the search page.
+- Discovery: Partially fix outdated search when going back to the search page.
+- Content: Update highlighted content
+- Maintenance: Fix extra fields in content for progress.
+- Maintenance: Add script to review the highlighted IDs.
+
 ## v2.0.12
 
 - Discovery: Fix global search results coming from previous async calls.
