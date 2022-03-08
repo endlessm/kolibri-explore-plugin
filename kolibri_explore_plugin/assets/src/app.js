@@ -64,6 +64,22 @@ class ExploreModule extends KolibriApp {
       );
     }
 
+    // Reemit the resize event on fullscreenchange to fix the problems with epub size
+    //
+    // There's a weird behaviour in the that produces a race condition with the
+    // full-screen resize event, making epub content not rendering correctly
+    // when toggling full-screen.
+    // https://phabricator.endlessm.com/T33246
+    window.addEventListener(
+      'fullscreenchange',
+      () => {
+        setTimeout(() => {
+          window.dispatchEvent(new Event('resize'));
+        }, 300);
+      },
+      false
+    );
+
     window.kolibri = kolibriApi;
   }
 }
