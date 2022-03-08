@@ -28,6 +28,7 @@ args = vars(parser.parse_args())
 # Connect to the database:
 db_path = os.path.join(kolibri_home, "db.sqlite3")
 connection = sqlite3.connect(db_path)
+connection.row_factory = sqlite3.Row
 cursor = connection.cursor()
 
 # Load content IDs from json file:
@@ -37,12 +38,16 @@ with open(HIGHLIGHTED_CONTENT_PATH, "r") as input_file:
     content_ids = list(chain.from_iterable(data.values()))
 
 # Output error for each content ID not found in the database:
-query = "SELECT title, id FROM content_contentnode WHERE id = ?"
+query = "SELECT title, id, available FROM content_contentnode WHERE id = ?"
 for content_id in content_ids:
     cursor.execute(query, (content_id,))
     row = cursor.fetchone()
     if row is None:
         print(f"Error: ID not found in database: {content_id}")
+    elif row["available"] != 1:
+        print(
+            f"Error: Content not available in database:"
+            f" {row['title']} - {row['id']}"
+        )
     elif args["list_rows"]:
-        title, _id = row
-        print(f"{title} - {_id}")
+        print(f"{row['title']} - {row['id']}")
