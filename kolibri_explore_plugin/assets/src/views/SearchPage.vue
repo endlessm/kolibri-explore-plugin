@@ -47,30 +47,6 @@
           </div>
         </template>
 
-        <!-- TODO: integrate this with resultCards -->
-        <template>
-          <div v-for="[title, nodes] in resultZim" :key="title">
-            <CardGrid
-              v-if="nodes.length"
-              variant="collapsible"
-              :itemsPerPage="4"
-              :nodes="nodes"
-              :mediaQuality="mediaQuality"
-              :cardColumns="cardColumns"
-            >
-              <div>
-                <h4 class="text-muted">
-                  <span class="font-weight-normal">
-                    {{ nodes.length }} results for "{{ cleanedQuery }}"
-                  </span>
-                  to {{ title }}
-                </h4>
-              </div>
-            </CardGrid>
-            <hr v-if="nodes.length">
-          </div>
-        </template>
-
         <template v-if="isLoading" class="placeholder">
           <CardGridPlaceholder />
         </template>
@@ -136,7 +112,7 @@
   import { PageNames } from '../constants';
   import { searchChannelsOnce } from '../modules/topicsRoot/handlers';
   import { ZimSearchChannels } from '../customApps';
-  import { wikiChannelSearch } from '../searchApi.js';
+  import { searchWikiChannelsOnce } from '../searchApi.js';
 
   import AlphabeticalChannelsList from '../components/AlphabeticalChannelsList';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
@@ -223,7 +199,7 @@
               const base = `/topics/${node.channel_id}`;
               if (node.kind === 'topic') {
                 node.nodeUrl = `${base}/t/${node.id}`;
-              } else {
+              } else if (node.kind !== 'zim') {
                 node.nodeUrl = `${base}/c/${node.id}`;
               }
             });
@@ -292,7 +268,6 @@
       search(query) {
         this.setSearchResult({});
         this.resultKinds = [];
-        this.resultZim = [];
 
         if (!query) {
           return;
@@ -306,23 +281,13 @@
           });
         });
 
-        // TODO: integrate this with search results
-        this.resultZim = [];
-        for (const group in ZimSearchChannels) {
-          const articles = [];
-          this.resultZim.push([group, articles]);
-          const groupChannels = ZimSearchChannels[group];
-          groupChannels.forEach(channel => {
-            wikiChannelSearch(channel, query)
-              .then(results => {
-                articles.push(...results);
-                this.progress += 100 / this.totalSearchSections;
-              })
-              .catch(() => {
-                this.progress += 100 / this.totalSearchSections;
-              });
+        Object.keys(ZimSearchChannels).forEach(g => {
+          searchWikiChannelsOnce(this.$store, query, g).finally(() => {
+            this.resultKinds.push(g);
+            const channels = ZimSearchChannels[g].length;
+            this.progress += (100 / this.totalSearchSections) * channels;
           });
-        }
+        });
       },
       clearInput() {
         this.query = '';

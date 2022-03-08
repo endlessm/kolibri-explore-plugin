@@ -1,4 +1,5 @@
 import { KolibriApi } from './kolibriApi';
+import { ZimSearchChannels } from './customApps';
 
 function searchInsideZimFile(zimfile, searchParams) {
   const { origin } = window.location;
@@ -23,7 +24,40 @@ function zimToNode(zimArticle, node) {
   };
 }
 
-export function wikiChannelSearch(channelId, query) {
+export function searchWikiChannelsOnce(store, search, kind) {
+  const groupChannels = ZimSearchChannels[kind];
+  const promises = groupChannels.map(channel => {
+    return wikiChannelSearch(channel, search);
+  });
+  const searchPromise = Promise.all(promises);
+  store.commit('topicsRoot/SET_LAST_SEARCH_PROMISE', { kind, searchPromise });
+
+  return new Promise((resolve, reject) => {
+    searchPromise.then(searchResults => {
+      const { lastSearchPromises } = store.state.topicsRoot;
+      if (searchPromise == lastSearchPromises[kind]) {
+        store.commit('topicsRoot/SET_LAST_SEARCH_PROMISE', { kind, searchPromise: null });
+        setSearchResults(store, searchResults, kind);
+        resolve(searchResults);
+      } else {
+        reject(new Error('Dropping a previous fetch while searching.'));
+      }
+    });
+  });
+}
+
+function setSearchResults(store, searchResults, kind) {
+  const articles = searchResults.flat();
+  store.commit('topicsRoot/SET_SEARCH_RESULT', {
+    ...store.state.topicsRoot.searchResult,
+    [kind]: {
+      channels: [],
+      results: articles,
+    },
+  });
+}
+
+function wikiChannelSearch(channelId, query) {
   const kolibri = new KolibriApi(channelId);
   const searchParams = {
     query,
@@ -49,8 +83,18 @@ export function wikiChannelSearch(channelId, query) {
     })
     .then(nodes => {
       // Convert the result to a ContentNode like object
-      return nodes
-        .map(n => n.articles.map(a => zimToNode(a, n.node)))
-        .reduce((result, item) => result.concat(item), []);
+      return (
+        nodes
+          .map(n => n.articles.map(a => zimToNode(a, n.node)))
+          .flat()
+          // remove duplicates
+          .reduce((result, item) => {
+            if (result.find(n => n.id === item.id)) {
+              return [...result];
+            }
+
+            return [...result, item];
+          }, [])
+      );
     });
 }
