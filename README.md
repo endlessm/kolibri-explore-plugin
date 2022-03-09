@@ -154,7 +154,7 @@ updated. You then need to commit the file.
 ### Making a release
 
 If you are releasing a new version, first please bump to either major,
-minor or patch. Eg:
+minor or patch. This should be done from the `stable` branch. Eg:
 
 ```
 yarn bump-version patch
