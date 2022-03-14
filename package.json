@@ -29,6 +29,7 @@
     "sass": "^1.49.9"
   },
   "resolutions": {
+    "axios": "0.21.2",
     "nth-check": "2.0.1",
     "ansi-regex": "5.0.1",
     "markdown-it": "12.3.2",
