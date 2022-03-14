@@ -29,6 +29,7 @@
     "sass": "^1.49.9"
   },
   "resolutions": {
+    "postcss": "7.0.36",
     "ansi-html": "0.0.8",
     "lodash": "4.17.21",
     "@npmcli/fs": "1.0.x",
