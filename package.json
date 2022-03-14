@@ -29,6 +29,7 @@
     "sass": "^1.49.9"
   },
   "resolutions": {
+    "markdown-it": "12.3.2",
     "node-forge": "1.0.0",
     "shelljs": "0.8.5",
     "follow-redirects": "1.14.8",
