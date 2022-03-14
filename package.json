@@ -29,6 +29,7 @@
     "sass": "^1.49.9"
   },
   "resolutions": {
+    "lodash": "4.17.21",
     "@npmcli/fs": "1.0.x",
     "vue-demi": "0.10.x",
     "node-sass": "file:dependency-stub"
