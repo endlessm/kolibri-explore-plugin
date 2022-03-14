@@ -25,14 +25,19 @@
     "packages/*"
   ],
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "lerna": "^4.0.0",
+    "sass": "^1.49.9"
   },
   "resolutions": {
     "@npmcli/fs": "1.0.x",
-    "vue-demi": "0.10.x"
+    "vue-demi": "0.10.x",
+    "node-sass": "file:dependency-stub"
   },
   "engines": {
-    "node": "10.x",
+    "node": "16.x",
     "yarn": "1.x"
+  },
+  "dependencies": {
+    "node-sass": "file:dependency-stub"
   }
 }
