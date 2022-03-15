@@ -29,6 +29,7 @@
     "sass": "^1.49.9"
   },
   "resolutions": {
+    "node-notifier": "8.0.1",
     "trim": "0.0.3",
     "glob-parent": "5.1.2",
     "trim-newlines": "3.0.1",
