@@ -3,10 +3,10 @@ option_spec = {
         "SHOW_AS_STANDALONE_CHANNEL": {
             "type": "boolean",
             "default": False,
-            "description": (
-                "Whether to inform the channel ",
-                "presentation that is standalone",
-            ),
+            "description": """
+                Whether to inform the channel presentation that it is
+                standalone.
+            """,
         },
     },
 }
