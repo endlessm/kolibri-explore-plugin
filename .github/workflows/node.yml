@@ -18,11 +18,11 @@ jobs:
     - name: Set up Node
       uses: actions/setup-node@v2
       with:
-        node-version: '10.24.1'
+        node-version: '16.14.0'
     - name: Install dependencies
       run: |
         yarn global add @vue/cli@v4.5.15
-        yarn install
+        yarn install --ignore-engines
 
     - name: Build
       run: yarn build
