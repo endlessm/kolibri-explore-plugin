@@ -43,7 +43,7 @@
                 </h4>
               </div>
             </CardGrid>
-            <hr>
+            <hr v-if="nodes.length">
           </div>
         </template>
 
@@ -111,6 +111,8 @@
 
   import { PageNames } from '../constants';
   import { searchChannelsOnce } from '../modules/topicsRoot/handlers';
+  import { ZimSearchChannels } from '../customApps';
+  import { searchWikiChannelsOnce } from '../searchApi.js';
 
   import AlphabeticalChannelsList from '../components/AlphabeticalChannelsList';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
@@ -132,6 +134,7 @@
         mediaQuality: constants.MediaQuality.REGULAR,
         progress: 100,
         resultKinds: [],
+        resultZim: [],
       };
     },
     computed: {
@@ -149,6 +152,7 @@
         return (
           !this.isEmpty &&
           !this.isLoading &&
+          !this.resultZim &&
           !this.resultCards.length &&
           !this.resultChannels.length
         );
@@ -195,7 +199,7 @@
               const base = `/topics/${node.channel_id}`;
               if (node.kind === 'topic') {
                 node.nodeUrl = `${base}/t/${node.id}`;
-              } else {
+              } else if (node.kind !== 'zim') {
                 node.nodeUrl = `${base}/c/${node.id}`;
               }
             });
@@ -220,6 +224,12 @@
       },
       keywords() {
         return this.cleanedQuery.split(/\s+/);
+      },
+      totalSearchSections() {
+        const zimSections = Object.keys(ZimSearchChannels)
+          .map(g => ZimSearchChannels[g].length)
+          .reduce((total, n) => total + n, 0);
+        return kinds.length + zimSections;
       },
     },
     watch: {
@@ -258,6 +268,7 @@
       search(query) {
         this.setSearchResult({});
         this.resultKinds = [];
+
         if (!query) {
           return;
         }
@@ -266,7 +277,15 @@
         kinds.forEach(k => {
           searchChannelsOnce(this.$store, query, k).then(() => {
             this.resultKinds.push(k);
-            this.progress += 100 / kinds.length;
+            this.progress += 100 / this.totalSearchSections;
+          });
+        });
+
+        Object.keys(ZimSearchChannels).forEach(g => {
+          searchWikiChannelsOnce(this.$store, query, g).finally(() => {
+            this.resultKinds.push(g);
+            const channels = ZimSearchChannels[g].length;
+            this.progress += (100 / this.totalSearchSections) * channels;
           });
         });
       },

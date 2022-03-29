@@ -250,6 +250,24 @@ export const ChannelCardIcons = {
   f62db29be20453c4a267132e93a9e602: 'wikipedia.png',
 };
 
+export const ZimSearchChannels = {
+  Wikipedia: ['f62db29be20453c4a267132e93a9e602'],
+  WikiHow: [
+    '58828121cc115549bda7fb3f71f4795e',
+    '05a4060cf5175df78edec8dc09e396a1',
+    '69497db42937539e94fe3969f6995d2d',
+    '00b0d8dff13e518d801ef816227b2691',
+    'b9fe8fe9b92b5af5964feccdadb78413',
+    'e114fe9de66e513384e4ca2e9b529c18',
+    '9c494b7b879e512f96f60176df85968c',
+    '304d529d4b1c597ea7d3c59b30ac3c14',
+    'afbf0498da3c5db3947c291ddda8e21a',
+    '146efed5aa585229a49513219e73af66',
+    'e4e4d0e342f951b09aa9ef1622f5301f',
+    '6f6dd2720bd2574fa70a069ac9b75046',
+  ],
+};
+
 export const GameAppIDs = [
   '3160899a73564d8a8467284d9219b91c', // Terminal Two
 ];
