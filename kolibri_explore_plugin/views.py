@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import json
 import os
 
 import requests
@@ -11,13 +12,20 @@ from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.clickjacking import xframe_options_exempt
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 from kolibri.core.content.api import cache_forever
+from kolibri.core.content.api import RemoteChannelViewSet
 from kolibri.core.content.zip_wsgi import add_security_headers
 from kolibri.core.content.zip_wsgi import get_embedded_file
 from kolibri.core.decorators import cache_no_user_data
+from kolibri.core.tasks.api import _job_to_response
+from kolibri.core.tasks.api import _remoteimport
+from kolibri.core.tasks.job import State
+from kolibri.core.tasks.main import queue
 from kolibri.utils import conf
+
 
 APPS_BUNDLE_PATHS = []
 if conf.OPTIONS["Explore"]["APPS_BUNDLE_PATH"]:
@@ -98,3 +106,63 @@ class AppMetadataView(AppBase):
         filename = self._get_file(app, "metadata.json")
         with open(filename) as json_file:
             return HttpResponse(json_file, content_type="application/json")
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class EndlessLearningCollection(View):
+    COLLECTION_TOKEN = "totoj-jupak"
+    BASE_URL = "https://kolibri-content.endlessos.org/"
+
+    def get(self, request):
+        job_ids = request.session.get("job_ids", [])
+        jobs = [queue.fetch_job(job) for job in job_ids]
+
+        finished_states = [
+            State.FAILED,
+            State.CANCELING,
+            State.CANCELED,
+        ]
+
+        jobs_response = [
+            _job_to_response(job)
+            for job in jobs
+            if job.state not in finished_states
+        ]
+
+        return HttpResponse(
+            json.dumps(jobs_response), content_type="application/json"
+        )
+
+    def post(self, request):
+        token = self.COLLECTION_TOKEN
+
+        channel_viewset = RemoteChannelViewSet()
+        channels = channel_viewset._make_channel_endpoint_request(
+            identifier=token
+        )
+
+        job_ids = []
+
+        for channel in channels:
+            task = {
+                "channel_id": channel["id"],
+                "channel_name": channel["name"],
+                "baseurl": self.BASE_URL,
+                "started_by_username": "endless",
+                "type": "REMOTECHANNELIMPORT",
+            }
+
+            job_id = queue.enqueue(
+                _remoteimport,
+                task["channel_id"],
+                task["baseurl"],
+                extra_metadata=task,
+                track_progress=True,
+                cancellable=True,
+            )
+            job_ids.append(job_id)
+
+        request.session["job_ids"] = job_ids
+        return HttpResponse(
+            json.dumps(job_ids), content_type="application/json"
+        )
