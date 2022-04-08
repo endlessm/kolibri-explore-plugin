@@ -49,7 +49,8 @@
     "lodash": "4.17.21",
     "@npmcli/fs": "1.0.x",
     "vue-demi": "0.10.x",
-    "node-sass": "file:dependency-stub"
+    "node-sass": "file:dependency-stub",
+    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system#b3fa27f7043befe8ed5fd265bc067e5ed811b053"
   },
   "engines": {
     "node": "16.x",
