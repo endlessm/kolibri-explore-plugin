@@ -26,7 +26,7 @@ nodes_config = [
 
 
 def random_hash():
-    return "%032x" % random.randrange(16 ** 32)
+    return "%032x" % random.randrange(16**32)
 
 
 def topic_title(level, number):
