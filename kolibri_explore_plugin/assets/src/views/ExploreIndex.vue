@@ -2,6 +2,7 @@
 
   <div>
     <BackToTop />
+    <InstallContentModal />
     <ContentModal />
     <AboutModal id="about-modal" />
     <DevTag v-if="showBuildInfo" />
@@ -32,6 +33,7 @@
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
   import { PageNames } from '../constants';
   import AboutModal from '../components/AboutModal';
+  import InstallContentModal from '../components/InstallContentModal';
   import commonExploreStrings from './commonExploreStrings';
   import ChannelsPage from './ChannelsPage';
   import CustomChannelPresentationApp from './CustomChannelPresentationApp';
@@ -52,7 +54,7 @@
 
   export default {
     name: 'ExploreIndex',
-    components: { AboutModal, ContentModal, DevTag },
+    components: { AboutModal, ContentModal, DevTag, InstallContentModal },
     mixins: [commonCoreStrings, commonExploreStrings, responsiveWindowMixin],
     data() {
       return {

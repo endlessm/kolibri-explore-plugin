@@ -10,6 +10,7 @@ export default {
       pageName: '',
       searchTerm: '',
       contentId: '',
+      visibleInstallContentModal: false,
     };
   },
   actions,

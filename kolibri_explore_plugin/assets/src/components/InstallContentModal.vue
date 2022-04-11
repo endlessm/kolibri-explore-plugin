@@ -1,0 +1,181 @@
+<template>
+
+  <div>
+    <transition name="fade">
+      <b-button
+        v-if="!isModalVisible && downloading"
+        variant="primary"
+        class="install-content rounded-circle"
+        @click="showModal"
+      >
+        <DownloadIcon />
+      </b-button>
+    </transition>
+
+    <b-modal
+      id="install-content-modal"
+      v-model="isModalVisible"
+      headerCloseVariant="light"
+      :hideFooter="downloading"
+      @hide="onHide"
+    >
+      <template #modal-title>
+        Welcome to Endless Learning
+      </template>
+      <h2 v-if="downloading">
+        Downloading&hellip;
+      </h2>
+      <h2 v-else>
+        Download Endless Learning Collection
+      </h2>
+      <p v-if="downloading">
+        You can close this window during the download and continue to
+        explore the existing content.
+      </p>
+
+      <div v-if="downloading" class="d-block text-center">
+        <b-progress
+          :value="progress"
+          :max="100"
+          showProgress
+          animated
+          class="my-2"
+        />
+        <b-button v-b-toggle.details variant="link">
+          More details
+        </b-button>
+        <b-collapse id="details" class="mt-2">
+          <div v-for="job in jobs" :key="job.id">
+            <b-row>
+              <b-col>{{ job.channel_name }}</b-col>
+              <b-col cols="9">
+                <div v-if="job.status === 'COMPLETED'">
+                  Completed
+                </div>
+                <b-progress
+                  v-else
+                  :value="job.percentage"
+                  :max="1"
+                  variant="success"
+                  showProgress
+                  animated
+                />
+              </b-col>
+            </b-row>
+          </div>
+        </b-collapse>
+      </div>
+      <template #modal-footer>
+        <b-button class="mt-3" block @click="downloadContent">
+          Download
+        </b-button>
+      </template>
+    </b-modal>
+  </div>
+
+</template>
+
+
+<script>
+
+  import axios from 'axios';
+  import urls from 'kolibri.urls';
+  import { mapState } from 'vuex';
+
+  import DownloadIcon from 'vue-material-design-icons/ProgressDownload.vue';
+  import { showChannels } from '../modules/topicsRoot/handlers';
+
+  export default {
+    name: 'InstallContentModal',
+    components: { DownloadIcon },
+    data() {
+      return {
+        pollingId: null,
+        jobs: null,
+        isModalVisible: false,
+        channelsDownloaded: 0,
+      };
+    },
+    computed: {
+      ...mapState(['visibleInstallContentModal']),
+      progress() {
+        if (!this.jobs) {
+          return 0;
+        }
+
+        const jobs = this.jobs.map(j => j.percentage);
+        const sum = jobs.reduce((a, b) => a + b, 0);
+        return (100 * sum) / this.jobs.length;
+      },
+      downloading() {
+        return this.jobs && this.jobs.some(j => j.status !== 'COMPLETED');
+      },
+    },
+    watch: {
+      visibleInstallContentModal() {
+        this.isModalVisible = this.visibleInstallContentModal;
+      },
+    },
+    beforeDestroy() {
+      clearInterval(this.pollingId);
+    },
+    mounted() {
+      this.pollJobs();
+    },
+    methods: {
+      downloadContent() {
+        const url = urls['kolibri:kolibri_explore_plugin:endless_learning_collection']();
+        this.jobs = [];
+        axios.post(url);
+      },
+      pollJobs() {
+        clearInterval(this.pollingId);
+        this.pollingId = setInterval(() => {
+          const url = urls['kolibri:kolibri_explore_plugin:endless_learning_collection']();
+          axios.get(url).then(({ data }) => {
+            this.jobs = data;
+            const completedJobs = this.jobs.filter(j => j.status === 'COMPLETED');
+            const completed = completedJobs.length;
+
+            if (this.downloading && completed > 0 && completed === this.jobs.length) {
+              // Download is completed
+              this.$store.commit('SET_SHOW_INSTALL_CONTENT', false);
+              clearInterval(this.pollingId);
+              showChannels(this.$store);
+            }
+
+            if (completed !== this.channelsDownloaded) {
+              this.channelsDownloaded = completed;
+              showChannels(this.$store);
+            }
+          });
+        }, 500);
+      },
+      onHide() {
+        this.$store.commit('SET_SHOW_INSTALL_CONTENT', false);
+      },
+      showModal() {
+        this.$store.commit('SET_SHOW_INSTALL_CONTENT', true);
+      },
+    },
+  };
+
+</script>
+
+
+<style lang="scss" scoped>
+
+  @import '../styles';
+
+  .install-content {
+    position: fixed;
+    bottom: $spacer;
+    left: $spacer;
+    z-index: $zindex-fixed;
+    // Remove 2px border from the actual size to match the slidable cards row:
+    width: $circled-button-size + 4px;
+    height: $circled-button-size + 4px;
+    padding: 0;
+  }
+
+</style>
