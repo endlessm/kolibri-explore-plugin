@@ -83,6 +83,7 @@
   import { mapState } from 'vuex';
 
   import DownloadIcon from 'vue-material-design-icons/ProgressDownload.vue';
+  import { ChannelResource } from 'kolibri.resources';
   import { showChannels } from '../modules/topicsRoot/handlers';
 
   export default {
@@ -121,6 +122,7 @@
     },
     mounted() {
       this.pollJobs();
+      ChannelResource.useContentCacheKey = false;
     },
     methods: {
       downloadContent() {
@@ -137,15 +139,17 @@
             const completedJobs = this.jobs.filter(j => j.status === 'COMPLETED');
             const completed = completedJobs.length;
 
-            if (this.downloading && completed > 0 && completed === this.jobs.length) {
+            if (completed > 0 && completed === this.jobs.length) {
               // Download is completed
               this.$store.commit('SET_SHOW_INSTALL_CONTENT', false);
               clearInterval(this.pollingId);
+              ChannelResource.clearCache();
               showChannels(this.$store);
             }
 
             if (completed !== this.channelsDownloaded) {
               this.channelsDownloaded = completed;
+              ChannelResource.clearCache();
               showChannels(this.$store);
             }
           });
