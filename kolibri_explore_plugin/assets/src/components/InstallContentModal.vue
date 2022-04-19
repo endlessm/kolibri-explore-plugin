@@ -8,6 +8,7 @@
         class="install-content rounded-circle"
         @click="showModal"
       >
+        <div :style="buttonStyles" class="button-progress rounded-circle"></div>
         <DownloadIcon />
       </b-button>
     </transition>
@@ -111,6 +112,17 @@
       downloading() {
         return this.jobs && this.jobs.some(j => j.status !== 'COMPLETED');
       },
+      buttonStyles() {
+        const stop = this.progress;
+        const color2 = 'rgba(255, 255, 255, 0.2)';
+        const color1 = 'rgba(255, 255, 255, 0)';
+        return {
+          background:
+            'linear-gradient(90deg,' +
+            `${color1} 0%, ${color1} ${stop}%,` +
+            `${color2} ${stop}%, ${color2} 100%)`,
+        };
+      },
     },
     watch: {
       visibleInstallContentModal() {
@@ -180,6 +192,14 @@
     width: $circled-button-size + 4px;
     height: $circled-button-size + 4px;
     padding: 0;
+  }
+
+  .button-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 
 </style>
