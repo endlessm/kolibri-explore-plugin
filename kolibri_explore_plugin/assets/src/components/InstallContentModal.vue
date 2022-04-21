@@ -67,7 +67,11 @@
         </b-collapse>
       </div>
       <template #modal-footer>
-        <b-button class="mt-3" block @click="downloadContent">
+        <b-button
+          class="mt-3"
+          block
+          @click="downloadContent"
+        >
           Download
         </b-button>
       </template>
@@ -96,6 +100,7 @@
         jobs: null,
         isModalVisible: false,
         channelsDownloaded: 0,
+        downloading: false,
       };
     },
     computed: {
@@ -108,9 +113,6 @@
         const jobs = this.jobs.map(j => j.percentage);
         const sum = jobs.reduce((a, b) => a + b, 0);
         return (100 * sum) / this.jobs.length;
-      },
-      downloading() {
-        return this.jobs && this.jobs.some(j => j.status !== 'COMPLETED');
       },
       buttonStyles() {
         const stop = this.progress;
@@ -130,7 +132,7 @@
       },
     },
     beforeDestroy() {
-      clearInterval(this.pollingId);
+      clearTimeout(this.pollingId);
     },
     mounted() {
       this.pollJobs();
@@ -138,34 +140,46 @@
     },
     methods: {
       downloadContent() {
+        this.downloading = true;
         const url = urls['kolibri:kolibri_explore_plugin:endless_learning_collection']();
         this.jobs = [];
-        axios.post(url);
+        axios
+          .post(url)
+          .then(() => {
+            this.pollJobs();
+          })
+          .catch(() => {
+            this.downloading = false;
+          });
       },
       pollJobs() {
-        clearInterval(this.pollingId);
-        this.pollingId = setInterval(() => {
-          const url = urls['kolibri:kolibri_explore_plugin:endless_learning_collection']();
-          axios.get(url).then(({ data }) => {
-            this.jobs = data;
-            const completedJobs = this.jobs.filter(j => j.status === 'COMPLETED');
-            const completed = completedJobs.length;
+        clearTimeout(this.pollingId);
 
-            if (completed > 0 && completed === this.jobs.length) {
-              // Download is completed
-              this.$store.commit('SET_SHOW_INSTALL_CONTENT', false);
-              clearInterval(this.pollingId);
-              ChannelResource.clearCache();
-              showChannels(this.$store);
-            }
+        const url = urls['kolibri:kolibri_explore_plugin:endless_learning_collection']();
+        axios.get(url).then(({ data }) => {
+          this.jobs = data;
+          const completedJobs = this.jobs.filter(j => j.status === 'COMPLETED');
+          const completed = completedJobs.length;
 
+          if (completed > 0 && completed === this.jobs.length) {
+            // Download is completed
+            this.$store.commit('SET_SHOW_INSTALL_CONTENT', false);
+            ChannelResource.clearCache();
+            showChannels(this.$store);
+            this.downloading = false;
+          } else {
             if (completed !== this.channelsDownloaded) {
               this.channelsDownloaded = completed;
               ChannelResource.clearCache();
               showChannels(this.$store);
             }
-          });
-        }, 500);
+
+            this.downloading = this.jobs.some(j => j.status !== 'COMPLETED');
+            if (this.downloading) {
+              this.pollingId = setTimeout(() => this.pollJobs(), 1500);
+            }
+          }
+        });
       },
       onHide() {
         this.$store.commit('SET_SHOW_INSTALL_CONTENT', false);
