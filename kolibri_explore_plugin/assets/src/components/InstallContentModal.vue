@@ -46,7 +46,7 @@
           More details
         </b-button>
         <b-collapse id="details" class="mt-2">
-          <div v-for="job in jobs" :key="job.id">
+          <div v-for="job in filteredJobs" :key="job.id">
             <b-row>
               <b-col>{{ job.channel_name }}</b-col>
               <b-col cols="9">
@@ -105,14 +105,16 @@
     },
     computed: {
       ...mapState(['visibleInstallContentModal']),
-      progress() {
+      filteredJobs() {
         if (!this.jobs) {
-          return 0;
+          return [];
         }
-
-        const jobs = this.jobs.map(j => j.percentage);
+        return this.jobs.filter(j => j.percentage <= 1);
+      },
+      progress() {
+        const jobs = this.filteredJobs.map(j => j.percentage);
         const sum = jobs.reduce((a, b) => a + b, 0);
-        return (100 * sum) / this.jobs.length;
+        return (100 * sum) / this.filteredJobs.length;
       },
       buttonStyles() {
         const stop = this.progress;
