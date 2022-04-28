@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 import os
+import shutil
 import subprocess
-import zipfile
-from pathlib import Path
 
 
 PROJECT_DIR = subprocess.check_output(
@@ -32,21 +31,10 @@ HIGHLIGHTED_CONTENT_PATH = os.path.join(
     PROJECT_DIR, "kolibri_explore_plugin", "static", "highlighted-content.json"
 )
 
-BUNDLE_EXCLUDE_GLOBS = ["*.map"]
 
-
-def bundle_zip(zip_name, compression=zipfile.ZIP_LZMA):
-    root_path = Path("dist")
-
-    if not zip_name.endswith(".zip"):
-        zip_name = zip_name + ".zip"
-
-    with zipfile.ZipFile(zip_name, "w", compression=compression) as bundle:
-        for path in root_path.glob("**/*"):
-            if not any(path.match(glob) for glob in BUNDLE_EXCLUDE_GLOBS):
-                bundle.write(path, path.relative_to(root_path))
-
-    print(f"File ./{zip_name} created.")
+def bundle_zip(zip_name):
+    shutil.make_archive(zip_name, "zip", "dist/")
+    print(f"File ./{zip_name}.zip created.")
 
 
 def get_available_overrides():
