@@ -19,9 +19,10 @@ from kolibri.core.content.zip_wsgi import get_embedded_file
 from kolibri.core.decorators import cache_no_user_data
 from kolibri.utils import conf
 
-APPS_BUNDLE_PATH = conf.OPTIONS["Explore"]["APPS_BUNDLE_PATH"] or os.path.join(
-    os.path.dirname(__file__), "apps"
-)
+APPS_BUNDLE_PATHS = []
+if conf.OPTIONS["Explore"]["APPS_BUNDLE_PATH"]:
+    APPS_BUNDLE_PATHS.append(conf.OPTIONS["Explore"]["APPS_BUNDLE_PATH"])
+APPS_BUNDLE_PATHS.append(os.path.join(os.path.dirname(__file__), "apps"))
 
 
 @method_decorator(cache_no_user_data, name="dispatch")
@@ -44,11 +45,13 @@ class AppBase(View):
         return HttpResponse()
 
     def _get_file(self, app, path):
-        if path.startswith("/"):
-            path = path[1:]
+        path = path.lstrip("/")
 
-        filename = os.path.join(APPS_BUNDLE_PATH, app, path)
-        if not os.path.exists(filename):
+        for apps_bundle_path in APPS_BUNDLE_PATHS:
+            filename = os.path.join(apps_bundle_path, app, path)
+            if os.path.exists(filename):
+                break
+        else:
             raise Http404
 
         return filename
