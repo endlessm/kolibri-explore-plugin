@@ -49,14 +49,14 @@
     "@npmcli/fs": "1.0.x",
     "vue-demi": "0.10.x",
     "node-sass": "file:dependency-stub",
-    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system#b3fa27f7043befe8ed5fd265bc067e5ed811b053"
+    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system#c2acc3fd19cee52ccd2a17fa8d2b10cddb2b3d63"
   },
   "engines": {
     "node": "16.x",
     "yarn": "1.x"
   },
   "dependencies": {
-    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system#b3fa27f7043befe8ed5fd265bc067e5ed811b053",
+    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system#c2acc3fd19cee52ccd2a17fa8d2b10cddb2b3d63",
     "node-sass": "file:dependency-stub"
   }
 }
