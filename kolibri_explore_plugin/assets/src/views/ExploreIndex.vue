@@ -2,7 +2,9 @@
 
   <div>
     <BackToTop />
-    <InstallContentModal />
+    <keep-alive>
+      <InstallContentModal />
+    </keep-alive>
     <ContentModal />
     <AboutModal id="about-modal" />
     <DevTag v-if="showBuildInfo" />

@@ -170,6 +170,7 @@
             showChannels(this.$store);
             this.downloading = false;
           } else {
+            this.downloading = true;
             if (completed !== this.channelsDownloaded) {
               this.channelsDownloaded = completed;
               ChannelResource.clearCache();
