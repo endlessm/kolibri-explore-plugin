@@ -25,6 +25,7 @@ from kolibri.core.tasks.api import _remoteimport
 from kolibri.core.tasks.job import State
 from kolibri.core.tasks.main import queue
 from kolibri.utils import conf
+from kolibri.utils.server import get_status
 
 
 APPS_BUNDLE_PATHS = []
@@ -116,6 +117,16 @@ class EndlessLearningCollection(View):
     def get(self, request):
         job_ids = request.session.get("job_ids", [])
         jobs = [queue.fetch_job(job) for job in job_ids]
+        running = [job for job in jobs if job.state == State.RUNNING]
+        pid, _, _ = get_status()
+
+        # requeue stalled jobs
+        for job in running:
+            job_pid = job.extra_metadata.get("PID", None)
+            if job_pid and job_pid != pid:
+                job.extra_metadata["PID"] = pid
+                queue.storage.save_job_meta(job)
+                queue.storage._update_job(job.job_id, State.QUEUED)
 
         finished_states = [
             State.FAILED,
@@ -143,13 +154,15 @@ class EndlessLearningCollection(View):
 
         job_ids = []
 
+        pid, _, _ = get_status()
         for channel in channels:
             task = {
                 "channel_id": channel["id"],
                 "channel_name": channel["name"],
                 "baseurl": self.BASE_URL,
                 "started_by_username": "endless",
-                "type": "REMOTECHANNELIMPORT",
+                "type": "REMOTEIMPORT",
+                "PID": pid,
             }
 
             job_id = queue.enqueue(
