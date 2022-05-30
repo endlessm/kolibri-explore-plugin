@@ -6,6 +6,7 @@ import json
 import os
 
 import requests
+from django.core.management import call_command
 from django.http import FileResponse
 from django.http import Http404
 from django.http import HttpResponse
@@ -17,6 +18,9 @@ from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 from kolibri.core.content.api import cache_forever
 from kolibri.core.content.api import RemoteChannelViewSet
+from kolibri.core.content.models import ContentNode
+from kolibri.core.content.models import LocalFile
+from kolibri.core.content.utils import paths
 from kolibri.core.content.zip_wsgi import add_security_headers
 from kolibri.core.content.zip_wsgi import get_embedded_file
 from kolibri.core.decorators import cache_no_user_data
@@ -109,6 +113,35 @@ class AppMetadataView(AppBase):
             return HttpResponse(json_file, content_type="application/json")
 
 
+def _import_channel_from_usb(channel_id, directory):
+    """
+    Imports the specified channel from the content directory
+    and then make all the content available.
+
+    This function doesn't import the actual content, just the channel
+    metadata, the content should exists and be present in the
+    KOLIBRI_CONTENT_FALLBACK_DIRS configuration, in other case the
+    imported content with this method won't work correctly.
+
+    Function to be called as a background call adding it to a task queue
+    """
+    call_command(
+        "importchannel",
+        "disk",
+        channel_id,
+        directory,
+    )
+    # Enable the content after import
+    # TODO: use the manifest.json to enable the content in the USB,
+    #       node_ids, and exclude_ids
+    nodes = ContentNode.objects.filter(channel_id=channel_id)
+    nodes.update(available=True)
+
+    files = LocalFile.objects.filter(files__contentnode__channel_id=channel_id)
+    files = files.filter(files__contentnode__available=True)
+    files.update(available=True)
+
+
 @method_decorator(csrf_exempt, name="dispatch")
 class EndlessLearningCollection(View):
     COLLECTION_TOKEN = "totoj-jupak"
@@ -144,10 +177,37 @@ class EndlessLearningCollection(View):
             json.dumps(jobs_response), content_type="application/json"
         )
 
+    def import_job(self, task):
+        content_fallback = paths.get_content_fallback_paths()
+        if content_fallback:
+            task.update({"type": "DISKIMPORT"})
+            # Just getting the first one
+            directory = os.path.dirname(content_fallback[0])
+            job_id = queue.enqueue(
+                _import_channel_from_usb,
+                task["channel_id"],
+                directory,
+                extra_metadata=task,
+                track_progress=True,
+            )
+        else:
+            task.update({"type": "REMOTEIMPORT"})
+            job_id = queue.enqueue(
+                _remoteimport,
+                task["channel_id"],
+                task["baseurl"],
+                extra_metadata=task,
+                track_progress=True,
+                cancellable=True,
+            )
+
+        return job_id
+
     def post(self, request):
         token = self.COLLECTION_TOKEN
 
         channel_viewset = RemoteChannelViewSet()
+        # TODO: get the list of channels from USB if manifest.json exists
         channels = channel_viewset._make_channel_endpoint_request(
             identifier=token
         )
@@ -161,18 +221,9 @@ class EndlessLearningCollection(View):
                 "channel_name": channel["name"],
                 "baseurl": self.BASE_URL,
                 "started_by_username": "endless",
-                "type": "REMOTEIMPORT",
                 "PID": pid,
             }
-
-            job_id = queue.enqueue(
-                _remoteimport,
-                task["channel_id"],
-                task["baseurl"],
-                extra_metadata=task,
-                track_progress=True,
-                cancellable=True,
-            )
+            job_id = self.import_job(task)
             job_ids.append(job_id)
 
         request.session["job_ids"] = job_ids
