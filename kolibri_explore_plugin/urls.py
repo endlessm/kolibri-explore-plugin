@@ -5,7 +5,6 @@ from django.conf.urls import url
 from . import __version__ as VERSION
 from .views import AppFileView
 from .views import AppMetadataView
-from .views import EndlessLearningCollection
 from .views import ExploreView
 
 if os.environ.get("PROXY_CUSTOM_CHANNEL", None):
@@ -28,11 +27,6 @@ urlpatterns = [
         r"^app/%s/(?P<app>[\w\-]+)/(?P<path>.*)?" % VERSION,
         AppView.as_view(),
         name="app_custom_presentation",
-    ),
-    url(
-        r"^endlesslearning/?",
-        EndlessLearningCollection.as_view(),
-        name="endless_learning_collection",
     ),
     url(r"^$", ExploreView.as_view(), name="explore"),
 ]

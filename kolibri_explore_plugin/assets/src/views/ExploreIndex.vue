@@ -3,7 +3,19 @@
   <div>
     <BackToTop />
     <keep-alive>
-      <InstallContentModal />
+      <div>
+        <CollectionSelectionModal
+          :visible="collectionModalVisible"
+          @downloadCollection="downloadCollection"
+        />
+        <InstallContentModal
+          :visible="contentModalVisible"
+          :collection="downloadingCollection"
+          @showModal="visibleModal = 'content'"
+          @hide="visibleModal = 'none'"
+          @newContent="reloadChannels"
+        />
+      </div>
     </keep-alive>
     <ContentModal />
     <AboutModal id="about-modal" />
@@ -33,9 +45,10 @@
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import LoadingImage from 'eos-components/src/assets/loading-animation.gif';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
+  import { ChannelResource } from 'kolibri.resources';
+  import { showChannels } from '../modules/topicsRoot/handlers';
   import { PageNames } from '../constants';
   import AboutModal from '../components/AboutModal';
-  import InstallContentModal from '../components/InstallContentModal';
   import commonExploreStrings from './commonExploreStrings';
   import ChannelsPage from './ChannelsPage';
   import CustomChannelPresentationApp from './CustomChannelPresentationApp';
@@ -56,16 +69,22 @@
 
   export default {
     name: 'ExploreIndex',
-    components: { AboutModal, ContentModal, DevTag, InstallContentModal },
+    components: {
+      AboutModal,
+      ContentModal,
+      DevTag,
+    },
     mixins: [commonCoreStrings, commonExploreStrings, responsiveWindowMixin],
     data() {
       return {
         lastRoute: null,
         isLoading: false,
+        visibleModal: 'none',
+        downloadingCollection: null,
       };
     },
     computed: {
-      ...mapState(['pageName']),
+      ...mapState(['noContent', 'pageName']),
       currentPage() {
         return pageNameToComponentMap[this.pageName] || null;
       },
@@ -75,8 +94,19 @@
       loadingImg() {
         return LoadingImage;
       },
+      contentModalVisible() {
+        return this.visibleModal === 'content';
+      },
+      collectionModalVisible() {
+        return this.visibleModal === 'collection';
+      },
     },
     watch: {
+      noContent() {
+        if (this.noContent) {
+          this.visibleModal = 'collection';
+        }
+      },
       $route: function(newRoute, oldRoute) {
         // Return if the user is leaving or entering the Search page.
         // This ensures we never set this.lastRoute to be any kind of
@@ -100,6 +130,16 @@
       },
       onLoad() {
         this.isLoading = false;
+      },
+      reloadChannels() {
+        ChannelResource.useContentCacheKey = false;
+        ChannelResource.clearCache();
+        showChannels(this.$store);
+        this.$store.commit('SET_NOCONTENT', false);
+      },
+      downloadCollection(collection) {
+        this.downloadingCollection = collection;
+        this.visibleModal = 'content';
       },
     },
   };

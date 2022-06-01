@@ -12,17 +12,19 @@ import ChannelCard from './components/ChannelCard.vue';
 import ChannelCardGroup from './components/ChannelCardGroup.vue';
 import ChannelLogo from './components/ChannelLogo.vue';
 import CollapsibleCardGrid from './components/CollapsibleCardGrid.vue';
+import CollectionSelectionModal from './components/CollectionSelectionModal.vue';
+import ContentCard from './components/ContentCard.vue';
 import ContentLink from './components/ContentLink.vue';
 import DummyButton from './components/DummyButton.vue';
 import Footer from './components/Footer.vue';
 import GridPage from './components/GridPage.vue';
+import InstallContentModal from './components/InstallContentModal.vue';
 import Keywords from './components/Keywords.vue';
 import NavBar from './components/NavBar.vue';
 import PlayButton from './components/PlayButton.vue';
-import ContentCard from './components/ContentCard.vue';
 import SearchBar from './components/SearchBar.vue';
-import SlidableGrid from './components/SlidableGrid.vue';
 import SlidableCardGrid from './components/SlidableCardGrid.vue';
+import SlidableGrid from './components/SlidableGrid.vue';
 import TopicCard from './components/TopicCard.vue';
 
 import cardMixin from './components/mixins/cardMixin.js';
@@ -48,17 +50,19 @@ const components = {
   ChannelCardGroup,
   ChannelLogo,
   CollapsibleCardGrid,
+  CollectionSelectionModal,
+  ContentCard,
   ContentLink,
   DummyButton,
   Footer,
   GridPage,
+  InstallContentModal,
   Keywords,
   NavBar,
   PlayButton,
-  ContentCard,
   SearchBar,
-  SlidableGrid,
   SlidableCardGrid,
+  SlidableGrid,
   TopicCard,
 };
 
