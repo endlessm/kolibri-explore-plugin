@@ -8,7 +8,7 @@ export default {
   SET_CONTENT_ID(state, id) {
     state.contentId = id;
   },
-  SET_SHOW_INSTALL_CONTENT(state, value) {
-    state.visibleInstallContentModal = value;
+  SET_NOCONTENT(state, value) {
+    state.noContent = value;
   },
 };

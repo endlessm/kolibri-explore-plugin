@@ -11,7 +11,8 @@ export function setAndCheckChannels(store) {
   return store.dispatch('setChannelInfo').then(
     channels => {
       if (!channels.length) {
-        store.commit('SET_SHOW_INSTALL_CONTENT', true);
+        // No channels, so we should show something to the user
+        store.commit('SET_NOCONTENT', true);
       }
       return channels;
     },

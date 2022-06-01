@@ -111,7 +111,11 @@ class AppMetadataView(AppBase):
 
 @method_decorator(csrf_exempt, name="dispatch")
 class EndlessLearningCollection(View):
-    COLLECTION_TOKEN = "totoj-jupak"
+    COLLECTION_TOKENS = {
+        "small": "totoj-jupak",
+        "medium": "totoj-jupak",
+        "large": "totoj-jupak",
+    }
     BASE_URL = "https://kolibri-content.endlessos.org/"
 
     def get(self, request):
@@ -145,7 +149,12 @@ class EndlessLearningCollection(View):
         )
 
     def post(self, request):
-        token = self.COLLECTION_TOKEN
+        collection = "small"
+        if request.body:
+            data = json.loads(request.body)
+            collection = data.get("collection", "small")
+
+        token = self.COLLECTION_TOKENS[collection]
 
         channel_viewset = RemoteChannelViewSet()
         channels = channel_viewset._make_channel_endpoint_request(
