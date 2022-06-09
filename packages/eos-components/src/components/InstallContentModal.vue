@@ -1,80 +1,62 @@
 <template>
 
-  <div>
+  <div v-if="collection">
     <transition name="fade">
       <b-button
-        v-if="!isModalVisible && downloading"
+        v-if="!visible && downloading"
         variant="primary"
         class="install-content rounded-circle"
-        @click="showModal"
+        @click="$emit('showModal')"
       >
         <div :style="buttonStyles" class="button-progress rounded-circle"></div>
-        <DownloadIcon />
+        <ProgressDownloadIcon />
       </b-button>
     </transition>
 
     <b-modal
       id="install-content-modal"
-      v-model="isModalVisible"
-      headerCloseVariant="light"
-      :hideFooter="downloading"
-      @hide="onHide"
+      size="xl"
+      centered
+      :visible="visible"
+      :hideFooter="true"
+      @hide="$emit('hide')"
     >
-      <template #modal-title>
-        Welcome to Endless Learning
-      </template>
-      <h2 v-if="downloading">
-        Downloading&hellip;
-      </h2>
-      <h2 v-else>
-        Download Endless Learning Collection
-      </h2>
-      <p v-if="downloading">
-        You can close this window during the download and continue to
-        explore the existing content.
-      </p>
+      <b-container>
+        <h1 class="text-primary">
+          Downloading&hellip;
+        </h1>
+        <h5 class="text-muted">
+          You can close this window during meanwhile
+          to explore the content as it finishes downloading.
+        </h5>
 
-      <div v-if="downloading" class="d-block text-center">
-        <b-progress
-          :value="progress"
-          :max="100"
-          showProgress
-          animated
-          class="my-2"
-        />
-        <b-button v-b-toggle.details variant="link">
-          More details
-        </b-button>
-        <b-collapse id="details" class="mt-2">
-          <div v-for="job in filteredJobs" :key="job.id">
-            <b-row>
-              <b-col>{{ job.channel_name }}</b-col>
-              <b-col cols="9">
-                <div v-if="job.status === 'COMPLETED'">
-                  Completed
-                </div>
-                <b-progress
-                  v-else
-                  :value="job.percentage"
-                  :max="1"
-                  variant="success"
-                  showProgress
-                  animated
-                />
-              </b-col>
-            </b-row>
-          </div>
-        </b-collapse>
-      </div>
-      <template #modal-footer>
+        <hr>
+
+        <b-row class="my-5">
+          <b-col cols="5">
+            <h6 class="text-muted">
+              {{ collection.subtitle }} Collection {{ collection.title }}
+            </h6>
+          </b-col>
+          <b-col>
+            <b-progress
+              :value="progress"
+              :max="100"
+              showProgress
+              animated
+            />
+          </b-col>
+        </b-row>
+
         <b-button
-          class="mt-3"
-          block
-          @click="downloadContent"
+          class="mb-2 mt-5"
+          variant="primary"
+          @click="$emit('hide')"
         >
-          Download
+          Explore
         </b-button>
-      </template>
+
+      </b-container>
     </b-modal>
   </div>
 
@@ -84,27 +66,35 @@
 <script>
 
   import axios from 'axios';
-  import urls from 'kolibri.urls';
-  import { mapState } from 'vuex';
+  import ProgressDownloadIcon from 'vue-material-design-icons/ProgressDownload.vue';
 
-  import DownloadIcon from 'vue-material-design-icons/ProgressDownload.vue';
-  import { ChannelResource } from 'kolibri.resources';
-  import { showChannels } from '../modules/topicsRoot/handlers';
+  const API_URL = '/explore/api/endlesslearning';
 
   export default {
     name: 'InstallContentModal',
-    components: { DownloadIcon },
+    components: {
+      ProgressDownloadIcon,
+    },
+    emits: ['hide', 'showModal', 'newContent'],
+    props: {
+      visible: {
+        type: Boolean,
+        default: false,
+      },
+      collection: {
+        type: Object,
+        default: null,
+      },
+    },
     data() {
       return {
         pollingId: null,
         jobs: null,
-        isModalVisible: false,
         channelsDownloaded: 0,
         downloading: false,
       };
     },
     computed: {
-      ...mapState(['visibleInstallContentModal']),
       filteredJobs() {
         if (!this.jobs) {
           return [];
@@ -129,24 +119,21 @@
       },
     },
     watch: {
-      visibleInstallContentModal() {
-        this.isModalVisible = this.visibleInstallContentModal;
+      collection() {
+        if (this.collection) {
+          this.downloadContent();
+        }
       },
     },
     beforeDestroy() {
       clearTimeout(this.pollingId);
     },
-    mounted() {
-      this.pollJobs();
-      ChannelResource.useContentCacheKey = false;
-    },
     methods: {
       downloadContent() {
         this.downloading = true;
-        const url = urls['kolibri:kolibri_explore_plugin:endless_learning_collection']();
         this.jobs = [];
         axios
-          .post(url)
+          .post(API_URL, { collection: this.collection.subtitle.toLowerCase()})
           .then(() => {
             this.pollJobs();
           })
@@ -157,24 +144,21 @@
       pollJobs() {
         clearTimeout(this.pollingId);
 
-        const url = urls['kolibri:kolibri_explore_plugin:endless_learning_collection']();
-        axios.get(url).then(({ data }) => {
+        axios.get(API_URL).then(({ data }) => {
           this.jobs = data;
           const completedJobs = this.jobs.filter(j => j.status === 'COMPLETED');
           const completed = completedJobs.length;
 
           if (completed > 0 && completed === this.jobs.length) {
             // Download is completed
-            this.$store.commit('SET_SHOW_INSTALL_CONTENT', false);
-            ChannelResource.clearCache();
-            showChannels(this.$store);
+            this.$emit('newContent');
+            this.$emit('hide');
             this.downloading = false;
           } else {
             this.downloading = true;
             if (completed !== this.channelsDownloaded) {
               this.channelsDownloaded = completed;
-              ChannelResource.clearCache();
-              showChannels(this.$store);
+              this.$emit('newContent');
             }
 
             this.downloading = this.jobs.some(j => j.status !== 'COMPLETED');
@@ -183,12 +167,6 @@
             }
           }
         });
-      },
-      onHide() {
-        this.$store.commit('SET_SHOW_INSTALL_CONTENT', false);
-      },
-      showModal() {
-        this.$store.commit('SET_SHOW_INSTALL_CONTENT', true);
       },
     },
   };
@@ -200,9 +178,25 @@
 
   @import '../styles';
 
+  ::v-deep .modal-content {
+    color: black;
+    text-align: center;
+    background-color: white;
+  }
+
+  .card {
+    border: 1px solid;
+    border-radius: $border-radius-lg;
+  }
+
+  ::v-deep .card-subtitle {
+    font-weight: bold;
+    color: black !important;
+  }
+
   .install-content {
     position: fixed;
-    bottom: $spacer;
+    top: $spacer + $navbar-height;
     left: $spacer;
     z-index: $zindex-fixed;
     // Remove 2px border from the actual size to match the slidable cards row:
