@@ -37,6 +37,10 @@ export default {
       this.$router.replace('/welcome');
     }
 
+    window.show_endless_key = () => {
+      this.$router.push('/endless-key');
+    }
+
     window.firstLaunch = () => {
       this.firstLaunch = true;
       this.$router.replace('/welcome');
@@ -51,6 +55,7 @@ export default {
     window.clean = fallback;
     window.firstLaunch = fallback;
     window.welcome = fallback;
+    window.show_endless_key = fallback;
   },
 };
 </script>
