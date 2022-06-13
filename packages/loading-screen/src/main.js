@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import App from '@/App.vue';
 
+import EndlessKey from '@/views/EndlessKey.vue';
 import Loading from '@/views/Loading.vue';
 import Welcome from '@/views/Welcome.vue';
 
@@ -16,6 +17,7 @@ const routes = [
   { path: '/', redirect: '/loading/default' },
   { path: '/loading/:state', component: Loading },
   { path: '/welcome', component: Welcome },
+  { path: '/endless-key', component: EndlessKey },
 ];
 
 const router = new VueRouter({
