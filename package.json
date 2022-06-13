@@ -17,7 +17,7 @@
     "lint-frontend": "kolibri-tools lint -p 'kolibri_explore_plugin/assets/**/*.{js,vue,scss,less,css}'",
     "lint-frontend:format": "yarn run lint-frontend --write",
     "bump-version": "bump2version",
-    "deploy:loading": "cp -rf packages/loading-screen/dist kolibri_explore_plugin/loadingScreen",
+    "deploy:loading": "cp -rf packages/loading-screen/dist kolibri_explore_plugin/loadingScreen && rm kolibri_explore_plugin/loadingScreen/js/*map",
     "release": "./scripts/check_can_relese.sh && twine upload -s dist/*"
   },
   "workspaces": [
