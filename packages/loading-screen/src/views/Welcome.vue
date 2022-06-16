@@ -65,8 +65,8 @@
     },
     methods: {
       downloadContent() {
-        // TODO: comunicate with the webview to notify the selection
         this.$router.replace('/loading/default');
+        window.EndlessAPI.load();
       },
       useEndlessKeyUSB() {
         this.$router.replace('/endless-key');

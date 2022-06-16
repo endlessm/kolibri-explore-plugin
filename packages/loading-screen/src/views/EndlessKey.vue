@@ -61,8 +61,8 @@
     },
     methods: {
       loadWithUSB() {
-        // TODO: comunicate with the webview to notify the selection
         this.$router.replace('/loading/default');
+        window.EndlessAPI.loadWithUSB();
       },
       goBack() {
         this.$router.replace('/welcome');

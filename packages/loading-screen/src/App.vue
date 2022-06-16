@@ -41,6 +41,11 @@ export default {
       this.$router.push('/endless-key');
     }
 
+    window.setHasUSB = () => {
+      // Does nothing.
+      // This function is implemented in the EndlessKey view component
+    }
+
     window.firstLaunch = () => {
       this.firstLaunch = true;
       this.$router.replace('/welcome');
