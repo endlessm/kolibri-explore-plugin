@@ -14,6 +14,7 @@
         <template v-if="showDownload">
           <b-button
             block
+            :disabled="isOffline"
             variant="outline-primary"
             @click="downloadContent"
           >
@@ -49,8 +50,18 @@
     name: 'Welcome',
     data() {
       return {
+        isOffline: false,
         showDownload: false,
       };
+    },
+    created() {
+      this.isOffline = !navigator.onLine;
+      window.addEventListener('offline', this.onOffline);
+      window.addEventListener('online', this.onOnline);
+    },
+    destroyed() {
+      window.removeEventListener('offline', this.onOffline);
+      window.removeEventListener('online', this.onOnline);
     },
     methods: {
       downloadContent() {
@@ -59,6 +70,12 @@
       },
       useEndlessKeyUSB() {
         this.$router.replace('/endless-key');
+      },
+      onOffline() {
+          this.isOffline = true;
+      },
+      onOnline() {
+          this.isOffline = false;
       },
     },
   };
