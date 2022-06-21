@@ -36,7 +36,6 @@
         const url = urls['kolibri:kolibri_explore_plugin:app_custom_presentation']({ app: app });
         const parameters = {
           ...this.customAppParameters,
-          ...this.$route.query,
           isStandaloneChannel: plugin_data.showAsStandaloneChannel,
         };
         const parametersString = serializeUrlParameters(parameters);

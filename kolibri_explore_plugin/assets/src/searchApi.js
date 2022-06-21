@@ -18,7 +18,7 @@ function zimToNode(zimArticle, node) {
     channelId: node.channel_id,
     description: zimArticle.snippet,
     kind: 'zim',
-    nodeUrl: `/topics/${node.channel_id}/c/${node.id}?zimPath=${zimArticle.path}`,
+    nodeUrl: `/topics/${node.channel_id}/c/${node.id}?path=${zimArticle.path}`,
   };
 }
 
