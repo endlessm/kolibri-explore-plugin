@@ -18,6 +18,11 @@ const routes = [
   { path: '/loading/:state', component: Loading },
   { path: '/welcome', component: Welcome },
   { path: '/endless-key', component: EndlessKey },
+  {
+    path: '/endless-key-required',
+    component: EndlessKey,
+    props: { required: true },
+  },
 ];
 
 const router = new VueRouter({
