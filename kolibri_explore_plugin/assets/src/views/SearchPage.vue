@@ -47,29 +47,6 @@
           </div>
         </template>
 
-        <!-- TODO: integrate this with resultCards -->
-        <template>
-          <div v-for="[title, nodes] in resultZim" :key="title">
-            <CardGrid
-              variant="collapsible"
-              :itemsPerPage="4"
-              :nodes="nodes"
-              :mediaQuality="mediaQuality"
-              :cardColumns="cardColumns"
-            >
-              <div>
-                <h4 class="text-muted">
-                  <span class="font-weight-normal">
-                    {{ nodes.length }} results for "{{ cleanedQuery }}"
-                  </span>
-                  to {{ title }}
-                </h4>
-              </div>
-            </CardGrid>
-            <hr>
-          </div>
-        </template>
-
         <template v-if="isLoading" class="placeholder">
           <CardGridPlaceholder />
         </template>
@@ -134,8 +111,6 @@
 
   import { PageNames } from '../constants';
   import { searchChannelsOnce } from '../modules/topicsRoot/handlers';
-  import { ZimSearchChannels } from '../customApps';
-  import { wikiChannelSearch } from '../searchApi.js';
 
   import AlphabeticalChannelsList from '../components/AlphabeticalChannelsList';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
@@ -157,7 +132,6 @@
         mediaQuality: constants.MediaQuality.REGULAR,
         progress: 100,
         resultKinds: [],
-        resultZim: [],
       };
     },
     computed: {
@@ -175,7 +149,6 @@
         return (
           !this.isEmpty &&
           !this.isLoading &&
-          !this.resultZim &&
           !this.resultCards.length &&
           !this.resultChannels.length
         );
@@ -248,9 +221,6 @@
       keywords() {
         return this.cleanedQuery.split(/\s+/);
       },
-      totalSearchSections() {
-        return kinds.length + Object.keys(ZimSearchChannels).length;
-      },
     },
     watch: {
       cleanedQuery() {
@@ -288,8 +258,6 @@
       search(query) {
         this.setSearchResult({});
         this.resultKinds = [];
-        this.resultZim = [];
-
         if (!query) {
           return;
         }
@@ -298,22 +266,9 @@
         kinds.forEach(k => {
           searchChannelsOnce(this.$store, query, k).then(() => {
             this.resultKinds.push(k);
-            this.progress += 100 / this.totalSearchSections;
+            this.progress += 100 / kinds.length;
           });
         });
-
-        // TODO: integrate this with search results
-        this.resultZim = [];
-        for (const group in ZimSearchChannels) {
-          wikiChannelSearch(ZimSearchChannels[group], query)
-            .then(results => {
-              this.resultZim.push([group, results]);
-              this.progress += 100 / this.totalSearchSections;
-            })
-            .catch(() => {
-              this.progress += 100 / this.totalSearchSections;
-            });
-        }
       },
       clearInput() {
         this.query = '';
