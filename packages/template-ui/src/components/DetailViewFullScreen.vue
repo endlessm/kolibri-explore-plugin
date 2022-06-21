@@ -23,10 +23,7 @@ export default {
       if (!this.node) {
         return '';
       }
-
-      const uri = window.location.search.substring(1);
-      const params = new URLSearchParams(uri);
-      return `/explore/#/content/${this.node.id}?${params.toString()}`;
+      return `/explore/#/content/${this.node.id}`;
     },
   },
 };
