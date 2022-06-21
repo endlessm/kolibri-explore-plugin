@@ -43,7 +43,7 @@
                 </h4>
               </div>
             </CardGrid>
-            <hr v-if="nodes.length">
+            <hr>
           </div>
         </template>
 
@@ -67,7 +67,7 @@
                 </h4>
               </div>
             </CardGrid>
-            <hr v-if="nodes.length">
+            <hr>
           </div>
         </template>
 
