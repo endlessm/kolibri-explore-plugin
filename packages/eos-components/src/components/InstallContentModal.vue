@@ -68,7 +68,7 @@
   import axios from 'axios';
   import ProgressDownloadIcon from 'vue-material-design-icons/ProgressDownload.vue';
 
-  const API_URL = '/explore/api/endlesslearning';
+  import { ApiURL } from '../constants';
 
   export default {
     name: 'InstallContentModal',
@@ -133,7 +133,7 @@
         this.downloading = true;
         this.jobs = [];
         axios
-          .post(API_URL, { collection: this.collection.subtitle.toLowerCase()})
+          .post(ApiURL, { collection: this.collection.subtitle.toLowerCase()})
           .then(() => {
             this.pollJobs();
           })
@@ -144,8 +144,8 @@
       pollJobs() {
         clearTimeout(this.pollingId);
 
-        axios.get(API_URL).then(({ data }) => {
-          this.jobs = data;
+        axios.get(ApiURL).then(({ data }) => {
+          this.jobs = data.jobs;
           const completedJobs = this.jobs.filter(j => j.status === 'COMPLETED');
           const completed = completedJobs.length;
 

@@ -111,11 +111,30 @@ class AppMetadataView(AppBase):
 
 @method_decorator(csrf_exempt, name="dispatch")
 class EndlessLearningCollection(View):
-    COLLECTION_TOKENS = {
-        "small": "totoj-jupak",
-        "medium": "totoj-jupak",
-        "large": "totoj-jupak",
+    COLLECTIONS = {
+        "small": {
+            "title": "3Gb",
+            "subtitle": "Small",
+            "channels": 10,
+            "text": "Short Description to be defined",
+            "token": "totoj-jupak",
+        },
+        "medium": {
+            "title": "6Gb",
+            "subtitle": "Medium",
+            "channels": 10,
+            "text": "Short Description to be defined",
+            "token": "totoj-jupak",
+        },
+        "large": {
+            "title": "12Gb",
+            "subtitle": "Large",
+            "channels": 10,
+            "text": "Short Description to be defined",
+            "token": "totoj-jupak",
+        },
     }
+
     BASE_URL = "https://kolibri-content.endlessos.org/"
 
     def get(self, request):
@@ -132,17 +151,30 @@ class EndlessLearningCollection(View):
                 queue.storage.save_job_meta(job)
                 queue.storage._update_job(job.job_id, State.QUEUED)
 
+        running_states = [
+            State.RUNNING,
+            State.QUEUED,
+        ]
+
         finished_states = [
             State.FAILED,
             State.CANCELING,
             State.CANCELED,
         ]
 
-        jobs_response = [
-            _job_to_response(job)
-            for job in jobs
-            if job.state not in finished_states
-        ]
+        jobs = [job for job in jobs if job.state not in finished_states]
+        running_jobs = len(
+            [job for job in jobs if job.state in running_states]
+        )
+        if running_jobs == 0 and "downloading" in request.session:
+            del request.session["downloading"]
+
+        collection = request.session.get("downloading")
+        collection = self.COLLECTIONS.get(collection)
+        jobs_response = {
+            "collection": collection,
+            "jobs": [_job_to_response(job) for job in jobs],
+        }
 
         return HttpResponse(
             json.dumps(jobs_response), content_type="application/json"
@@ -154,7 +186,7 @@ class EndlessLearningCollection(View):
             data = json.loads(request.body)
             collection = data.get("collection", "small")
 
-        token = self.COLLECTION_TOKENS[collection]
+        token = self.COLLECTIONS[collection]["token"]
 
         channel_viewset = RemoteChannelViewSet()
         channels = channel_viewset._make_channel_endpoint_request(
@@ -184,7 +216,10 @@ class EndlessLearningCollection(View):
             )
             job_ids.append(job_id)
 
+        # Two weeks session expiry
+        request.session.set_expiry(1209600)
         request.session["job_ids"] = job_ids
+        request.session["downloading"] = collection
         return HttpResponse(
             json.dumps(job_ids), content_type="application/json"
         )

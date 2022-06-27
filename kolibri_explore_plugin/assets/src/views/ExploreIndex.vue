@@ -46,6 +46,8 @@
   import LoadingImage from 'eos-components/src/assets/loading-animation.gif';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
   import { ChannelResource } from 'kolibri.resources';
+  import axios from 'axios';
+  import { constants } from 'eos-components';
   import { showChannels } from '../modules/topicsRoot/handlers';
   import { PageNames } from '../constants';
   import AboutModal from '../components/AboutModal';
@@ -123,6 +125,13 @@
           params: oldRoute.params,
         };
       },
+    },
+    mounted() {
+      axios.get(constants.ApiURL).then(({ data }) => {
+        if (data.collection) {
+          this.downloadCollection(data.collection);
+        }
+      });
     },
     methods: {
       onLoading() {
