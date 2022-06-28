@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <div class="loading">
+  <div class="d-flex flex-column flex-grow-1">
+    <div
+      id="main"
+      class="align-items-center d-flex flex-column flex-grow-1 justify-content-center"
+    >
       <img v-if="isLoading" :src="loadingImage" class="mb-1">
       <b-icon-exclamation-circle v-if="!isLoading" variant="dark" fontScale="4" class="mb-3" />
       <div v-if="isError">
@@ -32,9 +35,14 @@
         </h4>
       </div>
     </div>
-
-    <div v-if="isLoading" class="fixed-bottom kolibri mb-5 text-muted">
-      <h5>Powered by Kolibri</h5>
+    <div
+      v-if="isLoading"
+      id="footer"
+      class="mb-5 text-muted"
+    >
+      <h5 class="small text-uppercase">
+        Powered by Kolibri
+      </h5>
       <img :src="kolibriImage">
     </div>
   </div>
@@ -82,16 +90,12 @@ export default {
 <style lang="scss">
 @import '@/index.scss';
 
-.kolibri h5 {
-  text-transform: uppercase !important;
-  font-size: small;
+#main img {
+  width: 128px;
 }
 
-.kolibri img {
+#footer img {
   width: 64px;
 }
 
-.loading img {
-  max-width: 128px;
-}
 </style>

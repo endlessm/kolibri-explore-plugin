@@ -1,7 +1,7 @@
 <template>
   <div
     id="app"
-    class="align-items-center d-flex flex-column justify-content-center text-center vh-100"
+    class="align-items-center d-flex flex-column justify-content-center min-vh-100 text-center"
   >
     <router-view />
   </div>
@@ -71,16 +71,14 @@ export default {
 html {
   height: 100%;
 }
-/* Always show the vertical scrollbar */
 body {
-  overflow: hidden;
   min-height: 100vh;
+  background-color: white;
 }
 
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
   background-color: white;
 }
 
