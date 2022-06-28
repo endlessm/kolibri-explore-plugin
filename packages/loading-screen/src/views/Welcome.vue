@@ -9,36 +9,16 @@
         Let's begin by helping you find your content
       </h5>
       <div class="pt-5">
-        <template v-if="showDownload">
-          <b-button
-            class="mx-1"
-            :disabled="isOffline"
-            variant="outline-primary"
-            @click="downloadContent"
-          >
-            Download Content
-          </b-button>
-          <b-button
-            class="mx-1"
-            variant="primary"
-            @click="useEndlessKeyUSB"
-          >
-            I Have an Endless Key USB Drive
-          </b-button>
-        </template>
-        <template v-else>
-          <b-button
-            variant="primary"
-            @click="showDownload = true"
-          >
-            Get Started
-          </b-button>
-        </template>
+        <b-button
+          variant="primary"
+          @click="goToContentSourceSelection"
+        >
+          Get Started
+        </b-button>
       </div>
     </div>
     <div class="flex-grow-1 welcome-background-bottom"></div>
   </div>
-
 </template>
 
 
@@ -47,33 +27,10 @@
   export default {
     name: 'Welcome',
     data() {
-      return {
-        isOffline: false,
-        showDownload: false,
-      };
-    },
-    created() {
-      this.isOffline = !navigator.onLine;
-      window.addEventListener('offline', this.onOffline);
-      window.addEventListener('online', this.onOnline);
-    },
-    destroyed() {
-      window.removeEventListener('offline', this.onOffline);
-      window.removeEventListener('online', this.onOnline);
     },
     methods: {
-      downloadContent() {
-        this.$router.replace('/loading/default');
-        window.EndlessAPI.load();
-      },
-      useEndlessKeyUSB() {
-        this.$router.replace('/endless-key');
-      },
-      onOffline() {
-          this.isOffline = true;
-      },
-      onOnline() {
-          this.isOffline = false;
+      goToContentSourceSelection() {
+        this.$router.replace('/select-source');
       },
     },
   };
