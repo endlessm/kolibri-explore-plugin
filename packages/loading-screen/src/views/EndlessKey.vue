@@ -1,46 +1,42 @@
 <template>
-
-  <b-container>
-    <div class="content p-3 pb-5 position-relative">
+  <div>
+    <div class="p-3 pb-5">
       <h1 class="text-primary">
         Connect your Endless Key USB Drive
       </h1>
-      <h2 class="text-muted">
-        If you have an Endless Key Content USB Drive, you can connect it
-        to your computer, to explore its contents.
-      </h2>
 
-      <div class="endless-key mt-5">
-        <p>
-          Once you connect your Drive, click the “Load my content” button below.
-        </p>
-      </div>
+      <b-container class="inner-container">
+        <h5 class="font-weight-normal text-muted">
+          If you have an Endless Key Content USB Drive, you can connect it
+          to your computer, to explore its contents.
+        </h5>
 
-      <div class="buttons mt-5">
+        <img class="mt-4 w-100" :src="usbBackground">
+
         <b-button
-          v-if="!required"
-          class="mx-4"
-          variant="link"
-          @click="goBack"
-        >
-          Back
-        </b-button>
-        <b-button
-          class="mx-4"
+          class="mt-5"
           variant="primary"
           :disabled="!hasUSB"
           @click="loadWithUSB"
         >
-          {{ nextButtonText }}
+          Next
         </b-button>
-      </div>
+        <p v-if="!required" class="mt-5">
+          Check your
+          <b-link @click="goBack">
+            download choices
+          </b-link>
+          instead.
+        </p>
+      </b-container>
     </div>
-  </b-container>
-
+  </div>
 </template>
 
 
 <script>
+  import usbBackgroundConnect from '../assets/usb-connect.jpg';
+  import usbBackgroundConnected from '../assets/usb-connected.jpg';
 
   export default {
     name: 'EndlessKey',
@@ -56,12 +52,11 @@
       };
     },
     computed: {
-      nextButtonText() {
-        if (this.required) {
-          return 'Next';
+      usbBackground() {
+        if (this.hasUSB) {
+          return usbBackgroundConnected;
         }
-
-        return 'Load my content';
+        return usbBackgroundConnect;
       },
     },
     mounted() {
@@ -93,27 +88,11 @@
 
   @import '../styles';
 
-  h2 {
-    font-size: medium;
-  }
-
-  .endless-key {
-    background-image: url('../assets/endless-key.png');
-    background-size: cover;
-    background-position: center;
-    border-radius: $border-radius-lg;
-    min-height: 300px;
-    position: relative;
-  }
-
-  .endless-key p {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    width: 50%;
-    padding: 1em 1.5em;
-    text-align: left;
-    font-weight: bold;
+  // We need a custom container for the paragraph and the image:
+  .inner-container {
+    @include media-breakpoint-up(md) {
+      max-width: $inner-container-max-width;
+    }
   }
 
 </style>
