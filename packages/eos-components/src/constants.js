@@ -54,8 +54,11 @@ export const ItemsPerPage = 16;
 export const KeywordIconSize = 20;
 export const SearchBarDebounce = 2000;
 
+export const ApiURL = '/explore/api/endlesslearning';
+
 export default {
   AuthorFilterName,
+  ApiURL,
   CarouselInterval,
   DefaultKindLabel,
   FilterTagsBadList,
