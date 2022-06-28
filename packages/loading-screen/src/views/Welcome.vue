@@ -1,19 +1,17 @@
 <template>
-
-  <div>
-    <div class="d-lg-block d-none right-bg"></div>
-    <div class="d-lg-block d-none left-bg"></div>
+  <div class="d-flex flex-column flex-grow-1 w-100">
+    <div class="flex-grow-1 welcome-background-top"></div>
     <div class="content p-3 pb-5 position-relative">
       <h1 class="text-primary">
         Welcome to the Endless Key!
       </h1>
-      <h2 class="text-muted">
-        Lorem ipsum
-      </h2>
-      <div class="buttons pt-5">
+      <h5 class="font-weight-normal text-muted">
+        Let's begin by helping you find your content
+      </h5>
+      <div class="pt-5">
         <template v-if="showDownload">
           <b-button
-            block
+            class="mx-1"
             :disabled="isOffline"
             variant="outline-primary"
             @click="downloadContent"
@@ -21,7 +19,7 @@
             Download Content
           </b-button>
           <b-button
-            block
+            class="mx-1"
             variant="primary"
             @click="useEndlessKeyUSB"
           >
@@ -30,7 +28,6 @@
         </template>
         <template v-else>
           <b-button
-            block
             variant="primary"
             @click="showDownload = true"
           >
@@ -39,6 +36,7 @@
         </template>
       </div>
     </div>
+    <div class="flex-grow-1 welcome-background-bottom"></div>
   </div>
 
 </template>
@@ -87,34 +85,20 @@
 
   @import '../styles';
 
-  .left-bg,
-  .right-bg {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  .welcome-background-bottom,
+  .welcome-background-top {
+    background-size: contain;
+    background-repeat: no-repeat;
   }
 
-  .left-bg {
-    background-image: url('../assets/welcome-bg-bottom-left.png');
-    background-repeat: no-repeat;
-    background-position: bottom left;
-  }
-
-  .right-bg {
-    background-image: url('../assets/welcome-bg-top-right.png');
-    background-repeat: no-repeat;
+  .welcome-background-top {
+    background-image: url('../assets/welcome-bg-top-right.jpg');
     background-position: top right;
   }
 
-  h2 {
-    font-size: medium;
-  }
-
-  .buttons {
-    max-width: 300px;
-    margin: 0 auto;
+  .welcome-background-bottom {
+    background-image: url('../assets/welcome-bg-bottom-left.jpg');
+    background-position: bottom left;
   }
 
 </style>
