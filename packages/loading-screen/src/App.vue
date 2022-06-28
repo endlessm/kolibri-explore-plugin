@@ -38,7 +38,7 @@ export default {
     }
 
     window.show_endless_key = () => {
-      this.$router.push('/endless-key');
+      this.$router.push('/endless-key-required');
     }
 
     window.setHasUSB = () => {

@@ -18,6 +18,7 @@
 
       <div class="buttons mt-5">
         <b-button
+          v-if="!required"
           class="mx-4"
           variant="link"
           @click="goBack"
@@ -30,7 +31,7 @@
           :disabled="!hasUSB"
           @click="loadWithUSB"
         >
-          Load my content
+          {{ nextButtonText }}
         </b-button>
       </div>
     </div>
@@ -43,10 +44,25 @@
 
   export default {
     name: 'EndlessKey',
+    props: {
+      required: {
+        type: Boolean,
+        default: false,
+      },
+    },
     data() {
       return {
         hasUSB: false,
       };
+    },
+    computed: {
+      nextButtonText() {
+        if (this.required) {
+          return 'Next';
+        }
+
+        return 'Load my content';
+      },
     },
     mounted() {
       window.setHasUSB = (hasUSB) => {
