@@ -16,7 +16,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 from kolibri.core.content.api import cache_forever
-from kolibri.core.content.api import RemoteChannelViewSet
 from kolibri.core.content.zip_wsgi import add_security_headers
 from kolibri.core.content.zip_wsgi import get_embedded_file
 from kolibri.core.decorators import cache_no_user_data
@@ -33,6 +32,13 @@ APPS_BUNDLE_PATHS = []
 if conf.OPTIONS["Explore"]["APPS_BUNDLE_PATH"]:
     APPS_BUNDLE_PATHS.append(conf.OPTIONS["Explore"]["APPS_BUNDLE_PATH"])
 APPS_BUNDLE_PATHS.append(os.path.join(os.path.dirname(__file__), "apps"))
+
+
+COLLECTION_PATHS = os.path.join(
+    os.path.dirname(__file__), "static", "collections"
+)
+if conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]:
+    COLLECTION_PATHS = conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]
 
 
 @method_decorator(cache_no_user_data, name="dispatch")
@@ -199,20 +205,22 @@ class EndlessLearningCollection(View):
             data = json.loads(request.body)
             collection = data.get("collection", "small")
 
-        token = self.COLLECTIONS[collection]["token"]
-
-        channel_viewset = RemoteChannelViewSet()
-        channels = channel_viewset._make_channel_endpoint_request(
-            identifier=token
+        collection_manifest = os.path.join(
+            COLLECTION_PATHS, f"{collection}.json"
         )
 
-        job_ids = []
+        if not os.path.exists(collection_manifest):
+            raise Http404
 
+        manifest = {}
+        with open(collection_manifest) as f:
+            manifest = json.load(f)
+
+        job_ids = []
         pid, _, _ = get_status()
-        for channel in channels:
+        for channel in manifest.get("channels", []):
             task = {
                 "channel_id": channel["id"],
-                "channel_name": channel["name"],
                 "baseurl": self.BASE_URL,
                 "started_by_username": "endless",
                 "type": "REMOTEIMPORT",
@@ -223,6 +231,8 @@ class EndlessLearningCollection(View):
                 _remoteimport,
                 task["channel_id"],
                 task["baseurl"],
+                node_ids=channel["include_node_ids"] or None,
+                exclude_node_ids=channel["exclude_node_ids"] or None,
                 extra_metadata=task,
                 track_progress=True,
                 cancellable=True,
