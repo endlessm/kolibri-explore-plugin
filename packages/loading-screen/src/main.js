@@ -4,7 +4,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import App from '@/App.vue';
 
 import ContentSourceSelection from '@/views/ContentSourceSelection.vue';
-import EndlessKey from '@/views/EndlessKey.vue';
+import UsbDriveConnection from '@/views/UsbDriveConnection.vue';
 import Loading from '@/views/Loading.vue';
 import Welcome from '@/views/Welcome.vue';
 
@@ -19,10 +19,10 @@ const routes = [
   { path: '/loading/:state', component: Loading },
   { path: '/welcome', component: Welcome },
   { path: '/select-source', component: ContentSourceSelection },
-  { path: '/endless-key', component: EndlessKey },
+  { path: '/endless-key', component: UsbDriveConnection },
   {
     path: '/endless-key-required',
-    component: EndlessKey,
+    component: UsbDriveConnection,
     props: { required: true },
   },
 ];

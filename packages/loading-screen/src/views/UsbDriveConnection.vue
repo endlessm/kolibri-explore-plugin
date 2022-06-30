@@ -39,7 +39,7 @@
   import usbBackgroundConnected from '../assets/usb-connected.jpg';
 
   export default {
-    name: 'EndlessKey',
+    name: 'UsbDriveConnection',
     props: {
       required: {
         type: Boolean,

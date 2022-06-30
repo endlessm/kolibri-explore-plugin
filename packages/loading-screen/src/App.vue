@@ -43,7 +43,7 @@ export default {
 
     window.setHasUSB = () => {
       // Does nothing.
-      // This function is implemented in the EndlessKey view component
+      // This function is implemented in the UsbDriveConnection view component
     }
 
     window.firstLaunch = () => {
