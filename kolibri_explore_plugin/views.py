@@ -26,6 +26,7 @@ from kolibri.core.tasks.job import State
 from kolibri.core.tasks.main import queue
 from kolibri.utils import conf
 from kolibri.utils.server import get_status
+from kolibri.utils.system import get_free_space
 
 
 APPS_BUNDLE_PATHS = []
@@ -116,26 +117,37 @@ class EndlessLearningCollection(View):
             "title": "3Gb",
             "subtitle": "Small",
             "channels": 10,
+            "size": 3,
             "text": "Primary",
             "token": "kopip-lakip",
+            "available": True,
         },
         "medium": {
             "title": "6Gb",
             "subtitle": "Medium",
             "channels": 10,
+            "size": 6,
             "text": "Intermediate",
             "token": "zubit-vusus",
+            "available": True,
         },
         "large": {
             "title": "12Gb",
             "subtitle": "Large",
             "channels": 10,
+            "size": 12,
             "text": "Secondary",
             "token": "vofog-gufap",
+            "available": True,
         },
     }
 
     BASE_URL = "https://kolibri-content.endlessos.org/"
+
+    def check_collection_availability(self):
+        free_space_gb = get_free_space() / 1024**3
+        for _k, v in self.COLLECTIONS.items():
+            v["available"] = v["size"] < free_space_gb
 
     def get(self, request):
         job_ids = request.session.get("job_ids", [])
@@ -170,8 +182,9 @@ class EndlessLearningCollection(View):
             del request.session["downloading"]
 
         collection = request.session.get("downloading")
-        collection = self.COLLECTIONS.get(collection)
+        self.check_collection_availability()
         jobs_response = {
+            "collections": self.COLLECTIONS,
             "collection": collection,
             "jobs": [_job_to_response(job) for job in jobs],
         }

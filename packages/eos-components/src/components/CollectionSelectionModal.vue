@@ -25,9 +25,10 @@
             :key="collection.title"
             :title="collection.title"
             :subTitle="collection.subtitle"
+            :class="{ disabled: !collection.available }"
+            :borderVariant="collection.available ? 'primary' : 'light'"
             titleTag="h6"
             subTitleTag="h4"
-            borderVariant="primary"
           >
             <p class="text-muted">
               {{ collection.channels }} Channels
@@ -39,6 +40,7 @@
               class="mt-3"
               pill
               variant="primary"
+              :disabled="!collection.available"
               @click="$emit('downloadCollection', collection)"
             >
               <DownloadIcon />
@@ -69,30 +71,19 @@
         type: Boolean,
         default: false,
       },
-    },
-    data() {
-      return {
-        collections: [
-          {
-            title: '3Gb',
-            subtitle: 'Small',
-            channels: 10,
-            text: 'Short Description to be defined',
-          },
-          {
-            title: '6Gb',
-            subtitle: 'Medium',
-            channels: 10,
-            text: 'Short Description to be defined',
-          },
-          {
-            title: '12Gb',
-            subtitle: 'Large',
-            channels: 10,
-            text: 'Short Description to be defined',
-          },
-        ],
-      };
+      collections: {
+        type: Array,
+        default: () => {
+          return [
+            {
+              title: '3Gb',
+              subtitle: 'Small',
+              channels: 10,
+              text: 'Short Description to be defined',
+            },
+          ];
+        },
+      },
     },
   };
 

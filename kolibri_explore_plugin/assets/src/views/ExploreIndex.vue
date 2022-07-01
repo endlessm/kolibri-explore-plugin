@@ -6,6 +6,7 @@
       <div>
         <CollectionSelectionModal
           :visible="collectionModalVisible"
+          :collections="collections"
           @downloadCollection="downloadCollection"
         />
         <InstallContentModal
@@ -83,6 +84,7 @@
         isLoading: false,
         visibleModal: 'none',
         downloadingCollection: null,
+        collections: [],
       };
     },
     computed: {
@@ -128,6 +130,10 @@
     },
     mounted() {
       axios.get(constants.ApiURL).then(({ data }) => {
+        if (data.collections) {
+          this.collections = Object.values(data.collections);
+        }
+
         if (data.collection) {
           this.downloadCollection(data.collection);
         }
