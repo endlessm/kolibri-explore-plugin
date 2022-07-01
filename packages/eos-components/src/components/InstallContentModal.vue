@@ -48,6 +48,8 @@
           </b-col>
         </b-row>
 
+        <hr>
+
         <b-button
           class="mb-2 mt-5"
           variant="primary"
