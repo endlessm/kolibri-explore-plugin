@@ -11,6 +11,7 @@
         </h5>
         <b-card-group deck class="pt-5">
           <b-card
+            class="welcome-card"
             :class="{ active: selection === 'download', disabled: isOffline }"
             title="Download Sample"
             subTitle="Choose a sample collection to download"
@@ -34,6 +35,7 @@
             </span>
           </b-card>
           <b-card
+            class="welcome-card"
             :class="{ active: selection === 'usb' }"
             title="USB Drive Collection"
             subTitle="Explore collection stored on your USB Drive"
@@ -139,25 +141,5 @@
       max-width: $inner-container-max-width;
     }
   }
-  .card {
-    border: $border-width solid $dark;
-    border-radius: $border-radius-lg;
-    background-color: $gray-200;
-    .card-title {
-      color: $dark;
-    }
-    &.active .card-title {
-      color: $primary;
-    }
-    .icon-wrapper {
-      position: absolute;
-      right: map-get($spacers, 1);
-      top: map-get($spacers, 1);
-    }
-    &.disabled {
-      opacity: $disabled-card-opacity;
-    }
-  }
-
 
 </style>
