@@ -26,8 +26,6 @@
 
   export default {
     name: 'Welcome',
-    data() {
-    },
     methods: {
       goToContentSourceSelection() {
         this.$router.replace('/select-source');
