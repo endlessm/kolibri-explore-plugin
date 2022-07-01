@@ -118,8 +118,8 @@ class EndlessLearningCollection(View):
             "subtitle": "Small",
             "channels": 10,
             "size": 3,
-            "text": "Short Description to be defined",
-            "token": "totoj-jupak",
+            "text": "Primary",
+            "token": "kopip-lakip",
             "available": True,
         },
         "medium": {
@@ -127,8 +127,8 @@ class EndlessLearningCollection(View):
             "subtitle": "Medium",
             "channels": 10,
             "size": 6,
-            "text": "Short Description to be defined",
-            "token": "totoj-jupak",
+            "text": "Intermediate",
+            "token": "zubit-vusus",
             "available": True,
         },
         "large": {
@@ -136,8 +136,8 @@ class EndlessLearningCollection(View):
             "subtitle": "Large",
             "channels": 10,
             "size": 12,
-            "text": "Short Description to be defined",
-            "token": "totoj-jupak",
+            "text": "Secondary",
+            "token": "vofog-gufap",
             "available": True,
         },
     }
