@@ -105,10 +105,6 @@
     border-radius: $border-radius-lg;
   }
 
-  .card.disabled {
-    opacity: 0.7;
-  }
-
   ::v-deep .card-subtitle {
     font-weight: bold;
     color: black !important;
