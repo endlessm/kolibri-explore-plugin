@@ -116,22 +116,22 @@ class EndlessLearningCollection(View):
             "title": "3Gb",
             "subtitle": "Small",
             "channels": 10,
-            "text": "Short Description to be defined",
-            "token": "totoj-jupak",
+            "text": "Primary",
+            "token": "kopip-lakip",
         },
         "medium": {
             "title": "6Gb",
             "subtitle": "Medium",
             "channels": 10,
-            "text": "Short Description to be defined",
-            "token": "totoj-jupak",
+            "text": "Intermediate",
+            "token": "zubit-vusus",
         },
         "large": {
             "title": "12Gb",
             "subtitle": "Large",
             "channels": 10,
-            "text": "Short Description to be defined",
-            "token": "totoj-jupak",
+            "text": "Secondary",
+            "token": "vofog-gufap",
         },
     }
 
