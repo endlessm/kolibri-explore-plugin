@@ -17,6 +17,7 @@ import ContentCard from './components/ContentCard.vue';
 import ContentLink from './components/ContentLink.vue';
 import DummyButton from './components/DummyButton.vue';
 import Footer from './components/Footer.vue';
+import GradeSelectionModal from './components/GradeSelectionModal.vue';
 import GridPage from './components/GridPage.vue';
 import InstallContentModal from './components/InstallContentModal.vue';
 import Keywords from './components/Keywords.vue';
@@ -55,6 +56,7 @@ const components = {
   ContentLink,
   DummyButton,
   Footer,
+  GradeSelectionModal,
   GridPage,
   InstallContentModal,
   Keywords,
