@@ -26,8 +26,8 @@
           Downloading&hellip;
         </h1>
         <h5 class="text-muted">
-          You can close this window during meanwhile
-          to explore the content as it finishes downloading.
+          You may close this window and explore content while
+          the collection is downloading.
         </h5>
 
         <hr>

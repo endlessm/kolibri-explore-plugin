@@ -1,46 +1,24 @@
 <template>
-
-  <div>
-    <div class="d-lg-block d-none right-bg"></div>
-    <div class="d-lg-block d-none left-bg"></div>
+  <div class="d-flex flex-column flex-grow-1 w-100">
+    <div class="flex-grow-1 welcome-background-top"></div>
     <div class="content p-3 pb-5 position-relative">
       <h1 class="text-primary">
         Welcome to the Endless Key!
       </h1>
-      <h2 class="text-muted">
-        Lorem ipsum
-      </h2>
-      <div class="buttons pt-5">
-        <template v-if="showDownload">
-          <b-button
-            block
-            :disabled="isOffline"
-            variant="outline-primary"
-            @click="downloadContent"
-          >
-            Download Content
-          </b-button>
-          <b-button
-            block
-            variant="primary"
-            @click="useEndlessKeyUSB"
-          >
-            I Have an Endless Key USB Drive
-          </b-button>
-        </template>
-        <template v-else>
-          <b-button
-            block
-            variant="primary"
-            @click="showDownload = true"
-          >
-            Get Started
-          </b-button>
-        </template>
+      <h5 class="font-weight-normal text-muted">
+        Let's begin by helping you find your content
+      </h5>
+      <div class="pt-5">
+        <b-button
+          variant="primary"
+          @click="goToContentSourceSelection"
+        >
+          Get Started
+        </b-button>
       </div>
     </div>
+    <div class="flex-grow-1 welcome-background-bottom"></div>
   </div>
-
 </template>
 
 
@@ -48,34 +26,9 @@
 
   export default {
     name: 'Welcome',
-    data() {
-      return {
-        isOffline: false,
-        showDownload: false,
-      };
-    },
-    created() {
-      this.isOffline = !navigator.onLine;
-      window.addEventListener('offline', this.onOffline);
-      window.addEventListener('online', this.onOnline);
-    },
-    destroyed() {
-      window.removeEventListener('offline', this.onOffline);
-      window.removeEventListener('online', this.onOnline);
-    },
     methods: {
-      downloadContent() {
-        this.$router.replace('/loading/default');
-        window.EndlessAPI.load();
-      },
-      useEndlessKeyUSB() {
-        this.$router.replace('/endless-key');
-      },
-      onOffline() {
-          this.isOffline = true;
-      },
-      onOnline() {
-          this.isOffline = false;
+      goToContentSourceSelection() {
+        this.$router.replace('/select-source');
       },
     },
   };
@@ -87,34 +40,20 @@
 
   @import '../styles';
 
-  .left-bg,
-  .right-bg {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  .welcome-background-bottom,
+  .welcome-background-top {
+    background-size: contain;
+    background-repeat: no-repeat;
   }
 
-  .left-bg {
-    background-image: url('../assets/welcome-bg-bottom-left.png');
-    background-repeat: no-repeat;
-    background-position: bottom left;
-  }
-
-  .right-bg {
-    background-image: url('../assets/welcome-bg-top-right.png');
-    background-repeat: no-repeat;
+  .welcome-background-top {
+    background-image: url('../assets/welcome-bg-top-right.jpg');
     background-position: top right;
   }
 
-  h2 {
-    font-size: medium;
-  }
-
-  .buttons {
-    max-width: 300px;
-    margin: 0 auto;
+  .welcome-background-bottom {
+    background-image: url('../assets/welcome-bg-bottom-left.jpg');
+    background-position: bottom left;
   }
 
 </style>
