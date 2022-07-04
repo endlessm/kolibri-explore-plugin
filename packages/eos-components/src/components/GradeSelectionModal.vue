@@ -32,7 +32,9 @@
             class="welcome-card"
           >
             <!-- eslint-disable vue/no-v-html -->
-            <p class="text-muted" v-html="grade.text"></p>
+            <p class="text-muted">
+              {{ grade.text }} <br> {{ grade.secondaryText }}
+            </p>
             <img :src="grade.image" width="100%">
 
             <b-link
@@ -88,17 +90,20 @@
         grades: [
           {
             key: 'primary',
-            text: 'for students ages 6-9<br/>(in grades K-3)',
+            text: 'for students ages 6-9',
+            secondaryText: '(in grades K-3)',
             image: primaryImage,
           },
           {
             key: 'intermediate',
-            text: 'for students ages 10-13<br/>(in grades 4-7)',
+            text: 'for students ages 10-13',
+            secondaryText: '(in grades 4-7)',
             image: intermediateImage,
           },
           {
             key: 'secondary',
-            text: ' for students ages 14+<br/>(in grades 8+)',
+            text: ' for students ages 14+',
+            secondaryText: '(in grades 8+)',
             image: secondaryImage,
           },
         ],
@@ -127,7 +132,7 @@
     background-color: white;
   }
 
-  .welcome-card .card-title {
+  .card-title {
     text-transform: capitalize;
   }
 
