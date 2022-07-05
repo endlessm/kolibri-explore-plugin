@@ -94,23 +94,3 @@
 .description {
   white-space: pre-wrap;
 }
-
-.welcome-card {
-  border: $border-width solid $dark;
-  border-radius: $border-radius-lg;
-  background-color: $gray-200;
-  .card-title {
-    color: $dark;
-  }
-  &.active .card-title {
-    color: $primary;
-  }
-  .icon-wrapper {
-    position: absolute;
-    right: map-get($spacers, 1);
-    top: map-get($spacers, 1);
-  }
-  &.disabled {
-    opacity: $disabled-card-opacity;
-  }
-}

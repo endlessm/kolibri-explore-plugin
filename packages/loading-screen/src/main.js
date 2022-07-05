@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
+import eosComponents from 'eos-components';
 import App from '@/App.vue';
 
 import ContentSourceSelection from '@/views/ContentSourceSelection.vue';
@@ -12,6 +13,7 @@ import Welcome from '@/views/Welcome.vue';
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(VueRouter);
+Vue.use(eosComponents);
 
 Vue.config.productionTip = false;
 

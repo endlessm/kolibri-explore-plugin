@@ -27,6 +27,7 @@ import SearchBar from './components/SearchBar.vue';
 import SlidableCardGrid from './components/SlidableCardGrid.vue';
 import SlidableGrid from './components/SlidableGrid.vue';
 import TopicCard from './components/TopicCard.vue';
+import WelcomeCard from './components/WelcomeCard.vue';
 
 import cardMixin from './components/mixins/cardMixin.js';
 import responsiveMixin from './components/mixins/responsiveMixin.js';
@@ -66,6 +67,7 @@ const components = {
   SlidableCardGrid,
   SlidableGrid,
   TopicCard,
+  WelcomeCard,
 };
 
 const plugin = {

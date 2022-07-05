@@ -22,33 +22,17 @@
         </h6>
 
         <b-card-group deck class="py-5">
-          <b-card
+          <WelcomeCard
             v-for="grade in grades"
             :key="grade.key"
             :title="grade.key"
-            :borderVariant="selection === grade.key ? 'primary' : 'default'"
-            titleTag="h6"
-            subTitleTag="h4"
-            class="welcome-card"
+            :text="grade.text"
+            :secondaryText="grade.secondaryText"
+            :selected="selection === grade.key"
+            @click="setSelection(grade.key)"
           >
-            <!-- eslint-disable vue/no-v-html -->
-            <p class="text-muted">
-              {{ grade.text }} <br> {{ grade.secondaryText }}
-            </p>
             <img :src="grade.image" width="100%">
-
-            <b-link
-              href="#"
-              class="stretched-link"
-              @click="setSelection(grade.key)"
-            />
-            <span
-              v-if="selection === grade.key"
-              class="icon-wrapper text-primary"
-            >
-              <CheckCircleIcon />
-            </span>
-          </b-card>
+          </WelcomeCard>
         </b-card-group>
         <div class="pb-3 pt-5">
           <b-button
@@ -69,14 +53,12 @@
 
 
 <script>
-  import CheckCircleIcon from 'vue-material-design-icons/CheckCircle.vue';
   import primaryImage from '../assets/collections/primary-icons.png';
   import intermediateImage from '../assets/collections/intermediate-icons.png';
   import secondaryImage from '../assets/collections/secondary-icons.png';
 
   export default {
     name: 'GradeSelectionModal',
-    components: { CheckCircleIcon },
     emits: ['gradeSelected'],
     props: {
       visible: {
@@ -130,10 +112,6 @@
     color: black;
     text-align: center;
     background-color: white;
-  }
-
-  .card-title {
-    text-transform: capitalize;
   }
 
 </style>

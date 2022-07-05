@@ -10,53 +10,21 @@
           of our sample collections to start exploring.
         </h5>
         <b-card-group deck class="pt-5">
-          <b-card
-            class="welcome-card"
-            :class="{ active: selection === 'download', disabled: isOffline }"
+          <WelcomeCard
             title="Download Sample"
             subTitle="Choose a sample collection to download"
-            titleTag="h5"
-            subTitleTag="h6"
-            :borderVariant="selection === 'download' ? 'primary' : 'default'"
-            imgBottom
-            :imgSrc="downloadSelectionImage"
-          >
-            <b-link
-              href="#"
-              class="stretched-link"
-              :disabled="isOffline"
-              @click="setSelection('download')"
-            />
-            <span
-              v-if="selection === 'download'"
-              class="icon-wrapper text-primary"
-            >
-              <CheckCircleIcon />
-            </span>
-          </b-card>
-          <b-card
-            class="welcome-card"
-            :class="{ active: selection === 'usb' }"
+            :selected="selection === 'download'"
+            :img="downloadSelectionImage"
+            :disabled="isOffline"
+            @click="setSelection('download')"
+          />
+          <WelcomeCard
             title="USB Drive Collection"
             subTitle="Explore collection stored on your USB Drive"
-            titleTag="h5"
-            subTitleTag="h6"
-            :borderVariant="selection === 'usb' ? 'primary' : 'default'"
-            imgBottom
-            :imgSrc="usbSelectionImage"
-          >
-            <b-link
-              href="#"
-              class="stretched-link"
-              @click="setSelection('usb')"
-            />
-            <span
-              v-if="selection === 'usb'"
-              class="icon-wrapper text-primary"
-            >
-              <CheckCircleIcon />
-            </span>
-          </b-card>
+            :selected="selection === 'usb'"
+            :img="usbSelectionImage"
+            @click="setSelection('usb')"
+          />
         </b-card-group>
         <div class="pt-5">
           <b-button
@@ -76,13 +44,11 @@
 
 <script>
 
-  import CheckCircleIcon from 'vue-material-design-icons/CheckCircle.vue';
   import DownloadSelectionImage from '../assets/download-selection.png';
   import UsbSelectionImage from '../assets/usb-selection.png';
 
   export default {
     name: 'ContentSourceSelection',
-    components: { CheckCircleIcon },
     data() {
       return {
         selection: null,  // 'download', 'usb'

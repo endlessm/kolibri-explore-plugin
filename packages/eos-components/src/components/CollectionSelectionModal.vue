@@ -22,30 +22,23 @@
         </h6>
 
         <b-card-group deck class="py-5">
-          <b-card
+          <WelcomeCard
             v-for="collection in collections"
             :key="collection.title"
             :title="`${grade} ${collection.subtitle}`"
-            :class="{ disabled: !collection.available }"
-            titleTag="h6"
-            subTitleTag="h4"
-            class="welcome-card"
+            :text="`${collection.channels} Channels`"
+            :secondaryText="collection.text"
+            :disabled="!collection.available"
+            @click="$emit('downloadCollection', collection)"
           >
-            <p class="text-muted">
-              {{ collection.channels }} Channels
-              <br>
-              {{ collection.text }}
-            </p>
-
             <b-button
               class="mt-3"
               variant="primary"
               :disabled="!collection.available"
-              @click="$emit('downloadCollection', collection)"
             >
               Download <strong>{{ collection.size }}Gb</strong>
             </b-button>
-          </b-card>
+          </WelcomeCard>
         </b-card-group>
         <div class="pb-3 pt-5">
           <b-button
@@ -107,8 +100,8 @@
     background-color: white;
   }
 
-  .welcome-card {
-    background-color: white;
+  ::v-deep .card {
+    background-color: white !important;
   }
 
 </style>
