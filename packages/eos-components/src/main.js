@@ -17,6 +17,7 @@ import ContentCard from './components/ContentCard.vue';
 import ContentLink from './components/ContentLink.vue';
 import DummyButton from './components/DummyButton.vue';
 import Footer from './components/Footer.vue';
+import GradeSelectionModal from './components/GradeSelectionModal.vue';
 import GridPage from './components/GridPage.vue';
 import InstallContentModal from './components/InstallContentModal.vue';
 import Keywords from './components/Keywords.vue';
@@ -26,6 +27,7 @@ import SearchBar from './components/SearchBar.vue';
 import SlidableCardGrid from './components/SlidableCardGrid.vue';
 import SlidableGrid from './components/SlidableGrid.vue';
 import TopicCard from './components/TopicCard.vue';
+import WelcomeCard from './components/WelcomeCard.vue';
 
 import cardMixin from './components/mixins/cardMixin.js';
 import responsiveMixin from './components/mixins/responsiveMixin.js';
@@ -55,6 +57,7 @@ const components = {
   ContentLink,
   DummyButton,
   Footer,
+  GradeSelectionModal,
   GridPage,
   InstallContentModal,
   Keywords,
@@ -64,6 +67,7 @@ const components = {
   SlidableCardGrid,
   SlidableGrid,
   TopicCard,
+  WelcomeCard,
 };
 
 const plugin = {

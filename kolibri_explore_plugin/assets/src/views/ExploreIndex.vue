@@ -4,10 +4,16 @@
     <BackToTop />
     <keep-alive>
       <div>
+        <GradeSelectionModal
+          :visible="gradeModalVisible"
+          @gradeSelected="gradeSelected"
+        />
         <CollectionSelectionModal
           :visible="collectionModalVisible"
+          :grade="grade"
           :collections="collections"
           @downloadCollection="downloadCollection"
+          @goBack="visibleModal = 'grade'"
         />
         <InstallContentModal
           :visible="contentModalVisible"
@@ -85,6 +91,7 @@
         visibleModal: 'none',
         downloadingCollection: null,
         collections: [],
+        grade: 'intermediate',
       };
     },
     computed: {
@@ -104,11 +111,14 @@
       collectionModalVisible() {
         return this.visibleModal === 'collection';
       },
+      gradeModalVisible() {
+        return this.visibleModal === 'grade';
+      },
     },
     watch: {
       noContent() {
         if (this.noContent) {
-          this.visibleModal = 'collection';
+          this.visibleModal = 'grade';
         }
       },
       $route: function(newRoute, oldRoute) {
@@ -135,7 +145,7 @@
         }
 
         if (data.collection) {
-          this.downloadCollection(data.collection);
+          this.downloadCollection(data.collections[data.collection]);
         }
       });
     },
@@ -155,6 +165,10 @@
       downloadCollection(collection) {
         this.downloadingCollection = collection;
         this.visibleModal = 'content';
+      },
+      gradeSelected(grade) {
+        this.grade = grade;
+        this.visibleModal = 'collection';
       },
     },
   };

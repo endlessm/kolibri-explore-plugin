@@ -13,41 +13,42 @@
     >
       <b-container>
         <h1 class="text-primary">
-          Download Choice
+          Choose your collection
         </h1>
         <h6 class="text-muted">
-          Choose a collection size to download
+          Now, select the amount of content you would like to download. The
+          small collection will give you just a taste of each channel and is
+          recommended if you have limited free space on your computer.
         </h6>
 
         <b-card-group deck class="py-5">
-          <b-card
+          <WelcomeCard
             v-for="collection in collections"
             :key="collection.title"
-            :title="collection.title"
-            :subTitle="collection.subtitle"
-            :class="{ disabled: !collection.available }"
-            :borderVariant="collection.available ? 'primary' : 'light'"
-            titleTag="h6"
-            subTitleTag="h4"
+            :title="`${grade} ${collection.subtitle}`"
+            :text="`${collection.channels} Channels`"
+            :secondaryText="collection.text"
+            :disabled="!collection.available"
+            @click="$emit('downloadCollection', collection)"
           >
-            <p class="text-muted">
-              {{ collection.channels }} Channels
-              <br>
-              {{ collection.text }}
-            </p>
-
             <b-button
               class="mt-3"
-              pill
               variant="primary"
               :disabled="!collection.available"
-              @click="$emit('downloadCollection', collection)"
             >
-              <DownloadIcon />
-              Download
+              Download <strong>{{ collection.size }}Gb</strong>
             </b-button>
-          </b-card>
+          </WelcomeCard>
         </b-card-group>
+        <div class="pb-3 pt-5">
+          <b-button
+            class="m-1"
+            variant="link"
+            @click="$emit('goBack')"
+          >
+            Back
+          </b-button>
+        </div>
 
       </b-container>
     </b-modal>
@@ -58,14 +59,9 @@
 
 <script>
 
-  import DownloadIcon from 'vue-material-design-icons/DownloadOutline.vue';
-
   export default {
     name: 'CollectionSelectionModal',
-    components: {
-      DownloadIcon,
-    },
-    emits: ['downloadCollection'],
+    emits: ['downloadCollection', 'goBack'],
     props: {
       visible: {
         type: Boolean,
@@ -84,6 +80,10 @@
           ];
         },
       },
+      grade: {
+        type: String,
+        default: 'intermediate',
+      },
     },
   };
 
@@ -100,14 +100,8 @@
     background-color: white;
   }
 
-  .card {
-    border: 1px solid;
-    border-radius: $border-radius-lg;
-  }
-
-  ::v-deep .card-subtitle {
-    font-weight: bold;
-    color: black !important;
+  ::v-deep .card {
+    background-color: white !important;
   }
 
 </style>
