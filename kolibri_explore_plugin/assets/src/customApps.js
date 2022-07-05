@@ -59,8 +59,8 @@ export function getAppNameByID(id) {
   return CustomChannelApps[id] || 'default';
 }
 
-// The order here is important because is how they appear in the channel page.
-export const CategorizedChannelIds = [
+// The order here is important because is how they appear in the landing page.
+export const CategorizedIds = [
   {
     name: 'Curiosity and Reference',
     channels: [
@@ -69,6 +69,7 @@ export const CategorizedChannelIds = [
       'f62db29be20453c4a267132e93a9e602', // wikipedia
       '000409f81dbe5d1ba67101cb9fed4530', // touchable-earth
     ],
+    contentPicks: [],
   },
   {
     name: 'Arts',
@@ -76,6 +77,9 @@ export const CategorizedChannelIds = [
       '057f871caa405ec29d62ba0523c193d7', // music
       'f061fce103ff5d4e9b8433e67802e666', // arts
       'e11462f71c6f5472b113311c69071b05', // dance
+    ],
+    contentPicks: [
+      '4cf9c5c24352504d9e82d89649acdef1', // "despacito" from music channel
     ],
   },
   {
@@ -87,6 +91,7 @@ export const CategorizedChannelIds = [
       '197934f144305350b5820c7c4dd8e194', // phet-interactive-simulations
       '85b42a40745f4e2392ed62e72d4dad6e', // oceanx
     ],
+    contentPicks: [],
   },
   {
     name: 'Games & Gaming',
@@ -96,6 +101,7 @@ export const CategorizedChannelIds = [
       '57e23812e0dc562581958e39acedd717', // gaming
       'e409b964366a59219c148f2aaa741f43', // blockly-games
     ],
+    contentPicks: [],
   },
   {
     name: 'Health and Fitness',
@@ -105,6 +111,7 @@ export const CategorizedChannelIds = [
       '3fcffebc58d15175b948b140434ef6e6', // sports
       'c8540424d77f44f8ae306e22d3b14eaf', // coronavirus
     ],
+    contentPicks: [],
   },
   {
     name: 'Life and Skills',
@@ -114,6 +121,7 @@ export const CategorizedChannelIds = [
       '9eeebbc5140d5b98ac4a4d2ce9432135', // lgbtq
       '79a50be66bad5eb686c42617c914fd45', // careers
     ],
+    contentPicks: [],
   },
   {
     name: 'DIY and Healthy Eating',
@@ -122,6 +130,7 @@ export const CategorizedChannelIds = [
       'e9d0d54d209344849e9bed0aa8c222ad', // sikana-diy
       '79cd09863eed51e98576c35ede6f9c9d', // cooking
     ],
+    contentPicks: [],
   },
   {
     name: 'Literature and Language Arts',
@@ -131,6 +140,7 @@ export const CategorizedChannelIds = [
       '0418cc231e9c5513af0fff9f227f7172', // hello-channel
       '74f36493bb475b62935fa8705ed59fed', // thoughtful-learning
     ],
+    contentPicks: [],
   },
   {
     name: 'Educational Resources',
@@ -141,6 +151,7 @@ export const CategorizedChannelIds = [
       'bbb4ea407a3c450cb18cbaa76f2d75cd', // cspathshala-english
       'fc47aee82e0153e2a30197d3fdee1128', // open-stax
     ],
+    contentPicks: [],
   },
   {
     name: 'Fashion and Beauty',
@@ -149,6 +160,7 @@ export const CategorizedChannelIds = [
       '4968191fba07548c9592fc174a70b5d6', // beauty
       'b40491d1ef8b5506b8c6ae861372e9de', // jewelry-making
     ],
+    contentPicks: [],
   },
 ];
 

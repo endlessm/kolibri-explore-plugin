@@ -31,7 +31,7 @@
         <CardGridPlaceholder />
       </template>
       <template v-else>
-        <CategorizedChannelsList />
+        <CategorizedList />
       </template>
 
     </div>
@@ -47,12 +47,12 @@
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import { PageNames, searchTerms } from '../constants';
 
-  import CategorizedChannelsList from '../components/CategorizedChannelsList';
+  import CategorizedList from '../components/CategorizedList';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
 
   export default {
-    name: 'ChannelsPage',
-    components: { CategorizedChannelsList, DiscoveryNavBar },
+    name: 'DiscoveryPage',
+    components: { CategorizedList, DiscoveryNavBar },
     mixins: [commonCoreStrings],
     computed: {
       ...mapState('topicsRoot', { carouselNodes: 'carouselNodes' }),
