@@ -2,7 +2,7 @@
 
   <div id="categorized-channels" class="pt-4">
     <div
-      v-for="{ name, channels } in categories"
+      v-for="{ name, channels, contentPicks } in categories"
       :key="name"
       class="pb-4 pt-4"
     >
@@ -14,18 +14,28 @@
       <b-container class="no-container-padding">
         <SlidableGrid
           v-slot="slotProps"
-          :nodes="channels"
+          :nodes="getSlidableGridNodes(channels, contentPicks)"
           :hasWhiteBackground="true"
           :itemsPerSlideLarge="3"
           :itemsPerSlideMedium="2"
           :itemsPerSlideSmall="1"
         >
-          <ChannelCard
-            v-for="channel in slotProps.slideNodes"
-            :key="channel.id"
-            :channel="channel"
-            @click.native="goToChannel(channel.id)"
-          />
+          <template
+            v-for="node in slotProps.slideNodes"
+          >
+            <ChannelCard
+              v-if="node !== undefined && node.kind === 'channel'"
+              :key="node.id"
+              :channel="node"
+              @click.native="goToChannel(node.id)"
+            />
+            <!-- FIXME use a content card -->
+            <Card
+              v-else
+              :key="node.id"
+              :node="node"
+            />
+          </template>
         </SlidableGrid>
       </b-container>
     </div>
@@ -37,11 +47,19 @@
 <script>
 
   import { mapState } from 'vuex';
+  import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
   import { PageNames } from '../constants';
   import { CategorizedChannelIds } from '../customApps';
 
   export default {
     name: 'CategorizedChannelsList',
+    data() {
+      return {
+        contentPickNodes: {},
+        // FIXME display a loading screen using this state:
+        loadingContentPickNodes: true,
+      };
+    },
     computed: {
       ...mapState('topicsRoot', { rootNodes: 'rootNodes' }),
       categories() {
@@ -51,6 +69,7 @@
         }, {});
 
         const channelsPerCategory = CategorizedChannelIds.map(recommended => {
+          const contentPicks = this.contentPickNodes[recommended.name] || [];
           const channels = recommended.channels
             // Remove inexisting channel IDs:
             .filter(channelId => channelId in channelsByIds)
@@ -60,10 +79,13 @@
           return {
             name: recommended.name,
             channels: channels,
+            contentPicks: contentPicks,
           };
         })
-          // Remove categories with an empty channels list:
-          .filter(recommended => recommended.channels.length > 0);
+          // Remove empty categories:
+          .filter(
+            recommended => recommended.channels.length > 0 || recommended.contentPicks.length > 0
+          );
 
         // Add any remaining channels into a "More" special category:
 
@@ -83,13 +105,62 @@
         const remainingCategory = {
           name: 'More',
           channels: remainingChannels,
+          contentPicks: [],
         };
 
         return [...channelsPerCategory, remainingCategory];
       },
     },
-
+    mounted() {
+      return this.fetchAll();
+    },
     methods: {
+      fetchAll() {
+        this.loadingContentPickNodes = true;
+        return Promise.all(
+          CategorizedChannelIds.map(recommended => {
+            const contentPicks = recommended.contentPicks;
+            return (
+              Promise.all(
+                contentPicks.map(id => {
+                  return window.kolibri
+                    .getContentById(id)
+                    .then(node => {
+                      return node;
+                    })
+                    .catch(() => {
+                      return null;
+                    });
+                })
+              )
+                // Filter out the content not found:
+                .then(nodes => {
+                  return nodes.filter(n => n !== null);
+                })
+                // Mutate the nodes so they can be displayed in the carousel:
+                .then(nodes => {
+                  nodes.forEach(node => {
+                    const thumbnailUrl = getContentNodeThumbnail(node);
+                    node.thumbnail = thumbnailUrl;
+                    node.channel = this.rootNodes.find(c => c.id === node.channel_id);
+                    const base = `/topics/${node.channel_id}`;
+                    if (node.kind === 'topic') {
+                      node.nodeUrl = `${base}/t/${node.id}`;
+                    } else {
+                      node.nodeUrl = `${base}/c/${node.id}`;
+                    }
+                  });
+                  this.$set(this.contentPickNodes, recommended.name, nodes);
+                })
+            );
+          })
+        ).then(() => {
+          this.loadingContentPickNodes = false;
+        });
+      },
+      getSlidableGridNodes(channels, contentPicks) {
+        return channels.concat(contentPicks);
+      },
       goToChannel(channelId) {
         this.$router.push({
           name: PageNames.TOPICS_CHANNEL,
