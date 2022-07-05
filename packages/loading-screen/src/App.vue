@@ -57,9 +57,10 @@ export default {
     };
     window.show_retry = fallback;
     window.show_error = fallback;
+    window.show_loading = fallback;
     window.clean = fallback;
     window.firstLaunch = fallback;
-    window.welcome = fallback;
+    window.show_welcome = fallback;
     window.show_endless_key = fallback;
   },
 };

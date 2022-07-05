@@ -5,6 +5,7 @@ import App from '@/App.vue';
 
 import ContentSourceSelection from '@/views/ContentSourceSelection.vue';
 import UsbDriveConnection from '@/views/UsbDriveConnection.vue';
+import PermissionsExplanation from '@/views/PermissionsExplanation.vue';
 import Loading from '@/views/Loading.vue';
 import Welcome from '@/views/Welcome.vue';
 
@@ -25,6 +26,7 @@ const routes = [
     component: UsbDriveConnection,
     props: { required: true },
   },
+  { path: '/grant-permissions', component: PermissionsExplanation },
 ];
 
 const router = new VueRouter({
