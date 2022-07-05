@@ -59,8 +59,8 @@ export function getAppNameByID(id) {
   return CustomChannelApps[id] || 'default';
 }
 
-// The order here is important because is how they appear in the channel page.
-export const CategorizedChannelIds = [
+// The order here is important because is how they appear in the landing page.
+export const CategorizedIds = [
   {
     name: 'Curiosity and Reference',
     channels: [

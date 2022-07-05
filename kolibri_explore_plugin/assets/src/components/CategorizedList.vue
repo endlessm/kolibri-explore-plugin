@@ -1,6 +1,6 @@
 <template>
 
-  <div id="categorized-channels" class="pt-4">
+  <div id="categorized" class="pt-4">
     <div
       v-for="{ name, channels, contentPicks } in categories"
       :key="name"
@@ -29,7 +29,6 @@
               :channel="node"
               @click.native="goToChannel(node.id)"
             />
-            <!-- FIXME use a content card -->
             <Card
               v-else
               :key="node.id"
@@ -49,10 +48,10 @@
   import { mapState } from 'vuex';
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
   import { PageNames } from '../constants';
-  import { CategorizedChannelIds } from '../customApps';
+  import { CategorizedIds } from '../customApps';
 
   export default {
-    name: 'CategorizedChannelsList',
+    name: 'CategorizedList',
     data() {
       return {
         contentPickNodes: {},
@@ -68,7 +67,7 @@
           return result;
         }, {});
 
-        const channelsPerCategory = CategorizedChannelIds.map(recommended => {
+        const perCategory = CategorizedIds.map(recommended => {
           const contentPicks = this.contentPickNodes[recommended.name] || [];
           const channels = recommended.channels
             // Remove inexisting channel IDs:
@@ -89,7 +88,7 @@
 
         // Add any remaining channels into a "More" special category:
 
-        const categorizedChannels = channelsPerCategory.reduce((result, category) => {
+        const categorizedChannels = perCategory.reduce((result, category) => {
           return [...result, ...category.channels];
         }, []);
 
@@ -99,7 +98,7 @@
 
         if (remainingChannels.length === 0) {
           // Return early if there aren't remaining channels for a "More" category:
-          return channelsPerCategory;
+          return perCategory;
         }
 
         const remainingCategory = {
@@ -108,7 +107,7 @@
           contentPicks: [],
         };
 
-        return [...channelsPerCategory, remainingCategory];
+        return [...perCategory, remainingCategory];
       },
     },
     mounted() {
@@ -118,7 +117,7 @@
       fetchAll() {
         this.loadingContentPickNodes = true;
         return Promise.all(
-          CategorizedChannelIds.map(recommended => {
+          CategorizedIds.map(recommended => {
             const contentPicks = recommended.contentPicks;
             return (
               Promise.all(

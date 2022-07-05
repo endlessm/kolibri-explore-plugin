@@ -53,7 +53,7 @@
   import { PageNames } from '../constants';
   import AboutModal from '../components/AboutModal';
   import commonExploreStrings from './commonExploreStrings';
-  import ChannelsPage from './ChannelsPage';
+  import DiscoveryPage from './DiscoveryPage';
   import CustomChannelPresentationApp from './CustomChannelPresentationApp';
   import ContentUnavailablePage from './ContentUnavailablePage';
   import SearchPage from './SearchPage';
@@ -62,7 +62,7 @@
   import ContentModal from './ContentModal';
 
   const pageNameToComponentMap = {
-    [PageNames.TOPICS_ROOT]: ChannelsPage,
+    [PageNames.TOPICS_ROOT]: DiscoveryPage,
     [PageNames.TOPICS_CHANNEL]: CustomChannelPresentationApp,
     [PageNames.TOPICS_TOPIC]: CustomChannelPresentationApp,
     [PageNames.CONTENT_UNAVAILABLE]: ContentUnavailablePage,
