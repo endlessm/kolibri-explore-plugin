@@ -16,6 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 from kolibri.core.content.api import cache_forever
+from kolibri.core.content.api import RemoteChannelViewSet
 from kolibri.core.content.zip_wsgi import add_security_headers
 from kolibri.core.content.zip_wsgi import get_embedded_file
 from kolibri.core.decorators import cache_no_user_data
@@ -209,16 +210,23 @@ class EndlessLearningCollection(View):
             COLLECTION_PATHS, f"{collection}.json"
         )
 
-        if not os.path.exists(collection_manifest):
-            raise Http404
+        if os.path.exists(collection_manifest):
+            manifest = {}
+            with open(collection_manifest) as f:
+                manifest = json.load(f)
+            channels = manifest.get("channels", [])
+        else:
+            # Fallback, download full collection using the token
+            token = self.COLLECTIONS[collection]["token"]
 
-        manifest = {}
-        with open(collection_manifest) as f:
-            manifest = json.load(f)
+            channel_viewset = RemoteChannelViewSet()
+            channels = channel_viewset._make_channel_endpoint_request(
+                identifier=token
+            )
 
         job_ids = []
         pid, _, _ = get_status()
-        for channel in manifest.get("channels", []):
+        for channel in channels:
             task = {
                 "channel_id": channel["id"],
                 "baseurl": self.BASE_URL,
@@ -231,8 +239,10 @@ class EndlessLearningCollection(View):
                 _remoteimport,
                 task["channel_id"],
                 task["baseurl"],
-                node_ids=channel["include_node_ids"] or None,
-                exclude_node_ids=channel["exclude_node_ids"] or None,
+                # Done this way to convert [] to None
+                node_ids=channel.get("include_node_ids") or None,
+                # Done this way to convert [] to None
+                exclude_node_ids=channel.get("exclude_node_ids") or None,
                 extra_metadata=task,
                 track_progress=True,
                 cancellable=True,
