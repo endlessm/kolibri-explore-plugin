@@ -87,6 +87,10 @@
         type: Object,
         default: null,
       },
+      grade: {
+        type: String,
+        default: 'primary',
+      },
     },
     data() {
       return {
@@ -134,8 +138,10 @@
       downloadContent() {
         this.downloading = true;
         this.jobs = [];
+        const collection = this.collection.subtitle.toLowerCase();
+        const grade = this.grade.toLowerCase();
         axios
-          .post(ApiURL, { collection: this.collection.subtitle.toLowerCase()})
+          .post(ApiURL, { grade: grade, collection: collection})
           .then(() => {
             this.pollJobs();
           })

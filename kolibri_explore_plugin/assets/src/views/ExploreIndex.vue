@@ -11,13 +11,14 @@
         <CollectionSelectionModal
           :visible="collectionModalVisible"
           :grade="grade"
-          :collections="collections"
+          :collections="gradeCollections"
           @downloadCollection="downloadCollection"
           @goBack="visibleModal = 'grade'"
         />
         <InstallContentModal
           :visible="contentModalVisible"
           :collection="downloadingCollection"
+          :grade="grade"
           @showModal="visibleModal = 'content'"
           @hide="visibleModal = 'none'"
           @newContent="reloadChannels"
@@ -90,12 +91,15 @@
         isLoading: false,
         visibleModal: 'none',
         downloadingCollection: null,
-        collections: [],
+        collections: {},
         grade: 'intermediate',
       };
     },
     computed: {
       ...mapState(['noContent', 'pageName']),
+      gradeCollections() {
+        return Object.values(this.collections[this.grade] || {});
+      },
       currentPage() {
         return pageNameToComponentMap[this.pageName] || null;
       },
@@ -141,11 +145,13 @@
     mounted() {
       axios.get(constants.ApiURL).then(({ data }) => {
         if (data.collections) {
-          this.collections = Object.values(data.collections);
+          this.collections = data.collections;
         }
 
         if (data.collection) {
-          this.downloadCollection(data.collections[data.collection]);
+          const [grade, size] = data.collection.split('-');
+          const collection = data.collections[size];
+          this.downloadCollection(grade, collection);
         }
       });
     },
@@ -162,7 +168,8 @@
         showChannels(this.$store);
         this.$store.commit('SET_NOCONTENT', false);
       },
-      downloadCollection(collection) {
+      downloadCollection(grade, collection) {
+        this.grade = grade;
         this.downloadingCollection = collection;
         this.visibleModal = 'content';
       },

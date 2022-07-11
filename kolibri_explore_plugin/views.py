@@ -120,32 +120,65 @@ class AppMetadataView(AppBase):
 @method_decorator(csrf_exempt, name="dispatch")
 class EndlessLearningCollection(View):
     COLLECTIONS = {
-        "small": {
-            "title": "3 GB",
-            "subtitle": "Small",
-            "channels": 10,
-            "size": 3,
-            "text": "Primary",
-            "token": "kopip-lakip",
-            "available": True,
+        "primary": {
+            "small": {
+                "title": "2 GB",
+                "subtitle": "Small",
+                "channels": 13,
+                "size": 2,
+                "text": "Primary",
+                "token": "kopip-lakip",
+                "available": True,
+            },
+            "large": {
+                "title": "5 GB",
+                "subtitle": "Large",
+                "channels": 14,
+                "size": 5,
+                "text": "Primary",
+                "token": "vofog-gufap",
+                "available": True,
+            },
         },
-        "medium": {
-            "title": "6 GB",
-            "subtitle": "Medium",
-            "channels": 10,
-            "size": 6,
-            "text": "Intermediate",
-            "token": "zubit-vusus",
-            "available": True,
+        "intermediate": {
+            "small": {
+                "title": "3 GB",
+                "subtitle": "Small",
+                "channels": 22,
+                "size": 3,
+                "text": "Intermediate",
+                "token": "kopip-lakip",
+                "available": True,
+            },
+            "large": {
+                "title": "6 GB",
+                "subtitle": "Large",
+                "channels": 22,
+                "size": 6,
+                "text": "Intermediate",
+                "token": "vofog-gufap",
+                "available": True,
+            },
         },
-        "large": {
-            "title": "12 GB",
-            "subtitle": "Large",
-            "channels": 10,
-            "size": 12,
-            "text": "Secondary",
-            "token": "vofog-gufap",
-            "available": True,
+        "secondary": {
+            "small": {
+                "title": "3 GB",
+                "subtitle": "Small",
+                "channels": 23,
+                "size": 3,
+                "text": "Secondary",
+                "token": "kopip-lakip",
+                "available": True,
+            },
+            "large": {
+                "title": "6 GB",
+                "subtitle": "Large",
+                "channels": 24,
+                "size": 6,
+                "text": "Secondary",
+                "token": "vofog-gufap",
+                "available": True,
+            },
         },
     }
 
@@ -153,8 +186,9 @@ class EndlessLearningCollection(View):
 
     def check_collection_availability(self):
         free_space_gb = get_free_space() / 1024**3
-        for _k, v in self.COLLECTIONS.items():
-            v["available"] = v["size"] < free_space_gb
+        for _grade, collections in self.COLLECTIONS.items():
+            for _k, v in collections.items():
+                v["available"] = v["size"] < free_space_gb
 
     def get(self, request):
         job_ids = request.session.get("job_ids", [])
@@ -201,13 +235,15 @@ class EndlessLearningCollection(View):
         )
 
     def post(self, request):
+        grade = "primary"
         collection = "small"
         if request.body:
             data = json.loads(request.body)
             collection = data.get("collection", "small")
+            grade = data.get("grade", "primary")
 
         collection_manifest = os.path.join(
-            COLLECTION_PATHS, f"{collection}.json"
+            COLLECTION_PATHS, f"{grade}-{collection}.json"
         )
 
         if os.path.exists(collection_manifest):
@@ -217,7 +253,7 @@ class EndlessLearningCollection(View):
             channels = manifest.get("channels", [])
         else:
             # Fallback, download full collection using the token
-            token = self.COLLECTIONS[collection]["token"]
+            token = self.COLLECTIONS[grade][collection]["token"]
 
             channel_viewset = RemoteChannelViewSet()
             channels = channel_viewset._make_channel_endpoint_request(
@@ -252,7 +288,7 @@ class EndlessLearningCollection(View):
         # Two weeks session expiry
         request.session.set_expiry(1209600)
         request.session["job_ids"] = job_ids
-        request.session["downloading"] = collection
+        request.session["downloading"] = f"{grade}-{collection}"
         return HttpResponse(
             json.dumps(job_ids), content_type="application/json"
         )
