@@ -16,9 +16,9 @@
           Select grade range
         </h1>
         <h6 class="text-muted">
-          The Endless Key download for ChromeOS contains a sample of the
-          content available on the full Endless Key. The content is available
-          in three selections:
+          The Endless Key download contains a sample of the content available
+          on the full Endless Key. The content is available in three
+          selections:
         </h6>
 
         <b-card-group deck class="py-5">
@@ -101,23 +101,6 @@
     },
   };
 
-  let osname = 'ChromeOS';
-  if (navigator.appVersion.indexOf("Win") != -1) {
-    osname = 'Windows';
-  } else if (navigator.appVersion.indexOf("Mac") != -1) {
-    osname = 'MacOS';
-  } else if (navigator.appVersion.indexOf("CrOS") != -1) {
-    osname = 'ChromeOS';
-  } else if (navigator.appVersion.indexOf("Linux") != -1 ) {
-    osname = 'Linux';
-  };
-
-  let h6 = document.getElementsByTagName('h6')[0];
-  if (h6) {
-    h6.innerHTML = `The Endless Key download for ${osname} contains a sample of `
-                  +"the content available on the full Endless Key. The content "
-                  +"is available in three selections:";
-  };
 </script>
 
 
