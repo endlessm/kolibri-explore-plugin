@@ -36,7 +36,7 @@
               variant="primary"
               :disabled="!collection.available"
             >
-              Download <strong>{{ collection.size }}Gb</strong>
+              Download <strong>{{ collection.size }} GB</strong>
             </b-button>
           </WelcomeCard>
         </b-card-group>
@@ -72,7 +72,7 @@
         default: () => {
           return [
             {
-              title: '3Gb',
+              title: '3 GB',
               subtitle: 'Small',
               channels: 10,
               text: 'Short Description to be defined',
