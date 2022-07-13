@@ -40,11 +40,15 @@
           </b-col>
           <b-col>
             <b-progress
-              :value="progress"
               :max="100"
-              showProgress
-              animated
-            />
+            >
+              <b-progress-bar
+                :value="progress"
+                animated
+              >
+                {{ progress.toFixed(2) }}%
+              </b-progress-bar>
+            </b-progress>
           </b-col>
         </b-row>
 
