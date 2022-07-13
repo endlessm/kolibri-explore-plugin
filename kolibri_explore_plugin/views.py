@@ -114,7 +114,7 @@ class AppMetadataView(AppBase):
 class EndlessLearningCollection(View):
     COLLECTIONS = {
         "small": {
-            "title": "3Gb",
+            "title": "3 GB",
             "subtitle": "Small",
             "channels": 10,
             "size": 3,
@@ -123,7 +123,7 @@ class EndlessLearningCollection(View):
             "available": True,
         },
         "medium": {
-            "title": "6Gb",
+            "title": "6 GB",
             "subtitle": "Medium",
             "channels": 10,
             "size": 6,
@@ -132,7 +132,7 @@ class EndlessLearningCollection(View):
             "available": True,
         },
         "large": {
-            "title": "12Gb",
+            "title": "12 GB",
             "subtitle": "Large",
             "channels": 10,
             "size": 12,
