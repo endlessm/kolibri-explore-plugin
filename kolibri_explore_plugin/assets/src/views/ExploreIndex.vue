@@ -53,7 +53,7 @@
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import LoadingImage from 'eos-components/src/assets/loading-animation.gif';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
-  import { ChannelResource } from 'kolibri.resources';
+  import { ChannelResource, ContentNodeResource } from 'kolibri.resources';
   import axios from 'axios';
   import { constants } from 'eos-components';
   import { showChannels } from '../modules/topicsRoot/handlers';
@@ -163,6 +163,8 @@
         this.isLoading = false;
       },
       reloadChannels() {
+        ContentNodeResource.useContentCacheKey = false;
+        ContentNodeResource.clearCache();
         ChannelResource.useContentCacheKey = false;
         ChannelResource.clearCache();
         showChannels(this.$store);
