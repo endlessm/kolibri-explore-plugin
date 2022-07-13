@@ -155,7 +155,12 @@
         axios.get(ApiURL).then(({ data }) => {
           this.jobs = data.jobs;
           const completedJobs = this.jobs.filter(j => j.status === 'COMPLETED');
+          const queuedJobs = this.jobs.filter(j => j.status === 'QUEUED');
           const completed = completedJobs.length;
+          console.log('Downloading: ');
+          console.log(`  Total Jobs: ${this.jobs.length}`);
+          console.log(`      Queued: ${queuedJobs.length}`);
+          console.log(`   Completed: ${completedJobs.length}`);
 
           if (completed > 0 && completed === this.jobs.length) {
             // Download is completed

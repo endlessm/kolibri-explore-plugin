@@ -22,6 +22,7 @@ from kolibri.core.content.zip_wsgi import get_embedded_file
 from kolibri.core.decorators import cache_no_user_data
 from kolibri.core.tasks.api import _job_to_response
 from kolibri.core.tasks.api import _remoteimport
+from kolibri.core.tasks.exceptions import JobNotFound
 from kolibri.core.tasks.job import State
 from kolibri.core.tasks.main import queue
 from kolibri.utils import conf
@@ -192,7 +193,11 @@ class EndlessLearningCollection(View):
 
     def get(self, request):
         job_ids = request.session.get("job_ids", [])
-        jobs = [queue.fetch_job(job) for job in job_ids]
+        try:
+            jobs = [queue.fetch_job(job) for job in job_ids]
+        except JobNotFound:
+            request.session["job_ids"] = []
+            jobs = []
         running = [job for job in jobs if job.state == State.RUNNING]
         pid, _, _ = get_status()
 
