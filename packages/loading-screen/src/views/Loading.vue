@@ -13,9 +13,6 @@
         <h4 class="font-weight-normal mt-3 text-muted">
           Please, try restarting the Endless Key by closing this window and
           double clicking the launcher again.
-          <br>
-          <br>
-          More information on the <a :href="guideURL">Quick Start Guide</a>
         </h4>
       </div>
       <div v-else-if="isRetry">
@@ -73,15 +70,6 @@ export default {
     },
     isLoading() {
       return this.state === 'default';
-    },
-    guideURL() {
-      // This is the path for the guide in the Endless Key
-      // The loading screen index is on:
-      // D:\KOLIBRI_DATA\extensions\kolibri-explore-plugin\loadingScreen\index.html
-      //
-      // So we have four levels to go to the root, that's where the Guide PDF
-      // is placed.
-      return '../../../../Endless Key Quick Start.pdf';
     },
   },
 };
