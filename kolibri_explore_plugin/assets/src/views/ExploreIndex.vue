@@ -150,7 +150,7 @@
 
         if (data.collection) {
           const [grade, size] = data.collection.split('-');
-          const collection = data.collections[size];
+          const collection = data.collections[grade][size];
           this.downloadCollection(grade, collection);
         }
       });
