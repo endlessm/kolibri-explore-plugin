@@ -120,7 +120,7 @@ class AppMetadataView(AppBase):
 
 @method_decorator(csrf_exempt, name="dispatch")
 class EndlessLearningCollection(View):
-    COLLECTIONS = {
+    grade_collections = {
         "primary": {
             "small": {
                 "title": "2 GB",
@@ -187,8 +187,8 @@ class EndlessLearningCollection(View):
 
     def check_collection_availability(self):
         free_space_gb = get_free_space() / 1024**3
-        for _grade, collections in self.COLLECTIONS.items():
-            for _k, v in collections.items():
+        for collections in self.grade_collections.values():
+            for v in collections.values():
                 v["available"] = v["size"] < free_space_gb
 
     def get(self, request):
@@ -230,7 +230,7 @@ class EndlessLearningCollection(View):
         collection = request.session.get("downloading")
         self.check_collection_availability()
         jobs_response = {
-            "collections": self.COLLECTIONS,
+            "collections": self.grade_collections,
             "collection": collection,
             "jobs": [_job_to_response(job) for job in jobs],
         }
@@ -258,7 +258,7 @@ class EndlessLearningCollection(View):
             channels = manifest.get("channels", [])
         else:
             # Fallback, download full collection using the token
-            token = self.COLLECTIONS[grade][collection]["token"]
+            token = self.grade_collections[grade][collection]["token"]
 
             channel_viewset = RemoteChannelViewSet()
             channels = channel_viewset._make_channel_endpoint_request(
