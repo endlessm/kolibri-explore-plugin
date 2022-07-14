@@ -16,12 +16,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 from kolibri.core.content.api import cache_forever
-from kolibri.core.content.api import RemoteChannelViewSet
 from kolibri.core.content.zip_wsgi import add_security_headers
 from kolibri.core.content.zip_wsgi import get_embedded_file
 from kolibri.core.decorators import cache_no_user_data
 from kolibri.core.tasks.api import _job_to_response
 from kolibri.core.tasks.api import _remoteimport
+from kolibri.core.tasks.exceptions import JobNotFound
 from kolibri.core.tasks.job import State
 from kolibri.core.tasks.main import queue
 from kolibri.utils import conf
@@ -33,6 +33,13 @@ APPS_BUNDLE_PATHS = []
 if conf.OPTIONS["Explore"]["APPS_BUNDLE_PATH"]:
     APPS_BUNDLE_PATHS.append(conf.OPTIONS["Explore"]["APPS_BUNDLE_PATH"])
 APPS_BUNDLE_PATHS.append(os.path.join(os.path.dirname(__file__), "apps"))
+
+
+COLLECTION_PATHS = os.path.join(
+    os.path.dirname(__file__), "static", "collections"
+)
+if conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]:
+    COLLECTION_PATHS = conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]
 
 
 @method_decorator(cache_no_user_data, name="dispatch")
@@ -112,33 +119,66 @@ class AppMetadataView(AppBase):
 
 @method_decorator(csrf_exempt, name="dispatch")
 class EndlessLearningCollection(View):
-    COLLECTIONS = {
-        "small": {
-            "title": "3 GB",
-            "subtitle": "Small",
-            "channels": 10,
-            "size": 3,
-            "text": "Primary",
-            "token": "kopip-lakip",
-            "available": True,
+    grade_collections = {
+        "primary": {
+            "small": {
+                "title": "2 GB",
+                "subtitle": "Small",
+                "channels": 13,
+                "size": 2,
+                "text": "Primary",
+                "token": "kopip-lakip",
+                "available": True,
+            },
+            "large": {
+                "title": "5 GB",
+                "subtitle": "Large",
+                "channels": 14,
+                "size": 5,
+                "text": "Primary",
+                "token": "vofog-gufap",
+                "available": True,
+            },
         },
-        "medium": {
-            "title": "6 GB",
-            "subtitle": "Medium",
-            "channels": 10,
-            "size": 6,
-            "text": "Intermediate",
-            "token": "zubit-vusus",
-            "available": True,
+        "intermediate": {
+            "small": {
+                "title": "3 GB",
+                "subtitle": "Small",
+                "channels": 22,
+                "size": 3,
+                "text": "Intermediate",
+                "token": "kopip-lakip",
+                "available": True,
+            },
+            "large": {
+                "title": "6 GB",
+                "subtitle": "Large",
+                "channels": 22,
+                "size": 6,
+                "text": "Intermediate",
+                "token": "vofog-gufap",
+                "available": True,
+            },
         },
-        "large": {
-            "title": "12 GB",
-            "subtitle": "Large",
-            "channels": 10,
-            "size": 12,
-            "text": "Secondary",
-            "token": "vofog-gufap",
-            "available": True,
+        "secondary": {
+            "small": {
+                "title": "3 GB",
+                "subtitle": "Small",
+                "channels": 23,
+                "size": 3,
+                "text": "Secondary",
+                "token": "kopip-lakip",
+                "available": True,
+            },
+            "large": {
+                "title": "6 GB",
+                "subtitle": "Large",
+                "channels": 24,
+                "size": 6,
+                "text": "Secondary",
+                "token": "vofog-gufap",
+                "available": True,
+            },
         },
     }
 
@@ -146,12 +186,17 @@ class EndlessLearningCollection(View):
 
     def check_collection_availability(self):
         free_space_gb = get_free_space() / 1024**3
-        for _k, v in self.COLLECTIONS.items():
-            v["available"] = v["size"] < free_space_gb
+        for collections in self.grade_collections.values():
+            for v in collections.values():
+                v["available"] = v["size"] < free_space_gb
 
     def get(self, request):
         job_ids = request.session.get("job_ids", [])
-        jobs = [queue.fetch_job(job) for job in job_ids]
+        try:
+            jobs = [queue.fetch_job(job) for job in job_ids]
+        except JobNotFound:
+            request.session["job_ids"] = []
+            jobs = []
         running = [job for job in jobs if job.state == State.RUNNING]
         pid, _, _ = get_status()
 
@@ -184,7 +229,7 @@ class EndlessLearningCollection(View):
         collection = request.session.get("downloading")
         self.check_collection_availability()
         jobs_response = {
-            "collections": self.COLLECTIONS,
+            "collections": self.grade_collections,
             "collection": collection,
             "jobs": [_job_to_response(job) for job in jobs],
         }
@@ -194,25 +239,30 @@ class EndlessLearningCollection(View):
         )
 
     def post(self, request):
+        grade = "primary"
         collection = "small"
         if request.body:
             data = json.loads(request.body)
             collection = data.get("collection", "small")
+            grade = data.get("grade", "primary")
 
-        token = self.COLLECTIONS[collection]["token"]
-
-        channel_viewset = RemoteChannelViewSet()
-        channels = channel_viewset._make_channel_endpoint_request(
-            identifier=token
+        collection_manifest = os.path.join(
+            COLLECTION_PATHS, f"{grade}-{collection}.json"
         )
 
-        job_ids = []
+        if not os.path.exists(collection_manifest):
+            raise Http404("Collection manifest not found")
 
+        manifest = {}
+        with open(collection_manifest) as f:
+            manifest = json.load(f)
+        channels = manifest.get("channels", [])
+
+        job_ids = []
         pid, _, _ = get_status()
         for channel in channels:
             task = {
                 "channel_id": channel["id"],
-                "channel_name": channel["name"],
                 "baseurl": self.BASE_URL,
                 "started_by_username": "endless",
                 "type": "REMOTEIMPORT",
@@ -223,6 +273,10 @@ class EndlessLearningCollection(View):
                 _remoteimport,
                 task["channel_id"],
                 task["baseurl"],
+                # Done this way to convert [] to None
+                node_ids=channel.get("include_node_ids") or None,
+                # Done this way to convert [] to None
+                exclude_node_ids=channel.get("exclude_node_ids") or None,
                 extra_metadata=task,
                 track_progress=True,
                 cancellable=True,
@@ -232,7 +286,7 @@ class EndlessLearningCollection(View):
         # Two weeks session expiry
         request.session.set_expiry(1209600)
         request.session["job_ids"] = job_ids
-        request.session["downloading"] = collection
+        request.session["downloading"] = f"{grade}-{collection}"
         return HttpResponse(
             json.dumps(job_ids), content_type="application/json"
         )

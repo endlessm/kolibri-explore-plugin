@@ -21,6 +21,15 @@
           selections:
         </h6>
 
+        <b-alert
+          v-if="error"
+          variant="danger"
+          show
+          fade
+        >
+          {{ error }}
+        </b-alert>
+
         <b-card-group deck class="py-5">
           <WelcomeCard
             v-for="grade in grades"
@@ -64,6 +73,10 @@
       visible: {
         type: Boolean,
         default: false,
+      },
+      error: {
+        type: String,
+        default: '',
       },
     },
     data() {

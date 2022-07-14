@@ -6,20 +6,22 @@
       <div>
         <GradeSelectionModal
           :visible="gradeModalVisible"
+          :error="installError"
           @gradeSelected="gradeSelected"
         />
         <CollectionSelectionModal
           :visible="collectionModalVisible"
           :grade="grade"
-          :collections="collections"
+          :collections="gradeCollections"
           @downloadCollection="downloadCollection"
           @goBack="visibleModal = 'grade'"
         />
         <InstallContentModal
           :visible="contentModalVisible"
           :collection="downloadingCollection"
+          :grade="grade"
           @showModal="visibleModal = 'content'"
-          @hide="visibleModal = 'none'"
+          @hide="installContentHide"
           @newContent="reloadChannels"
         />
       </div>
@@ -52,7 +54,7 @@
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import LoadingImage from 'eos-components/src/assets/loading-animation.gif';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
-  import { ChannelResource } from 'kolibri.resources';
+  import { ChannelResource, ContentNodeResource } from 'kolibri.resources';
   import axios from 'axios';
   import { constants } from 'eos-components';
   import { showChannels } from '../modules/topicsRoot/handlers';
@@ -90,12 +92,16 @@
         isLoading: false,
         visibleModal: 'none',
         downloadingCollection: null,
-        collections: [],
+        collections: {},
         grade: 'intermediate',
+        installError: '',
       };
     },
     computed: {
       ...mapState(['noContent', 'pageName']),
+      gradeCollections() {
+        return Object.values(this.collections[this.grade] || {});
+      },
       currentPage() {
         return pageNameToComponentMap[this.pageName] || null;
       },
@@ -141,11 +147,13 @@
     mounted() {
       axios.get(constants.ApiURL).then(({ data }) => {
         if (data.collections) {
-          this.collections = Object.values(data.collections);
+          this.collections = data.collections;
         }
 
         if (data.collection) {
-          this.downloadCollection(data.collections[data.collection]);
+          const [grade, size] = data.collection.split('-');
+          const collection = data.collections[grade][size];
+          this.downloadCollection(grade, collection);
         }
       });
     },
@@ -157,18 +165,30 @@
         this.isLoading = false;
       },
       reloadChannels() {
+        ContentNodeResource.useContentCacheKey = false;
+        ContentNodeResource.clearCache();
         ChannelResource.useContentCacheKey = false;
         ChannelResource.clearCache();
         showChannels(this.$store);
         this.$store.commit('SET_NOCONTENT', false);
       },
-      downloadCollection(collection) {
+      downloadCollection(grade, collection) {
+        this.grade = grade;
         this.downloadingCollection = collection;
         this.visibleModal = 'content';
       },
       gradeSelected(grade) {
         this.grade = grade;
         this.visibleModal = 'collection';
+        this.installError = '';
+      },
+      installContentHide(error) {
+        if (error || this.installError) {
+          this.visibleModal = 'grade';
+          this.installError = 'Can not install the selected collection';
+        } else {
+          this.visibleModal = 'none';
+        }
       },
     },
   };

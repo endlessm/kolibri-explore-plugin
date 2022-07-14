@@ -40,11 +40,15 @@
           </b-col>
           <b-col>
             <b-progress
-              :value="progress"
               :max="100"
-              showProgress
-              animated
-            />
+            >
+              <b-progress-bar
+                :value="progress"
+                animated
+              >
+                {{ progress.toFixed(2) }}%
+              </b-progress-bar>
+            </b-progress>
           </b-col>
         </b-row>
 
@@ -87,6 +91,10 @@
         type: Object,
         default: null,
       },
+      grade: {
+        type: String,
+        default: 'primary',
+      },
     },
     data() {
       return {
@@ -126,6 +134,11 @@
           this.downloadContent();
         }
       },
+      visible() {
+        if (this.visible && !this.downloading) {
+          this.downloadContent();
+        }
+      },
     },
     beforeDestroy() {
       clearTimeout(this.pollingId);
@@ -134,12 +147,15 @@
       downloadContent() {
         this.downloading = true;
         this.jobs = [];
+        const collection = this.collection.subtitle.toLowerCase();
+        const grade = this.grade.toLowerCase();
         axios
-          .post(ApiURL, { collection: this.collection.subtitle.toLowerCase()})
+          .post(ApiURL, { grade: grade, collection: collection})
           .then(() => {
             this.pollJobs();
           })
-          .catch(() => {
+          .catch((error) => {
+            this.$emit('hide', error);
             this.downloading = false;
           });
       },
@@ -149,7 +165,12 @@
         axios.get(ApiURL).then(({ data }) => {
           this.jobs = data.jobs;
           const completedJobs = this.jobs.filter(j => j.status === 'COMPLETED');
+          const queuedJobs = this.jobs.filter(j => j.status === 'QUEUED');
           const completed = completedJobs.length;
+          console.log('Downloading: ');
+          console.log(`  Total Jobs: ${this.jobs.length}`);
+          console.log(`      Queued: ${queuedJobs.length}`);
+          console.log(`   Completed: ${completedJobs.length}`);
 
           if (completed > 0 && completed === this.jobs.length) {
             // Download is completed

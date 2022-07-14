@@ -29,7 +29,7 @@
             :text="`${collection.channels} Channels`"
             :secondaryText="collection.text"
             :disabled="!collection.available"
-            @click="$emit('downloadCollection', collection)"
+            @click="$emit('downloadCollection', grade, collection)"
           >
             <b-button
               class="mt-3"
