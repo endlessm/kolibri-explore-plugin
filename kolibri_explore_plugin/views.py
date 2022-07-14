@@ -16,7 +16,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 from kolibri.core.content.api import cache_forever
-from kolibri.core.content.api import RemoteChannelViewSet
 from kolibri.core.content.zip_wsgi import add_security_headers
 from kolibri.core.content.zip_wsgi import get_embedded_file
 from kolibri.core.decorators import cache_no_user_data
@@ -251,19 +250,13 @@ class EndlessLearningCollection(View):
             COLLECTION_PATHS, f"{grade}-{collection}.json"
         )
 
-        if os.path.exists(collection_manifest):
-            manifest = {}
-            with open(collection_manifest) as f:
-                manifest = json.load(f)
-            channels = manifest.get("channels", [])
-        else:
-            # Fallback, download full collection using the token
-            token = self.grade_collections[grade][collection]["token"]
+        if not os.path.exists(collection_manifest):
+            raise Http404("Collection manifest not found")
 
-            channel_viewset = RemoteChannelViewSet()
-            channels = channel_viewset._make_channel_endpoint_request(
-                identifier=token
-            )
+        manifest = {}
+        with open(collection_manifest) as f:
+            manifest = json.load(f)
+        channels = manifest.get("channels", [])
 
         job_ids = []
         pid, _, _ = get_status()

@@ -134,6 +134,11 @@
           this.downloadContent();
         }
       },
+      visible() {
+        if (this.visible && !this.downloading) {
+          this.downloadContent();
+        }
+      },
     },
     beforeDestroy() {
       clearTimeout(this.pollingId);
@@ -149,7 +154,8 @@
           .then(() => {
             this.pollJobs();
           })
-          .catch(() => {
+          .catch((error) => {
+            this.$emit('hide', error);
             this.downloading = false;
           });
       },

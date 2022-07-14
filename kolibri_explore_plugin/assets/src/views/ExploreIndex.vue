@@ -6,6 +6,7 @@
       <div>
         <GradeSelectionModal
           :visible="gradeModalVisible"
+          :error="installError"
           @gradeSelected="gradeSelected"
         />
         <CollectionSelectionModal
@@ -20,7 +21,7 @@
           :collection="downloadingCollection"
           :grade="grade"
           @showModal="visibleModal = 'content'"
-          @hide="visibleModal = 'none'"
+          @hide="installContentHide"
           @newContent="reloadChannels"
         />
       </div>
@@ -93,6 +94,7 @@
         downloadingCollection: null,
         collections: {},
         grade: 'intermediate',
+        installError: '',
       };
     },
     computed: {
@@ -178,6 +180,15 @@
       gradeSelected(grade) {
         this.grade = grade;
         this.visibleModal = 'collection';
+        this.installError = '';
+      },
+      installContentHide(error) {
+        if (error || this.installError) {
+          this.visibleModal = 'grade';
+          this.installError = 'Can not install the selected collection';
+        } else {
+          this.visibleModal = 'none';
+        }
       },
     },
   };
