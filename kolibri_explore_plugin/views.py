@@ -25,7 +25,8 @@ from kolibri.core.tasks.exceptions import JobNotFound
 from kolibri.core.tasks.job import State
 from kolibri.core.tasks.main import queue
 from kolibri.utils import conf
-from kolibri.utils.server import get_status
+from kolibri.utils.server import _read_pid_file
+from kolibri.utils.server import PID_FILE
 from kolibri.utils.system import get_free_space
 
 
@@ -198,7 +199,7 @@ class EndlessLearningCollection(View):
             request.session["job_ids"] = []
             jobs = []
         running = [job for job in jobs if job.state == State.RUNNING]
-        pid, _, _ = get_status()
+        pid, _, _, _ = _read_pid_file(PID_FILE)
 
         # requeue stalled jobs
         for job in running:
@@ -259,7 +260,7 @@ class EndlessLearningCollection(View):
         channels = manifest.get("channels", [])
 
         job_ids = []
-        pid, _, _ = get_status()
+        pid, _, _, _ = _read_pid_file(PID_FILE)
         for channel in channels:
             task = {
                 "channel_id": channel["id"],
