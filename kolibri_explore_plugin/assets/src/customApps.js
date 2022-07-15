@@ -64,7 +64,7 @@ export const CategorizedIds = [
   {
     name: 'Curiosity and Reference',
     channels: [
-      '2091ca47ff544c96b4ae02b3a92346e1', // ted-ed-lessons
+      '1e378725d3924b47aa5e1260628820b5', // ted-ed-lessons
       '1520f018610256549c98ca0140cceebe', // virtual-field-trips
       'f62db29be20453c4a267132e93a9e602', // wikipedia
       '000409f81dbe5d1ba67101cb9fed4530', // touchable-earth
@@ -167,7 +167,7 @@ export const CategorizedIds = [
 // These should match a file existing on static/thumbnails/NAME
 export const ChannelCardThumbnails = {
   c8540424d77f44f8ae306e22d3b14eaf: 'coronavirus.jpg',
-  '2091ca47ff544c96b4ae02b3a92346e1': 'ted-ed-lessons.jpg',
+  '1e378725d3924b47aa5e1260628820b5': 'ted-ed-lessons.jpg',
   '74f36493bb475b62935fa8705ed59fed': 'thoughtful-learning.jpg',
   '0418cc231e9c5513af0fff9f227f7172': 'hello-channel.jpg',
   '3160899a73564d8a8467284d9219b91c': 'terminal-two.jpg',
@@ -225,7 +225,7 @@ export const ChannelCardThumbnails = {
 
 // These should match a file existing on static/icons/NAME
 export const ChannelCardIcons = {
-  '2091ca47ff544c96b4ae02b3a92346e1': 'ted-ed-lessons.png',
+  '1e378725d3924b47aa5e1260628820b5': 'ted-ed-lessons.png',
   '97111903de564de49483a9705d41a8ac': 'career-girls.png',
   bf0260ed911f44cda27a263db93a8512: '49ers-edu-digital-playbook.png',
   bcc6e12a0ddf4a17a8b600c6b880e3ed: 'common-sense-student-resources.png',
