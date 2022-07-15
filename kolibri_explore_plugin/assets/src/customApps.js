@@ -12,7 +12,7 @@ export const CustomChannelApps = {
   '197934f144305350b5820c7c4dd8e194': 'phet-interactive-simulations',
   e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy',
   '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home',
-  '2091ca47ff544c96b4ae02b3a92346e1': 'ted-ed-lessons',
+  '1e378725d3924b47aa5e1260628820b5': 'ted-ed-lessons',
   '3160899a73564d8a8467284d9219b91c': 'terminal-two',
   '74f36493bb475b62935fa8705ed59fed': 'thoughtful-learning',
   bf0260ed911f44cda27a263db93a8512: '49ers-edu-digital-playbook',
