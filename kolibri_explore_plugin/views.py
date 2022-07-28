@@ -226,6 +226,7 @@ class EndlessLearningCollection(View):
         )
         if running_jobs == 0 and "downloading" in request.session:
             del request.session["downloading"]
+            del request.session["job_ids"]
 
         collection = request.session.get("downloading")
         self.check_collection_availability()
@@ -246,6 +247,13 @@ class EndlessLearningCollection(View):
             data = json.loads(request.body)
             collection = data.get("collection", "small")
             grade = data.get("grade", "primary")
+
+        # Do nothing if already downloading
+        if "downloading" in request.session:
+            job_ids = request.session["job_ids"]
+            return HttpResponse(
+                json.dumps(job_ids), content_type="application/json"
+            )
 
         collection_manifest = os.path.join(
             COLLECTION_PATHS, f"{grade}-{collection}.json"

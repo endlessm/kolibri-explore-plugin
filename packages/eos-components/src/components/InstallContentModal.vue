@@ -46,7 +46,7 @@
                 :value="progress"
                 animated
               >
-                {{ progress.toFixed(2) }}%
+                {{ progress.toFixed(0) }}%
               </b-progress-bar>
             </b-progress>
           </b-col>
@@ -105,16 +105,10 @@
       };
     },
     computed: {
-      filteredJobs() {
-        if (!this.jobs) {
-          return [];
-        }
-        return this.jobs.filter(j => j.percentage <= 1);
-      },
       progress() {
-        const jobs = this.filteredJobs.map(j => j.percentage);
+        const jobs = this.jobs.map(j => j.percentage > 1 ? 0 : j.percentage);
         const sum = jobs.reduce((a, b) => a + b, 0);
-        return (100 * sum) / this.filteredJobs.length;
+        return (100 * sum) / this.jobs.length;
       },
       buttonStyles() {
         const stop = this.progress;
