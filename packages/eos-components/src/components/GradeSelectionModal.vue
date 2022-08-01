@@ -43,7 +43,7 @@
             <img :src="grade.image" width="100%">
           </WelcomeCard>
         </b-card-group>
-        <div class="pb-3 pt-5">
+        <div class="pb-3 pt-3">
           <b-button
             class="m-1"
             :disabled="selection === null"

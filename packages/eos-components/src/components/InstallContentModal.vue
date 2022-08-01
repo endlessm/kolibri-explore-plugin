@@ -55,7 +55,7 @@
         <hr>
 
         <b-button
-          class="mb-2 mt-5"
+          class="mb-2 mt-3"
           variant="primary"
           @click="$emit('hide')"
         >
