@@ -40,7 +40,7 @@
             </b-button>
           </WelcomeCard>
         </b-card-group>
-        <div class="pb-3 pt-5">
+        <div class="pb-3 pt-3">
           <b-button
             class="m-1"
             variant="link"
