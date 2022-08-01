@@ -127,4 +127,14 @@
     background-color: white;
   }
 
+
+  .card-deck {
+    @include media-breakpoint-down(md) {
+      .card {
+        flex: auto;
+        margin-bottom: $card-deck-margin;
+      }
+    }
+  }
+
 </style>
