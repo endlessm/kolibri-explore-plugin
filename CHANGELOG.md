@@ -2,6 +2,12 @@
 
 List of the most important changes for each release.
 
+## v2.0.20
+
+- Discovery: Fix progress bar back and forth behavior
+- Discovery: Responsiveness improvements
+- Maintenance: Use _read_pid_file instead of get_status
+
 ## v2.0.13
 
 - Discovery: Fix focus in search bar after clicking the clear button.
