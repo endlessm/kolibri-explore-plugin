@@ -215,7 +215,6 @@ class EndlessLearningCollection(View):
         ]
 
         finished_states = [
-            State.FAILED,
             State.CANCELING,
             State.CANCELED,
         ]
