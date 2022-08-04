@@ -106,7 +106,15 @@
     },
     computed: {
       progress() {
-        const jobs = this.jobs.map(j => j.percentage > 1 ? 0 : j.percentage);
+        const jobs = this.jobs.map(j => {
+          if (j.percentage > 1 || !j.channel_name) {
+            return 0;
+          }
+          if (j.status === 'FAILED') {
+            return 1;
+          }
+          return j.percentage;
+        });
         const sum = jobs.reduce((a, b) => a + b, 0);
         return (100 * sum) / this.jobs.length;
       },
@@ -160,11 +168,22 @@
           this.jobs = data.jobs;
           const completedJobs = this.jobs.filter(j => j.status === 'COMPLETED');
           const queuedJobs = this.jobs.filter(j => j.status === 'QUEUED');
+          const runningJobs = this.jobs.filter(j => j.status === 'RUNNING');
+          const failedJobs = this.jobs.filter(j => j.status === 'FAILED');
+
           const completed = completedJobs.length;
+
           console.log('Downloading: ');
           console.log(`  Total Jobs: ${this.jobs.length}`);
           console.log(`      Queued: ${queuedJobs.length}`);
+          console.log(`     Running: ${runningJobs.length}`);
+          console.log(`      Failed: ${failedJobs.length}`);
           console.log(`   Completed: ${completedJobs.length}`);
+          console.log(`    Progress: ${this.progress}`);
+          for (var i=0; i<this.jobs.length; i++) {
+            const job = this.jobs[i];
+            console.log(`       JOB: ${job.channel_name}|${job.status} ${job.percentage}`);
+          }
 
           if (completed > 0 && completed === this.jobs.length) {
             // Download is completed
