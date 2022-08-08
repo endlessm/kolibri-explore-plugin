@@ -41,6 +41,10 @@ export default {
       this.$router.push('/endless-key-required');
     }
 
+    window.show_wrong_folder = () => {
+      this.$router.push('/permissions-wrong-folder');
+    }
+
     window.setHasUSB = () => {
       // Does nothing.
       // This function is implemented in the UsbDriveConnection view component
@@ -62,6 +66,7 @@ export default {
     window.firstLaunch = fallback;
     window.show_welcome = fallback;
     window.show_endless_key = fallback;
+    window.show_wrong_folder = fallback;
   },
 };
 </script>
