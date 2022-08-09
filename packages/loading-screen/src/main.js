@@ -7,6 +7,7 @@ import App from '@/App.vue';
 import ContentSourceSelection from '@/views/ContentSourceSelection.vue';
 import UsbDriveConnection from '@/views/UsbDriveConnection.vue';
 import PermissionsExplanation from '@/views/PermissionsExplanation.vue';
+import PermissionsCancelled from '@/views/PermissionsCancelled.vue';
 import PermissionsWrongFolder from '@/views/PermissionsWrongFolder.vue';
 import Loading from '@/views/Loading.vue';
 import Welcome from '@/views/Welcome.vue';
@@ -30,6 +31,7 @@ const routes = [
     props: { required: true },
   },
   { path: '/grant-permissions', component: PermissionsExplanation },
+  { path: '/permissions-cancelled', component: PermissionsCancelled },
   { path: '/permissions-wrong-folder', component: PermissionsWrongFolder },
 ];
 
