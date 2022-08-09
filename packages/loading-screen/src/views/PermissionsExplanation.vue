@@ -49,7 +49,7 @@
     methods: {
       openSystemPermission() {
         this.$router.replace('/loading/default');
-        window.EndlessAPI.openSystemPermission();
+        window.EndlessAPI.loadWithUSB();
       },
     },
   };
