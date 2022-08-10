@@ -2,22 +2,35 @@
   <div>
     <div class="p-3 pb-5">
       <h1 class="text-primary">
-        Permission
+        The Endless Key needs access to your device
       </h1>
 
       <b-container class="inner-container">
         <h5 class="font-weight-normal text-muted">
-          The Endless Key needs your Permission to access files on your device.
+          This will let you see and experience the content
+          from your external device on your Endless Key app.
         </h5>
 
-        <img class="mt-4 w-100" :src="permissionsImage">
+        <b-list-group>
+          <b-list-group-item variant="dark">
+            <b>1. Open the Endless Key external device</b>
+          </b-list-group-item>
+          <b-list-group-item variant="dark">
+            <b>2. Select the "KOLIBRI_DATA" folder</b>
+            <br>
+            <span class="text-muted"><FolderIcon /> KOLIBRI_DATA</span>
+          </b-list-group-item>
+          <b-list-group-item variant="dark">
+            <b>3. Allow access</b>
+          </b-list-group-item>
+        </b-list-group>
 
         <b-button
           class="mt-5"
           variant="primary"
           @click="openSystemPermission"
         >
-          Grant Permission
+          Allow
         </b-button>
       </b-container>
     </div>
@@ -26,19 +39,17 @@
 
 
 <script>
-  import PermissionsImage from '../assets/permissions-explanation.gif';
+  import FolderIcon from 'vue-material-design-icons/FolderOutline.vue';
 
   export default {
     name: 'PermissionsExplanation',
-    data() {
-      return {
-        permissionsImage: PermissionsImage,
-      };
+    components: {
+      FolderIcon,
     },
     methods: {
       openSystemPermission() {
         this.$router.replace('/loading/default');
-        window.EndlessAPI.openSystemPermission();
+        window.EndlessAPI.loadWithUSB();
       },
     },
   };

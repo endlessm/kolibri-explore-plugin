@@ -2,7 +2,7 @@
   <div>
     <div class="p-3 pb-5">
       <h1 class="text-primary">
-        Wrong folder selected
+        Folder selection cancelled
       </h1>
 
       <b-container class="inner-container">
@@ -33,7 +33,7 @@
 
 <script>
   export default {
-    name: 'PermissionsWrongFolder',
+    name: 'PermissionsCancelled',
     data() {
       return {
       };

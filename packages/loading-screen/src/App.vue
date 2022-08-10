@@ -38,7 +38,15 @@ export default {
     }
 
     window.show_endless_key = () => {
+      this.$router.push('/endless-key');
+    }
+
+    window.show_endless_key_required = () => {
       this.$router.push('/endless-key-required');
+    }
+
+    window.show_permissions_cancelled = () => {
+      this.$router.push('/permissions-cancelled');
     }
 
     window.show_wrong_folder = () => {
@@ -66,6 +74,8 @@ export default {
     window.firstLaunch = fallback;
     window.show_welcome = fallback;
     window.show_endless_key = fallback;
+    window.show_endless_key_required = fallback;
+    window.show_permissions_cancelled = fallback;
     window.show_wrong_folder = fallback;
   },
 };

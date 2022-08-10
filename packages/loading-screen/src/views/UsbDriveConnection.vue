@@ -49,6 +49,7 @@
     data() {
       return {
         hasUSB: false,
+        needsPermission: false,
       };
     },
     computed: {
@@ -63,17 +64,26 @@
       window.setHasUSB = (hasUSB) => {
         this.hasUSB = hasUSB;
       };
+      window.setNeedsPermission = (needsPermission) => {
+        this.needsPermission = needsPermission;
+      };
     },
     beforeDestroy() {
       function fallback() {
         console.log('No loading screen');
       };
       window.setHasUSB = fallback;
+      window.needsPermission = fallback;
     },
     methods: {
       loadWithUSB() {
-        this.$router.replace('/loading/default');
-        window.EndlessAPI.loadWithUSB();
+        if (this.needsPermission) {
+          this.$router.replace('/grant-permissions');
+        }
+        else {
+          this.$router.replace('/loading/default');
+          window.EndlessAPI.loadWithUSB();
+        }
       },
       goBack() {
         this.$router.replace('/welcome');
