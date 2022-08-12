@@ -37,6 +37,7 @@
 <script>
   import usbBackgroundConnect from '../assets/usb-connect.jpg';
   import usbBackgroundConnected from '../assets/usb-connected.jpg';
+  import { store } from "../store.js";
 
   export default {
     name: 'UsbDriveConnection',
@@ -46,34 +47,19 @@
         default: false,
       },
     },
-    data() {
-      return {
-        hasUSB: false,
-        needsPermission: false,
-      };
-    },
     computed: {
+      hasUSB() {
+        return store.state.isUsbConnected;
+      },
+      needsPermission() {
+        return store.state.needsPermission;
+      },
       usbBackground() {
         if (this.hasUSB) {
           return usbBackgroundConnected;
         }
         return usbBackgroundConnect;
       },
-    },
-    mounted() {
-      window.setHasUSB = (hasUSB) => {
-        this.hasUSB = hasUSB;
-      };
-      window.setNeedsPermission = (needsPermission) => {
-        this.needsPermission = needsPermission;
-      };
-    },
-    beforeDestroy() {
-      function fallback() {
-        console.log('No loading screen');
-      };
-      window.setHasUSB = fallback;
-      window.needsPermission = fallback;
     },
     methods: {
       loadWithUSB() {
