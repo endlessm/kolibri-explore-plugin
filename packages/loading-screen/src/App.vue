@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { store } from "./store.js";
 
 export default {
   name: 'App',
@@ -53,9 +54,12 @@ export default {
       this.$router.push('/permissions-wrong-folder');
     }
 
-    window.setHasUSB = () => {
-      // Does nothing.
-      // This function is implemented in the UsbDriveConnection view component
+    window.setHasUSB = (isUsbConnected) => {
+      store.setUsbConnected(isUsbConnected);
+    }
+
+    window.setNeedsPermission = (needsPermission) => {
+      store.setNeedsPermission(needsPermission);
     }
 
     window.firstLaunch = () => {

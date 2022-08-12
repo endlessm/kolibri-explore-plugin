@@ -11,6 +11,7 @@ import PermissionsCancelled from '@/views/PermissionsCancelled.vue';
 import PermissionsWrongFolder from '@/views/PermissionsWrongFolder.vue';
 import Loading from '@/views/Loading.vue';
 import Welcome from '@/views/Welcome.vue';
+import { store } from "@/store.js";
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
@@ -41,5 +42,6 @@ const router = new VueRouter({
 
 window.app = new Vue({
   router,
+  data: store.state,
   render: (h) => h(App),
 }).$mount('#app');
