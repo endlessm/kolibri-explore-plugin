@@ -183,8 +183,6 @@ class EndlessLearningCollection(View):
         },
     }
 
-    BASE_URL = "https://kolibri-content.endlessos.org/"
-
     def check_collection_availability(self):
         free_space_gb = get_free_space() / 1024**3
         for collections in self.grade_collections.values():
@@ -271,7 +269,7 @@ class EndlessLearningCollection(View):
         for channel in channels:
             task = {
                 "channel_id": channel["id"],
-                "baseurl": self.BASE_URL,
+                "baseurl": conf.OPTIONS["Urls"]["CENTRAL_CONTENT_BASE_URL"],
                 "started_by_username": "endless",
                 "type": "REMOTEIMPORT",
                 "PID": pid,
