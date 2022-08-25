@@ -2,7 +2,7 @@
   <div>
     <div class="p-3 pb-5">
       <h1 class="text-primary">
-        The Endless Key needs access to your device
+        Endless Key needs access to your device
       </h1>
 
       <b-container class="inner-container">

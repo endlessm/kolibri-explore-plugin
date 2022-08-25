@@ -25,7 +25,7 @@
         v-b-modal.about-modal
         class="btn d-md-block d-none pr-0"
       >
-        About the Endless Key
+        About Endless Key
       </b-nav-text>
     </b-navbar-nav>
   </NavBar>

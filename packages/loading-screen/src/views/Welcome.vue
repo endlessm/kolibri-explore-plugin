@@ -3,7 +3,7 @@
     <div class="flex-grow-1 welcome-background-top"></div>
     <div class="content p-3 pb-5 position-relative">
       <h1 class="text-primary">
-        Welcome to the Endless Key!
+        Welcome to Endless Key!
       </h1>
       <h5 class="font-weight-normal text-muted">
         Let's begin by helping you find your content
