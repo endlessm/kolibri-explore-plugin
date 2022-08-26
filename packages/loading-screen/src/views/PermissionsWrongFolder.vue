@@ -1,39 +1,35 @@
 <template>
-  <div>
-    <div class="p-3 pb-5">
-      <h1 class="text-primary">
-        Wrong folder selected
-      </h1>
-
-      <b-container class="inner-container">
-        <h5 class="font-weight-normal text-muted">
-          Please make sure to select the "KOLIBRI_DATA" folder in your external device.
-        </h5>
-
-        <b-button
-          class="mt-5"
-          variant="primary"
-          @click="loadWithUSB"
-        >
-          Allow Access
-        </b-button>
-        <br>
-        <b-button
-          class="mt-5"
-          variant="primary"
-          to="select-source"
-        >
-          Download choices
-        </b-button>
-      </b-container>
-    </div>
-  </div>
+  <WelcomeBase title="Wrong folder selected">
+    <template #body>
+      <h5 class="font-weight-normal mb-5 text-muted">
+        Please make sure to select the "KOLIBRI_DATA" folder in your external device.
+      </h5>
+      <b-button
+        variant="primary"
+        @click="loadWithUSB"
+      >
+        Allow Access
+      </b-button>
+      <p class="mt-5">
+        Check your
+        <b-link to="select-source">
+          download choices
+        </b-link>
+        instead.
+      </p>
+    </template>
+  </WelcomeBase>
 </template>
 
 
 <script>
+  import WelcomeBase from './WelcomeBase.vue';
+
   export default {
     name: 'PermissionsWrongFolder',
+    components: {
+      WelcomeBase,
+    },
     methods: {
       loadWithUSB() {
         this.$router.replace('/loading/default');
@@ -41,12 +37,4 @@
       },
     },
   };
-
 </script>
-
-
-<style lang="scss" scoped>
-
-  @import '../styles';
-
-</style>
