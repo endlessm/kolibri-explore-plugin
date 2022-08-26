@@ -23,7 +23,7 @@
         </b-button>
         <p v-if="!required" class="mt-5">
           Check your
-          <b-link @click="goBack">
+          <b-link to="select-source">
             download choices
           </b-link>
           instead.
@@ -70,9 +70,6 @@
           this.$router.replace('/loading/default');
           window.EndlessAPI.loadWithUSB();
         }
-      },
-      goBack() {
-        this.$router.replace('/welcome');
       },
     },
   };
