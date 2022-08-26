@@ -34,10 +34,6 @@
 <script>
   export default {
     name: 'PermissionsCancelled',
-    data() {
-      return {
-      };
-    },
     methods: {
       loadWithUSB() {
         this.$router.replace('/loading/default');

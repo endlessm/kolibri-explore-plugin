@@ -34,10 +34,6 @@
 <script>
   export default {
     name: 'PermissionsWrongFolder',
-    data() {
-      return {
-      };
-    },
     methods: {
       loadWithUSB() {
         this.$router.replace('/loading/default');
