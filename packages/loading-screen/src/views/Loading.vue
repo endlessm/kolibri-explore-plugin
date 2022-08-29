@@ -11,7 +11,7 @@
           Could not start Endless Key
         </h1>
         <h4 class="font-weight-normal mt-3 text-muted">
-          Please, try restarting the Endless Key by closing this window and
+          Please, try restarting Endless Key by closing this window and
           double clicking the launcher again.
         </h4>
       </div>
@@ -25,7 +25,7 @@
       </div>
       <div v-else>
         <h1 class="text-primary">
-          Welcome to the Endless Key
+          Welcome to Endless Key
         </h1>
         <h4 class="font-weight-normal mt-3 text-muted">
           Please wait a moment while your discovery experience loads

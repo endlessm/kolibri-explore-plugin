@@ -43,7 +43,7 @@
             </p>
 
             <p>
-              The Endless Key is a 128 gigabyte USB drive that is designed to
+              Endless Key is a 128 gigabyte USB drive that is designed to
               provide a robust, engaging and safe digital learning environment,
               with high-quality learning and discovery resources that can be
               accessed offline (without internet) by students using Windows

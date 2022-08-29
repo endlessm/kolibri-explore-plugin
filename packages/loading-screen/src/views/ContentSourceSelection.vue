@@ -1,54 +1,52 @@
 <template>
-  <div>
-    <div class="p-3 pb-5">
-      <h1 class="text-primary">
-        Select a content source
-      </h1>
-      <b-container class="inner-container">
-        <h5 class="font-weight-normal text-muted">
-          View content from an Endless Key USB Drive Collection, or download one
-          of our sample collections to start exploring.
-        </h5>
-        <b-card-group deck class="pt-5">
-          <WelcomeCard
-            title="Download Sample"
-            subTitle="Choose a sample collection to download"
-            :selected="selection === 'download'"
-            :img="downloadSelectionImage"
-            :disabled="isOffline"
-            @click="setSelection('download')"
-          />
-          <WelcomeCard
-            title="USB Drive Collection"
-            subTitle="Explore collection stored on your USB Drive"
-            :selected="selection === 'usb'"
-            :img="usbSelectionImage"
-            @click="setSelection('usb')"
-          />
-        </b-card-group>
-        <div class="pt-5">
-          <b-button
-            class="m-1"
-            :disabled="selection === null"
-            variant="primary"
-            @click="onNext"
-          >
-            Next
-          </b-button>
-        </div>
-      </b-container>
-    </div>
-  </div>
+  <WelcomeBase title="Select a content source">
+    <template #body>
+      <h5 class="font-weight-normal mb-5 text-muted">
+        View content from an Endless Key USB Drive Collection, or download one
+        of our sample collections to start exploring.
+      </h5>
+      <b-card-group deck>
+        <WelcomeCard
+          class="mb-3"
+          title="Download Sample"
+          subTitle="Choose a sample collection to download"
+          :selected="selection === 'download'"
+          :img="downloadSelectionImage"
+          :disabled="isOffline"
+          @click="setSelection('download')"
+        />
+        <WelcomeCard
+          class="mb-3"
+          title="USB Drive Collection"
+          subTitle="Explore collection stored on your USB Drive"
+          :selected="selection === 'usb'"
+          :img="usbSelectionImage"
+          @click="setSelection('usb')"
+        />
+      </b-card-group>
+      <b-button
+        class="mt-5"
+        :disabled="selection === null"
+        variant="primary"
+        @click="onNext"
+      >
+        Next
+      </b-button>
+    </template>
+  </WelcomeBase>
 </template>
 
 
 <script>
-
   import DownloadSelectionImage from '../assets/download-selection.png';
   import UsbSelectionImage from '../assets/usb-selection.png';
+  import WelcomeBase from './WelcomeBase.vue';
 
   export default {
     name: 'ContentSourceSelection',
+    components: {
+      WelcomeBase,
+    },
     data() {
       return {
         selection: null,  // 'download', 'usb'
@@ -93,19 +91,4 @@
       },
     },
   };
-
 </script>
-
-
-<style lang="scss" scoped>
-
-  @import '../styles';
-
-  // We need a custom container:
-  .inner-container {
-    @include media-breakpoint-up(md) {
-      max-width: $inner-container-max-width;
-    }
-  }
-
-</style>

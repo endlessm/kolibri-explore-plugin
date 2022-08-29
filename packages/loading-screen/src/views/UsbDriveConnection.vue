@@ -1,36 +1,28 @@
 <template>
-  <div>
-    <div class="p-3 pb-5">
-      <h1 class="text-primary">
-        Connect your Endless Key USB Drive
-      </h1>
-
-      <b-container class="inner-container">
-        <h5 class="font-weight-normal text-muted">
-          If you have an Endless Key Content USB Drive, you can connect it
-          to your computer, to explore its contents.
-        </h5>
-
-        <img class="mt-4 w-100" :src="usbBackground">
-
-        <b-button
-          class="mt-5"
-          variant="primary"
-          :disabled="!hasUSB"
-          @click="loadWithUSB"
-        >
-          Next
-        </b-button>
-        <p v-if="!required" class="mt-5">
-          Check your
-          <b-link @click="goBack">
-            download choices
-          </b-link>
-          instead.
-        </p>
-      </b-container>
-    </div>
-  </div>
+  <WelcomeBase title="Connect your Endless Key USB Drive">
+    <template #body>
+      <h5 class="font-weight-normal mb-5 text-muted">
+        If you have an Endless Key Content USB Drive, you can connect it
+        to your computer, to explore its contents.
+      </h5>
+      <img class="w-100" :src="usbBackground">
+      <b-button
+        class="mt-5"
+        variant="primary"
+        :disabled="!hasUSB"
+        @click="loadWithUSB"
+      >
+        Next
+      </b-button>
+      <p v-if="!required" class="mt-5">
+        Check your
+        <b-link to="select-source">
+          download choices
+        </b-link>
+        instead.
+      </p>
+    </template>
+  </WelcomeBase>
 </template>
 
 
@@ -38,9 +30,13 @@
   import usbBackgroundConnect from '../assets/usb-connect.jpg';
   import usbBackgroundConnected from '../assets/usb-connected.jpg';
   import { store } from "../store.js";
+  import WelcomeBase from './WelcomeBase.vue';
 
   export default {
     name: 'UsbDriveConnection',
+    components: {
+      WelcomeBase,
+    },
     props: {
       required: {
         type: Boolean,
@@ -71,24 +67,7 @@
           window.EndlessAPI.loadWithUSB();
         }
       },
-      goBack() {
-        this.$router.replace('/welcome');
-      },
     },
   };
 
 </script>
-
-
-<style lang="scss" scoped>
-
-  @import '../styles';
-
-  // We need a custom container for the paragraph and the image:
-  .inner-container {
-    @include media-breakpoint-up(md) {
-      max-width: $inner-container-max-width;
-    }
-  }
-
-</style>
