@@ -1,11 +1,12 @@
 <template>
   <WelcomeBase title="Connect your Endless Key USB Drive">
     <template #body>
-      <h5 class="font-weight-normal mb-5 text-muted">
-        If you have an Endless Key Content USB Drive, you can connect it
-        to your computer, to explore its contents.
-      </h5>
-      <img class="w-100" :src="usbBackground">
+      <img
+        class="w-100"
+        :src="usbBackground"
+        alt="If you have an Endless Key Content USB Drive, you can connect it
+             to your computer, to explore its contents."
+      >
       <b-button
         class="mt-5"
         variant="primary"
@@ -15,7 +16,7 @@
         Next
       </b-button>
       <p v-if="!required" class="mt-5">
-        Check your
+        View your
         <b-link to="select-source">
           download choices
         </b-link>
