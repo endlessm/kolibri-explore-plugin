@@ -1,19 +1,29 @@
 <template>
-  <b-container class="no-container-padding welcome-container">
-    <slot name="header">
-      <h1 class="mb-3 text-primary">
-        {{ title }}
-      </h1>
-    </slot>
-    <b-row class="justify-content-center">
-      <b-col cols="12" sm="8">
-        <slot name="body">
-        </slot>
-      </b-col>
-    </b-row>
-    <slot name="extra-body">
-      <!-- Use this slot for advanced grid. Eg: multiple columns. -->
-    </slot>
+  <b-container
+    class="d-flex flex-column flex-grow-1 no-container-padding welcome-container"
+  >
+    <b-container
+      class="d-flex flex-column flex-grow-1 justify-content-center no-container-padding"
+    >
+      <slot name="header">
+        <slot name="header-top"></slot>
+        <h1 class="mb-3" :class="titleVariant || 'text-primary'">
+          {{ title }}
+        </h1>
+      </slot>
+      <b-row class="justify-content-center">
+        <b-col cols="12" sm="8">
+          <slot name="body">
+          </slot>
+        </b-col>
+      </b-row>
+      <slot name="extra-body">
+        <!-- Use this slot for advanced grid. Eg: multiple columns. -->
+      </slot>
+    </b-container>
+    <b-container v-if="hasFooter" id="footer" class="no-container-padding">
+      <slot name="footer"></slot>
+    </b-container>
   </b-container>
 </template>
 
@@ -25,6 +35,15 @@
       title: {
         type: String,
         required: true,
+      },
+      titleVariant: {
+        type: String,
+        default: null,
+      }
+    },
+    computed: {
+      hasFooter() {
+        return !!this.$slots.footer;
       },
     },
   };
