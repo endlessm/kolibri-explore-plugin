@@ -16,8 +16,7 @@
           Choose your collection
         </h1>
         <h6 class="text-muted">
-          Now, select the amount of content you would like to download. The
-          small collection will give you just a taste of each channel and is
+          The small collection will give you just a taste of each channel and is
           recommended if you have limited free space on your computer.
         </h6>
 
