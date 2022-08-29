@@ -7,11 +7,11 @@
     >
       <slot name="header">
         <slot name="header-top"></slot>
-        <h1 class="mb-3" :class="titleVariant || 'text-primary'">
+        <h1 v-if="title" class="mb-3" :class="titleVariant || 'text-primary'">
           {{ title }}
         </h1>
       </slot>
-      <b-row class="justify-content-center">
+      <b-row v-if="hasBody" class="justify-content-center">
         <b-col cols="12" sm="8">
           <slot name="body">
           </slot>
@@ -34,7 +34,7 @@
     props: {
       title: {
         type: String,
-        required: true,
+        default: null,
       },
       titleVariant: {
         type: String,
@@ -42,6 +42,9 @@
       }
     },
     computed: {
+      hasBody() {
+        return !!this.$slots.body;
+      },
       hasFooter() {
         return !!this.$slots.footer;
       },
