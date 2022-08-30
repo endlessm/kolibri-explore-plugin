@@ -6,7 +6,7 @@
         Welcome to Endless Key!
       </h1>
       <h5 class="font-weight-normal text-muted">
-        Let's begin by helping you find your content
+        Let's begin by helping you find your content.
       </h5>
       <div class="pt-5">
         <b-button

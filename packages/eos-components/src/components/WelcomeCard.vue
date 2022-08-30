@@ -4,8 +4,8 @@
     :subTitle="subTitle"
     :borderVariant="selected ? 'primary' : 'default'"
     :class="{ active: selected, disabled: disabled }"
-    titleTag="h6"
-    subTitleTag="h4"
+    titleTag="h5"
+    subTitleTag="p"
     imgBottom
     :imgSrc="img"
   >

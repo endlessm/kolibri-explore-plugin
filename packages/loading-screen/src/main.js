@@ -10,6 +10,9 @@ import PermissionsExplanation from '@/views/PermissionsExplanation.vue';
 import PermissionsCancelled from '@/views/PermissionsCancelled.vue';
 import PermissionsWrongFolder from '@/views/PermissionsWrongFolder.vue';
 import Loading from '@/views/Loading.vue';
+import LoadingInitial from '@/views/LoadingInitial.vue';
+import LoadingError from '@/views/LoadingError.vue';
+import LoadingRetry from '@/views/LoadingRetry.vue';
 import Welcome from '@/views/Welcome.vue';
 import { store } from "@/store.js";
 
@@ -22,7 +25,10 @@ Vue.config.productionTip = false;
 
 const routes = [
   { path: '/', redirect: '/loading/default' },
-  { path: '/loading/:state', component: Loading },
+  { path: '/loading/default', component: Loading },
+  { path: '/loading/initial', component: LoadingInitial },
+  { path: '/loading/error', component: LoadingError },
+  { path: '/loading/retry', component: LoadingRetry },
   { path: '/welcome', component: Welcome },
   { path: '/select-source', component: ContentSourceSelection },
   { path: '/endless-key', component: UsbDriveConnection },

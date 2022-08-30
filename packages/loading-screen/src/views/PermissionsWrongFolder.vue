@@ -11,7 +11,7 @@
         Allow Access
       </b-button>
       <p class="mt-5">
-        Check your
+        View your
         <b-link to="select-source">
           download choices
         </b-link>

@@ -15,11 +15,6 @@
         <h1 class="text-primary">
           Select grade range
         </h1>
-        <h6 class="text-muted">
-          The Endless Key download contains a sample of the content available
-          on the full Endless Key. The content is available in three
-          selections:
-        </h6>
 
         <b-alert
           v-if="error"

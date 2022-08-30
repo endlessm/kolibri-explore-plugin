@@ -2,8 +2,8 @@
   <WelcomeBase title="Select a content source">
     <template #body>
       <h5 class="font-weight-normal mb-5 text-muted">
-        View content from an Endless Key USB Drive Collection, or download one
-        of our sample collections to start exploring.
+        Download one of our sample collections or view content from an
+        Endless Key USB Drive.
       </h5>
       <b-card-group deck>
         <WelcomeCard

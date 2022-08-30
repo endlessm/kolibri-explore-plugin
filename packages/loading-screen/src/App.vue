@@ -1,7 +1,7 @@
 <template>
   <div
     id="app"
-    class="align-items-center d-flex flex-column justify-content-center min-vh-100 text-center"
+    class="d-flex min-vh-100 text-center"
   >
     <router-view />
   </div>
@@ -99,7 +99,6 @@ body {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: white;
 }
 
 </style>
