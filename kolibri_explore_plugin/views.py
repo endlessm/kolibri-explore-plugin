@@ -183,11 +183,20 @@ class EndlessLearningCollection(View):
         },
     }
 
-    def check_collection_availability(self):
+    def update_collection_json(self):
         free_space_gb = get_free_space() / 1024**3
-        for collections in self.grade_collections.values():
-            for v in collections.values():
+        for grade, collections in self.grade_collections.items():
+            for collection, v in collections.items():
+                # check collection availability
                 v["available"] = v["size"] < free_space_gb
+                # calculate real number of channels
+                collection_manifest = os.path.join(
+                    COLLECTION_PATHS, f"{grade}-{collection}.json"
+                )
+                with open(collection_manifest) as f:
+                    manifest = json.load(f)
+                    channels = manifest.get("channels", [])
+                    v["channels"] = len(channels)
 
     def get(self, request):
         job_ids = request.session.get("job_ids", [])
@@ -226,7 +235,7 @@ class EndlessLearningCollection(View):
             del request.session["job_ids"]
 
         collection = request.session.get("downloading")
-        self.check_collection_availability()
+        self.update_collection_json()
         jobs_response = {
             "collections": self.grade_collections,
             "collection": collection,
