@@ -1,11 +1,11 @@
 <template>
-  <WelcomeBase title="Connect your Endless Key USB Drive">
+  <WelcomeBase title="Connect your Endless Key external drive">
     <template #body>
       <img
         class="w-100"
         :src="usbBackground"
-        alt="If you have an Endless Key Content USB Drive, you can connect it
-             to your computer, to explore its contents."
+        alt="If you have an Endless Key external drive you can connect it
+             to your computer to explore its contents."
       >
       <b-button
         class="mt-5"
