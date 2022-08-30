@@ -1,5 +1,10 @@
 <template>
   <WelcomeBase title="Folder selection cancelled" titleVariant="text-dark">
+    <template #header-top>
+      <p class="mb-3 text-dark">
+        <FolderAlertIcon size="64" />
+      </p>
+    </template>
     <template #body>
       <h5 class="font-weight-normal mb-5 text-muted">
         If that's not what you want, you can try again.
@@ -24,11 +29,13 @@
 
 
 <script>
+  import FolderAlertIcon from 'vue-material-design-icons/FolderAlertOutline.vue';
   import WelcomeBase from './WelcomeBase.vue';
 
   export default {
     name: 'PermissionsCancelled',
     components: {
+      FolderAlertIcon,
       WelcomeBase,
     },
     methods: {
