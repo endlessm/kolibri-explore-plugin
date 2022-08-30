@@ -3,7 +3,7 @@
     <template #body>
       <h5 class="font-weight-normal mb-5 text-muted">
         Download one of our sample collections or view content from an
-        Endless Key USB Drive.
+        Endless Key external drive.
       </h5>
       <b-card-group deck>
         <WelcomeCard

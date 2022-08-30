@@ -1,7 +1,8 @@
 <template>
-  <WelcomeBase title="Wrong folder selected">
+  <WelcomeBase title="Oops, you have selected another folder" titleVariant="text-dark">
     <template #body>
       <h5 class="font-weight-normal mb-5 text-muted">
+        You can try again!
         Please make sure to select the "KOLIBRI_DATA" folder in your external device.
       </h5>
       <b-button

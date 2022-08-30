@@ -1,7 +1,8 @@
 <template>
-  <WelcomeBase title="Folder selection cancelled">
+  <WelcomeBase title="Folder selection cancelled" titleVariant="text-dark">
     <template #body>
       <h5 class="font-weight-normal mb-5 text-muted">
+        If that's not what you want, you can try again.
         Please make sure to select the "KOLIBRI_DATA" folder in your external device.
       </h5>
       <b-button

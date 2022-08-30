@@ -3,7 +3,7 @@
     <template #body>
       <h5 class="font-weight-normal mb-5 text-muted">
         This will let you see and experience the content
-        from your external device on your Endless Key app.
+        from the external device on your Endless Key app.
       </h5>
       <b-list-group>
         <b-list-group-item variant="dark">
