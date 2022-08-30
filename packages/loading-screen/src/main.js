@@ -24,7 +24,7 @@ Vue.use(eosComponents);
 Vue.config.productionTip = false;
 
 const routes = [
-  { path: '/', redirect: '/loading/default' },
+  { path: '/', redirect: '/loading/initial' },
   { path: '/loading/default', component: Loading },
   { path: '/loading/initial', component: LoadingInitial },
   { path: '/loading/error', component: LoadingError },
