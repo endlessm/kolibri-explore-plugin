@@ -147,6 +147,10 @@
     },
     methods: {
       downloadContent() {
+        if (this.downloading) {
+          return;
+        }
+
         this.downloading = true;
         this.jobs = [];
         const collection = this.collection.metadata.subtitle.toLowerCase();
