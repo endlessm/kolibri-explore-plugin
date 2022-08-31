@@ -171,7 +171,7 @@
           const runningJobs = this.jobs.filter(j => j.status === 'RUNNING');
           const failedJobs = this.jobs.filter(j => j.status === 'FAILED');
 
-          const completed = completedJobs.length;
+          const completed = completedJobs.length + failedJobs.length;
 
           console.log('Downloading: ');
           console.log(`  Total Jobs: ${this.jobs.length}`);
@@ -197,10 +197,19 @@
               this.$emit('newContent');
             }
 
-            this.downloading = this.jobs.some(j => j.status !== 'COMPLETED');
+            this.downloading = this.jobs.some(j => j.status !== 'COMPLETED' && j.status !== 'FAILED');
             if (this.downloading) {
               this.pollingId = setTimeout(() => this.pollJobs(), 1500);
+            } else {
+              this.$emit('newContent');
+              this.$emit('hide');
+              this.downloading = false;
             }
+          }
+        })
+        .catch(() => {
+          if (this.downloading) {
+            this.pollingId = setTimeout(() => this.pollJobs(), 1500);
           }
         });
       },
