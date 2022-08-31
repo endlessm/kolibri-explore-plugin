@@ -104,6 +104,7 @@
     },
     computed: {
       ...mapState(['noContent', 'pageName']),
+      ...mapState('topicsRoot', { rootNodes: 'rootNodes' }),
       gradeCollections() {
         return Object.values(this.collections[this.grade] || {});
       },
@@ -128,9 +129,10 @@
     },
     watch: {
       noContent() {
-        if (this.noContent) {
-          this.visibleModal = 'grade';
-        }
+        this.getRunningJobs();
+      },
+      rootNodes() {
+        this.getRunningJobs();
       },
       $route: function(newRoute, oldRoute) {
         // Return if the user is leaving or entering the Search page.
@@ -148,19 +150,6 @@
           params: oldRoute.params,
         };
       },
-    },
-    mounted() {
-      axios.get(ApiURL).then(({ data }) => {
-        if (data.collections) {
-          this.collections = data.collections;
-        }
-
-        if (data.collection) {
-          const [grade, size] = data.collection.split('-');
-          const collection = data.collections[grade][size];
-          this.downloadCollection(grade, collection);
-        }
-      });
     },
     methods: {
       onLoading() {
@@ -194,6 +183,21 @@
         } else {
           this.visibleModal = 'none';
         }
+      },
+      getRunningJobs() {
+        axios.get(ApiURL).then(({ data }) => {
+          if (data.collections) {
+            this.collections = data.collections;
+          }
+
+          if (data.collection) {
+            const [grade, size] = data.collection.split('-');
+            const collection = data.collections[grade][size];
+            this.downloadCollection(grade, collection);
+          } else if (this.noContent) {
+            this.visibleModal = 'grade';
+          }
+        });
       },
     },
   };
