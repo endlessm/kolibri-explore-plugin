@@ -152,11 +152,11 @@
         const collection = this.collection.subtitle.toLowerCase();
         const grade = this.grade.toLowerCase();
         axios
-          .post(ApiURL, { grade: grade, collection: collection})
+          .post(ApiURL, { grade: grade, collection: collection })
           .then(() => {
             this.pollJobs();
           })
-          .catch((error) => {
+          .catch(error => {
             this.$emit('hide', error);
             this.downloading = false;
           });
@@ -180,7 +180,7 @@
           console.log(`      Failed: ${failedJobs.length}`);
           console.log(`   Completed: ${completedJobs.length}`);
           console.log(`    Progress: ${this.progress}`);
-          for (var i=0; i<this.jobs.length; i++) {
+          for (var i = 0; i < this.jobs.length; i++) {
             const job = this.jobs[i];
             console.log(`       JOB: ${job.channel_name}|${job.status} ${job.percentage}`);
           }
