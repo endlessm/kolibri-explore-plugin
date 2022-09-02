@@ -123,61 +123,25 @@ class EndlessLearningCollection(View):
     grade_collections = {
         "primary": {
             "small": {
-                "title": "2 GB",
-                "subtitle": "Small",
-                "channels": 13,
-                "size": 2,
-                "text": "Primary",
-                "token": "kopip-lakip",
                 "available": True,
             },
             "large": {
-                "title": "5 GB",
-                "subtitle": "Large",
-                "channels": 14,
-                "size": 5,
-                "text": "Primary",
-                "token": "vofog-gufap",
                 "available": True,
             },
         },
         "intermediate": {
             "small": {
-                "title": "3 GB",
-                "subtitle": "Small",
-                "channels": 22,
-                "size": 3,
-                "text": "Intermediate",
-                "token": "kopip-lakip",
                 "available": True,
             },
             "large": {
-                "title": "6 GB",
-                "subtitle": "Large",
-                "channels": 22,
-                "size": 6,
-                "text": "Intermediate",
-                "token": "vofog-gufap",
                 "available": True,
             },
         },
         "secondary": {
             "small": {
-                "title": "3 GB",
-                "subtitle": "Small",
-                "channels": 23,
-                "size": 3,
-                "text": "Secondary",
-                "token": "kopip-lakip",
                 "available": True,
             },
             "large": {
-                "title": "6 GB",
-                "subtitle": "Large",
-                "channels": 24,
-                "size": 6,
-                "text": "Secondary",
-                "token": "vofog-gufap",
                 "available": True,
             },
         },
@@ -187,16 +151,17 @@ class EndlessLearningCollection(View):
         free_space_gb = get_free_space() / 1024**3
         for grade, collections in self.grade_collections.items():
             for name, collection in collections.items():
-                # check collection availability
-                collection["available"] = collection["size"] < free_space_gb
-                # calculate real number of channels
                 collection_manifest = os.path.join(
                     COLLECTION_PATHS, f"{grade}-{name}.json"
                 )
                 with open(collection_manifest) as f:
                     manifest = json.load(f)
-                    channels = manifest.get("channels", [])
-                    collection["channels"] = len(channels)
+                    metadata = manifest.get("metadata", {})
+                    collection.update(metadata)
+
+                # check collection availability
+                collection["available"] = collection["size"] < free_space_gb
+                # calculate real number of channels
 
     def get(self, request):
         job_ids = request.session.get("job_ids", [])
