@@ -63,6 +63,9 @@
                 <b-list-group-item class="bg-light rounded-0">
                   Commit: {{ buildInfo.commit }}
                 </b-list-group-item>
+                <b-list-group-item class="bg-light rounded-0">
+                  Kolibri: {{ kolibriVersion }}
+                </b-list-group-item>
               </b-list-group>
               <hr>
             </template>
@@ -292,6 +295,11 @@
           },
         ],
       };
+    },
+    computed: {
+      kolibriVersion() {
+        return window.kolibriCoreAppGlobal.version;
+      },
     },
     mounted() {
       this.activeItemId = this.menuItems[0].id;
