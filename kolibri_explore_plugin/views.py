@@ -17,14 +17,14 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 from kolibri.core.content.api import metadata_cache
+from kolibri.core.content.api import RemoteChannelViewSet
+from kolibri.core.content.tasks import remoteimport
 from kolibri.core.content.zip_wsgi import add_security_headers
 from kolibri.core.content.zip_wsgi import get_embedded_file
 from kolibri.core.decorators import cache_no_user_data
-from kolibri.core.tasks.api import _job_to_response
-from kolibri.core.tasks.api import _remoteimport
 from kolibri.core.tasks.exceptions import JobNotFound
 from kolibri.core.tasks.job import State
-from kolibri.core.tasks.main import queue
+from kolibri.core.tasks.main import job_storage
 from kolibri.utils import conf
 from kolibri.utils.server import _read_pid_file
 from kolibri.utils.server import PID_FILE
@@ -148,6 +148,23 @@ class EndlessLearningCollection(View):
         },
     }
 
+    def _job_to_response(self, job):
+        output = {
+            "status": job.state,
+            "type": job.func,
+            "exception": job.exception,
+            "traceback": job.traceback,
+            "percentage": job.percentage_progress,
+            "id": job.job_id,
+            "cancellable": job.cancellable,
+            "clearable": job.state
+            in [State.FAILED, State.CANCELED, State.COMPLETED],
+            "facility_id": job.facility_id,
+            "extra_metadata": job.extra_metadata,
+            "channel_name": job.extra_metadata.get("channel_name", ""),
+        }
+        return output
+
     def update_collection_from_json(self):
         free_space_gb = get_free_space() / 1024**3
         for grade, collections in self.grade_collections.items():
@@ -179,7 +196,7 @@ class EndlessLearningCollection(View):
     def get(self, request):
         job_ids = request.session.get("job_ids", [])
         try:
-            jobs = [queue.fetch_job(job) for job in job_ids]
+            jobs = [job_storage.get_job(job) for job in job_ids]
         except JobNotFound:
             request.session["job_ids"] = []
             jobs = []
@@ -191,8 +208,8 @@ class EndlessLearningCollection(View):
             job_pid = job.extra_metadata.get("PID", None)
             if job_pid and job_pid != pid:
                 job.extra_metadata["PID"] = pid
-                queue.storage.save_job_meta(job)
-                queue.storage._update_job(job.job_id, State.QUEUED)
+                job.save_meta()
+                job.storage._update_job(job.job_id, State.QUEUED)
 
         running_states = [
             State.RUNNING,
@@ -217,7 +234,7 @@ class EndlessLearningCollection(View):
         jobs_response = {
             "collections": self.grade_collections,
             "collection": collection,
-            "jobs": [_job_to_response(job) for job in jobs],
+            "jobs": [self._job_to_response(job) for job in jobs],
         }
 
         return HttpResponse(
@@ -247,26 +264,36 @@ class EndlessLearningCollection(View):
 
         job_ids = []
         pid, _, _, _ = _read_pid_file(PID_FILE)
+        baseurl = conf.OPTIONS["Urls"]["CENTRAL_CONTENT_BASE_URL"]
+
         for channel in channels:
+            channels = RemoteChannelViewSet()._make_channel_endpoint_request(
+                channel["id"],
+                baseurl=baseurl,
+            )
+            channel_name = ""
+            if channels:
+                channel_name = channels[0]["name"]
+
             task = {
                 "channel_id": channel["id"],
-                "baseurl": conf.OPTIONS["Urls"]["CENTRAL_CONTENT_BASE_URL"],
+                "channel_name": channel_name,
+                "baseurl": baseurl,
                 "started_by_username": "endless",
                 "type": "REMOTEIMPORT",
                 "PID": pid,
             }
 
-            job_id = queue.enqueue(
-                _remoteimport,
-                task["channel_id"],
-                task["baseurl"],
-                # Done this way to convert [] to None
-                node_ids=channel.get("include_node_ids") or None,
-                # Done this way to convert [] to None
-                exclude_node_ids=channel.get("exclude_node_ids") or None,
+            job_id = remoteimport.enqueue(
+                args=[task["channel_id"]],
+                kwargs=dict(
+                    baseurl=task["baseurl"],
+                    # Done this way to convert [] to None
+                    node_ids=channel.get("include_node_ids") or None,
+                    # Done this way to convert [] to None
+                    exclude_node_ids=channel.get("exclude_node_ids") or None,
+                ),
                 extra_metadata=task,
-                track_progress=True,
-                cancellable=True,
             )
             job_ids.append(job_id)
 
