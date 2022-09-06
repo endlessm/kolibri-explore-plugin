@@ -16,7 +16,7 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
 from django.views.generic.base import View
-from kolibri.core.content.api import cache_forever
+from kolibri.core.content.api import metadata_cache
 from kolibri.core.content.zip_wsgi import add_security_headers
 from kolibri.core.content.zip_wsgi import get_embedded_file
 from kolibri.core.decorators import cache_no_user_data
@@ -77,7 +77,7 @@ class AppBase(View):
 
 
 class AppView(AppBase):
-    @cache_forever
+    @method_decorator(metadata_cache, name="dispatch")
     @xframe_options_exempt
     def get(self, request, app, path=""):
         filename = self._get_file(app, "custom-channel-ui.zip")
