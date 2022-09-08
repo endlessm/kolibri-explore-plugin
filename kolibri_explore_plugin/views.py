@@ -3,6 +3,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import json
+import logging
 import os
 
 import requests
@@ -154,8 +155,16 @@ class EndlessLearningCollection(View):
                 collection_manifest = os.path.join(
                     COLLECTION_PATHS, f"{grade}-{name}.json"
                 )
+
+                if not os.path.exists(collection_manifest):
+                    logging.error("Collection manifest not found")
+                    collection["loaded"] = False
+                    continue
+
                 with open(collection_manifest) as f:
                     manifest = json.load(f)
+                    collection["loaded"] = True
+                    collection["channels"] = manifest.get("channels", [])
                     collection["metadata"] = manifest.get("metadata", {})
 
                 # check collection availability
@@ -216,12 +225,12 @@ class EndlessLearningCollection(View):
         )
 
     def post(self, request):
-        grade = "primary"
-        collection = "small"
+        collection_grade = "primary"
+        collection_name = "small"
         if request.body:
             data = json.loads(request.body)
-            collection = data.get("collection", "small")
-            grade = data.get("grade", "primary")
+            collection_grade = data.get("grade", "primary")
+            collection_name = data.get("collection", "small")
 
         # Do nothing if already downloading
         if "downloading" in request.session:
@@ -230,17 +239,11 @@ class EndlessLearningCollection(View):
                 json.dumps(job_ids), content_type="application/json"
             )
 
-        collection_manifest = os.path.join(
-            COLLECTION_PATHS, f"{grade}-{collection}.json"
-        )
-
-        if not os.path.exists(collection_manifest):
+        collection = self.grade_collections[collection_grade][collection_name]
+        if not collection["loaded"]:
             raise Http404("Collection manifest not found")
 
-        manifest = {}
-        with open(collection_manifest) as f:
-            manifest = json.load(f)
-        channels = manifest.get("channels", [])
+        channels = collection["channels"]
 
         job_ids = []
         pid, _, _, _ = _read_pid_file(PID_FILE)
@@ -270,7 +273,9 @@ class EndlessLearningCollection(View):
         # Two weeks session expiry
         request.session.set_expiry(1209600)
         request.session["job_ids"] = job_ids
-        request.session["downloading"] = f"{grade}-{collection}"
+        request.session[
+            "downloading"
+        ] = f"{collection_grade}-{collection_name}"
         return HttpResponse(
             json.dumps(job_ids), content_type="application/json"
         )
