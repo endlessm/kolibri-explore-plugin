@@ -23,10 +23,10 @@
         <b-card-group deck class="py-5">
           <WelcomeCard
             v-for="collection in collections"
-            :key="collection.title"
-            :title="`${grade} ${collection.subtitle}`"
-            :text="`${collection.channels} Channels`"
-            :secondaryText="collection.text"
+            :key="collection.metadata.title"
+            :title="`${grade} ${collection.metadata.subtitle}`"
+            :text="`${collection.channels.length} Channels`"
+            :secondaryText="collection.metadata.description"
             :disabled="!collection.available"
             @click="$emit('downloadCollection', grade, collection)"
           >
@@ -35,7 +35,7 @@
               variant="primary"
               :disabled="!collection.available"
             >
-              Download <strong>{{ collection.size }} GB</strong>
+              Download <strong>{{ collection.required_gigabytes }} GB</strong>
             </b-button>
           </WelcomeCard>
         </b-card-group>
@@ -68,20 +68,11 @@
       },
       collections: {
         type: Array,
-        default: () => {
-          return [
-            {
-              title: '3 GB',
-              subtitle: 'Small',
-              channels: 10,
-              text: 'Short Description to be defined',
-            },
-          ];
-        },
+        default: null,
       },
       grade: {
         type: String,
-        default: 'intermediate',
+        default: null,
       },
     },
   };
