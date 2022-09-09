@@ -35,7 +35,7 @@
               variant="primary"
               :disabled="!collection.available"
             >
-              Download <strong>{{ collection.required_gigabytes }} GB</strong>
+              Download <strong>{{ collection.metadata.required_gigabytes }} GB</strong>
             </b-button>
           </WelcomeCard>
         </b-card-group>
