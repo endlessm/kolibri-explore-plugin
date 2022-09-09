@@ -56,10 +56,12 @@
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
   import { ChannelResource, ContentNodeResource } from 'kolibri.resources';
   import axios from 'axios';
-  import { constants } from 'eos-components';
   import { showChannels } from '../modules/topicsRoot/handlers';
-  import { PageNames } from '../constants';
+  import { ApiURL, PageNames } from '../constants';
   import AboutModal from '../components/AboutModal';
+  import GradeSelectionModal from '../components/GradeSelectionModal';
+  import CollectionSelectionModal from '../components/CollectionSelectionModal';
+  import InstallContentModal from '../components/InstallContentModal';
   import commonExploreStrings from './commonExploreStrings';
   import DiscoveryPage from './DiscoveryPage';
   import CustomChannelPresentationApp from './CustomChannelPresentationApp';
@@ -84,6 +86,9 @@
       AboutModal,
       ContentModal,
       DevTag,
+      GradeSelectionModal,
+      CollectionSelectionModal,
+      InstallContentModal,
     },
     mixins: [commonCoreStrings, commonExploreStrings, responsiveWindowMixin],
     data() {
@@ -145,7 +150,7 @@
       },
     },
     mounted() {
-      axios.get(constants.ApiURL).then(({ data }) => {
+      axios.get(ApiURL).then(({ data }) => {
         if (data.collections) {
           this.collections = data.collections;
         }

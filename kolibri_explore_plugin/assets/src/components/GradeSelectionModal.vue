@@ -57,9 +57,10 @@
 
 
 <script>
-  import primaryImage from '../assets/collections/primary-icons.png';
-  import intermediateImage from '../assets/collections/intermediate-icons.png';
-  import secondaryImage from '../assets/collections/secondary-icons.png';
+
+  import primaryImage from '../collections/primary-icons.png';
+  import intermediateImage from '../collections/intermediate-icons.png';
+  import secondaryImage from '../collections/secondary-icons.png';
 
   export default {
     name: 'GradeSelectionModal',
@@ -121,7 +122,6 @@
     text-align: center;
     background-color: white;
   }
-
 
   .card-deck {
     @include media-breakpoint-down(md) {

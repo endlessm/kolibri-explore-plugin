@@ -3,6 +3,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import json
+import logging
 import os
 
 import requests
@@ -123,71 +124,57 @@ class EndlessLearningCollection(View):
     grade_collections = {
         "primary": {
             "small": {
-                "title": "2 GB",
-                "subtitle": "Small",
-                "channels": 13,
-                "size": 2,
-                "text": "Primary",
-                "token": "kopip-lakip",
                 "available": True,
             },
             "large": {
-                "title": "5 GB",
-                "subtitle": "Large",
-                "channels": 14,
-                "size": 5,
-                "text": "Primary",
-                "token": "vofog-gufap",
                 "available": True,
             },
         },
         "intermediate": {
             "small": {
-                "title": "3 GB",
-                "subtitle": "Small",
-                "channels": 22,
-                "size": 3,
-                "text": "Intermediate",
-                "token": "kopip-lakip",
                 "available": True,
             },
             "large": {
-                "title": "6 GB",
-                "subtitle": "Large",
-                "channels": 22,
-                "size": 6,
-                "text": "Intermediate",
-                "token": "vofog-gufap",
                 "available": True,
             },
         },
         "secondary": {
             "small": {
-                "title": "3 GB",
-                "subtitle": "Small",
-                "channels": 23,
-                "size": 3,
-                "text": "Secondary",
-                "token": "kopip-lakip",
                 "available": True,
             },
             "large": {
-                "title": "6 GB",
-                "subtitle": "Large",
-                "channels": 24,
-                "size": 6,
-                "text": "Secondary",
-                "token": "vofog-gufap",
                 "available": True,
             },
         },
     }
 
-    def check_collection_availability(self):
+    def update_collection_from_json(self):
         free_space_gb = get_free_space() / 1024**3
-        for collections in self.grade_collections.values():
-            for v in collections.values():
-                v["available"] = v["size"] < free_space_gb
+        for grade, collections in self.grade_collections.items():
+            for name, collection in collections.items():
+                collection_manifest = os.path.join(
+                    COLLECTION_PATHS, f"{grade}-{name}.json"
+                )
+
+                if not os.path.exists(collection_manifest):
+                    logging.error("Collection manifest not found")
+                    collection["loaded"] = False
+                    continue
+
+                with open(collection_manifest) as f:
+                    manifest = json.load(f)
+                    collection["loaded"] = True
+                    collection["channels"] = manifest.get("channels", [])
+                    collection["metadata"] = manifest.get("metadata", {})
+
+                # check collection availability
+                if "required_gigabytes" in collection["metadata"]:
+                    collection["available"] = (
+                        collection["metadata"]["required_gigabytes"]
+                        < free_space_gb
+                    )
+                else:
+                    collection["available"] = False
 
     def get(self, request):
         job_ids = request.session.get("job_ids", [])
@@ -226,7 +213,7 @@ class EndlessLearningCollection(View):
             del request.session["job_ids"]
 
         collection = request.session.get("downloading")
-        self.check_collection_availability()
+        self.update_collection_from_json()
         jobs_response = {
             "collections": self.grade_collections,
             "collection": collection,
@@ -238,12 +225,12 @@ class EndlessLearningCollection(View):
         )
 
     def post(self, request):
-        grade = "primary"
-        collection = "small"
+        collection_grade = "primary"
+        collection_name = "small"
         if request.body:
             data = json.loads(request.body)
-            collection = data.get("collection", "small")
-            grade = data.get("grade", "primary")
+            collection_grade = data.get("grade", "primary")
+            collection_name = data.get("collection", "small")
 
         # Do nothing if already downloading
         if "downloading" in request.session:
@@ -252,17 +239,11 @@ class EndlessLearningCollection(View):
                 json.dumps(job_ids), content_type="application/json"
             )
 
-        collection_manifest = os.path.join(
-            COLLECTION_PATHS, f"{grade}-{collection}.json"
-        )
-
-        if not os.path.exists(collection_manifest):
+        collection = self.grade_collections[collection_grade][collection_name]
+        if not collection["loaded"]:
             raise Http404("Collection manifest not found")
 
-        manifest = {}
-        with open(collection_manifest) as f:
-            manifest = json.load(f)
-        channels = manifest.get("channels", [])
+        channels = collection["channels"]
 
         job_ids = []
         pid, _, _, _ = _read_pid_file(PID_FILE)
@@ -292,7 +273,9 @@ class EndlessLearningCollection(View):
         # Two weeks session expiry
         request.session.set_expiry(1209600)
         request.session["job_ids"] = job_ids
-        request.session["downloading"] = f"{grade}-{collection}"
+        request.session[
+            "downloading"
+        ] = f"{collection_grade}-{collection_name}"
         return HttpResponse(
             json.dumps(job_ids), content_type="application/json"
         )
