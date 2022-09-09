@@ -168,54 +168,58 @@
       pollJobs() {
         clearTimeout(this.pollingId);
 
-        axios.get(ApiURL).then(({ data }) => {
-          this.jobs = data.jobs;
-          const completedJobs = this.jobs.filter(j => j.status === 'COMPLETED');
-          const queuedJobs = this.jobs.filter(j => j.status === 'QUEUED');
-          const runningJobs = this.jobs.filter(j => j.status === 'RUNNING');
-          const failedJobs = this.jobs.filter(j => j.status === 'FAILED');
+        axios
+          .get(ApiURL)
+          .then(({ data }) => {
+            this.jobs = data.jobs;
+            const completedJobs = this.jobs.filter(j => j.status === 'COMPLETED');
+            const queuedJobs = this.jobs.filter(j => j.status === 'QUEUED');
+            const runningJobs = this.jobs.filter(j => j.status === 'RUNNING');
+            const failedJobs = this.jobs.filter(j => j.status === 'FAILED');
 
-          const completed = completedJobs.length + failedJobs.length;
+            const completed = completedJobs.length + failedJobs.length;
 
-          console.log('Downloading: ');
-          console.log(`  Total Jobs: ${this.jobs.length}`);
-          console.log(`      Queued: ${queuedJobs.length}`);
-          console.log(`     Running: ${runningJobs.length}`);
-          console.log(`      Failed: ${failedJobs.length}`);
-          console.log(`   Completed: ${completedJobs.length}`);
-          console.log(`    Progress: ${this.progress}`);
-          for (var i = 0; i < this.jobs.length; i++) {
-            const job = this.jobs[i];
-            console.log(`       JOB: ${job.channel_name}|${job.status} ${job.percentage}`);
-          }
-
-          if (completed > 0 && completed === this.jobs.length) {
-            // Download is completed
-            this.$emit('newContent');
-            this.$emit('hide');
-            this.downloading = false;
-          } else {
-            this.downloading = true;
-            if (completed !== this.channelsDownloaded) {
-              this.channelsDownloaded = completed;
-              this.$emit('newContent');
+            console.log('Downloading: ');
+            console.log(`  Total Jobs: ${this.jobs.length}`);
+            console.log(`      Queued: ${queuedJobs.length}`);
+            console.log(`     Running: ${runningJobs.length}`);
+            console.log(`      Failed: ${failedJobs.length}`);
+            console.log(`   Completed: ${completedJobs.length}`);
+            console.log(`    Progress: ${this.progress}`);
+            for (var i = 0; i < this.jobs.length; i++) {
+              const job = this.jobs[i];
+              console.log(`       JOB: ${job.channel_name}|${job.status} ${job.percentage}`);
             }
 
-            this.downloading = this.jobs.some(j => j.status !== 'COMPLETED' && j.status !== 'FAILED');
-            if (this.downloading) {
-              this.pollingId = setTimeout(() => this.pollJobs(), 1500);
-            } else {
+            if (completed > 0 && completed === this.jobs.length) {
+              // Download is completed
               this.$emit('newContent');
               this.$emit('hide');
               this.downloading = false;
+            } else {
+              this.downloading = true;
+              if (completed !== this.channelsDownloaded) {
+                this.channelsDownloaded = completed;
+                this.$emit('newContent');
+              }
+
+              this.downloading = this.jobs.some(
+                j => j.status !== 'COMPLETED' && j.status !== 'FAILED'
+              );
+              if (this.downloading) {
+                this.pollingId = setTimeout(() => this.pollJobs(), 1500);
+              } else {
+                this.$emit('newContent');
+                this.$emit('hide');
+                this.downloading = false;
+              }
             }
-          }
-        })
-        .catch(() => {
-          if (this.downloading) {
-            this.pollingId = setTimeout(() => this.pollJobs(), 1500);
-          }
-        });
+          })
+          .catch(() => {
+            if (this.downloading) {
+              this.pollingId = setTimeout(() => this.pollJobs(), 1500);
+            }
+          });
       },
     },
   };
