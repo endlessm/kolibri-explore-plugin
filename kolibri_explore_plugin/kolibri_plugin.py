@@ -18,6 +18,7 @@ from kolibri.utils import conf
 class Explore(KolibriPluginBase):
     translated_view_urls = "urls"
     untranslated_view_urls = "api_urls"
+    can_manage_while_running = True
     kolibri_options = "options"
 
     @property

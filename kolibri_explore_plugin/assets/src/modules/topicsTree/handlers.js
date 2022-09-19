@@ -1,5 +1,4 @@
 import samePageCheckGenerator from 'kolibri.utils.samePageCheckGenerator';
-import ConditionalPromise from 'kolibri.lib.conditionalPromise';
 import router from 'kolibri.coreVue.router';
 import urls from 'kolibri.urls';
 import axios from 'axios';
@@ -39,26 +38,68 @@ export function showTopicsTopic(store, { id, isRoot = false }) {
       store.dispatch('setChannelInfo'),
     ];
 
-    return ConditionalPromise.all(promises).only(
-      samePageCheckGenerator(store),
+    const shouldResolve = samePageCheckGenerator(store);
+    return Promise.all(promises).then(
       ([topic]) => {
-        const currentChannel = store.getters.getChannelObject(topic.channel_id);
+        if (shouldResolve()) {
+          const currentChannel = store.getters.getChannelObject(topic.channel_id);
+          if (!currentChannel) {
+            router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
+            return;
+          }
+          if (isRoot) {
+            topic.description = currentChannel.description;
+            topic.tagline = currentChannel.tagline;
+            topic.thumbnail = currentChannel.thumbnail;
+          }
+          store.commit('topicsTree/SET_STATE', {
+            isRoot,
+            channel: currentChannel,
+            topic: normalizeContentNode(topic),
+          });
+
+          const appName = getAppNameByID(topic.channel_id);
+          if (appName) {
+            _getAppMetadata(appName)
+              .then(({ data }) => {
+                store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
+              })
+              .catch(() => {
+                console.log(`no metadata ${appName}`);
+              });
+          }
+
+          store.dispatch('notLoading');
+          store.commit('CORE_SET_ERROR', null);
+        }
+      },
+      error => {
+        shouldResolve() ? store.dispatch('handleApiError', error) : null;
+      }
+    );
+  });
+}
+
+export function showCustomContent(store, id) {
+  store.commit('CORE_SET_PAGE_LOADING', true);
+
+  const promises = [store.dispatch('setChannelInfo')];
+
+  const shouldResolve = samePageCheckGenerator(store);
+  Promise.all(promises).then(
+    () => {
+      if (shouldResolve()) {
+        const currentChannel = store.getters.getChannelObject(id);
         if (!currentChannel) {
           router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
           return;
         }
-        if (isRoot) {
-          topic.description = currentChannel.description;
-          topic.tagline = currentChannel.tagline;
-          topic.thumbnail = currentChannel.thumbnail;
-        }
+        currentChannel.thumbnail = getChannelIcon(currentChannel);
         store.commit('topicsTree/SET_STATE', {
-          isRoot,
           channel: currentChannel,
-          topic: normalizeContentNode(topic),
         });
 
-        const appName = getAppNameByID(topic.channel_id);
+        const appName = getAppNameByID(id);
         if (appName) {
           _getAppMetadata(appName)
             .then(({ data }) => {
@@ -69,51 +110,12 @@ export function showTopicsTopic(store, { id, isRoot = false }) {
             });
         }
 
-        store.dispatch('notLoading');
+        store.commit('CORE_SET_PAGE_LOADING', false);
         store.commit('CORE_SET_ERROR', null);
-      },
-      error => {
-        store.dispatch('handleApiError', error);
       }
-    );
-  });
-}
-
-export function showCustomContent(store, id) {
-  store.commit('SET_EMPTY_LOGGING_STATE');
-  store.commit('CORE_SET_PAGE_LOADING', true);
-
-  const promises = [store.dispatch('setChannelInfo')];
-
-  ConditionalPromise.all(promises).only(
-    samePageCheckGenerator(store),
-    () => {
-      const currentChannel = store.getters.getChannelObject(id);
-      if (!currentChannel) {
-        router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
-        return;
-      }
-      currentChannel.thumbnail = getChannelIcon(currentChannel);
-      store.commit('topicsTree/SET_STATE', {
-        channel: currentChannel,
-      });
-
-      const appName = getAppNameByID(id);
-      if (appName) {
-        _getAppMetadata(appName)
-          .then(({ data }) => {
-            store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
-          })
-          .catch(() => {
-            console.log(`no metadata ${appName}`);
-          });
-      }
-
-      store.commit('CORE_SET_PAGE_LOADING', false);
-      store.commit('CORE_SET_ERROR', null);
     },
     error => {
-      store.dispatch('handleApiError', error);
+      shouldResolve() ? store.dispatch('handleApiError', error) : null;
     }
   );
 }
@@ -126,7 +128,6 @@ export function showTopicsChannel(store, id) {
 }
 
 export function showTopicsContent(store, id) {
-  store.commit('SET_EMPTY_LOGGING_STATE');
   store.commit('CORE_SET_PAGE_LOADING', true);
   store.commit('SET_PAGE_NAME', PageNames.TOPICS_CONTENT);
 
@@ -135,35 +136,37 @@ export function showTopicsContent(store, id) {
     ContentNodeResource.fetchNextContent(id),
     store.dispatch('setChannelInfo'),
   ];
-  ConditionalPromise.all(promises).only(
-    samePageCheckGenerator(store),
+  const shouldResolve = samePageCheckGenerator(store);
+  Promise.all(promises).then(
     ([content, nextContent]) => {
-      const currentChannel = store.getters.getChannelObject(content.channel_id);
-      if (!currentChannel) {
-        router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
-        return;
-      }
-      store.commit('topicsTree/SET_STATE', {
-        content: contentState(content, nextContent),
-        channel: currentChannel,
-      });
+      if (shouldResolve()) {
+        const currentChannel = store.getters.getChannelObject(content.channel_id);
+        if (!currentChannel) {
+          router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
+          return;
+        }
+        store.commit('topicsTree/SET_STATE', {
+          content: contentState(content, nextContent),
+          channel: currentChannel,
+        });
 
-      const appName = getAppNameByID(content.channel_id);
-      if (appName) {
-        _getAppMetadata(appName)
-          .then(({ data }) => {
-            store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
-          })
-          .catch(() => {
-            console.log(`no metadata ${appName}`);
-          });
-      }
+        const appName = getAppNameByID(content.channel_id);
+        if (appName) {
+          _getAppMetadata(appName)
+            .then(({ data }) => {
+              store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
+            })
+            .catch(() => {
+              console.log(`no metadata ${appName}`);
+            });
+        }
 
-      store.commit('CORE_SET_PAGE_LOADING', false);
-      store.commit('CORE_SET_ERROR', null);
+        store.commit('CORE_SET_PAGE_LOADING', false);
+        store.commit('CORE_SET_ERROR', null);
+      }
     },
     error => {
-      store.dispatch('handleApiError', error);
+      shouldResolve() ? store.dispatch('handleApiError', error) : null;
     }
   );
 }
@@ -174,32 +177,34 @@ export function showTopicsContentInLightbox(store, id) {
     ContentNodeResource.fetchNextContent(id),
     store.dispatch('setChannelInfo'),
   ];
-  ConditionalPromise.all(promises).only(
-    samePageCheckGenerator(store),
+  const shouldResolve = samePageCheckGenerator(store);
+  Promise.all(promises).then(
     ([content, nextContent]) => {
-      const currentChannel = store.getters.getChannelObject(content.channel_id);
-      if (!currentChannel) {
-        router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
-        return;
-      }
-      store.commit('topicsTree/SET_STATE', {
-        content: contentState(content, nextContent),
-        channel: currentChannel,
-      });
+      if (shouldResolve()) {
+        const currentChannel = store.getters.getChannelObject(content.channel_id);
+        if (!currentChannel) {
+          router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
+          return;
+        }
+        store.commit('topicsTree/SET_STATE', {
+          content: contentState(content, nextContent),
+          channel: currentChannel,
+        });
 
-      const appName = getAppNameByID(content.channel_id);
-      if (appName) {
-        _getAppMetadata(appName)
-          .then(({ data }) => {
-            store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
-          })
-          .catch(() => {
-            console.log(`no metadata ${appName}`);
-          });
+        const appName = getAppNameByID(content.channel_id);
+        if (appName) {
+          _getAppMetadata(appName)
+            .then(({ data }) => {
+              store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
+            })
+            .catch(() => {
+              console.log(`no metadata ${appName}`);
+            });
+        }
       }
     },
     error => {
-      store.dispatch('handleApiError', error);
+      shouldResolve() ? store.dispatch('handleApiError', error) : null;
     }
   );
 }
