@@ -29,6 +29,7 @@
     "sass": "^1.49.9"
   },
   "resolutions": {
+    "vuex-router-sync": "^5.0.0",
     "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system#269b294bf562dd7d0e3a616aaace97bf0d3433c3"
   },
   "engines": {
