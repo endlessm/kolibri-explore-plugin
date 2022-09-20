@@ -13,9 +13,9 @@
     "vue-material-design-icons": "^4.12.1"
   },
   "devDependencies": {
-    "kolibri-tools": "0.15.0-dev.4"
+    "kolibri-tools": "0.16.0-dev.1"
   },
   "resolutions": {
-    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system#b3fa27f7043befe8ed5fd265bc067e5ed811b053"
+    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system#269b294bf562dd7d0e3a616aaace97bf0d3433c3"
   }
 }
