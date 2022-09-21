@@ -11,8 +11,8 @@
     "ensure-override": "../../scripts/ensure_override.py"
   },
   "dependencies": {
-    "bootstrap": "^4.5.3",
-    "bootstrap-vue": "^2.21.2",
+    "bootstrap": "^4.6.1",
+    "bootstrap-vue": "^2.22.0",
     "core-js": "^3.6.5",
     "eos-components": "^0.1.0",
     "kolibri-api": "0.1.0",
