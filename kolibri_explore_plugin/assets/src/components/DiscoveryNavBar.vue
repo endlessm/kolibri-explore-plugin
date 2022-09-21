@@ -99,6 +99,7 @@
   }
 
   $logo-size: 50px;
+
   .logo {
     width: $logo-size;
   }

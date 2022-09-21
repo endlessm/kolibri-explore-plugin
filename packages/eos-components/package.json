@@ -11,8 +11,8 @@
   "dependencies": {
     "@fontsource/lato": "^4.4.5",
     "@fontsource/poppins": "^4.4.5",
-    "bootstrap": "^4.5.3",
-    "bootstrap-vue": "^2.21.2",
+    "bootstrap": "^4.6.1",
+    "bootstrap-vue": "^2.22.0",
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
     "vue-clamp": "^0.3.1",

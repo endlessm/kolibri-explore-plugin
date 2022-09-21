@@ -29,34 +29,18 @@
     "sass": "^1.49.9"
   },
   "resolutions": {
-    "minimatch": "3.0.2",
-    "cli": "1.0.0",
-    "highlight.js": "10.4.1",
-    "node-notifier": "8.0.1",
-    "trim": "0.0.3",
-    "glob-parent": "5.1.2",
-    "trim-newlines": "3.0.1",
-    "axios": "0.21.2",
-    "nth-check": "2.0.1",
-    "ansi-regex": "5.0.1",
-    "markdown-it": "12.3.2",
-    "node-forge": "1.0.0",
-    "shelljs": "0.8.5",
-    "follow-redirects": "1.14.8",
-    "postcss": "7.0.36",
-    "ansi-html": "0.0.8",
-    "lodash": "4.17.21",
-    "@npmcli/fs": "1.0.x",
-    "vue-demi": "0.10.x",
-    "node-sass": "file:dependency-stub",
-    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system#c2acc3fd19cee52ccd2a17fa8d2b10cddb2b3d63"
+    "vuex-router-sync": "^5.0.0",
+    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system#269b294bf562dd7d0e3a616aaace97bf0d3433c3"
   },
   "engines": {
     "node": "16.x",
     "yarn": "1.x"
   },
   "dependencies": {
-    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system#c2acc3fd19cee52ccd2a17fa8d2b10cddb2b3d63",
+    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system#269b294bf562dd7d0e3a616aaace97bf0d3433c3",
     "node-sass": "file:dependency-stub"
-  }
+  },
+  "browserslist": [
+    "extends browserslist-config-kolibri"
+  ]
 }

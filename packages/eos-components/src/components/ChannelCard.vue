@@ -109,7 +109,7 @@
     border: $border-width solid $card-border-color;
   }
 
-  $card-image-ar: 376 / 600;
+  $card-image-ar: calc(376 / 600);
   .bigThumbnail {
     padding-top: percentage($card-image-ar);
     width: 100%;

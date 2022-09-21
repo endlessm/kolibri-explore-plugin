@@ -5,17 +5,19 @@
   "version": "1.0.0",
   "dependencies": {
     "@vueuse/core": "^4.11.1",
-    "bootstrap": "^4.5.3",
-    "bootstrap-vue": "^2.21.2",
+    "axios": "^0.27.2",
+    "bootstrap": "^4.6.1",
+    "bootstrap-vue": "^2.22.0",
     "deep-object-diff": "^1.1.0",
     "eos-components": "^0.1.0",
     "underscore": "^1.13.1",
     "vue-material-design-icons": "^4.12.1"
   },
   "devDependencies": {
-    "kolibri-tools": "0.15.0-dev.4"
+    "vuex-router-sync": "^5.0.0",
+    "kolibri-tools": "0.16.0-dev.1"
   },
   "resolutions": {
-    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system#b3fa27f7043befe8ed5fd265bc067e5ed811b053"
+    "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system#269b294bf562dd7d0e3a616aaace97bf0d3433c3"
   }
 }
