@@ -1,7 +1,7 @@
 import samePageCheckGenerator from 'kolibri.utils.samePageCheckGenerator';
 import router from 'kolibri.coreVue.router';
+import client from 'kolibri.client';
 import urls from 'kolibri.urls';
-import axios from 'axios';
 import { ContentNodeResource } from 'kolibri.resources';
 import { PageNames } from '../../constants';
 import { getAppNameByID, getChannelIcon } from '../../customApps';
@@ -9,7 +9,7 @@ import { normalizeContentNode, contentState } from '../coreExplore/utils';
 
 function _getAppMetadata(appName) {
   const url = urls['kolibri:kolibri_explore_plugin:app_metadata']({ app: appName });
-  return axios.get(url);
+  return client({ url });
 }
 
 function _parseAppMetadata(data, appName) {

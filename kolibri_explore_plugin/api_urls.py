@@ -1,12 +1,17 @@
 from django.conf.urls import url
 
-from .views import EndlessLearningCollection
-
+from .views import EndlessKeyCollections
+from .views import EndlessKeyCollectionsView
 
 urlpatterns = [
     url(
-        r"^endlesslearning/?",
-        EndlessLearningCollection.as_view(),
-        name="endless_learning_collection",
+        r"^endless-key-collections/?",
+        EndlessKeyCollections.as_view(),
+        name="endless_key_collections",
+    ),
+    url(
+        r"^endless-key-collections-new/?",
+        EndlessKeyCollectionsView.as_view(),
+        name="endless_key_collections_new",
     ),
 ]

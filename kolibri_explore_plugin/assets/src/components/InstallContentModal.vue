@@ -71,10 +71,9 @@
 
 <script>
 
-  import axios from 'axios';
+  import client from 'kolibri.client';
+  import urls from 'kolibri.urls';
   import ProgressDownloadIcon from 'vue-material-design-icons/ProgressDownload.vue';
-
-  import { ApiURL } from '../constants';
 
   export default {
     name: 'InstallContentModal',
@@ -155,8 +154,11 @@
         this.jobs = [];
         const collection = this.collection.metadata.subtitle.toLowerCase();
         const grade = this.grade.toLowerCase();
-        axios
-          .post(ApiURL, { grade: grade, collection: collection })
+        client({
+          url: urls['kolibri:kolibri_explore_plugin:endless_key_collections'](),
+          method: 'POST',
+          data: { grade, collection },
+        })
           .then(() => {
             this.pollJobs();
           })
@@ -168,8 +170,9 @@
       pollJobs() {
         clearTimeout(this.pollingId);
 
-        axios
-          .get(ApiURL)
+        client({
+          url: urls['kolibri:kolibri_explore_plugin:endless_key_collections'](),
+        })
           .then(({ data }) => {
             this.jobs = data.jobs;
             const completedJobs = this.jobs.filter(j => j.status === 'COMPLETED');
