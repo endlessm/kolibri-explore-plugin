@@ -4,6 +4,9 @@
     <BackToTop />
     <keep-alive>
       <div>
+        <ManuqModal
+          :visible="true"
+        />
         <GradeSelectionModal
           :visible="gradeModalVisible"
           :error="installError"
@@ -60,6 +63,7 @@
   import { showChannels } from '../modules/topicsRoot/handlers';
   import { PageNames } from '../constants';
   import AboutModal from '../components/AboutModal';
+  import ManuqModal from '../components/ManuqModal';
   import GradeSelectionModal from '../components/GradeSelectionModal';
   import CollectionSelectionModal from '../components/CollectionSelectionModal';
   import InstallContentModal from '../components/InstallContentModal';
@@ -87,6 +91,7 @@
       AboutModal,
       ContentModal,
       DevTag,
+      ManuqModal,
       GradeSelectionModal,
       CollectionSelectionModal,
       InstallContentModal,
@@ -158,6 +163,7 @@
       },
       onLoad() {
         this.isLoading = false;
+        // this.$bvModal.show("manuq-modal");
       },
       reloadChannels() {
         ContentNodeResource.useContentCacheKey = false;

@@ -22,7 +22,7 @@
     </b-button-group>
     <b-navbar-nav>
       <b-nav-text
-        v-b-modal.about-modal
+        v-b-modal.manuq-modal
         class="btn d-md-block d-none pr-0"
       >
         About Endless Key

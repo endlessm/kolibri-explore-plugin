@@ -19,10 +19,6 @@ from django.views.generic.base import View
 from kolibri.core.content.api import metadata_cache
 from kolibri.core.content.api import RemoteChannelViewSet
 from kolibri.core.content.tasks import remoteimport
-from kolibri.core.content.utils.content_manifest import ContentManifest
-from kolibri.core.content.utils.content_manifest import (
-    ContentManifestParseError,
-)
 from kolibri.core.content.zip_wsgi import add_security_headers
 from kolibri.core.content.zip_wsgi import get_embedded_file
 from kolibri.core.decorators import cache_no_user_data
@@ -33,8 +29,6 @@ from kolibri.utils import conf
 from kolibri.utils.server import _read_pid_file
 from kolibri.utils.server import PID_FILE
 from kolibri.utils.system import get_free_space
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 
 APPS_BUNDLE_PATHS = []
@@ -125,38 +119,6 @@ class AppMetadataView(AppBase):
             return HttpResponse(json_file, content_type="application/json")
 
 
-class EndlessKeyContentManifest(ContentManifest):
-    def __init__(self):
-        self.metadata = None
-        self.available = None
-        super().__init__()
-
-    def read_dict(self, manifest_data, validate=False):
-        self.metadata = manifest_data.get("metadata")
-        if self.metadata is None:
-            raise ContentManifestParseError(
-                "metadata is a required field for Endless Key manifest"
-            )
-        super().read_dict(manifest_data, validate)
-
-    def set_availability(self, free_space_gb):
-        if "required_gigabytes" in self.metadata:
-            self.available = (
-                self.metadata["required_gigabytes"] < free_space_gb
-            )
-        else:
-            self.available = False
-
-
-class EndlessKeyCollectionsView(APIView):
-    def get(self, request, format=None):
-        return Response(
-            {
-                "hola": "qué tal",
-            }
-        )
-
-
 @method_decorator(csrf_exempt, name="dispatch")
 class EndlessKeyCollections(View):
     grade_collections = {
@@ -207,7 +169,7 @@ class EndlessKeyCollections(View):
         free_space_gb = get_free_space() / 1024**3
         for grade, collections in self.grade_collections.items():
             for name, collection in collections.items():
-                content_manifest = EndlessKeyContentManifest()
+                # content_manifest = EndlessKeyContentManifest()
                 manifest_filename = os.path.join(
                     COLLECTION_PATHS, f"{grade}-{name}.json"
                 )
@@ -217,8 +179,8 @@ class EndlessKeyCollections(View):
                     collection["loaded"] = False
                     continue
 
-                content_manifest.read(manifest_filename, validate=True)
-                content_manifest.set_availability(free_space_gb)
+                # content_manifest.read(manifest_filename, validate=True)
+                # content_manifest.set_availability(free_space_gb)
                 # FIXME
                 # collection["manifest"] = content_manifest
                 with open(manifest_filename) as fd:
