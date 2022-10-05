@@ -9,11 +9,17 @@
     headerCloseVariant="light"
   >
     <p>Status: {{ statusLabel }}</p>
-    <b-button @click="onImportStart">
-      Start
+    <b-button @click="onImportChannelStart">
+      Import channel
     </b-button>
-    <b-button @click="onImportCheck">
-      Check
+    <b-button @click="onImportChannelCheck">
+      Check import channel
+    </b-button>
+    <b-button @click="onImportContentStart">
+      Import content
+    </b-button>
+    <b-button @click="onImportContentCheck">
+      Check import content
     </b-button>
   </b-modal>
 
@@ -39,12 +45,12 @@
     mounted() {},
     beforeDestroy() {},
     methods: {
-      onImportStart() {
+      onImportChannelStart() {
         this.statusLabel = 'starting...';
         client({
           url: urls['kolibri:kolibri_explore_plugin:start_importchannel'](),
           method: 'POST',
-          data: { method: 'importchannel' },
+          data: { foo: 'bar' },
         }).then(({ data }) => {
           console.log(data);
           if (data.message) {
@@ -52,10 +58,34 @@
           }
         });
       },
-      onImportCheck() {
+      onImportChannelCheck() {
         this.statusLabel = 'checking...';
         client({
           url: urls['kolibri:kolibri_explore_plugin:get_importchannel_status'](),
+        }).then(({ data }) => {
+          console.log(data);
+          if (data.message) {
+            this.statusLabel = data.message;
+          }
+        });
+      },
+      onImportContentStart() {
+        this.statusLabel = 'starting...';
+        client({
+          url: urls['kolibri:kolibri_explore_plugin:start_importcontent'](),
+          method: 'POST',
+          data: { foo: 'bar' },
+        }).then(({ data }) => {
+          console.log(data);
+          if (data.message) {
+            this.statusLabel = data.message;
+          }
+        });
+      },
+      onImportContentCheck() {
+        this.statusLabel = 'checking...';
+        client({
+          url: urls['kolibri:kolibri_explore_plugin:get_importcontent_status'](),
         }).then(({ data }) => {
           console.log(data);
           if (data.message) {

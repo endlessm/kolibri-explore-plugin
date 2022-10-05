@@ -1,7 +1,9 @@
 import logging
 import os
 
+from kolibri.core.content.models import ChannelMetadata
 from kolibri.core.content.tasks import remotechannelimport
+from kolibri.core.content.tasks import remotecontentimport
 from kolibri.core.content.utils.content_manifest import ContentManifest
 from kolibri.core.content.utils.content_manifest import (
     ContentManifestParseError,
@@ -12,12 +14,41 @@ from kolibri.utils.system import get_free_space
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+# from kolibri.core.content.management.commands.importcontent import (
+#     _node_ids_from_content_manifest,
+# )
+
 
 COLLECTION_PATHS = os.path.join(
     os.path.dirname(__file__), "static", "collections"
 )
 if conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]:
     COLLECTION_PATHS = conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]
+
+
+# FIXME copying an internal function from
+# kolibri.core.content.management.commands.importcontent
+def _node_ids_from_content_manifest(content_manifest, channel_id):
+    node_ids = set()
+
+    channel_metadata = ChannelMetadata.objects.get(id=channel_id)
+
+    for channel_version in content_manifest.get_channel_versions(channel_id):
+        if channel_version != channel_metadata.version:
+            logging.warning(
+                "Manifest entry for {channel_id} has a different"
+                " version ({manifest_version}) than the installed"
+                " channel ({local_version})".format(
+                    channel_id=channel_id,
+                    manifest_version=channel_version,
+                    local_version=channel_metadata.version,
+                )
+            )
+        node_ids.update(
+            content_manifest.get_include_node_ids(channel_id, channel_version)
+        )
+
+    return node_ids
 
 
 class EndlessKeyContentManifest(ContentManifest):
@@ -57,7 +88,24 @@ def _remotechannelimport(user, channel_id):
     return job_id
 
 
+def _remotecontentimport(user, channel_id, node_ids, exclude_node_ids):
+    job = remotecontentimport.validate_job_data(
+        user,
+        {
+            "channel_id": channel_id,
+            # FIXME why is channel_name needed?
+            "channel_name": "foo",
+            "node_ids": node_ids,
+            "exclude_node_ids": exclude_node_ids,
+        },
+    )
+    # remotecontentimport.check_job_permissions(user, job, view)
+    job_id = remotecontentimport.enqueue(job=job)
+    return job_id
+
+
 _job_id = None
+_job_id_2 = None
 _content_manifest = None
 
 
@@ -91,7 +139,26 @@ def get_importchannel_status(request):
     job = job_storage.get_job(_job_id)
     logging.debug(f"MANUQ JOB {job}")
     return Response(
-        {"message": f"status: {job.state} progress: {job.progress}"}
+        {
+            "message": f"status: {job.state}"
+            + f" progress: {job.progress} of {job.total_progress}"
+        }
+    )
+
+
+@api_view(["GET"])
+def get_importcontent_status(request):
+    logging.debug("MANUQ get_importcontent_status")
+    if _job_id_2 is None:
+        return Response({"message": "couldn't check"})
+
+    job = job_storage.get_job(_job_id_2)
+    logging.debug(f"MANUQ JOB {job}")
+    return Response(
+        {
+            "message": f"status: {job.state}"
+            + f" progress: {job.progress} of {job.total_progress}"
+        }
     )
 
 
@@ -113,3 +180,38 @@ def start_importchannel(request):
         logging.debug(f"MANUQ STARTED JOB WITH ID {_job_id}")
 
     return Response({"message": "importchannel started"})
+
+
+@api_view(["POST"])
+def start_importcontent(request):
+    global _job_id_2
+    logging.debug("MANUQ start_importcontent")
+    if _content_manifest is None:
+        return Response({"message": "couldn't start"})
+
+    channel_ids = _content_manifest.get_channel_ids()
+
+    # FIXME
+    channel_ids = list(channel_ids)[:1]
+
+    for channel_id in channel_ids:
+        logging.debug(f"MANUQ IMPORTCONTENT {request.user} - {channel_id}")
+        # FIXME print nodes
+        # node_ids =
+        # _content_manifest.get_include_node_ids(channel_id,
+        # channel_version="11")
+
+        node_ids = _node_ids_from_content_manifest(
+            _content_manifest, channel_id
+        )
+        exclude_node_ids = []  # exclude_node_ids
+        logging.debug(f"MANUQ IMPORTCONTENT {node_ids} - {exclude_node_ids}")
+        _job_id_2 = _remotecontentimport(
+            request.user,
+            channel_id,
+            node_ids,
+            exclude_node_ids,
+        )
+        logging.debug(f"MANUQ STARTED JOB WITH ID {_job_id_2}")
+
+    return Response({"message": "importcontent started"})
