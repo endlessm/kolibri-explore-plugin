@@ -11,7 +11,6 @@ from kolibri.utils import conf
 from kolibri.utils.system import get_free_space
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 
 COLLECTION_PATHS = os.path.join(
@@ -58,87 +57,59 @@ def _remotechannelimport(user, channel_id):
     return job_id
 
 
-class EndlessKeyCollectionsView(APIView):
-    def __init__(self, *args, **kwargs):
-        logging.debug("MANUQ INIT")
-        super().__init__(*args, **kwargs)
+_job_id = None
+_content_manifest = None
 
-        self.content_manifest = None
-        self._job_id = None
 
-        grade = "primary"
-        name = "small"
-        manifest_filename = os.path.join(
-            COLLECTION_PATHS, f"{grade}-{name}.json"
-        )
+def _read_content_manifest(grade, name):
+    global _content_manifest
 
-        if not os.path.exists(manifest_filename):
-            logging.error(f"Collection manifest {manifest_filename} not found")
-            return
+    manifest_filename = os.path.join(COLLECTION_PATHS, f"{grade}-{name}.json")
 
-        self.content_manifest = EndlessKeyContentManifest()
-        self.content_manifest.read(manifest_filename, validate=True)
+    if not os.path.exists(manifest_filename):
+        logging.error(f"Collection manifest {manifest_filename} not found")
+        return
 
-        free_space_gb = get_free_space() / 1024**3
-        self.content_manifest.set_availability(free_space_gb)
+    _content_manifest = EndlessKeyContentManifest()
+    _content_manifest.read(manifest_filename, validate=True)
 
-    def get(self, request):
-        logging.debug("MANUQ GET")
-        if self._job_id is not None:
-            job = job_storage.get_job(self._job_id)
-            logging.debug(f"MANUQ JOB {job} - {job.state}")
+    free_space_gb = get_free_space() / 1024**3
+    _content_manifest.set_availability(free_space_gb)
 
-            return Response(
-                {
-                    "message": f"status: {job.state}",
-                }
-            )
 
-        return Response(
-            {
-                "message": "couldn't check",
-            }
-        )
-
-    def post(self, request):
-        logging.debug(f"MANUQ POST {request.data}")
-        if self.content_manifest is None:
-            return Response({"message": "nothing"})
-
-        if "method" in request.data:
-            if request.data["method"] == "importchannel":
-                channel_ids = self.content_manifest.get_channel_ids()
-
-                # FIXME
-                channel_ids = list(channel_ids)[:1]
-
-                for channel_id in channel_ids:
-                    logging.debug(
-                        f"MANUQ IMPORTCHANNEL {request.user} - {channel_id}"
-                    )
-                    self._job_id = _remotechannelimport(
-                        request.user, channel_id
-                    )
-                    logging.debug(f"MANUQ STARTED JOB WITH ID {self._job_id}")
-
-            return Response(
-                {
-                    "message": "importchannel started",
-                }
-            )
-
-        return Response(
-            {
-                "message": "did nothing",
-            }
-        )
+# FIXME read all of them
+# FIXME let user choose: set by the frontend and stored somewhere
+_read_content_manifest(grade="primary", name="small")
 
 
 @api_view(["GET"])
-def get_foo(request):
-    logging.debug("MANUQ GET")
+def get_importchannel_status(request):
+    logging.debug("MANUQ get_importchannel_status")
+    if _job_id is None:
+        return Response({"message": "couldn't check"})
+
+    job = job_storage.get_job(_job_id)
+    logging.debug(f"MANUQ JOB {job}")
     return Response(
-        {
-            "message": "hola desde función decorada!",
-        }
+        {"message": f"status: {job.state} progress: {job.progress}"}
     )
+
+
+@api_view(["POST"])
+def start_importchannel(request):
+    global _job_id
+    logging.debug("MANUQ start_importchannel")
+    if _content_manifest is None:
+        return Response({"message": "couldn't start"})
+
+    channel_ids = _content_manifest.get_channel_ids()
+
+    # FIXME
+    channel_ids = list(channel_ids)[:1]
+
+    for channel_id in channel_ids:
+        logging.debug(f"MANUQ IMPORTCHANNEL {request.user} - {channel_id}")
+        _job_id = _remotechannelimport(request.user, channel_id)
+        logging.debug(f"MANUQ STARTED JOB WITH ID {_job_id}")
+
+    return Response({"message": "importchannel started"})

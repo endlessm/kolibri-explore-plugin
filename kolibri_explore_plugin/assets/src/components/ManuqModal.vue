@@ -42,7 +42,7 @@
       onImportStart() {
         this.statusLabel = 'starting...';
         client({
-          url: urls['kolibri:kolibri_explore_plugin:endless_key_collections_new'](),
+          url: urls['kolibri:kolibri_explore_plugin:start_importchannel'](),
           method: 'POST',
           data: { method: 'importchannel' },
         }).then(({ data }) => {
@@ -55,8 +55,7 @@
       onImportCheck() {
         this.statusLabel = 'checking...';
         client({
-          url: urls['kolibri:kolibri_explore_plugin:endless_key_collections_new'](),
-          method: 'GET',
+          url: urls['kolibri:kolibri_explore_plugin:get_importchannel_status'](),
         }).then(({ data }) => {
           console.log(data);
           if (data.message) {
