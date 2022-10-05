@@ -4,6 +4,7 @@ import os
 from kolibri.core.content.models import ChannelMetadata
 from kolibri.core.content.tasks import remotechannelimport
 from kolibri.core.content.tasks import remotecontentimport
+from kolibri.core.content.utils.annotation import calculate_published_size
 from kolibri.core.content.utils.content_manifest import ContentManifest
 from kolibri.core.content.utils.content_manifest import (
     ContentManifestParseError,
@@ -32,6 +33,9 @@ def _node_ids_from_content_manifest(content_manifest, channel_id):
     node_ids = set()
 
     channel_metadata = ChannelMetadata.objects.get(id=channel_id)
+    calculate_published_size(channel_metadata)
+    logging.debug(f"MANUQ CHANNEL NAME {channel_metadata.name}")
+    logging.debug(f"MANUQ CHANNEL SIZE {channel_metadata.published_size}")
 
     for channel_version in content_manifest.get_channel_versions(channel_id):
         if channel_version != channel_metadata.version:
