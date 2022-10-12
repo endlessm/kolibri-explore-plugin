@@ -12,7 +12,20 @@
       <p>loading...</p>
     </template>
     <template v-else>
-      <p>INFO!</p>
+      <ul v-for="info in collectionsInfo" :key="info.grade">
+        <li>{{ info.grade }}</li>
+        <li>{{ info.metadata.title }}</li>
+        <li>{{ info.metadata.subtitle }}</li>
+        <li v-for="collection in info.collections" :key="info.grade + collection.name">
+          {{ collection.name }}
+          <ul>
+            <li>{{ collection.metadata.title }}</li>
+            <li>{{ collection.metadata.subtitle }}</li>
+            <li>{{ collection.metadata.description }}</li>
+            <li>{{ collection.available ? "YEP" : "NOPE" }}</li>
+          </ul>
+        </li>
+      </ul>
     </template>
 
     <p>Status: {{ statusLabel }}</p>

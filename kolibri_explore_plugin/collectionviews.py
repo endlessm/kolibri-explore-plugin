@@ -23,9 +23,24 @@ COLLECTION_PATHS = os.path.join(
 if conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]:
     COLLECTION_PATHS = conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]
 
-# FIXME add collections info here as well
 COLLECTION_GRADES = ["primary", "intermediate", "secondary"]
 COLLECTION_NAMES = ["small", "large"]
+
+# FIXME: Move this metadata to the collections repo.
+GRADES_METADATA = {
+    "primary": {
+        "title": "for students ages 6-9",
+        "subtitle": "(in grades K-3)",
+    },
+    "intermediate": {
+        "title": "for students ages 10-13",
+        "subtitle": "(in grades 4-7)",
+    },
+    "secondary": {
+        "title": "for students ages 14+",
+        "subtitle": "(in grades 8+)",
+    },
+}
 
 
 class DownloadStatus(Enum):
@@ -358,7 +373,7 @@ def get_collections_info(request):
         grade_info = {
             "grade": grade,
             "collections": [],
-            # FIXME move grade metadata from frontend to here
+            "metadata": GRADES_METADATA[grade],
         }
         for name in COLLECTION_NAMES:
             manifest = _get_content_manifest(grade, name)
