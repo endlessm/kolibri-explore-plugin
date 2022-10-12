@@ -29,7 +29,7 @@
     </template>
 
     <p>Status: {{ statusLabel }}</p>
-    <b-button @click="onStartDownload">
+    <b-button @click="onStartDownload('primary', 'small')">
       Start
     </b-button>
     <b-button @click="onContinueDownload">
@@ -80,12 +80,12 @@
           }
         });
       },
-      onStartDownload() {
+      onStartDownload(grade, name) {
         this.statusLabel = 'starting download...';
         return client({
           url: urls['kolibri:kolibri_explore_plugin:start_download'](),
           method: 'POST',
-          data: { grade: 'foo', name: 'bar' },
+          data: { grade, name },
         }).then(({ data }) => {
           console.log(data);
           if (data.status) {
