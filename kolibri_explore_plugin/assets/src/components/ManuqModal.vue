@@ -8,18 +8,22 @@
     :hideFooter="true"
     headerCloseVariant="light"
   >
+    <template v-if="loading">
+      <p>loading...</p>
+    </template>
+    <template v-else>
+      <p>INFO!</p>
+    </template>
+
     <p>Status: {{ statusLabel }}</p>
-    <b-button @click="onImportChannelStart">
-      Import channel
+    <b-button @click="onStartDownload">
+      Start
     </b-button>
-    <b-button @click="onImportChannelCheck">
-      Check import channel
+    <b-button @click="onContinueDownload">
+      Continue
     </b-button>
-    <b-button @click="onImportContentStart">
-      Import content
-    </b-button>
-    <b-button @click="onImportContentCheck">
-      Check import content
+    <b-button @click="onGetDownloadStatus">
+      Get status
     </b-button>
   </b-modal>
 
@@ -37,59 +41,65 @@
     components: {},
     data() {
       return {
+        loading: true,
         statusLabel: 'idle',
+        collectionsInfo: null,
       };
     },
     computed: {},
     watch: {},
-    mounted() {},
+    mounted() {
+      return this.onGetCollectionsInfo();
+    },
     beforeDestroy() {},
     methods: {
-      onImportChannelStart() {
-        this.statusLabel = 'starting...';
-        client({
-          url: urls['kolibri:kolibri_explore_plugin:start_importchannel'](),
+      onGetCollectionsInfo() {
+        this.loading = true;
+        this.statusLabel = 'getting collections info...';
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:get_collections_info'](),
+        }).then(({ data }) => {
+          this.loading = false;
+          this.statusLabel = 'got collections info';
+          console.log(data);
+          if (data.collectionsInfo) {
+            this.collectionsInfo = data.collectionsInfo;
+          }
+        });
+      },
+      onStartDownload() {
+        this.statusLabel = 'starting download...';
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:start_download'](),
           method: 'POST',
-          data: { foo: 'bar' },
+          data: { grade: 'foo', name: 'bar' },
         }).then(({ data }) => {
           console.log(data);
-          if (data.message) {
-            this.statusLabel = data.message;
+          if (data.status) {
+            this.statusLabel = data.status;
           }
         });
       },
-      onImportChannelCheck() {
-        this.statusLabel = 'checking...';
-        client({
-          url: urls['kolibri:kolibri_explore_plugin:get_importchannel_status'](),
-        }).then(({ data }) => {
-          console.log(data);
-          if (data.message) {
-            this.statusLabel = data.message;
-          }
-        });
-      },
-      onImportContentStart() {
-        this.statusLabel = 'starting...';
-        client({
-          url: urls['kolibri:kolibri_explore_plugin:start_importcontent'](),
+      onContinueDownload() {
+        this.statusLabel = 'continuing download...';
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:continue_download'](),
           method: 'POST',
-          data: { foo: 'bar' },
         }).then(({ data }) => {
           console.log(data);
-          if (data.message) {
-            this.statusLabel = data.message;
+          if (data.status) {
+            this.statusLabel = data.status;
           }
         });
       },
-      onImportContentCheck() {
-        this.statusLabel = 'checking...';
-        client({
-          url: urls['kolibri:kolibri_explore_plugin:get_importcontent_status'](),
+      onGetDownloadStatus() {
+        this.statusLabel = 'getting status...';
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:get_download_status'](),
         }).then(({ data }) => {
           console.log(data);
-          if (data.message) {
-            this.statusLabel = data.message;
+          if (data.status) {
+            this.statusLabel = data.status;
           }
         });
       },

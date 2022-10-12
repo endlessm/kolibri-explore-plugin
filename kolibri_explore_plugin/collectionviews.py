@@ -16,16 +16,16 @@ from kolibri.utils.system import get_free_space
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-# from kolibri.core.content.management.commands.importcontent import (
-#     _node_ids_from_content_manifest,
-# )
-
 
 COLLECTION_PATHS = os.path.join(
     os.path.dirname(__file__), "static", "collections"
 )
 if conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]:
     COLLECTION_PATHS = conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]
+
+# FIXME add collections info here as well
+COLLECTION_GRADES = ["primary", "intermediate", "secondary"]
+COLLECTION_NAMES = ["small", "large"]
 
 
 class DownloadStatus(Enum):
@@ -36,6 +36,10 @@ class DownloadStatus(Enum):
 
 class EndlessKeyContentManifest(ContentManifest):
     def __init__(self, grade, name):
+        """The EK collections are organized by grade. Example: the
+        "primary-small" collection has grade "primary" and name
+        "small"
+        """
         self.grade = grade
         self.name = name
         self.metadata = None
@@ -63,6 +67,8 @@ class EndlessKeyContentManifest(ContentManifest):
         super().read_dict(manifest_data, validate)
 
     def set_availability(self, free_space_gb):
+        # FIXME using a hardcoded number is silly. Find a way to get
+        # the exact weight.
         if "required_gigabytes" in self.metadata:
             self.available = (
                 self.metadata["required_gigabytes"] < free_space_gb
@@ -163,6 +169,13 @@ class CollectionDownloadManager:
     def __init__(self):
         pass
 
+    def state_from_dict(self, state):
+        pass
+
+    def state_to_dict(self):
+        state = {}
+        return state
+
 
 def _remotechannelimport(user, channel_id):
     """Create, validate and enqueue a remotechannelimport job."""
@@ -194,25 +207,33 @@ def _remotecontentimport(user, channel_id, node_ids, exclude_node_ids):
     return job_id
 
 
+# FIXME REMOVE
 _job_id = None
 _job_id_2 = None
 _content_manifest = None
+
+_content_manifests = []
 _collection_download_manager = None
 
 
-def _read_content_manifest(grade, name):
-    global _content_manifest
-
-    _content_manifest = EndlessKeyContentManifest(grade, name)
-    _content_manifest.read(validate=True)
+def _read_content_manifests():
+    global _content_manifests
 
     free_space_gb = get_free_space() / 1024**3
-    _content_manifest.set_availability(free_space_gb)
+
+    for grade in COLLECTION_GRADES:
+        for name in COLLECTION_NAMES:
+            manifest = EndlessKeyContentManifest(grade, name)
+            manifest.read(validate=True)
+            manifest.set_availability(free_space_gb)
+            _content_manifests.append(manifest)
 
 
-# FIXME read all of them
-# FIXME let user choose: set by the frontend and stored somewhere
-_read_content_manifest(grade="primary", name="small")
+_read_content_manifests()
+
+# FIXME REMOVE
+# let user choose: set by the frontend and stored somewhere
+_content_manifest = _content_manifests[0]
 
 
 # FIXME call this when download starts
@@ -320,3 +341,73 @@ def start_importcontent(request):
         logging.debug(f"MANUQ STARTED JOB WITH ID {_job_id_2}")
 
     return Response({"message": "importcontent started"})
+
+
+def _get_content_manifest(grade, name):
+    for manifest in _content_manifests:
+        if manifest.grade == grade and manifest.name == name:
+            return manifest
+
+
+# KEEP
+@api_view(["GET"])
+def get_collections_info(request):
+    logging.debug("MANUQ get_collections_info")
+    info = []
+    for grade in COLLECTION_GRADES:
+        grade_info = {
+            "grade": grade,
+            "collections": [],
+            # FIXME move grade metadata from frontend to here
+        }
+        for name in COLLECTION_NAMES:
+            manifest = _get_content_manifest(grade, name)
+            collection_info = {
+                "grade": manifest.grade,
+                "name": manifest.name,
+                "metadata": manifest.metadata,
+                "available": manifest.available,
+            }
+            grade_info["collections"].append(collection_info)
+        info.append(grade_info)
+
+    return Response({"collectionsInfo": info})
+
+
+@api_view(["POST"])
+def start_download(request):
+    """Start downloading a collection.
+
+    Pass the collection "grade" and "name" in the POST data.
+
+    Raise error if a download is already happening? Or resume?
+    """
+    grade = request.data.get("grade")
+    name = request.data.get("name")
+
+    logging.debug(f"MANUQ start_download {grade} {name}")
+
+    # init the download manager
+    # return the download status
+
+    return Response({"status": "start_download"})
+
+
+@api_view(["POST"])
+def continue_download(request):
+    logging.debug("MANUQ continue_download")
+
+    # check if the current job has completed
+    # if so call update in the download manager
+    # return the download status
+
+    return Response({"status": "continue_download"})
+
+
+@api_view(["GET"])
+def get_download_status(request):
+    logging.debug("MANUQ get_download_status")
+
+    # return the download status
+
+    return Response({"status": "get_download_status"})
