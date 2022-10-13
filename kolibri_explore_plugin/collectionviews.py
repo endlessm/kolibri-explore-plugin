@@ -14,6 +14,7 @@ from kolibri.core.tasks.main import job_storage
 from kolibri.utils import conf
 from kolibri.utils.system import get_free_space
 from rest_framework.decorators import api_view
+from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 
 
@@ -405,7 +406,14 @@ def start_download(request):
 
     logging.debug(f"MANUQ start_download {grade} {name}")
 
+    if grade not in _content_manifests_by_grade_name:
+        raise APIException(f"Grade {grade} not found in content manifests")
+    if name not in _content_manifests_by_grade_name[grade]:
+        raise APIException(f"Name {name} not found in content manifests")
+
     # init the download manager
+    # check the request session
+
     # return the download status
 
     # FIXME move function body here
