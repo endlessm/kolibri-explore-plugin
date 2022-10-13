@@ -228,11 +228,13 @@ _job_id_2 = None
 _content_manifest = None
 
 _content_manifests = []
+_content_manifests_by_grade_name = {}
 _collection_download_manager = None
 
 
 def _read_content_manifests():
     global _content_manifests
+    global _content_manifests_by_grade_name
 
     free_space_gb = get_free_space() / 1024**3
 
@@ -243,6 +245,10 @@ def _read_content_manifests():
             manifest.set_availability(free_space_gb)
             _content_manifests.append(manifest)
 
+            if grade not in _content_manifests_by_grade_name:
+                _content_manifests_by_grade_name[grade] = {}
+            _content_manifests_by_grade_name[grade][name] = manifest
+
 
 _read_content_manifests()
 
@@ -252,7 +258,7 @@ _content_manifest = _content_manifests[0]
 
 
 # FIXME call this when download starts
-def _extend_session(request):
+def _extend_session_expiry(request):
     # The session will expire two weeks from now.
     request.session.set_expiry(1209600)
 
@@ -358,15 +364,10 @@ def start_importcontent(request):
     return Response({"message": "importcontent started"})
 
 
-def _get_content_manifest(grade, name):
-    for manifest in _content_manifests:
-        if manifest.grade == grade and manifest.name == name:
-            return manifest
-
-
 # KEEP
 @api_view(["GET"])
 def get_collections_info(request):
+    """Return the collections and their availability."""
     logging.debug("MANUQ get_collections_info")
     info = []
     for grade in COLLECTION_GRADES:
@@ -376,7 +377,7 @@ def get_collections_info(request):
             "metadata": GRADES_METADATA[grade],
         }
         for name in COLLECTION_NAMES:
-            manifest = _get_content_manifest(grade, name)
+            manifest = _content_manifests_by_grade_name[grade][name]
             collection_info = {
                 "grade": manifest.grade,
                 "name": manifest.name,
@@ -396,6 +397,8 @@ def start_download(request):
     Pass the collection "grade" and "name" in the POST data.
 
     Raise error if a download is already happening? Or resume?
+
+    Returns download status.
     """
     grade = request.data.get("grade")
     name = request.data.get("name")
@@ -405,11 +408,18 @@ def start_download(request):
     # init the download manager
     # return the download status
 
+    # FIXME move function body here
+    _extend_session_expiry(request)
+
     return Response({"status": "start_download"})
 
 
 @api_view(["POST"])
 def continue_download(request):
+    """Continue downloading current collection
+
+    Returns download status.
+    """
     logging.debug("MANUQ continue_download")
 
     # check if the current job has completed
@@ -421,6 +431,7 @@ def continue_download(request):
 
 @api_view(["GET"])
 def get_download_status(request):
+    """Return the download status."""
     logging.debug("MANUQ get_download_status")
 
     # return the download status

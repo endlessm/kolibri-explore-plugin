@@ -8,7 +8,7 @@
     :hideFooter="true"
     headerCloseVariant="light"
   >
-    <template v-if="loading">
+    <!-- <template v-if="loading">
       <p>loading...</p>
     </template>
     <template v-else>
@@ -26,7 +26,7 @@
           </ul>
         </li>
       </ul>
-    </template>
+    </template> -->
 
     <p>Status: {{ statusLabel }}</p>
     <b-button @click="onStartDownload('primary', 'small')">
@@ -38,6 +38,19 @@
     <b-button @click="onGetDownloadStatus">
       Get status
     </b-button>
+
+    <p></p>
+
+    <b-progress
+      :max="1"
+    >
+      <b-progress-bar
+        :value="0.1"
+        animated
+      >
+        10%
+      </b-progress-bar>
+    </b-progress>
   </b-modal>
 
 </template>
