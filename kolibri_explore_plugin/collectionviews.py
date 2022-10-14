@@ -255,9 +255,35 @@ class CollectionDownloadManager:
     def get_status(self):
         # FIXME add more details
         # current channel being downloaded etc
+
+        progress = None
+        pending = len(self._tasks_pending)
+        completed = len(self._tasks_completed)
+        total = completed + pending + (1 if self._current_task else 0)
+
+        if self._stage == DownloadStage.NOT_STARTED:
+            progress = 0
+
+        elif self._stage == DownloadStage.IMPORTING_CHANNELS:
+            progress = completed / total
+
+        elif self._stage == DownloadStage.IMPORTING_CONTENT:
+            if self._current_job_id is None:
+                progress = 0
+            # FIXME
+            print(job_storage)
+            progress = 0.5
+            # job = job_storage.get_job(self._current_job_id)
+            # return job.progress / job.total_progress
+
+        elif self._stage == DownloadStage.COMPLETED:
+            progress = 1
+
         return {
             "stage": self._stage.name,
-            "progress": self._get_progress(),
+            "progress": progress,
+            "completed": completed,
+            "total": total,
         }
 
     def get_state(self):
@@ -308,27 +334,6 @@ class CollectionDownloadManager:
         # FIXME pass user
         # FIXME call with current task params
         # self._current_job_id = _remotechannelimport(request.user, channel_id)
-
-    def _get_progress(self):
-        if self._stage == DownloadStage.NOT_STARTED:
-            return 0
-
-        elif self._stage == DownloadStage.IMPORTING_CHANNELS:
-            completed = len(self._tasks_completed)
-            pending = len(self._tasks_pending)
-            return completed / (completed + pending)
-
-        elif self._stage == DownloadStage.IMPORTING_CONTENT:
-            if self._current_job_id is None:
-                return 0
-            # FIXME
-            print(job_storage)
-            return 0.5
-            # job = job_storage.get_job(self._current_job_id)
-            # return job.progress / job.total_progress
-
-        elif self._stage == DownloadStage.COMPLETED:
-            return 1
 
 
 def _remotechannelimport(user, channel_id):

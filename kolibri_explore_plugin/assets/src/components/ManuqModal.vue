@@ -50,13 +50,14 @@
     <p></p>
 
     <b-progress
+      v-if="status !== null"
       :max="1"
     >
       <b-progress-bar
-        :value="progress"
+        :value="status.progress"
         animated
       >
-        {{ (progress * 100).toFixed() }}%
+        {{ (status.progress * 100).toFixed() }}%
       </b-progress-bar>
     </b-progress>
   </b-modal>
@@ -76,12 +77,21 @@
     data() {
       return {
         loading: true,
-        statusLabel: 'idle',
-        progress: 0.1,
+        status: null,
         collectionsInfo: null,
       };
     },
-    computed: {},
+    computed: {
+      statusLabel() {
+        if (this.loading) {
+          return 'Loading';
+        } else if (this.status === null) {
+          return 'Idle';
+        } else {
+          return `${this.status.stage} (${this.status.completed} of ${this.status.total})`;
+        }
+      },
+    },
     watch: {},
     mounted() {
       // FIXME also try resume here?
@@ -91,12 +101,10 @@
     methods: {
       onGetCollectionsInfo() {
         this.loading = true;
-        this.statusLabel = 'getting collections info...';
         return client({
           url: urls['kolibri:kolibri_explore_plugin:get_collections_info'](),
         }).then(({ data }) => {
           this.loading = false;
-          this.statusLabel = 'got collections info';
           console.log(data);
           if (data.collectionsInfo) {
             this.collectionsInfo = data.collectionsInfo;
@@ -104,7 +112,6 @@
         });
       },
       onStartDownload(grade, name) {
-        this.statusLabel = 'starting download...';
         return client({
           url: urls['kolibri:kolibri_explore_plugin:start_download'](),
           method: 'POST',
@@ -112,59 +119,50 @@
         }).then(({ data }) => {
           console.log(data);
           if (data.status) {
-            this.statusLabel = data.status.stage;
-            this.progress = data.status.progress;
+            this.status = data.status;
           }
         });
       },
       onResumeDownload() {
-        this.statusLabel = 'resuming download...';
         return client({
           url: urls['kolibri:kolibri_explore_plugin:resume_download'](),
           method: 'POST',
         }).then(({ data }) => {
           console.log(data);
           if (data.status) {
-            this.statusLabel = data.status.stage;
-            this.progress = data.status.progress;
+            this.status = data.status;
           }
         });
       },
       onContinueDownload() {
-        this.statusLabel = 'continuing download...';
         return client({
           url: urls['kolibri:kolibri_explore_plugin:continue_download'](),
           method: 'POST',
         }).then(({ data }) => {
           console.log(data);
           if (data.status) {
-            this.statusLabel = data.status.stage;
-            this.progress = data.status.progress;
+            this.status = data.status;
           }
         });
       },
       onGetDownloadStatus() {
-        this.statusLabel = 'getting status...';
         return client({
           url: urls['kolibri:kolibri_explore_plugin:get_download_status'](),
         }).then(({ data }) => {
           console.log(data);
           if (data.status) {
-            this.statusLabel = data.status.stage;
-            this.progress = data.status.progress;
+            this.status = data.status;
           }
         });
       },
       onCancelDownload() {
-        this.statusLabel = 'cancelling download...';
         return client({
           url: urls['kolibri:kolibri_explore_plugin:cancel_download'](),
           method: 'POST',
         }).then(({ data }) => {
           console.log(data);
           if (data.status) {
-            this.statusLabel = data.status.stage;
-            this.progress = data.status.progress;
+            this.status = data.status;
           }
         });
       },
