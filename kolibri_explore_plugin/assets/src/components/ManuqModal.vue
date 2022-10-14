@@ -29,6 +29,9 @@
     </template> -->
 
     <p>Status: {{ statusLabel }}</p>
+    <p v-if="errorLabel !== null" class="text-danger">
+      Error: {{ errorLabel }}
+    </p>
     <b-button-group class="mx-auto w-100">
       <b-button @click="onStartDownload('primary', 'small')">
         Start
@@ -78,6 +81,7 @@
       return {
         loading: true,
         status: null,
+        errorLabel: null,
         collectionsInfo: null,
       };
     },
@@ -116,55 +120,90 @@
           url: urls['kolibri:kolibri_explore_plugin:start_download'](),
           method: 'POST',
           data: { grade, name },
-        }).then(({ data }) => {
-          console.log(data);
-          if (data.status) {
-            this.status = data.status;
-          }
-        });
+        })
+          .then(({ data }) => {
+            console.log(data);
+            this.errorLabel = null;
+            if (data.status) {
+              this.status = data.status;
+            }
+          })
+          .catch(({ response }) => {
+            if (response.data.detail) {
+              this.errorLabel = response.data.detail;
+            }
+          });
       },
       onResumeDownload() {
         return client({
           url: urls['kolibri:kolibri_explore_plugin:resume_download'](),
           method: 'POST',
-        }).then(({ data }) => {
-          console.log(data);
-          if (data.status) {
-            this.status = data.status;
-          }
-        });
+        })
+          .then(({ data }) => {
+            console.log(data);
+            this.errorLabel = null;
+            if (data.status) {
+              this.status = data.status;
+            }
+          })
+          .catch(({ response }) => {
+            if (response.data.detail) {
+              this.errorLabel = response.data.detail;
+            }
+          });
       },
       onContinueDownload() {
         return client({
           url: urls['kolibri:kolibri_explore_plugin:continue_download'](),
           method: 'POST',
-        }).then(({ data }) => {
-          console.log(data);
-          if (data.status) {
-            this.status = data.status;
-          }
-        });
+        })
+          .then(({ data }) => {
+            console.log(data);
+            this.errorLabel = null;
+            if (data.status) {
+              this.status = data.status;
+            }
+          })
+          .catch(({ response }) => {
+            if (response.data.detail) {
+              this.errorLabel = response.data.detail;
+            }
+          });
       },
       onGetDownloadStatus() {
         return client({
           url: urls['kolibri:kolibri_explore_plugin:get_download_status'](),
-        }).then(({ data }) => {
-          console.log(data);
-          if (data.status) {
-            this.status = data.status;
-          }
-        });
+        })
+          .then(({ data }) => {
+            console.log(data);
+            this.errorLabel = null;
+            if (data.status) {
+              this.status = data.status;
+            }
+          })
+          .catch(({ response }) => {
+            if (response.data.detail) {
+              this.errorLabel = response.data.detail;
+            }
+          });
       },
       onCancelDownload() {
         return client({
           url: urls['kolibri:kolibri_explore_plugin:cancel_download'](),
           method: 'POST',
-        }).then(({ data }) => {
-          console.log(data);
-          if (data.status) {
-            this.status = data.status;
-          }
-        });
+        })
+          .then(({ data }) => {
+            console.log(data);
+            this.errorLabel = null;
+            if (data.status) {
+              this.status = data.status;
+            }
+          })
+          .catch(({ response }) => {
+            if (response.data.detail) {
+              this.errorLabel = response.data.detail;
+            }
+          });
       },
     },
   };
