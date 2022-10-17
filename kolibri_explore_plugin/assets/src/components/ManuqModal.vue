@@ -33,12 +33,9 @@
       Error: {{ errorLabel }}
     </p>
     <b-button-group class="mx-auto w-100">
-      <!-- <b-button @click="onStartDownload('primary', 'small')">
-        Start
+      <b-button @click="startOrResumeDownload">
+        Start/Resume
       </b-button>
-      <b-button @click="onResumeDownload">
-        Resume
-      </b-button> -->
       <b-button @click="onContinueDownload">
         Continue
       </b-button>
@@ -99,7 +96,7 @@
     watch: {},
     mounted() {
       this.loading = true;
-      return Promise.all([this.onGetCollectionsInfo(), this.startOrResumeDownload()]).then(() => {
+      return Promise.all([this.onGetCollectionsInfo(), this.tryStartResume()]).then(() => {
         this.loading = false;
       });
     },
@@ -112,6 +109,13 @@
           console.log(data);
           if (data.collectionsInfo) {
             this.collectionsInfo = data.collectionsInfo;
+          }
+        });
+      },
+      tryStartResume() {
+        return this.onGetDownloadStatus().then(() => {
+          if (this.status.stage === 'NOT_STARTED') {
+            return this.startOrResumeDownload();
           }
         });
       },

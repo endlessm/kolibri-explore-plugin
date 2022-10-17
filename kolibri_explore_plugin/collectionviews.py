@@ -186,14 +186,16 @@ class CollectionDownloadManager:
         self._tasks_pending = []
         self._tasks_completed = []
 
-    def start(self, manifest):
+    def from_manifest(self, manifest):
+        """Start downloading a collection manifest."""
         if self._stage != DownloadStage.NOT_STARTED:
             raise DownloadError("A download has already started. Can't start")
 
         self._content_manifest = manifest
         self._set_next_stage()
 
-    def resume(self, state):
+    def from_state(self, state):
+        """Resume download from a previous state."""
         if self._stage != DownloadStage.NOT_STARTED:
             raise DownloadError("A download has already started. Can't resume")
 
@@ -249,9 +251,14 @@ class CollectionDownloadManager:
         return True
 
     def get_status(self):
-        # FIXME add more details
-        # current channel_name being downloaded etc
-        # channel icon?
+        """Calculate progress and return download status.
+
+        It must be JSON serializable to be sent to the client in a
+        HTTP response.
+        """
+
+        # FIXME add more details of current channel being downloaded
+        # (name and icon) when possible
 
         progress = None
         pending = len(self._tasks_pending)
@@ -283,11 +290,11 @@ class CollectionDownloadManager:
             "total": total,
         }
 
-    def get_state(self):
-        """Return state that is JSON serializable.
+    def to_state(self):
+        """Create and return a state representation that is JSON serializable.
 
         The state can be persisted and used in another session to
-        regenerate this singleton using the resume() method.
+        regenerate this singleton using the from_state() method.
         """
         grade = None
         name = None
@@ -487,7 +494,7 @@ _read_content_manifests()
 
 
 def _save_state_in_request_session(request):
-    new_state = _collection_download_manager.get_state()
+    new_state = _collection_download_manager.to_state()
     if new_state["stage"] == DownloadStage.NOT_STARTED:
         # Not saving an empty state
         return
@@ -555,7 +562,7 @@ def start_download(request):
 
     # Init the download manager and start downloading
     try:
-        _collection_download_manager.start(manifest)
+        _collection_download_manager.from_manifest(manifest)
         logger.info(f"Download started for {grade=} {name=}")
     except DownloadError as err:
         raise APIException(err)
@@ -585,7 +592,7 @@ def resume_download(request):
 
     # Init the download manager and start downloading
     try:
-        _collection_download_manager.resume(saved_state)
+        _collection_download_manager.from_state(saved_state)
         grade = saved_state["grade"]
         name = saved_state["name"]
         logger.info(f"Download resumed for {grade=} {name=}")
