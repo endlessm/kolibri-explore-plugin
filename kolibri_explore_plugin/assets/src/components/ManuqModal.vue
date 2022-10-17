@@ -33,12 +33,12 @@
       Error: {{ errorLabel }}
     </p>
     <b-button-group class="mx-auto w-100">
-      <b-button @click="onStartDownload('primary', 'small')">
+      <!-- <b-button @click="onStartDownload('primary', 'small')">
         Start
       </b-button>
       <b-button @click="onResumeDownload">
         Resume
-      </b-button>
+      </b-button> -->
       <b-button @click="onContinueDownload">
         Continue
       </b-button>
@@ -98,20 +98,32 @@
     },
     watch: {},
     mounted() {
-      // FIXME also try resume here?
-      return this.onGetCollectionsInfo();
+      this.loading = true;
+      return Promise.all([this.onGetCollectionsInfo(), this.startOrResumeDownload()]).then(() => {
+        this.loading = false;
+      });
     },
     beforeDestroy() {},
     methods: {
       onGetCollectionsInfo() {
-        this.loading = true;
         return client({
           url: urls['kolibri:kolibri_explore_plugin:get_collections_info'](),
         }).then(({ data }) => {
-          this.loading = false;
           console.log(data);
           if (data.collectionsInfo) {
             this.collectionsInfo = data.collectionsInfo;
+          }
+        });
+      },
+      startOrResumeDownload() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:get_should_resume'](),
+        }).then(({ data }) => {
+          console.log(data);
+          if (data.shouldResume) {
+            return this.onResumeDownload();
+          } else {
+            return this.onStartDownload('primary', 'small');
           }
         });
       },

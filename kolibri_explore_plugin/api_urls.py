@@ -4,6 +4,7 @@ from .collectionviews import cancel_download
 from .collectionviews import continue_download
 from .collectionviews import get_collections_info
 from .collectionviews import get_download_status
+from .collectionviews import get_should_resume
 from .collectionviews import resume_download
 from .collectionviews import start_download
 from .views import EndlessKeyCollections  # FIXME remove
@@ -20,6 +21,11 @@ urlpatterns = [
         r"ek-collections/get-collections-info",
         get_collections_info,
         name="get_collections_info",
+    ),
+    url(
+        r"ek-collections/get-should-resume",
+        get_should_resume,
+        name="get_should_resume",
     ),
     url(
         r"ek-collections/start-download",

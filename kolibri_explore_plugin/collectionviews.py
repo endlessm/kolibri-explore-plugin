@@ -520,6 +520,13 @@ def get_collections_info(request):
     return Response({"collectionsInfo": info})
 
 
+@api_view(["GET"])
+def get_should_resume(request):
+    """Return if there is a saved state that should be resumed."""
+    has_saved_state = "COLLECTIONS_STATE" in request.session
+    return Response({"shouldResume": has_saved_state})
+
+
 @api_view(["POST"])
 def start_download(request):
     """Start downloading a collection.
