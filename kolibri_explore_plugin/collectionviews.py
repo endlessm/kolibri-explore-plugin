@@ -18,6 +18,8 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 
 
+logger = logging.getLogger(__name__)
+
 COLLECTION_PATHS = os.path.join(
     os.path.dirname(__file__), "static", "collections"
 )
@@ -152,7 +154,7 @@ class EndlessKeyContentManifest(ContentManifest):
 
         for channel_version in self.get_channel_versions(channel_id):
             if channel_version != channel_metadata.version:
-                logging.warning(
+                logger.warning(
                     "Manifest entry for {channel_id} has a different"
                     " version ({manifest_version}) than the installed"
                     " channel ({local_version})".format(
@@ -228,8 +230,7 @@ class CollectionDownloadManager:
 
         if self._current_task is None:
             # First task of this phase
-            self._current_task = self._tasks_pending.pop(0)
-            self._current_job_id = self._enqueue_current_task()
+            self._enqueue_current_task()
             return True
 
         if not self._has_current_job_completed():
@@ -244,8 +245,7 @@ class CollectionDownloadManager:
             self._set_next_stage()
         else:
             # Enqueue next pending task
-            self._current_task = self._tasks_pending.pop(0)
-            self._current_job_id = self._enqueue_current_task()
+            self._enqueue_current_task()
         return True
 
     def get_status(self):
@@ -321,13 +321,18 @@ class CollectionDownloadManager:
         self._tasks_pending = tasks
         self._tasks_completed = []
 
+        # Call update so the first task gets enqueued
+        if self._stage != DownloadStage.COMPLETED:
+            self.update()
+
     def _has_current_job_completed(self):
         # FIXME what about stalled jobs? cancelled jobs? failed jobs?
         # FIXME use self._current_job_id
         return True
 
     def _enqueue_current_task(self):
-        return 123
+        self._current_task = self._tasks_pending.pop(0)
+        self._current_job_id = 123
         # FIXME pass user
         # FIXME call with current task params
         # self._current_job_id = _remotechannelimport(request.user, channel_id)
@@ -398,12 +403,12 @@ _read_content_manifests()
 
 # @api_view(["GET"])
 # def get_importchannel_status(request):
-#     logging.debug("MANUQ get_importchannel_status")
+#     logger.debug("MANUQ get_importchannel_status")
 #     if _job_id is None:
 #         return Response({"message": "couldn't check"})
 
 #     job = job_storage.get_job(_job_id)
-#     logging.debug(f"MANUQ JOB {job}")
+#     logger.debug(f"MANUQ JOB {job}")
 #     return Response(
 #         {
 #             "message": f"status: {job.state}"
@@ -414,12 +419,12 @@ _read_content_manifests()
 
 # @api_view(["GET"])
 # def get_importcontent_status(request):
-#     logging.debug("MANUQ get_importcontent_status")
+#     logger.debug("MANUQ get_importcontent_status")
 #     if _job_id_2 is None:
 #         return Response({"message": "couldn't check"})
 
 #     job = job_storage.get_job(_job_id_2)
-#     logging.debug(f"MANUQ JOB {job}")
+#     logger.debug(f"MANUQ JOB {job}")
 #     return Response(
 #         {
 #             "message": f"status: {job.state}"
@@ -431,7 +436,7 @@ _read_content_manifests()
 # @api_view(["POST"])
 # def start_importchannel(request):
 #     global _job_id
-#     logging.debug("MANUQ start_importchannel")
+#     logger.debug("MANUQ start_importchannel")
 #     if _content_manifest is None:
 #         return Response({"message": "couldn't start"})
 
@@ -441,9 +446,9 @@ _read_content_manifests()
 #     channel_ids = list(channel_ids)[:1]
 
 #     for channel_id in channel_ids:
-#         logging.debug(f"MANUQ IMPORTCHANNEL {request.user} - {channel_id}")
+#         logger.debug(f"MANUQ IMPORTCHANNEL {request.user} - {channel_id}")
 #         _job_id = _remotechannelimport(request.user, channel_id)
-#         logging.debug(f"MANUQ STARTED JOB WITH ID {_job_id}")
+#         logger.debug(f"MANUQ STARTED JOB WITH ID {_job_id}")
 
 #     return Response({"message": "importchannel started"})
 
@@ -451,7 +456,7 @@ _read_content_manifests()
 # @api_view(["POST"])
 # def start_importcontent(request):
 #     global _job_id_2
-#     logging.debug("MANUQ start_importcontent")
+#     logger.debug("MANUQ start_importcontent")
 #     if _content_manifest is None:
 #         return Response({"message": "couldn't start"})
 
@@ -461,7 +466,7 @@ _read_content_manifests()
 #     channel_ids = list(channel_ids)[:1]
 
 #     for channel_id in channel_ids:
-#         logging.debug(f"MANUQ IMPORTCONTENT {request.user} - {channel_id}")
+#         logger.debug(f"MANUQ IMPORTCONTENT {request.user} - {channel_id}")
 #         # FIXME print nodes
 #         # node_ids =
 #         # _content_manifest.get_include_node_ids(channel_id,
@@ -469,14 +474,14 @@ _read_content_manifests()
 
 #         node_ids = _content_manifest.get_node_ids_for_channel(channel_id)
 #         exclude_node_ids = []
-#         logging.debug(f"MANUQ IMPORTCONTENT {node_ids} - {exclude_node_ids}")
+#         logger.debug(f"MANUQ IMPORTCONTENT {node_ids} - {exclude_node_ids}")
 #         _job_id_2 = _remotecontentimport(
 #             request.user,
 #             channel_id,
 #             node_ids,
 #             exclude_node_ids,
 #         )
-#         logging.debug(f"MANUQ STARTED JOB WITH ID {_job_id_2}")
+#         logger.debug(f"MANUQ STARTED JOB WITH ID {_job_id_2}")
 
 #     return Response({"message": "importcontent started"})
 
@@ -486,8 +491,9 @@ def _save_state_in_request_session(request):
     if new_state["stage"] == DownloadStage.NOT_STARTED:
         # Not saving an empty state
         return
+
+    logger.info(f"Saving download state: {new_state}")
     request.session["COLLECTIONS_STATE"] = new_state
-    logging.debug(f"Saved state: {new_state}")
 
 
 @api_view(["GET"])
@@ -543,6 +549,7 @@ def start_download(request):
     # Init the download manager and start downloading
     try:
         _collection_download_manager.start(manifest)
+        logger.info(f"Download started for {grade=} {name=}")
     except DownloadError as err:
         raise APIException(err)
 
@@ -572,6 +579,9 @@ def resume_download(request):
     # Init the download manager and start downloading
     try:
         _collection_download_manager.resume(saved_state)
+        grade = saved_state["grade"]
+        name = saved_state["name"]
+        logger.info(f"Download resumed for {grade=} {name=}")
     except DownloadError as err:
         raise APIException(err)
 
@@ -612,6 +622,8 @@ def cancel_download(request):
     if "COLLECTIONS_STATE" in request.session:
         del request.session["COLLECTIONS_STATE"]
 
+    logger.info("Download cancelled")
+
     status = _collection_download_manager.get_status()
     return Response({"status": status})
 
@@ -620,6 +632,4 @@ def cancel_download(request):
 def get_download_status(request):
     """Return the download status."""
     status = _collection_download_manager.get_status()
-    logging.debug(f"MANUQ new status: {status}")
-
     return Response({"status": status})
