@@ -190,7 +190,7 @@
       onCancelDownload() {
         return client({
           url: urls['kolibri:kolibri_explore_plugin:cancel_download'](),
-          method: 'POST',
+          method: 'DELETE',
         })
           .then(({ data }) => {
             console.log(data);

@@ -168,6 +168,10 @@ class EndlessKeyContentManifest(ContentManifest):
         return node_ids
 
 
+class DownloadError(Exception):
+    pass
+
+
 class CollectionDownloadManager:
     def __init__(self):
         self._set_empty_state()
@@ -180,33 +184,16 @@ class CollectionDownloadManager:
         self._tasks_pending = []
         self._tasks_completed = []
 
-    def is_downloading(self):
-        return self._stage is not DownloadStage.NOT_STARTED
-
     def start(self, manifest):
-        if self.is_downloading():
-            # FIXME raise something
-            pass
+        if self._stage != DownloadStage.NOT_STARTED:
+            raise DownloadError("A download has already started. Can't start")
 
         self._content_manifest = manifest
         self._set_next_stage()
 
-    def cancel(self):
-        if not self.is_downloading():
-            return
-
-        if self._current_job_id is not None:
-            pass
-            # FIXME cancel current job
-            # job = job_storage.get_job(self._current_job_id)
-            # job.SOMETHING
-
-        self._set_empty_state()
-
     def resume(self, state):
-        if self.is_downloading():
-            # FIXME raise something
-            pass
+        if self._stage != DownloadStage.NOT_STARTED:
+            raise DownloadError("A download has already started. Can't resume")
 
         grade = state["grade"]
         name = state["name"]
@@ -219,6 +206,15 @@ class CollectionDownloadManager:
         self._tasks_pending = state["tasks_pending"]
         self._tasks_completed = state["tasks_completed"]
 
+    def cancel(self):
+        if self._current_job_id is not None:
+            pass
+            # FIXME cancel current job
+            # job = job_storage.get_job(self._current_job_id)
+            # job.SOMETHING
+
+        self._set_empty_state()
+
     def update(self):
         """Go to the next download step when possible.
 
@@ -227,8 +223,8 @@ class CollectionDownloadManager:
 
         Returns True if the state has changed.
         """
-        if self._stage == DownloadStage.COMPLETED:
-            return False
+        if self._stage == DownloadStage.NOT_STARTED:
+            raise DownloadError("Download hasn't started yet. Can't update")
 
         if self._current_task is None:
             # First task of this phase
@@ -254,7 +250,8 @@ class CollectionDownloadManager:
 
     def get_status(self):
         # FIXME add more details
-        # current channel being downloaded etc
+        # current channel_name being downloaded etc
+        # channel icon?
 
         progress = None
         pending = len(self._tasks_pending)
@@ -365,11 +362,6 @@ def _remotecontentimport(user, channel_id, node_ids, exclude_node_ids):
     job_id = remotecontentimport.enqueue(job=job)
     return job_id
 
-
-# # FIXME REMOVE
-# _job_id = None
-# _job_id_2 = None
-# _content_manifest = None
 
 _content_manifests = []
 _content_manifests_by_grade_name = {}
@@ -489,10 +481,18 @@ _read_content_manifests()
 #     return Response({"message": "importcontent started"})
 
 
+def _save_state_in_request_session(request):
+    new_state = _collection_download_manager.get_state()
+    if new_state["stage"] == DownloadStage.NOT_STARTED:
+        # Not saving an empty state
+        return
+    request.session["COLLECTIONS_STATE"] = new_state
+    logging.debug(f"Saved state: {new_state}")
+
+
 @api_view(["GET"])
 def get_collections_info(request):
     """Return the collections and their availability."""
-    logging.debug("MANUQ get_collections_info")
     info = []
     for grade in COLLECTION_GRADES:
         grade_info = {
@@ -527,39 +527,32 @@ def start_download(request):
     grade = request.data.get("grade")
     name = request.data.get("name")
 
-    # Validate grade and name:
+    # Validate grade and name
     if grade not in _content_manifests_by_grade_name:
         raise APIException(f"Grade {grade} not found in content manifests")
     if name not in _content_manifests_by_grade_name[grade]:
         raise APIException(f"Name {name} not found in content manifests")
 
-    if _collection_download_manager.is_downloading():
-        # FIXME be more forgiving with double posts? Just return current state?
-        # Check grade and name first
-        raise APIException("A download is already happening. Can't start.")
+    manifest = _content_manifests_by_grade_name[grade][name]
 
-    # Check if a previous download state was saved
+    # Fail if a previous download can be resumed
     saved_state = request.session.get("COLLECTIONS_STATE")
-    logging.debug(f"MANUQ current state: {saved_state}")
     if saved_state is not None:
-        # FIXME be more forgiving with double posts?
         raise APIException("A previous download state was found. Resume it.")
 
     # Init the download manager and start downloading
-    manifest = _content_manifests_by_grade_name[grade][name]
-    _collection_download_manager.start(manifest)
+    try:
+        _collection_download_manager.start(manifest)
+    except DownloadError as err:
+        raise APIException(err)
 
     # Extend session so it expires two weeks from now
     request.session.set_expiry(1209600)
 
     # Save state in session
-    new_state = _collection_download_manager.get_state()
-    request.session["COLLECTIONS_STATE"] = new_state
-    logging.debug(f"MANUQ new state: {new_state}")
+    _save_state_in_request_session(request)
 
     status = _collection_download_manager.get_status()
-    logging.debug(f"MANUQ new status: {status}")
-
     return Response({"status": status})
 
 
@@ -576,22 +569,16 @@ def resume_download(request):
     if saved_state is None:
         raise APIException("No download state was found. Can't resume.")
 
-    if _collection_download_manager.is_downloading():
-        # FIXME be more forgiving with double posts? Just return current state?
-        # Check grade and name first
-        raise APIException("A download is already happening. Can't resume.")
-
-    _collection_download_manager.resume(saved_state)
+    # Init the download manager and start downloading
+    try:
+        _collection_download_manager.resume(saved_state)
+    except DownloadError as err:
+        raise APIException(err)
 
     # Extend session so it expires two weeks from now
     request.session.set_expiry(1209600)
 
-    new_state = _collection_download_manager.get_state()
-    logging.debug(f"MANUQ new state: {new_state}")
-
     status = _collection_download_manager.get_status()
-    logging.debug(f"MANUQ new status: {status}")
-
     return Response({"status": status})
 
 
@@ -601,44 +588,31 @@ def continue_download(request):
 
     Returns download status.
     """
-    if not _collection_download_manager.is_downloading():
-        raise APIException("Download hasn't started yet.")
-
-    # Save state in session
-    changed = _collection_download_manager.update()
-    if changed:
-        new_state = _collection_download_manager.get_state()
-        request.session["COLLECTIONS_STATE"] = new_state
-        logging.debug(f"MANUQ new state: {new_state}")
-    else:
-        logging.debug("MANUQ no state changes")
+    try:
+        changed = _collection_download_manager.update()
+        if changed:
+            _save_state_in_request_session(request)
+    except DownloadError as err:
+        raise APIException(err)
 
     status = _collection_download_manager.get_status()
-    logging.debug(f"MANUQ new status: {status}")
-
     return Response({"status": status})
 
 
-@api_view(["POST"])
+@api_view(["DELETE"])
 def cancel_download(request):
     """Cancel current download and clear the saved state
 
-    Note that this doesn't remove the downloaded data.
+    Note that this doesn't remove the downloaded data yet.
 
     Returns download status.
     """
-    if _collection_download_manager.is_downloading():
-        _collection_download_manager.cancel()
+    _collection_download_manager.cancel()
 
     if "COLLECTIONS_STATE" in request.session:
         del request.session["COLLECTIONS_STATE"]
 
-    new_state = _collection_download_manager.get_state()
-    logging.debug(f"MANUQ new state: {new_state}")
-
     status = _collection_download_manager.get_status()
-    logging.debug(f"MANUQ new status: {status}")
-
     return Response({"status": status})
 
 
