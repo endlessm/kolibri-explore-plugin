@@ -4,8 +4,9 @@
   "license": "AGPL-3.0",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "../../scripts/set_override.py default && vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "build": "../../scripts/set_override.py default && vue-cli-service build && yarn zip",
+    "lint": "vue-cli-service lint",
+    "zip": "../../scripts/bundle_zip.py loading-screen.zip"
   },
   "dependencies": {
     "bootstrap": "^4.6.1",

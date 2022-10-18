@@ -13,6 +13,7 @@ build/
 dist/
 kolibri_explore_plugin.egg-info/
 packages/*/custom-channel-ui.zip
+packages/loading-screen/loading-screen.zip
 packages/template-ui/src/nodes.json
 packages/template-ui/*.zip
 apps-bundle.zip
