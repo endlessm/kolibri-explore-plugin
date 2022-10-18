@@ -10,6 +10,7 @@ from kolibri.core.content.utils.content_manifest import ContentManifest
 from kolibri.core.content.utils.content_manifest import (
     ContentManifestParseError,
 )
+from kolibri.core.tasks.job import State as JobState
 from kolibri.core.tasks.main import job_storage
 from kolibri.utils import conf
 from kolibri.utils.system import get_free_space
@@ -127,11 +128,9 @@ class EndlessKeyContentManifest(ContentManifest):
                     "task": "remotecontentimport",
                     "params": {
                         "channel_id": channel_id,
-                        # FIXME
-                        "node_ids": [1, 2, 3],
-                        # "node_ids": list(
-                        #     self.get_node_ids_for_channel(channel_id)
-                        # ),
+                        "node_ids": list(
+                            self.get_node_ids_for_channel(channel_id)
+                        ),
                         "exclude_node_ids": [],
                     },
                 }
@@ -185,6 +184,7 @@ class CollectionDownloadManager:
         self._current_task = None
         self._tasks_pending = []
         self._tasks_completed = []
+        self._tasks_previously_completed = []
 
     def from_manifest(self, manifest):
         """Start downloading a collection manifest."""
@@ -209,17 +209,15 @@ class CollectionDownloadManager:
         self._current_task = state["current_task"]
         self._tasks_pending = state["tasks_pending"]
         self._tasks_completed = state["tasks_completed"]
+        self._tasks_previously_completed = state["tasks_previously_completed"]
 
     def cancel(self):
         if self._current_job_id is not None:
-            pass
-            # FIXME cancel current job
-            # job = job_storage.get_job(self._current_job_id)
-            # job.SOMETHING
+            job_storage.cancel(self._current_job_id)
 
         self._set_empty_state()
 
-    def update(self):
+    def update(self, user):
         """Go to the next download step when possible.
 
         If the current task was completed move to the next task. If
@@ -230,24 +228,41 @@ class CollectionDownloadManager:
         if self._stage == DownloadStage.NOT_STARTED:
             raise DownloadError("Download hasn't started yet. Can't update")
 
+        if self._stage == DownloadStage.COMPLETED:
+            return False
+
         if self._current_task is None:
             # First task of this phase
-            self._enqueue_current_task()
+            self._next_task_or_stage(user)
             return True
 
-        if not self._has_current_job_completed():
+        if self._current_job_id is None:
+            # Enqueue still in progress
+            return False
+
+        job = job_storage.get_job(self._current_job_id)
+        logger.debug(f"Checking state of job {job}")
+        if job.state in [JobState.CANCELED, JobState.FAILED]:
+            # Current job was canceled or failed so it needs to be restarted
+            self._current_job_id = job_storage.restart_job(
+                self._current_job_id
+            )
+        elif job.state in [
+            JobState.PENDING,
+            JobState.SCHEDULED,
+            JobState.QUEUED,
+            JobState.RUNNING,
+            JobState.CANCELING,
+        ]:
+            # Current job hasn't completed yet
             return False
 
         # Current task was completed
+        assert job.state == JobState.COMPLETED
         self._tasks_completed.append(self._current_task)
         self._current_task = None
         self._current_job_id = None
-        if not self._tasks_pending:
-            # No more tasks pending in this stage, move to the next one
-            self._set_next_stage()
-        else:
-            # Enqueue next pending task
-            self._enqueue_current_task()
+        self._next_task_or_stage(user)
         return True
 
     def get_status(self):
@@ -274,11 +289,12 @@ class CollectionDownloadManager:
         elif self._stage == DownloadStage.IMPORTING_CONTENT:
             if self._current_job_id is None:
                 progress = 0
-            # FIXME
-            print(job_storage)
-            progress = 0.5
-            # job = job_storage.get_job(self._current_job_id)
-            # return job.progress / job.total_progress
+            else:
+                job = job_storage.get_job(self._current_job_id)
+                if job.total_progress == 0:
+                    progress = 0
+                else:
+                    progress = job.progress / job.total_progress
 
         elif self._stage == DownloadStage.COMPLETED:
             progress = 1
@@ -310,9 +326,18 @@ class CollectionDownloadManager:
             "current_task": self._current_task,
             "tasks_pending": self._tasks_pending,
             "tasks_completed": self._tasks_completed,
+            "tasks_previously_completed": self._tasks_previously_completed,
         }
 
         return state
+
+    def _next_task_or_stage(self, user):
+        if not self._tasks_pending:
+            # No more tasks pending in this stage, move to the next one
+            self._set_next_stage()
+        else:
+            # Enqueue next pending task
+            self._enqueue_current_task(user)
 
     def _set_next_stage(self):
         if self._stage == DownloadStage.COMPLETED:
@@ -326,33 +351,29 @@ class CollectionDownloadManager:
         elif self._stage == DownloadStage.IMPORTING_CONTENT:
             tasks = self._content_manifest.get_contentimport_tasks()
         self._tasks_pending = tasks
+        self._tasks_previously_completed.extend(self._tasks_completed)
         self._tasks_completed = []
 
-        # Call update so the first task gets enqueued
-        if self._stage != DownloadStage.COMPLETED:
-            self.update()
-
-    def _has_current_job_completed(self):
-        # FIXME what about stalled jobs? cancelled jobs? failed jobs?
-        # FIXME use self._current_job_id
-        return True
-
-    def _enqueue_current_task(self):
+    def _enqueue_current_task(self, user):
         self._current_task = self._tasks_pending.pop(0)
-        self._current_job_id = 123
-        # FIXME pass user
-        # FIXME call with current task params
-        # self._current_job_id = _remotechannelimport(request.user, channel_id)
+        tasks_mapping = {
+            "remotechannelimport": _remotechannelimport,
+            "remotecontentimport": _remotecontentimport,
+        }
+        fn = tasks_mapping[self._current_task["task"]]
+        params = self._current_task["params"]
+        self._current_job_id = fn(user=user, **params)
+        logger.debug(f"Enqueued job id {self._current_job_id}")
 
 
 def _remotechannelimport(user, channel_id):
     """Create, validate and enqueue a remotechannelimport job."""
-    channel_metadata = ChannelMetadata.objects.get(id=channel_id)
     job = remotechannelimport.validate_job_data(
         user,
         {
             "channel_id": channel_id,
-            "channel_name": channel_metadata.name,
+            # FIXME: Why is channel_name needed? It isn't known at this point.
+            "channel_name": "foo",
         },
     )
     job_id = remotechannelimport.enqueue(job=job)
@@ -399,98 +420,6 @@ def _read_content_manifests():
 
 
 _read_content_manifests()
-
-# # FIXME REMOVE
-# # let user choose: set by the frontend and stored somewhere
-# _content_manifest = _content_manifests[0]
-
-
-# # FIXME call this when download starts
-
-
-# @api_view(["GET"])
-# def get_importchannel_status(request):
-#     logger.debug("MANUQ get_importchannel_status")
-#     if _job_id is None:
-#         return Response({"message": "couldn't check"})
-
-#     job = job_storage.get_job(_job_id)
-#     logger.debug(f"MANUQ JOB {job}")
-#     return Response(
-#         {
-#             "message": f"status: {job.state}"
-#             + f" progress: {job.progress} of {job.total_progress}"
-#         }
-#     )
-
-
-# @api_view(["GET"])
-# def get_importcontent_status(request):
-#     logger.debug("MANUQ get_importcontent_status")
-#     if _job_id_2 is None:
-#         return Response({"message": "couldn't check"})
-
-#     job = job_storage.get_job(_job_id_2)
-#     logger.debug(f"MANUQ JOB {job}")
-#     return Response(
-#         {
-#             "message": f"status: {job.state}"
-#             + f" progress: {job.progress} of {job.total_progress}"
-#         }
-#     )
-
-
-# @api_view(["POST"])
-# def start_importchannel(request):
-#     global _job_id
-#     logger.debug("MANUQ start_importchannel")
-#     if _content_manifest is None:
-#         return Response({"message": "couldn't start"})
-
-#     channel_ids = _content_manifest.get_channel_ids()
-
-#     # FIXME
-#     channel_ids = list(channel_ids)[:1]
-
-#     for channel_id in channel_ids:
-#         logger.debug(f"MANUQ IMPORTCHANNEL {request.user} - {channel_id}")
-#         _job_id = _remotechannelimport(request.user, channel_id)
-#         logger.debug(f"MANUQ STARTED JOB WITH ID {_job_id}")
-
-#     return Response({"message": "importchannel started"})
-
-
-# @api_view(["POST"])
-# def start_importcontent(request):
-#     global _job_id_2
-#     logger.debug("MANUQ start_importcontent")
-#     if _content_manifest is None:
-#         return Response({"message": "couldn't start"})
-
-#     channel_ids = _content_manifest.get_channel_ids()
-
-#     # FIXME
-#     channel_ids = list(channel_ids)[:1]
-
-#     for channel_id in channel_ids:
-#         logger.debug(f"MANUQ IMPORTCONTENT {request.user} - {channel_id}")
-#         # FIXME print nodes
-#         # node_ids =
-#         # _content_manifest.get_include_node_ids(channel_id,
-#         # channel_version="11")
-
-#         node_ids = _content_manifest.get_node_ids_for_channel(channel_id)
-#         exclude_node_ids = []
-#         logger.debug(f"MANUQ IMPORTCONTENT {node_ids} - {exclude_node_ids}")
-#         _job_id_2 = _remotecontentimport(
-#             request.user,
-#             channel_id,
-#             node_ids,
-#             exclude_node_ids,
-#         )
-#         logger.debug(f"MANUQ STARTED JOB WITH ID {_job_id_2}")
-
-#     return Response({"message": "importcontent started"})
 
 
 def _save_state_in_request_session(request):
@@ -613,7 +542,7 @@ def continue_download(request):
     Returns download status.
     """
     try:
-        changed = _collection_download_manager.update()
+        changed = _collection_download_manager.update(request.user)
         if changed:
             _save_state_in_request_session(request)
     except DownloadError as err:
