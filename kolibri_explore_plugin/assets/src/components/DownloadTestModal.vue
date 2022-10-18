@@ -33,7 +33,7 @@
       Error: {{ errorLabel }}
     </p>
     <b-button-group class="mx-auto w-100">
-      <b-button :disabled="loading || downloading" @click="startOrResumeDownload">
+      <b-button :disabled="loading || downloading" @click="tryStartResume">
         Start/Resume
       </b-button>
       <!-- <b-button @click="onUpdateDownload">
@@ -133,9 +133,15 @@
         });
       },
       tryStartResume() {
+        if (this.updateIntervalId) {
+          clearInterval(this.updateIntervalId);
+          this.updateIntervalId = null;
+        }
         return this.onGetDownloadStatus().then(() => {
           if (this.status.stage === 'NOT_STARTED') {
-            return this.startOrResumeDownload();
+            return this.startOrResumeDownload().then(() => {
+              this.updateIntervalId = setInterval(this.onUpdateDownload, 1500);
+            });
           } else {
             this.updateIntervalId = setInterval(this.onUpdateDownload, 1500);
           }
@@ -144,18 +150,14 @@
       startOrResumeDownload() {
         return client({
           url: urls['kolibri:kolibri_explore_plugin:get_should_resume'](),
-        })
-          .then(({ data }) => {
-            console.log(data);
-            if (data.shouldResume) {
-              return this.onResumeDownload();
-            } else {
-              return this.onStartDownload('primary', 'small');
-            }
-          })
-          .then(() => {
-            this.updateIntervalId = setInterval(this.onUpdateDownload, 1500);
-          });
+        }).then(({ data }) => {
+          console.log(data);
+          if (data.shouldResume) {
+            return this.onResumeDownload();
+          } else {
+            return this.onStartDownload('primary', 'small');
+          }
+        });
       },
       onStartDownload(grade, name) {
         return client({
@@ -234,6 +236,10 @@
           });
       },
       onCancelDownload() {
+        if (this.updateIntervalId) {
+          clearInterval(this.updateIntervalId);
+          this.updateIntervalId = null;
+        }
         return client({
           url: urls['kolibri:kolibri_explore_plugin:cancel_download'](),
           method: 'DELETE',

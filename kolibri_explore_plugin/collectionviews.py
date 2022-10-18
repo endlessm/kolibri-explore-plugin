@@ -1,5 +1,6 @@
 import logging
 import os
+import time
 from enum import auto
 from enum import IntEnum
 
@@ -138,7 +139,9 @@ class EndlessKeyContentManifest(ContentManifest):
                     },
                     "extra_metadata": {
                         "channel_name": channel_metadata.name,
-                        "channel_thumbnail": channel_metadata.thumbnail,
+                        # FIXME enable thumbnail data if the UI needs it,
+                        # for now it only clutters the debug lines:
+                        # "channel_thumbnail": channel_metadata.thumbnail,
                     },
                 }
             )
@@ -194,6 +197,7 @@ class CollectionDownloadManager:
         self._tasks_pending = []
         self._tasks_completed = []
         self._tasks_previously_completed = []
+        self._enqueue_timestamp = None
 
     def from_manifest(self, manifest):
         """Start downloading a collection manifest."""
@@ -247,8 +251,13 @@ class CollectionDownloadManager:
 
         if self._current_job_id is None:
             # Enqueue still in progress
+            # FIXME: The download can potentially stall here!
+            duration = 0
+            if self._enqueue_timestamp is not None:
+                duration = time.time() - self._enqueue_timestamp
             logger.debug(
-                f"Enqueue still in progress for task {self._current_task}"
+                f"Enqueue in progress {duration=}"
+                f" for task {self._current_task}"
             )
             return False
 
@@ -379,6 +388,13 @@ class CollectionDownloadManager:
 
     def _enqueue_current_task(self, user):
         self._current_task = self._tasks_pending.pop(0)
+
+        self._enqueue_timestamp = time.time()
+        logger.debug(
+            f"Enqueuing task {self._current_task}"
+            f" at {self._enqueue_timestamp}"
+        )
+
         tasks_mapping = {
             "remotechannelimport": _remotechannelimport,
             "remotecontentimport": _remotecontentimport,
@@ -386,6 +402,7 @@ class CollectionDownloadManager:
         fn = tasks_mapping[self._current_task["task"]]
         params = self._current_task["params"]
         self._current_job_id = fn(user=user, **params)
+        self._enqueue_timestamp = None
         logger.debug(f"Enqueued job id {self._current_job_id}")
 
 
@@ -447,7 +464,7 @@ _read_content_manifests()
 
 def _save_state_in_request_session(request):
     new_state = _collection_download_manager.to_state()
-    if new_state["stage"] == DownloadStage.NOT_STARTED:
+    if new_state["stage"] == DownloadStage.NOT_STARTED.name:
         # Not saving an empty state
         return
 
