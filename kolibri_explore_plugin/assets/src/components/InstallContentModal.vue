@@ -155,7 +155,7 @@
         const collection = this.collection.metadata.subtitle.toLowerCase();
         const grade = this.grade.toLowerCase();
         client({
-          url: urls['kolibri:kolibri_explore_plugin:endless_key_collections'](),
+          url: urls['kolibri:kolibri_explore_plugin:endless_learning_collection'](),
           method: 'POST',
           data: { grade, collection },
         })
@@ -171,7 +171,7 @@
         clearTimeout(this.pollingId);
 
         client({
-          url: urls['kolibri:kolibri_explore_plugin:endless_key_collections'](),
+          url: urls['kolibri:kolibri_explore_plugin:endless_learning_collection'](),
         })
           .then(({ data }) => {
             this.jobs = data.jobs;

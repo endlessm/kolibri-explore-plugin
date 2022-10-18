@@ -119,8 +119,9 @@ class AppMetadataView(AppBase):
             return HttpResponse(json_file, content_type="application/json")
 
 
+# FIXME remove
 @method_decorator(csrf_exempt, name="dispatch")
-class EndlessKeyCollections(View):
+class EndlessLearningCollection(View):
     grade_collections = {
         "primary": {
             "small": {
@@ -169,25 +170,20 @@ class EndlessKeyCollections(View):
         free_space_gb = get_free_space() / 1024**3
         for grade, collections in self.grade_collections.items():
             for name, collection in collections.items():
-                # content_manifest = EndlessKeyContentManifest()
-                manifest_filename = os.path.join(
+                collection_manifest = os.path.join(
                     COLLECTION_PATHS, f"{grade}-{name}.json"
                 )
 
-                if not os.path.exists(manifest_filename):
+                if not os.path.exists(collection_manifest):
                     logging.error("Collection manifest not found")
                     collection["loaded"] = False
                     continue
 
-                # content_manifest.read(manifest_filename, validate=True)
-                # content_manifest.set_availability(free_space_gb)
-                # FIXME
-                # collection["manifest"] = content_manifest
-                with open(manifest_filename) as fd:
-                    manifest_data = json.load(fd)
+                with open(collection_manifest) as f:
+                    manifest = json.load(f)
                     collection["loaded"] = True
-                    collection["channels"] = manifest_data.get("channels", [])
-                    collection["metadata"] = manifest_data.get("metadata", {})
+                    collection["channels"] = manifest.get("channels", [])
+                    collection["metadata"] = manifest.get("metadata", {})
 
                 # check collection availability
                 if "required_gigabytes" in collection["metadata"]:

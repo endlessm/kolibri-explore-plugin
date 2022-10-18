@@ -163,7 +163,6 @@
       },
       onLoad() {
         this.isLoading = false;
-        // this.$bvModal.show("manuq-modal");
       },
       reloadChannels() {
         ContentNodeResource.useContentCacheKey = false;
@@ -192,7 +191,7 @@
         }
       },
       getRunningJobs() {
-        client({ url: urls['kolibri:kolibri_explore_plugin:endless_key_collections']() }).then(
+        client({ url: urls['kolibri:kolibri_explore_plugin:endless_learning_collection']() }).then(
           ({ data }) => {
             if (data.collections) {
               this.collections = data.collections;
