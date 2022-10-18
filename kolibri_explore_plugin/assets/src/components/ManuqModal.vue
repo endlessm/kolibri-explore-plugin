@@ -4,7 +4,7 @@
     id="manuq-modal"
     size="xl"
     centered
-    title="Hola Mundo"
+    title="Test download collection"
     :hideFooter="true"
     headerCloseVariant="light"
   >
@@ -28,21 +28,21 @@
       </ul>
     </template> -->
 
-    <p>Status: {{ statusLabel }}</p>
+    <p>{{ statusLabel }}</p>
     <p v-if="errorLabel !== null" class="text-danger">
       Error: {{ errorLabel }}
     </p>
     <b-button-group class="mx-auto w-100">
-      <b-button @click="startOrResumeDownload">
+      <b-button :disabled="loading || downloading" @click="startOrResumeDownload">
         Start/Resume
       </b-button>
-      <b-button @click="onContinueDownload">
-        Continue
-      </b-button>
-      <b-button @click="onGetDownloadStatus">
+      <!-- <b-button @click="onUpdateDownload">
+        Update
+      </b-button> -->
+      <!-- <b-button @click="onGetDownloadStatus">
         Get status
-      </b-button>
-      <b-button @click="onCancelDownload">
+      </b-button> -->
+      <b-button :disabled="loading" @click="onCancelDownload">
         Cancel
       </b-button>
     </b-button-group>
@@ -80,9 +80,20 @@
         status: null,
         errorLabel: null,
         collectionsInfo: null,
+        updateIntervalId: null,
       };
     },
     computed: {
+      downloading() {
+        if (
+          this.status === null ||
+          this.status.stage === 'NOT_STARTED' ||
+          this.status.stage === 'COMPLETED'
+        ) {
+          return false;
+        }
+        return true;
+      },
       statusLabel() {
         if (this.loading) {
           return 'Loading';
@@ -95,8 +106,8 @@
         } else if (this.status.stage === 'IMPORTING_CHANNELS') {
           return `Downloading channels metadata (${this.status.current_task_number} of ${this.status.total_tasks_number})...`;
         } else if (this.status.stage === 'IMPORTING_CONTENT') {
-          return `Downloading content for channel ${this.status.extra.channel_name} (${this.status
-            .total_tasks_number - this.status.current_task_number} channels left)...`;
+          return `Downloading content for channel ${this.status.extra_metadata.channel_name} (${this
+            .status.total_tasks_number - this.status.current_task_number} more channels left)...`;
         } else {
           return `${this.status.stage} (${this.status.current_task_number} of ${this.status.total_tasks_number})`;
         }
@@ -125,20 +136,26 @@
         return this.onGetDownloadStatus().then(() => {
           if (this.status.stage === 'NOT_STARTED') {
             return this.startOrResumeDownload();
+          } else {
+            this.updateIntervalId = setInterval(this.onUpdateDownload, 1500);
           }
         });
       },
       startOrResumeDownload() {
         return client({
           url: urls['kolibri:kolibri_explore_plugin:get_should_resume'](),
-        }).then(({ data }) => {
-          console.log(data);
-          if (data.shouldResume) {
-            return this.onResumeDownload();
-          } else {
-            return this.onStartDownload('primary', 'small');
-          }
-        });
+        })
+          .then(({ data }) => {
+            console.log(data);
+            if (data.shouldResume) {
+              return this.onResumeDownload();
+            } else {
+              return this.onStartDownload('primary', 'small');
+            }
+          })
+          .then(() => {
+            this.updateIntervalId = setInterval(this.onUpdateDownload, 1500);
+          });
       },
       onStartDownload(grade, name) {
         return client({
@@ -177,9 +194,13 @@
             }
           });
       },
-      onContinueDownload() {
+      onUpdateDownload() {
+        if (!this.downloading && this.updateIntervalId) {
+          clearInterval(this.updateIntervalId);
+          this.updateIntervalId = null;
+        }
         return client({
-          url: urls['kolibri:kolibri_explore_plugin:continue_download'](),
+          url: urls['kolibri:kolibri_explore_plugin:update_download'](),
           method: 'POST',
         })
           .then(({ data }) => {

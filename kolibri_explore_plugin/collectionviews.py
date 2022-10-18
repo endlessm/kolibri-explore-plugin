@@ -136,7 +136,7 @@ class EndlessKeyContentManifest(ContentManifest):
                         ),
                         "exclude_node_ids": [],
                     },
-                    "extra": {
+                    "extra_metadata": {
                         "channel_name": channel_metadata.name,
                         "channel_thumbnail": channel_metadata.thumbnail,
                     },
@@ -247,6 +247,9 @@ class CollectionDownloadManager:
 
         if self._current_job_id is None:
             # Enqueue still in progress
+            logger.debug(
+                f"Enqueue still in progress for task {self._current_task}"
+            )
             return False
 
         job = job_storage.get_job(self._current_job_id)
@@ -288,7 +291,7 @@ class CollectionDownloadManager:
             1 if self._current_task else 0
         )
         total_tasks_number = current_task_number + pending_tasks_number
-        extra = {}
+        extra_metadata = {}
 
         if self._stage == DownloadStage.NOT_STARTED:
             progress = 0
@@ -311,9 +314,9 @@ class CollectionDownloadManager:
                     progress = job.progress / job.total_progress
             if (
                 self._current_task is not None
-                and "extra" in self._current_task
+                and "extra_metadata" in self._current_task
             ):
-                extra.update(self._current_task["extra"])
+                extra_metadata.update(self._current_task["extra_metadata"])
 
         elif self._stage == DownloadStage.COMPLETED:
             progress = 1
@@ -323,7 +326,7 @@ class CollectionDownloadManager:
             "progress": progress,
             "current_task_number": current_task_number,
             "total_tasks_number": total_tasks_number,
-            "extra": extra,
+            "extra_metadata": extra_metadata,
         }
 
     def to_state(self):
@@ -489,8 +492,6 @@ def start_download(request):
 
     Pass the collection "grade" and "name" in the POST data.
 
-    Raise error if a download is already happening? Or resume?
-
     Returns download status.
     """
     grade = request.data.get("grade")
@@ -530,8 +531,6 @@ def start_download(request):
 def resume_download(request):
     """Resume download from a previous session.
 
-    Raise error if a download is already happening? Or resume?
-
     Returns download status.
     """
 
@@ -556,8 +555,10 @@ def resume_download(request):
 
 
 @api_view(["POST"])
-def continue_download(request):
-    """Continue downloading current collection
+def update_download(request):
+    """Continue downloading current collection.
+
+    Save state when the dowload status changes.
 
     Returns download status.
     """
@@ -574,7 +575,7 @@ def continue_download(request):
 
 @api_view(["DELETE"])
 def cancel_download(request):
-    """Cancel current download and clear the saved state
+    """Cancel current download and clear the saved state.
 
     Note that this doesn't remove the downloaded data yet.
 

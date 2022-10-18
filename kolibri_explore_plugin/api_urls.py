@@ -1,12 +1,12 @@
 from django.conf.urls import url
 
 from .collectionviews import cancel_download
-from .collectionviews import continue_download
 from .collectionviews import get_collections_info
 from .collectionviews import get_download_status
 from .collectionviews import get_should_resume
 from .collectionviews import resume_download
 from .collectionviews import start_download
+from .collectionviews import update_download
 from .views import EndlessKeyCollections  # FIXME remove
 
 
@@ -38,9 +38,9 @@ urlpatterns = [
         name="resume_download",
     ),
     url(
-        r"ek-collections/continue-download",
-        continue_download,
-        name="continue_download",
+        r"ek-collections/update-download",
+        update_download,
+        name="update_download",
     ),
     url(
         r"ek-collections/cancel-download",
