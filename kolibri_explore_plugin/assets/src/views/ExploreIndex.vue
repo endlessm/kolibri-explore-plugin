@@ -4,7 +4,7 @@
     <BackToTop />
     <keep-alive>
       <div>
-        <ManuqModal
+        <DownloadTestModal
           :visible="true"
         />
         <GradeSelectionModal
@@ -63,7 +63,7 @@
   import { showChannels } from '../modules/topicsRoot/handlers';
   import { PageNames } from '../constants';
   import AboutModal from '../components/AboutModal';
-  import ManuqModal from '../components/ManuqModal';
+  import DownloadTestModal from '../components/DownloadTestModal';
   import GradeSelectionModal from '../components/GradeSelectionModal';
   import CollectionSelectionModal from '../components/CollectionSelectionModal';
   import InstallContentModal from '../components/InstallContentModal';
@@ -91,7 +91,7 @@
       AboutModal,
       ContentModal,
       DevTag,
-      ManuqModal,
+      DownloadTestModal,
       GradeSelectionModal,
       CollectionSelectionModal,
       InstallContentModal,

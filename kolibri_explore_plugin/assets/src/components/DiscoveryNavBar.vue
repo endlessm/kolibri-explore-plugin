@@ -22,7 +22,7 @@
     </b-button-group>
     <b-navbar-nav>
       <b-nav-text
-        v-b-modal.manuq-modal
+        v-b-modal.download-test-modal
         class="btn d-md-block d-none pr-0"
       >
         About Endless Key

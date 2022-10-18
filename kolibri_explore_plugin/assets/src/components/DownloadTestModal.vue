@@ -1,7 +1,7 @@
 <template>
 
   <b-modal
-    id="manuq-modal"
+    id="download-test-modal"
     size="xl"
     centered
     title="Test download collection"
@@ -71,7 +71,7 @@
   import urls from 'kolibri.urls';
 
   export default {
-    name: 'ManuqModal',
+    name: 'DownloadTestModal',
     metaInfo() {},
     components: {},
     data() {
