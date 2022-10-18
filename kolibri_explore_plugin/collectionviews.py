@@ -123,22 +123,29 @@ class EndlessKeyContentManifest(ContentManifest):
         tasks = []
 
         for channel_id in self.get_channel_ids():
+            channel_metadata = self._get_channel_metadata(channel_id)
             tasks.append(
                 {
                     "task": "remotecontentimport",
                     "params": {
                         "channel_id": channel_id,
                         "node_ids": list(
-                            self.get_node_ids_for_channel(channel_id)
+                            self._get_node_ids_for_channel(
+                                channel_metadata, channel_id
+                            )
                         ),
                         "exclude_node_ids": [],
+                    },
+                    "extra": {
+                        "channel_name": channel_metadata.name,
+                        "channel_thumbnail": channel_metadata.thumbnail,
                     },
                 }
             )
 
         return tasks
 
-    def get_node_ids_for_channel(self, channel_id):
+    def _get_node_ids_for_channel(self, channel_metadata, channel_id):
         """Get node IDs regardless of the version
 
         Assumes that the channel has been imported already.
@@ -148,8 +155,6 @@ class EndlessKeyContentManifest(ContentManifest):
         kolibri.core.content.management.commands.importcontent
         """
         node_ids = set()
-
-        channel_metadata = ChannelMetadata.objects.get(id=channel_id)
 
         for channel_version in self.get_channel_versions(channel_id):
             if channel_version != channel_metadata.version:
@@ -167,6 +172,10 @@ class EndlessKeyContentManifest(ContentManifest):
             )
 
         return node_ids
+
+    def _get_channel_metadata(self, channel_id):
+        channel_metadata = ChannelMetadata.objects.get(id=channel_id)
+        return channel_metadata
 
 
 class DownloadError(Exception):
@@ -272,13 +281,11 @@ class CollectionDownloadManager:
         HTTP response.
         """
 
-        # FIXME add more details of current channel being downloaded
-        # (name and icon) when possible
-
         progress = None
         pending = len(self._tasks_pending)
         completed = len(self._tasks_completed)
         total = completed + pending + (1 if self._current_task else 0)
+        extra = {}
 
         if self._stage == DownloadStage.NOT_STARTED:
             progress = 0
@@ -295,6 +302,11 @@ class CollectionDownloadManager:
                     progress = 0
                 else:
                     progress = job.progress / job.total_progress
+            if (
+                self._current_task is not None
+                and "extra" in self._current_task
+            ):
+                extra.update(self._current_task["extra"])
 
         elif self._stage == DownloadStage.COMPLETED:
             progress = 1
@@ -304,6 +316,7 @@ class CollectionDownloadManager:
             "progress": progress,
             "completed": completed,
             "total": total,
+            "extra": extra,
         }
 
     def to_state(self):
