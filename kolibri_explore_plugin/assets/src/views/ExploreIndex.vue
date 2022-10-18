@@ -50,14 +50,15 @@
 
 <script>
 
+  import client from 'kolibri.client';
+  import urls from 'kolibri.urls';
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import LoadingImage from 'eos-components/src/assets/loading-animation.gif';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
   import { ChannelResource, ContentNodeResource } from 'kolibri.resources';
-  import axios from 'axios';
   import { showChannels } from '../modules/topicsRoot/handlers';
-  import { ApiURL, PageNames } from '../constants';
+  import { PageNames } from '../constants';
   import AboutModal from '../components/AboutModal';
   import GradeSelectionModal from '../components/GradeSelectionModal';
   import CollectionSelectionModal from '../components/CollectionSelectionModal';
@@ -185,19 +186,21 @@
         }
       },
       getRunningJobs() {
-        axios.get(ApiURL).then(({ data }) => {
-          if (data.collections) {
-            this.collections = data.collections;
-          }
+        client({ url: urls['kolibri:kolibri_explore_plugin:endless_learning_collection']() }).then(
+          ({ data }) => {
+            if (data.collections) {
+              this.collections = data.collections;
+            }
 
-          if (data.collection) {
-            const [grade, size] = data.collection.split('-');
-            const collection = data.collections[grade][size];
-            this.downloadCollection(grade, collection);
-          } else if (this.noContent) {
-            this.visibleModal = 'grade';
+            if (data.collection) {
+              const [grade, size] = data.collection.split('-');
+              const collection = data.collections[grade][size];
+              this.downloadCollection(grade, collection);
+            } else if (this.noContent) {
+              this.visibleModal = 'grade';
+            }
           }
-        });
+        );
       },
     },
   };
