@@ -119,6 +119,7 @@ class AppMetadataView(AppBase):
             return HttpResponse(json_file, content_type="application/json")
 
 
+# FIXME remove
 @method_decorator(csrf_exempt, name="dispatch")
 class EndlessLearningCollection(View):
     grade_collections = {
