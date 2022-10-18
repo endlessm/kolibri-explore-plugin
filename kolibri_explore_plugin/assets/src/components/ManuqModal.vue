@@ -88,8 +88,17 @@
           return 'Loading';
         } else if (this.status === null) {
           return 'Idle';
+        } else if (this.status.stage === 'NOT_STARTED') {
+          return 'Ready to start downloading';
+        } else if (this.status.stage === 'COMPLETED') {
+          return 'Download completed';
+        } else if (this.status.stage === 'IMPORTING_CHANNELS') {
+          return `Downloading channels metadata (${this.status.current_task_number} of ${this.status.total_tasks_number})...`;
+        } else if (this.status.stage === 'IMPORTING_CONTENT') {
+          return `Downloading content for channel ${this.status.extra.channel_name} (${this.status
+            .total_tasks_number - this.status.current_task_number} channels left)...`;
         } else {
-          return `${this.status.stage} (${this.status.completed} of ${this.status.total})`;
+          return `${this.status.stage} (${this.status.current_task_number} of ${this.status.total_tasks_number})`;
         }
       },
     },

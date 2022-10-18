@@ -256,6 +256,7 @@ class CollectionDownloadManager:
             self._current_job_id = job_storage.restart_job(
                 self._current_job_id
             )
+            return True
         elif job.state in [
             JobState.PENDING,
             JobState.SCHEDULED,
@@ -282,16 +283,22 @@ class CollectionDownloadManager:
         """
 
         progress = None
-        pending = len(self._tasks_pending)
-        completed = len(self._tasks_completed)
-        total = completed + pending + (1 if self._current_task else 0)
+        pending_tasks_number = len(self._tasks_pending)
+        current_task_number = len(self._tasks_completed) + (
+            1 if self._current_task else 0
+        )
+        total_tasks_number = current_task_number + pending_tasks_number
         extra = {}
 
         if self._stage == DownloadStage.NOT_STARTED:
             progress = 0
 
         elif self._stage == DownloadStage.IMPORTING_CHANNELS:
-            progress = completed / total
+            progress = current_task_number / total_tasks_number
+            # Making the last channel import appear like it still
+            # needs progress
+            if progress == 1:
+                progress = 0.98
 
         elif self._stage == DownloadStage.IMPORTING_CONTENT:
             if self._current_job_id is None:
@@ -314,8 +321,8 @@ class CollectionDownloadManager:
         return {
             "stage": self._stage.name,
             "progress": progress,
-            "completed": completed,
-            "total": total,
+            "current_task_number": current_task_number,
+            "total_tasks_number": total_tasks_number,
             "extra": extra,
         }
 
