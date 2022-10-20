@@ -90,6 +90,9 @@ class EndlessKeyContentManifest(ContentManifest):
         else:
             self.available = False
 
+    def get_channels_count(self):
+        return len(self.get_channel_ids())
+
     def get_channelimport_tasks(self):
         """Return a serializable object to create channelimport tasks
 
@@ -490,6 +493,7 @@ def get_collections_info(request):
                 "name": manifest.name,
                 "metadata": manifest.metadata,
                 "available": manifest.available,
+                "channelsCount": manifest.get_channels_count(),
             }
             grade_info["collections"].append(collection_info)
         info.append(grade_info)
