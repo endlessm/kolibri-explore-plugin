@@ -22,13 +22,13 @@
 
         <b-card-group deck class="py-5">
           <WelcomeCard
-            v-for="collection in collections"
+            v-for="collection in gradeInfo.collections"
             :key="collection.metadata.title"
-            :title="`${grade} ${collection.metadata.subtitle}`"
-            :text="`${collection.channels.length} Channels`"
+            :title="`${collection.grade} ${collection.metadata.subtitle}`"
+            :text="`${collection.channelsCount} Channels`"
             :secondaryText="collection.metadata.description"
             :disabled="!collection.available"
-            @click="$emit('nameSelected', collection)"
+            @click="$emit('nameSelected', collection.name)"
           >
             <b-button
               class="mt-3"
@@ -62,12 +62,8 @@
     name: 'CollectionSelectionModal',
     emits: ['nameSelected', 'goBack'],
     props: {
-      collections: {
-        type: Array,
-        default: null,
-      },
-      grade: {
-        type: String,
+      gradeInfo: {
+        type: Object,
         default: null,
       },
     },

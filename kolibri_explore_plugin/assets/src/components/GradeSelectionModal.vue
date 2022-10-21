@@ -15,26 +15,17 @@
         Select grade range
       </h1>
 
-      <b-alert
-        v-if="error"
-        variant="danger"
-        show
-        fade
-      >
-        {{ error }}
-      </b-alert>
-
       <b-card-group deck class="py-5">
         <WelcomeCard
-          v-for="grade in grades"
-          :key="grade.key"
-          :title="grade.key"
-          :text="grade.text"
-          :secondaryText="grade.secondaryText"
-          :selected="selection === grade.key"
-          @click="setSelection(grade.key)"
+          v-for="info in collectionsInfo"
+          :key="info.grade"
+          :title="info.grade"
+          :text="info.metadata.title"
+          :secondaryText="info.metadata.subtitle"
+          :selected="selection === info.grade"
+          @click="setSelection(info.grade)"
         >
-          <img :src="grade.image" width="100%">
+          <img :src="images[info.grade]" width="100%">
         </WelcomeCard>
       </b-card-group>
       <div class="pb-3 pt-3">
@@ -64,34 +55,19 @@
     name: 'GradeSelectionModal',
     emits: ['gradeSelected'],
     props: {
-      error: {
-        type: String,
-        default: '',
+      collectionsInfo: {
+        type: Array,
+        default: null,
       },
     },
     data() {
       return {
         selection: null, // 'primary', 'intermediate', 'secondary'
-        grades: [
-          {
-            key: 'primary',
-            text: 'for students ages 6-9',
-            secondaryText: '(in grades K-3)',
-            image: primaryImage,
-          },
-          {
-            key: 'intermediate',
-            text: 'for students ages 10-13',
-            secondaryText: '(in grades 4-7)',
-            image: intermediateImage,
-          },
-          {
-            key: 'secondary',
-            text: ' for students ages 14+',
-            secondaryText: '(in grades 8+)',
-            image: secondaryImage,
-          },
-        ],
+        images: {
+          primary: primaryImage,
+          intermediate: intermediateImage,
+          secondary: secondaryImage,
+        },
       };
     },
     methods: {

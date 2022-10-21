@@ -5,13 +5,12 @@
     <div>
       <GradeSelectionModal
         v-if="gradeModalVisible"
-        :error="installError"
+        :collectionsInfo="collectionsInfo"
         @gradeSelected="onGradeSelected"
       />
       <CollectionSelectionModal
         v-if="collectionModalVisible"
-        :grade="grade"
-        :collections="gradeCollections"
+        :gradeInfo="gradeInfo"
         @nameSelected="onNameSelected"
         @goBack="onBackToGradeSelection"
       />
@@ -96,18 +95,19 @@
         isLoading: false,
         // Collections selection and download data:
         visibleModal: 'none',
-        collections: {},
+        loadingCollections: true,
+        collectionsInfo: null,
         grade: null,
         name: null,
         installError: '',
       };
     },
     computed: {
-      ...mapState(['noContent', 'pageName']),
+      ...mapState(['pageName']),
       ...mapState('topicsRoot', { rootNodes: 'rootNodes' }),
-      gradeCollections() {
-        return Object.values(this.collections[this.grade] || {});
-      },
+      ...mapState({
+        coreLoading: state => state.core.loading,
+      }),
       currentPage() {
         return pageNameToComponentMap[this.pageName] || null;
       },
@@ -116,6 +116,9 @@
       },
       loadingImg() {
         return LoadingImage;
+      },
+      gradeInfo() {
+        return this.collectionsInfo.find(col => col.grade === this.grade);
       },
       installModalVisible() {
         return this.visibleModal === 'content';
@@ -128,11 +131,11 @@
       },
     },
     watch: {
-      noContent() {
-        this.getRunningJobs();
-      },
-      rootNodes() {
-        this.getRunningJobs();
+      coreLoading() {
+        if (this.coreLoading || this.collectionsInfo !== null) {
+          return;
+        }
+        return this.setupCollections();
       },
       $route: function(newRoute, oldRoute) {
         // Return if the user is leaving or entering the Search page.
@@ -166,6 +169,24 @@
         showChannels(this.$store);
         this.$store.commit('SET_NOCONTENT', false);
       },
+      setupCollections() {
+        this.loadingCollections = true;
+        return this.getCollectionsInfo().then(collectionsInfo => {
+          // FIXME use this to download or not
+          const hasContent = this.rootNodes.length > 0;
+          console.log(hasContent);
+
+          this.collectionsInfo = collectionsInfo;
+          this.loadingCollections = false;
+        });
+      },
+      getCollectionsInfo() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:get_collections_info'](),
+        }).then(({ data }) => {
+          return data.collectionsInfo;
+        });
+      },
       onGradeSelected(grade) {
         this.grade = grade;
         this.visibleModal = 'collection';
@@ -185,24 +206,6 @@
         } else {
           this.visibleModal = 'none';
         }
-      },
-      getRunningJobs() {
-        client({ url: urls['kolibri:kolibri_explore_plugin:endless_learning_collection']() }).then(
-          ({ data }) => {
-            if (data.collections) {
-              this.collections = data.collections;
-            }
-
-            if (data.collection) {
-              const [grade, size] = data.collection.split('-');
-              const collection = data.collections[grade][size];
-              this.grade = grade;
-              this.onNameSelected(collection);
-            } else if (this.noContent) {
-              this.visibleModal = 'grade';
-            }
-          }
-        );
       },
     },
   };
