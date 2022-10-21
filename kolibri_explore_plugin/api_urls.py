@@ -7,16 +7,9 @@ from .collectionviews import get_should_resume
 from .collectionviews import resume_download
 from .collectionviews import start_download
 from .collectionviews import update_download
-from .views import EndlessLearningCollection  # FIXME remove
 
 
 urlpatterns = [
-    url(
-        # FIXME: Remove once the reimplementation is completed
-        r"ek-collections/old",
-        EndlessLearningCollection.as_view(),
-        name="endless_learning_collection",
-    ),
     url(
         r"ek-collections/get-collections-info",
         get_collections_info,
