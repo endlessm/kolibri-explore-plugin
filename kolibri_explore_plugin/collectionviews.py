@@ -49,20 +49,23 @@ GRADES_METADATA = {
 
 
 class EndlessKeyContentManifest(ContentManifest):
-    def __init__(self, grade, name):
-        """The EK collections are organized by grade. Example: the
+    def __init__(self):
+        """Extended content manifest for Endless Key
+
+        The EK collections are organized by grade. Example: the
         "primary-small" collection has grade "primary" and name
         "small"
+
+        They also add more metadata and set availability according to
+        disk space.
         """
-        self.grade = grade
-        self.name = name
         self.metadata = None
         self.available = None
         super().__init__()
 
-    def read(self, validate=False):
+    def read_from_static_collection(self, grade, name, validate=False):
         manifest_filename = os.path.join(
-            COLLECTION_PATHS, f"{self.grade}-{self.name}.json"
+            COLLECTION_PATHS, f"{grade}-{name}.json"
         )
 
         if not os.path.exists(manifest_filename):
@@ -79,6 +82,9 @@ class EndlessKeyContentManifest(ContentManifest):
                 "metadata is a required field for Endless Key manifest"
             )
         super().read_dict(manifest_data, validate)
+
+    def to_dict(self):
+        raise NotImplementedError()
 
     def set_availability(self, free_space_gb):
         # FIXME using a hardcoded number is silly. Find a way to get
@@ -416,7 +422,7 @@ def _remotechannelimport(user, channel_id):
         user,
         {
             "channel_id": channel_id,
-            # FIXME: Why is channel_name needed? It isn't known at this point.
+            # FIXME: The channel_name is needed since commit b53d7baa
             "channel_name": "foo",
         },
     )
@@ -430,7 +436,7 @@ def _remotecontentimport(user, channel_id, node_ids, exclude_node_ids):
         user,
         {
             "channel_id": channel_id,
-            # FIXME: Why is channel_name needed? It isn't known at this point.
+            # FIXME: The channel_name is needed since commit b53d7baa
             "channel_name": "foo",
             "node_ids": node_ids,
             "exclude_node_ids": exclude_node_ids,
@@ -453,8 +459,8 @@ def _read_content_manifests():
 
     for grade in COLLECTION_GRADES:
         for name in COLLECTION_NAMES:
-            manifest = EndlessKeyContentManifest(grade, name)
-            manifest.read(validate=True)
+            manifest = EndlessKeyContentManifest()
+            manifest.read_from_static_collection(grade, name, validate=True)
             manifest.set_availability(free_space_gb)
             _content_manifests.append(manifest)
 
