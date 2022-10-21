@@ -28,7 +28,7 @@
             :text="`${collection.channels.length} Channels`"
             :secondaryText="collection.metadata.description"
             :disabled="!collection.available"
-            @click="$emit('downloadCollection', grade, collection)"
+            @click="$emit('nameSelected', collection)"
           >
             <b-button
               class="mt-3"
@@ -60,7 +60,7 @@
 
   export default {
     name: 'CollectionSelectionModal',
-    emits: ['downloadCollection', 'goBack'],
+    emits: ['nameSelected', 'goBack'],
     props: {
       collections: {
         type: Array,

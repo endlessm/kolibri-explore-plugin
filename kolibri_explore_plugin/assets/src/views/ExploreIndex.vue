@@ -6,18 +6,18 @@
       <GradeSelectionModal
         v-if="gradeModalVisible"
         :error="installError"
-        @gradeSelected="gradeSelected"
+        @gradeSelected="onGradeSelected"
       />
       <CollectionSelectionModal
         v-if="collectionModalVisible"
         :grade="grade"
         :collections="gradeCollections"
-        @downloadCollection="downloadCollection"
-        @goBack="visibleModal = 'grade'"
+        @nameSelected="onNameSelected"
+        @goBack="onBackToGradeSelection"
       />
       <InstallContentModal
-        v-if="contentModalVisible"
-        :collection="downloadingCollection"
+        v-if="installModalVisible"
+        :collection="name"
         :grade="grade"
         @showModal="visibleModal = 'content'"
         @hide="installContentHide"
@@ -94,10 +94,11 @@
       return {
         lastRoute: null,
         isLoading: false,
+        // Collections selection and download data:
         visibleModal: 'none',
-        downloadingCollection: null,
         collections: {},
-        grade: 'intermediate',
+        grade: null,
+        name: null,
         installError: '',
       };
     },
@@ -116,7 +117,7 @@
       loadingImg() {
         return LoadingImage;
       },
-      contentModalVisible() {
+      installModalVisible() {
         return this.visibleModal === 'content';
       },
       collectionModalVisible() {
@@ -165,15 +166,17 @@
         showChannels(this.$store);
         this.$store.commit('SET_NOCONTENT', false);
       },
-      downloadCollection(grade, collection) {
-        this.grade = grade;
-        this.downloadingCollection = collection;
-        this.visibleModal = 'content';
-      },
-      gradeSelected(grade) {
+      onGradeSelected(grade) {
         this.grade = grade;
         this.visibleModal = 'collection';
         this.installError = '';
+      },
+      onNameSelected(name) {
+        this.name = name;
+        this.visibleModal = 'content';
+      },
+      onBackToGradeSelection() {
+        this.grade = null;
       },
       installContentHide(error) {
         if (error || this.installError) {
@@ -193,7 +196,8 @@
             if (data.collection) {
               const [grade, size] = data.collection.split('-');
               const collection = data.collections[grade][size];
-              this.downloadCollection(grade, collection);
+              this.grade = grade;
+              this.onNameSelected(collection);
             } else if (this.noContent) {
               this.visibleModal = 'grade';
             }
