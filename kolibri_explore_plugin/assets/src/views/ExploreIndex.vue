@@ -16,11 +16,7 @@
       />
       <InstallContentModal
         v-if="installModalVisible"
-        :collection="name"
-        :grade="grade"
-        @showModal="visibleModal = 'content'"
-        @hide="installContentHide"
-        @newContent="reloadChannels"
+        @completed="onDownloadCompleted"
       />
     </div>
     <ContentModal />
@@ -94,12 +90,14 @@
         lastRoute: null,
         isLoading: false,
         // Collections selection and download data:
-        visibleModal: 'none',
         loadingCollections: true,
         collectionsInfo: null,
         grade: null,
         name: null,
-        installError: '',
+        downloadInitiated: false,
+        downloadCompleted: false,
+        // Use this flag to debug the download selection:
+        debugForceDownloadSelection: false,
       };
     },
     computed: {
@@ -120,20 +118,39 @@
       gradeInfo() {
         return this.collectionsInfo.find(col => col.grade === this.grade);
       },
-      installModalVisible() {
-        return this.visibleModal === 'content';
-      },
-      collectionModalVisible() {
-        return this.visibleModal === 'collection';
+      needsToSelectCollection() {
+        if (
+          this.coreLoading ||
+          this.loadingCollections ||
+          this.downloadInitiated ||
+          this.downloadCompleted
+        ) {
+          return false;
+        }
+        return true;
       },
       gradeModalVisible() {
-        return this.visibleModal === 'grade';
+        return this.needsToSelectCollection && this.grade === null;
+      },
+      collectionModalVisible() {
+        return this.needsToSelectCollection && this.grade !== null && this.name === null;
+      },
+      installModalVisible() {
+        if (this.coreLoading || this.loadingCollections || this.downloadCompleted) {
+          return false;
+        }
+        return this.downloadInitiated;
       },
     },
     watch: {
       coreLoading() {
         if (this.coreLoading || this.collectionsInfo !== null) {
           return;
+        }
+        if (this.debugForceDownloadSelection) {
+          return this.cancelDownload().then(() => {
+            this.setupCollections();
+          });
         }
         return this.setupCollections();
       },
@@ -161,24 +178,46 @@
       onLoad() {
         this.isLoading = false;
       },
-      reloadChannels() {
-        ContentNodeResource.useContentCacheKey = false;
-        ContentNodeResource.clearCache();
-        ChannelResource.useContentCacheKey = false;
-        ChannelResource.clearCache();
-        showChannels(this.$store);
-        this.$store.commit('SET_NOCONTENT', false);
-      },
       setupCollections() {
+        // If a download is ongoing then display the progress.
+        // If a download can be resumed then resume it and display the progress.
+        // Otherwise check if the conditions are met to display the collection selection.
+        // Current conditions are: there is no content or a debugging flag is enabled.
         this.loadingCollections = true;
-        return this.getCollectionsInfo().then(collectionsInfo => {
-          // FIXME use this to download or not
-          const hasContent = this.rootNodes.length > 0;
-          console.log(hasContent);
-
-          this.collectionsInfo = collectionsInfo;
-          this.loadingCollections = false;
-        });
+        return Promise.all([
+          this.getCollectionsInfo(),
+          this.getDownloadStatus(),
+          this.getShouldResume(),
+        ])
+          .then(([collectionsInfo, status, shouldResume]) => {
+            this.collectionsInfo = collectionsInfo;
+            if (status.stage === 'COMPLETED') {
+              console.debug('Download completed.');
+              this.downloadCompleted = true;
+            } else if (status.stage !== 'NOT_STARTED') {
+              console.debug('A collections download is ongoing...');
+              this.downloadInitiated = true;
+            } else {
+              if (shouldResume) {
+                console.debug('Resuming previous collections download...');
+                return this.resumeDownload().then(() => {
+                  this.downloadInitiated = true;
+                });
+              } else {
+                // Check conditions in order to select collections:
+                const hasContent = this.rootNodes.length > 0;
+                this.downloadCompleted = hasContent && !this.debugForceDownloadSelection;
+                if (this.downloadCompleted) {
+                  console.debug('Conditions not met to download, assuming as completed.');
+                } else {
+                  console.debug('Display collection selection.');
+                }
+              }
+            }
+          })
+          .then(() => {
+            this.loadingCollections = false;
+          });
       },
       getCollectionsInfo() {
         return client({
@@ -187,25 +226,64 @@
           return data.collectionsInfo;
         });
       },
+      getDownloadStatus() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:get_download_status'](),
+        }).then(({ data }) => {
+          return data.status;
+        });
+      },
+      getShouldResume() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:get_should_resume'](),
+        }).then(({ data }) => {
+          return data.shouldResume;
+        });
+      },
+      resumeDownload() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:resume_download'](),
+          method: 'POST',
+        }).then(({ data }) => {
+          return data.status;
+        });
+      },
+      startDownload() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:start_download'](),
+          method: 'POST',
+          data: { grade: this.grade, name: this.name },
+        }).then(({ data }) => {
+          return data.status;
+        });
+      },
+      cancelDownload() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:cancel_download'](),
+          method: 'DELETE',
+        }).then(({ data }) => {
+          return data.status;
+        });
+      },
       onGradeSelected(grade) {
         this.grade = grade;
-        this.visibleModal = 'collection';
-        this.installError = '';
       },
       onNameSelected(name) {
         this.name = name;
-        this.visibleModal = 'content';
+        this.startDownload().then(() => {
+          this.downloadInitiated = true;
+        });
       },
       onBackToGradeSelection() {
         this.grade = null;
       },
-      installContentHide(error) {
-        if (error || this.installError) {
-          this.visibleModal = 'grade';
-          this.installError = 'Can not install the selected collection';
-        } else {
-          this.visibleModal = 'none';
-        }
+      onDownloadCompleted() {
+        this.downloadCompleted = true;
+        ContentNodeResource.useContentCacheKey = false;
+        ContentNodeResource.clearCache();
+        ChannelResource.useContentCacheKey = false;
+        ChannelResource.clearCache();
+        showChannels(this.$store);
       },
     },
   };

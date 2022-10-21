@@ -15,7 +15,7 @@
         Downloading&hellip;
       </h1>
       <h5 class="text-muted">
-        You may close this window and explore content while
+        Please wait while
         the collection is downloading.
       </h5>
 
@@ -24,32 +24,25 @@
       <b-row class="my-5">
         <b-col cols="5">
           <h6 class="text-muted">
-            {{ collection.metadata.subtitle }} Collection {{ collection.metadata.title }}
+            {{ statusLabel }}
           </h6>
         </b-col>
         <b-col>
           <b-progress
-            :max="100"
+            v-if="status !== null"
+            :max="1"
           >
             <b-progress-bar
-              :value="progress"
+              :value="status.progress"
               animated
             >
-              {{ progress.toFixed(0) }}%
+              {{ (status.progress * 100).toFixed() }}%
             </b-progress-bar>
           </b-progress>
         </b-col>
       </b-row>
 
       <hr>
-
-      <b-button
-        class="mb-2 mt-3"
-        variant="primary"
-        @click="$emit('hide')"
-      >
-        Explore
-      </b-button>
 
     </b-container>
   </b-modal>
@@ -62,131 +55,94 @@
   import client from 'kolibri.client';
   import urls from 'kolibri.urls';
 
+  const UPDATE_DELAY = 1500;
+
   export default {
     name: 'InstallContentModal',
-    emits: ['hide', 'showModal', 'newContent'],
-    props: {
-      collection: {
-        type: Object,
-        default: null,
-      },
-      grade: {
-        type: String,
-        default: 'primary',
-      },
-    },
+    components: {},
+    emits: ['completed'],
+    props: {},
     data() {
       return {
-        pollingId: null,
-        jobs: null,
-        channelsDownloaded: 0,
-        downloading: false,
+        status: null,
+        updateIntervalId: null,
       };
     },
     computed: {
-      progress() {
-        const jobs = this.jobs.map(j => {
-          if (j.percentage > 1 || !j.channel_name) {
-            return 0;
+      statusLabel() {
+        if (this.status === null || this.status.stage === 'NOT_STARTED') {
+          return 'Loading…';
+        } else if (this.status.stage === 'COMPLETED') {
+          return 'Download completed';
+        } else if (this.status.stage === 'IMPORTING_CHANNELS') {
+          return `Fetching information (${this.status.current_task_number} of ${this.status.total_tasks_number})…`;
+        } else if (this.status.stage === 'IMPORTING_CONTENT') {
+          let label = 'Downloading content';
+          if (this.status.extra_metadata.channel_name) {
+            label += ` for channel ${this.status.extra_metadata.channel_name}`;
           }
-          if (j.status === 'FAILED') {
-            return 1;
+          const remaining = this.status.total_tasks_number - this.status.current_task_number;
+          if (remaining > 0) {
+            label += ` (${remaining} more channels left)`;
           }
-          return j.percentage;
-        });
-        const sum = jobs.reduce((a, b) => a + b, 0);
-        return (100 * sum) / this.jobs.length;
-      },
-    },
-    watch: {
-      collection() {
-        if (this.collection) {
-          this.downloadContent();
+          label += '…';
+          return label;
+        } else {
+          // This shouldn't be reached anyways.
+          return 'Loading…';
         }
       },
     },
-    beforeDestroy() {
-      clearTimeout(this.pollingId);
-    },
-    methods: {
-      downloadContent() {
-        if (this.downloading) {
+    mounted() {
+      return this.getDownloadStatus().then(status => {
+        this.status = status;
+        if (this.checkCompleted()) {
           return;
         }
-
-        this.downloading = true;
-        this.jobs = [];
-        const collection = this.collection.metadata.subtitle.toLowerCase();
-        const grade = this.grade.toLowerCase();
-        client({
-          url: urls['kolibri:kolibri_explore_plugin:endless_learning_collection'](),
-          method: 'POST',
-          data: { grade, collection },
-        })
-          .then(() => {
-            this.pollJobs();
-          })
-          .catch(error => {
-            this.$emit('hide', error);
-            this.downloading = false;
-          });
+        if (this.status.stage !== 'NOT_STARTED') {
+          this.updateIntervalId = setInterval(this.updateLoop, UPDATE_DELAY);
+        }
+      });
+    },
+    beforeDestroy() {
+      this.clearUpdateInterval();
+    },
+    methods: {
+      checkCompleted() {
+        if (this.status && this.status.stage === 'COMPLETED') {
+          this.$emit('completed');
+          return true;
+        }
+        return false;
       },
-      pollJobs() {
-        clearTimeout(this.pollingId);
-
-        client({
-          url: urls['kolibri:kolibri_explore_plugin:endless_learning_collection'](),
-        })
-          .then(({ data }) => {
-            this.jobs = data.jobs;
-            const completedJobs = this.jobs.filter(j => j.status === 'COMPLETED');
-            const queuedJobs = this.jobs.filter(j => j.status === 'QUEUED');
-            const runningJobs = this.jobs.filter(j => j.status === 'RUNNING');
-            const failedJobs = this.jobs.filter(j => j.status === 'FAILED');
-
-            const completed = completedJobs.length + failedJobs.length;
-
-            console.log('Downloading: ');
-            console.log(`  Total Jobs: ${this.jobs.length}`);
-            console.log(`      Queued: ${queuedJobs.length}`);
-            console.log(`     Running: ${runningJobs.length}`);
-            console.log(`      Failed: ${failedJobs.length}`);
-            console.log(`   Completed: ${completedJobs.length}`);
-            console.log(`    Progress: ${this.progress}`);
-            for (var i = 0; i < this.jobs.length; i++) {
-              const job = this.jobs[i];
-              console.log(`       JOB: ${job.channel_name}|${job.status} ${job.percentage}`);
-            }
-
-            if (completed > 0 && completed === this.jobs.length) {
-              // Download is completed
-              this.$emit('newContent');
-              this.$emit('hide');
-              this.downloading = false;
-            } else {
-              this.downloading = true;
-              if (completed !== this.channelsDownloaded) {
-                this.channelsDownloaded = completed;
-                this.$emit('newContent');
-              }
-
-              this.downloading = this.jobs.some(
-                j => j.status !== 'COMPLETED' && j.status !== 'FAILED'
-              );
-              if (this.downloading) {
-                this.pollingId = setTimeout(() => this.pollJobs(), 1500);
-              } else {
-                this.$emit('newContent');
-                this.$emit('hide');
-                this.downloading = false;
-              }
-            }
-          })
-          .catch(() => {
-            if (this.downloading) {
-              this.pollingId = setTimeout(() => this.pollJobs(), 1500);
-            }
-          });
+      updateLoop() {
+        return this.updateDownload().then(status => {
+          this.status = status;
+          if (this.checkCompleted()) {
+            this.clearUpdateInterval();
+          }
+        });
+      },
+      clearUpdateInterval() {
+        if (this.updateIntervalId !== null) {
+          clearInterval(this.updateIntervalId);
+          this.updateIntervalId = null;
+        }
+      },
+      getDownloadStatus() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:get_download_status'](),
+        }).then(({ data }) => {
+          return data.status;
+        });
+      },
+      updateDownload() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:update_download'](),
+          method: 'POST',
+        }).then(({ data }) => {
+          return data.status;
+        });
       },
     },
   };
