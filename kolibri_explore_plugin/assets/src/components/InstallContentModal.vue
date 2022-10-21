@@ -1,70 +1,58 @@
 <template>
 
-  <div v-if="collection">
-    <transition name="fade">
-      <b-button
-        v-if="!visible && downloading"
-        variant="primary"
-        class="install-content rounded-circle"
-        @click="$emit('showModal')"
-      >
-        <div :style="buttonStyles" class="button-progress rounded-circle"></div>
-        <ProgressDownloadIcon />
-      </b-button>
-    </transition>
+  <b-modal
+    id="install-content-modal"
+    size="xl"
+    centered
+    :visible="visible"
+    :noCloseOnBackdrop="true"
+    :noCloseOnEsc="true"
+    :hideFooter="true"
+    :hideHeaderClose="true"
+  >
+    <b-container>
+      <h1 class="text-primary">
+        Downloading&hellip;
+      </h1>
+      <h5 class="text-muted">
+        You may close this window and explore content while
+        the collection is downloading.
+      </h5>
 
-    <b-modal
-      id="install-content-modal"
-      size="xl"
-      centered
-      :visible="visible"
-      :hideFooter="true"
-      @hide="$emit('hide')"
-    >
-      <b-container>
-        <h1 class="text-primary">
-          Downloading&hellip;
-        </h1>
-        <h5 class="text-muted">
-          You may close this window and explore content while
-          the collection is downloading.
-        </h5>
+      <hr>
 
-        <hr>
-
-        <b-row class="my-5">
-          <b-col cols="5">
-            <h6 class="text-muted">
-              {{ collection.metadata.subtitle }} Collection {{ collection.metadata.title }}
-            </h6>
-          </b-col>
-          <b-col>
-            <b-progress
-              :max="100"
+      <b-row class="my-5">
+        <b-col cols="5">
+          <h6 class="text-muted">
+            {{ collection.metadata.subtitle }} Collection {{ collection.metadata.title }}
+          </h6>
+        </b-col>
+        <b-col>
+          <b-progress
+            :max="100"
+          >
+            <b-progress-bar
+              :value="progress"
+              animated
             >
-              <b-progress-bar
-                :value="progress"
-                animated
-              >
-                {{ progress.toFixed(0) }}%
-              </b-progress-bar>
-            </b-progress>
-          </b-col>
-        </b-row>
+              {{ progress.toFixed(0) }}%
+            </b-progress-bar>
+          </b-progress>
+        </b-col>
+      </b-row>
 
-        <hr>
+      <hr>
 
-        <b-button
-          class="mb-2 mt-3"
-          variant="primary"
-          @click="$emit('hide')"
-        >
-          Explore
-        </b-button>
+      <b-button
+        class="mb-2 mt-3"
+        variant="primary"
+        @click="$emit('hide')"
+      >
+        Explore
+      </b-button>
 
-      </b-container>
-    </b-modal>
-  </div>
+    </b-container>
+  </b-modal>
 
 </template>
 
@@ -73,13 +61,9 @@
 
   import client from 'kolibri.client';
   import urls from 'kolibri.urls';
-  import ProgressDownloadIcon from 'vue-material-design-icons/ProgressDownload.vue';
 
   export default {
     name: 'InstallContentModal',
-    components: {
-      ProgressDownloadIcon,
-    },
     emits: ['hide', 'showModal', 'newContent'],
     props: {
       visible: {
@@ -116,17 +100,6 @@
         });
         const sum = jobs.reduce((a, b) => a + b, 0);
         return (100 * sum) / this.jobs.length;
-      },
-      buttonStyles() {
-        const stop = this.progress;
-        const color2 = 'rgba(255, 255, 255, 0.2)';
-        const color1 = 'rgba(255, 255, 255, 0)';
-        return {
-          background:
-            'linear-gradient(90deg,' +
-            `${color1} 0%, ${color1} ${stop}%,` +
-            `${color2} ${stop}%, ${color2} 100%)`,
-        };
       },
     },
     watch: {
@@ -238,35 +211,6 @@
     color: black;
     text-align: center;
     background-color: white;
-  }
-
-  .card {
-    border: 1px solid;
-    border-radius: $border-radius-lg;
-  }
-
-  ::v-deep .card-subtitle {
-    font-weight: bold;
-    color: black !important;
-  }
-
-  .install-content {
-    position: fixed;
-    top: $spacer + $navbar-height;
-    left: $spacer;
-    z-index: $zindex-fixed;
-    // Remove 2px border from the actual size to match the slidable cards row:
-    width: $circled-button-size + 4px;
-    height: $circled-button-size + 4px;
-    padding: 0;
-  }
-
-  .button-progress {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
   }
 
 </style>
