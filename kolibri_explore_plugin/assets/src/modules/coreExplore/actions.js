@@ -10,10 +10,6 @@ export function resetModuleState(store, lastPageName) {
 export function setAndCheckChannels(store) {
   return store.dispatch('setChannelInfo').then(
     channels => {
-      if (!channels.length) {
-        // No channels, so we should show something to the user
-        store.commit('SET_NOCONTENT', true);
-      }
       return channels;
     },
     error => {
