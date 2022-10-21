@@ -5,7 +5,7 @@
       id="collection-selection-modal"
       size="xl"
       centered
-      :visible="visible"
+      :visible="true"
       :noCloseOnBackdrop="true"
       :noCloseOnEsc="true"
       :hideFooter="true"
@@ -62,10 +62,6 @@
     name: 'CollectionSelectionModal',
     emits: ['downloadCollection', 'goBack'],
     props: {
-      visible: {
-        type: Boolean,
-        default: false,
-      },
       collections: {
         type: Array,
         default: null,

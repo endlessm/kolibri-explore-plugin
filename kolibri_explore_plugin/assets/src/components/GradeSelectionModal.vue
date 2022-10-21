@@ -5,7 +5,7 @@
       id="grade-selection-modal"
       size="xl"
       centered
-      :visible="visible"
+      :visible="true"
       :noCloseOnBackdrop="true"
       :noCloseOnEsc="true"
       :hideFooter="true"
@@ -66,10 +66,6 @@
     name: 'GradeSelectionModal',
     emits: ['gradeSelected'],
     props: {
-      visible: {
-        type: Boolean,
-        default: false,
-      },
       error: {
         type: String,
         default: '',

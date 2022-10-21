@@ -2,30 +2,28 @@
 
   <div>
     <BackToTop />
-    <keep-alive>
-      <div>
-        <GradeSelectionModal
-          :visible="gradeModalVisible"
-          :error="installError"
-          @gradeSelected="gradeSelected"
-        />
-        <CollectionSelectionModal
-          :visible="collectionModalVisible"
-          :grade="grade"
-          :collections="gradeCollections"
-          @downloadCollection="downloadCollection"
-          @goBack="visibleModal = 'grade'"
-        />
-        <InstallContentModal
-          :visible="contentModalVisible"
-          :collection="downloadingCollection"
-          :grade="grade"
-          @showModal="visibleModal = 'content'"
-          @hide="installContentHide"
-          @newContent="reloadChannels"
-        />
-      </div>
-    </keep-alive>
+    <div>
+      <GradeSelectionModal
+        v-if="gradeModalVisible"
+        :error="installError"
+        @gradeSelected="gradeSelected"
+      />
+      <CollectionSelectionModal
+        v-if="collectionModalVisible"
+        :grade="grade"
+        :collections="gradeCollections"
+        @downloadCollection="downloadCollection"
+        @goBack="visibleModal = 'grade'"
+      />
+      <InstallContentModal
+        v-if="contentModalVisible"
+        :collection="downloadingCollection"
+        :grade="grade"
+        @showModal="visibleModal = 'content'"
+        @hide="installContentHide"
+        @newContent="reloadChannels"
+      />
+    </div>
     <ContentModal />
     <AboutModal id="about-modal" />
     <DevTag v-if="showBuildInfo" />

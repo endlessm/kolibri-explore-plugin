@@ -4,7 +4,7 @@
     id="install-content-modal"
     size="xl"
     centered
-    :visible="visible"
+    :visible="true"
     :noCloseOnBackdrop="true"
     :noCloseOnEsc="true"
     :hideFooter="true"
@@ -66,10 +66,6 @@
     name: 'InstallContentModal',
     emits: ['hide', 'showModal', 'newContent'],
     props: {
-      visible: {
-        type: Boolean,
-        default: false,
-      },
       collection: {
         type: Object,
         default: null,
@@ -105,11 +101,6 @@
     watch: {
       collection() {
         if (this.collection) {
-          this.downloadContent();
-        }
-      },
-      visible() {
-        if (this.visible && !this.downloading) {
           this.downloadContent();
         }
       },
