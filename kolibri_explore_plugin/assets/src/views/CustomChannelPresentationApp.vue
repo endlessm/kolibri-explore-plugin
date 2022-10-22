@@ -1,6 +1,7 @@
 <template>
 
   <iframe
+    v-show="apiIsReady"
     ref="iframe"
     class="custom-presentation-iframe"
     frameBorder="0"
@@ -30,6 +31,11 @@
 
   export default {
     name: 'CustomChannelPresentationApp',
+    data: function() {
+      return {
+        apiIsReady: false,
+      };
+    },
     computed: {
       rooturl() {
         const app = getAppNameByID(this.channel.id);
@@ -51,7 +57,10 @@
     },
     watch: {
       channel() {
-        this.iframeWindow.kolibri = new KolibriApi(this.channel.id);
+        this.$nextTick(function() {
+          this.iframeWindow.kolibri = new KolibriApi(this.channel.id);
+          this.apiIsReady = true;
+        });
       },
     },
     mounted() {
