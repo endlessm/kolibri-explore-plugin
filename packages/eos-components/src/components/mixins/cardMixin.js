@@ -1,6 +1,6 @@
 import { getFirstStructuredTag } from '../../utils';
 import { StructuredTags } from '../../constants';
-import { cardImageAspectRatio } from '../../styles.scss';
+import styles from '../../styles.scss';
 
 import AppThumb from '../../assets/thumbnails/app.png';
 import AudioThumb from '../../assets/thumbnails/audio.png';
@@ -23,7 +23,7 @@ export default {
       return this.getDuration();
     },
     isThumbnailWide() {
-      return this.thumbnailAspectRatio <= cardImageAspectRatio;
+      return this.thumbnailAspectRatio <= styles.cardImageAspectRatio;
     },
   },
   methods: {
