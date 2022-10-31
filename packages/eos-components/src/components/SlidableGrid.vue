@@ -148,7 +148,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "sass:math";
 @import "../styles.scss";
 
 #backgroud-block-left, #backgroud-block-right {
@@ -202,7 +201,7 @@ $white-gradient-right: linear-gradient(90deg,
 .btn.previous, .btn.next {
   position: absolute;
   top: 50%;
-  margin-top: math.div(-$circled-button-size, 2);
+  margin-top: -$circled-button-size / 2;
   padding: 0;
   border-width: 2px;
   bottom: 0;
