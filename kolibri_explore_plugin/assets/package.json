@@ -9,7 +9,7 @@
     "bootstrap-vue": "^2.22.0",
     "deep-object-diff": "^1.1.0",
     "eos-components": "^0.1.0",
-    "underscore": "^1.13.1",
+    "lodash": "^4.17.21",
     "vue-material-design-icons": "^4.12.1"
   },
   "devDependencies": {
