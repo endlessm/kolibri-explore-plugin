@@ -104,7 +104,7 @@
 
 <script>
 
-  import _ from 'underscore';
+  import _ from 'lodash';
   import { mapMutations, mapState } from 'vuex';
   import { utils, constants, responsiveMixin } from 'eos-components';
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';

@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import _ from 'underscore';
+import _ from 'lodash';
 import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue';
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue';
 import { ItemsPerSlide } from '../constants';

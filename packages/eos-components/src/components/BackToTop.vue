@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import _ from 'underscore';
+  import _ from 'lodash';
   import ChevronUpIcon from 'vue-material-design-icons/ChevronUp.vue';
 
   export default {
