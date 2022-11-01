@@ -12,11 +12,10 @@
   >
     <b-container>
       <h1 class="text-primary">
-        Downloading&hellip;
+        {{ titleLabel }}
       </h1>
       <h5 class="text-muted">
-        Please wait while
-        the collection is downloading.
+        {{ subtitleLabel }}
       </h5>
 
       <hr>
@@ -69,28 +68,44 @@
       };
     },
     computed: {
-      statusLabel() {
-        if (this.status === null || this.status.stage === 'NOT_STARTED') {
-          return 'Loading…';
-        } else if (this.status.stage === 'COMPLETED') {
-          return 'Download completed';
-        } else if (this.status.stage === 'IMPORTING_CHANNELS') {
-          return `Fetching information (${this.status.current_task_number} of ${this.status.total_tasks_number})…`;
-        } else if (this.status.stage === 'IMPORTING_CONTENT') {
-          let label = 'Downloading content';
-          if (this.status.extra_metadata.channel_name) {
-            label += ` for channel ${this.status.extra_metadata.channel_name}`;
+      titleLabel() {
+        if (this.status !== null) {
+          if (this.status.stage === 'IMPORTING_CONTENT') {
+            return 'Downloading…';
+          } else if (this.status.stage === 'COMPLETED') {
+            return 'Download completed.';
           }
-          const remaining = this.status.total_tasks_number - this.status.current_task_number;
-          if (remaining > 0) {
-            label += ` (${remaining} more channels left)`;
-          }
-          label += '…';
-          return label;
-        } else {
-          // This shouldn't be reached anyways.
-          return 'Loading…';
         }
+        return 'Preparing to download';
+      },
+      subtitleLabel() {
+        if (this.status !== null) {
+          if (this.status.stage === 'IMPORTING_CONTENT') {
+            return 'Please wait a moment while the collection is downloading.';
+          } else if (this.status.stage === 'COMPLETED') {
+            return 'You can now navigate the content.';
+          }
+        }
+        return 'Please wait a moment while the content is being prepared to download.';
+      },
+      statusLabel() {
+        if (this.status !== null) {
+          if (this.status.stage === 'IMPORTING_CHANNELS') {
+            return `Preparing download (${this.status.current_task_number} of ${this.status.total_tasks_number})…`;
+          } else if (this.status.stage === 'IMPORTING_CONTENT') {
+            let label = 'Downloading content';
+            if (this.status.extra_metadata.channel_name) {
+              label += ` for channel ${this.status.extra_metadata.channel_name}`;
+            }
+            const remaining = this.status.total_tasks_number - this.status.current_task_number;
+            if (remaining > 0) {
+              label += ` (${remaining} more channels left)`;
+            }
+            label += '…';
+            return label;
+          }
+        }
+        return '';
       },
     },
     mounted() {
