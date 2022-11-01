@@ -59,11 +59,15 @@ class EndlessKeyContentManifest(ContentManifest):
         They also add more metadata and set availability according to
         disk space.
         """
+        self.grade = None
+        self.name = None
         self.metadata = None
         self.available = None
         super().__init__()
 
     def read_from_static_collection(self, grade, name, validate=False):
+        self.grade = grade
+        self.name = name
         manifest_filename = os.path.join(
             COLLECTION_PATHS, f"{grade}-{name}.json"
         )
