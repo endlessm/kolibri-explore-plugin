@@ -8,7 +8,4 @@ export default {
   SET_CONTENT_ID(state, id) {
     state.contentId = id;
   },
-  SET_NOCONTENT(state, value) {
-    state.noContent = value;
-  },
 };

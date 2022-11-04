@@ -5,7 +5,7 @@
       id="collection-selection-modal"
       size="xl"
       centered
-      :visible="visible"
+      :visible="true"
       :noCloseOnBackdrop="true"
       :noCloseOnEsc="true"
       :hideFooter="true"
@@ -13,29 +13,29 @@
     >
       <b-container>
         <h1 class="text-primary">
-          Choose your collection
+          {{ $tr('header') }}
         </h1>
         <h6 class="text-muted">
-          The small collection will give you just a taste of each channel and is
-          recommended if you have limited free space on your computer.
+          {{ $tr('description') }}
         </h6>
 
         <b-card-group deck class="py-5">
           <WelcomeCard
-            v-for="collection in collections"
+            v-for="collection in gradeInfo.collections"
             :key="collection.metadata.title"
-            :title="`${grade} ${collection.metadata.subtitle}`"
-            :text="`${collection.channels.length} Channels`"
+            :title="`${collection.grade} ${collection.metadata.subtitle}`"
+            :text="`${collection.channelsCount} Channels`"
             :secondaryText="collection.metadata.description"
             :disabled="!collection.available"
-            @click="$emit('downloadCollection', grade, collection)"
+            @click="$emit('nameSelected', collection.name)"
           >
             <b-button
               class="mt-3"
               variant="primary"
               :disabled="!collection.available"
             >
-              Download <strong>{{ collection.metadata.required_gigabytes }} GB</strong>
+              {{ $tr('downloadAction') }}
+              <strong>{{ collection.metadata.required_gigabytes }} GB</strong>
             </b-button>
           </WelcomeCard>
         </b-card-group>
@@ -45,7 +45,7 @@
             variant="link"
             @click="$emit('goBack')"
           >
-            Back
+            {{ coreString('backAction') }}
           </b-button>
         </div>
 
@@ -58,22 +58,24 @@
 
 <script>
 
+  import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
+
   export default {
     name: 'CollectionSelectionModal',
-    emits: ['downloadCollection', 'goBack'],
+    emits: ['nameSelected', 'goBack'],
+    mixins: [commonCoreStrings],
     props: {
-      visible: {
-        type: Boolean,
-        default: false,
-      },
-      collections: {
-        type: Array,
+      gradeInfo: {
+        type: Object,
         default: null,
       },
-      grade: {
-        type: String,
-        default: null,
-      },
+    },
+    $trs: {
+      header: 'Choose your collection',
+      description:
+        'The small collection will give you just a taste of each channel and is' +
+        ' recommended if you have limited free space on your computer.',
+      downloadAction: 'Download',
     },
   };
 

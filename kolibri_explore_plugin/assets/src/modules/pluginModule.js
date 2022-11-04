@@ -10,7 +10,6 @@ export default {
       pageName: '',
       searchTerm: '',
       contentId: '',
-      noContent: false,
     };
   },
   actions,

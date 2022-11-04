@@ -2,30 +2,23 @@
 
   <div>
     <BackToTop />
-    <keep-alive>
-      <div>
-        <GradeSelectionModal
-          :visible="gradeModalVisible"
-          :error="installError"
-          @gradeSelected="gradeSelected"
-        />
-        <CollectionSelectionModal
-          :visible="collectionModalVisible"
-          :grade="grade"
-          :collections="gradeCollections"
-          @downloadCollection="downloadCollection"
-          @goBack="visibleModal = 'grade'"
-        />
-        <InstallContentModal
-          :visible="contentModalVisible"
-          :collection="downloadingCollection"
-          :grade="grade"
-          @showModal="visibleModal = 'content'"
-          @hide="installContentHide"
-          @newContent="reloadChannels"
-        />
-      </div>
-    </keep-alive>
+    <div>
+      <GradeSelectionModal
+        v-if="gradeModalVisible"
+        :collectionsInfo="collectionsInfo"
+        @gradeSelected="onGradeSelected"
+      />
+      <CollectionSelectionModal
+        v-if="collectionModalVisible"
+        :gradeInfo="gradeInfo"
+        @nameSelected="onNameSelected"
+        @goBack="onBackToGradeSelection"
+      />
+      <InstallContentModal
+        v-if="installModalVisible"
+        @completed="onDownloadCompleted"
+      />
+    </div>
     <ContentModal />
     <AboutModal id="about-modal" />
     <DevTag v-if="showBuildInfo" />
@@ -96,19 +89,23 @@
       return {
         lastRoute: null,
         isLoading: false,
-        visibleModal: 'none',
-        downloadingCollection: null,
-        collections: {},
-        grade: 'intermediate',
-        installError: '',
+        // Collections selection and download data:
+        loadingCollections: true,
+        collectionsInfo: null,
+        grade: null,
+        name: null,
+        downloadInitiated: false,
+        downloadCompleted: false,
+        // Use this flag to debug the download selection:
+        debugForceDownloadSelection: false,
       };
     },
     computed: {
-      ...mapState(['noContent', 'pageName']),
+      ...mapState(['pageName']),
       ...mapState('topicsRoot', { rootNodes: 'rootNodes' }),
-      gradeCollections() {
-        return Object.values(this.collections[this.grade] || {});
-      },
+      ...mapState({
+        coreLoading: state => state.core.loading,
+      }),
       currentPage() {
         return pageNameToComponentMap[this.pageName] || null;
       },
@@ -118,22 +115,44 @@
       loadingImg() {
         return LoadingImage;
       },
-      contentModalVisible() {
-        return this.visibleModal === 'content';
+      gradeInfo() {
+        return this.collectionsInfo.find(col => col.grade === this.grade);
       },
-      collectionModalVisible() {
-        return this.visibleModal === 'collection';
+      needsToSelectCollection() {
+        if (
+          this.coreLoading ||
+          this.loadingCollections ||
+          this.downloadInitiated ||
+          this.downloadCompleted
+        ) {
+          return false;
+        }
+        return true;
       },
       gradeModalVisible() {
-        return this.visibleModal === 'grade';
+        return this.needsToSelectCollection && this.grade === null;
+      },
+      collectionModalVisible() {
+        return this.needsToSelectCollection && this.grade !== null && this.name === null;
+      },
+      installModalVisible() {
+        if (this.coreLoading || this.loadingCollections || this.downloadCompleted) {
+          return false;
+        }
+        return this.downloadInitiated;
       },
     },
     watch: {
-      noContent() {
-        this.getRunningJobs();
-      },
-      rootNodes() {
-        this.getRunningJobs();
+      coreLoading() {
+        if (this.coreLoading || this.collectionsInfo !== null) {
+          return;
+        }
+        if (this.debugForceDownloadSelection) {
+          return this.cancelDownload().then(() => {
+            this.setupCollections();
+          });
+        }
+        return this.setupCollections();
       },
       $route: function(newRoute, oldRoute) {
         // Return if the user is leaving or entering the Search page.
@@ -159,48 +178,112 @@
       onLoad() {
         this.isLoading = false;
       },
-      reloadChannels() {
+      setupCollections() {
+        // If a download is ongoing then display the progress.
+        // If a download can be resumed then resume it and display the progress.
+        // Otherwise check if the conditions are met to display the collection selection.
+        // Current conditions are: there is no content or a debugging flag is enabled.
+        this.loadingCollections = true;
+        return Promise.all([
+          this.getCollectionsInfo(),
+          this.getDownloadStatus(),
+          this.getShouldResume(),
+        ])
+          .then(([collectionsInfo, status, shouldResume]) => {
+            this.collectionsInfo = collectionsInfo;
+            if (status.stage === 'COMPLETED') {
+              console.debug('Download completed.');
+              this.downloadCompleted = true;
+            } else if (status.stage !== 'NOT_STARTED') {
+              console.debug('A collections download is ongoing...');
+              this.downloadInitiated = true;
+            } else {
+              if (shouldResume) {
+                console.debug('Resuming previous collections download...');
+                return this.resumeDownload().then(() => {
+                  this.downloadInitiated = true;
+                });
+              } else {
+                // Check conditions in order to select collections:
+                const hasContent = this.rootNodes.length > 0;
+                this.downloadCompleted = hasContent && !this.debugForceDownloadSelection;
+                if (this.downloadCompleted) {
+                  console.debug('Conditions not met to download, assuming as completed.');
+                } else {
+                  console.debug('Display collection selection.');
+                }
+              }
+            }
+          })
+          .then(() => {
+            this.loadingCollections = false;
+          });
+      },
+      getCollectionsInfo() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:get_collections_info'](),
+        }).then(({ data }) => {
+          return data.collectionsInfo;
+        });
+      },
+      getDownloadStatus() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:get_download_status'](),
+        }).then(({ data }) => {
+          return data.status;
+        });
+      },
+      getShouldResume() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:get_should_resume'](),
+        }).then(({ data }) => {
+          return data.shouldResume;
+        });
+      },
+      resumeDownload() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:resume_download'](),
+          method: 'POST',
+        }).then(({ data }) => {
+          return data.status;
+        });
+      },
+      startDownload() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:start_download'](),
+          method: 'POST',
+          data: { grade: this.grade, name: this.name },
+        }).then(({ data }) => {
+          return data.status;
+        });
+      },
+      cancelDownload() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:cancel_download'](),
+          method: 'DELETE',
+        }).then(({ data }) => {
+          return data.status;
+        });
+      },
+      onGradeSelected(grade) {
+        this.grade = grade;
+      },
+      onNameSelected(name) {
+        this.name = name;
+        this.startDownload().then(() => {
+          this.downloadInitiated = true;
+        });
+      },
+      onBackToGradeSelection() {
+        this.grade = null;
+      },
+      onDownloadCompleted() {
+        this.downloadCompleted = true;
         ContentNodeResource.useContentCacheKey = false;
         ContentNodeResource.clearCache();
         ChannelResource.useContentCacheKey = false;
         ChannelResource.clearCache();
         showChannels(this.$store);
-        this.$store.commit('SET_NOCONTENT', false);
-      },
-      downloadCollection(grade, collection) {
-        this.grade = grade;
-        this.downloadingCollection = collection;
-        this.visibleModal = 'content';
-      },
-      gradeSelected(grade) {
-        this.grade = grade;
-        this.visibleModal = 'collection';
-        this.installError = '';
-      },
-      installContentHide(error) {
-        if (error || this.installError) {
-          this.visibleModal = 'grade';
-          this.installError = 'Can not install the selected collection';
-        } else {
-          this.visibleModal = 'none';
-        }
-      },
-      getRunningJobs() {
-        client({ url: urls['kolibri:kolibri_explore_plugin:endless_learning_collection']() }).then(
-          ({ data }) => {
-            if (data.collections) {
-              this.collections = data.collections;
-            }
-
-            if (data.collection) {
-              const [grade, size] = data.collection.split('-');
-              const collection = data.collections[grade][size];
-              this.downloadCollection(grade, collection);
-            } else if (this.noContent) {
-              this.visibleModal = 'grade';
-            }
-          }
-        );
       },
     },
   };

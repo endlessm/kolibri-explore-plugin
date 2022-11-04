@@ -1,70 +1,50 @@
 <template>
 
-  <div v-if="collection">
-    <transition name="fade">
-      <b-button
-        v-if="!visible && downloading"
-        variant="primary"
-        class="install-content rounded-circle"
-        @click="$emit('showModal')"
-      >
-        <div :style="buttonStyles" class="button-progress rounded-circle"></div>
-        <ProgressDownloadIcon />
-      </b-button>
-    </transition>
+  <b-modal
+    id="install-content-modal"
+    size="xl"
+    centered
+    :visible="true"
+    :noCloseOnBackdrop="true"
+    :noCloseOnEsc="true"
+    :hideFooter="true"
+    :hideHeaderClose="true"
+  >
+    <b-container>
+      <h1 class="text-primary">
+        {{ titleLabel }}
+      </h1>
+      <h5 class="text-muted">
+        {{ subtitleLabel }}
+      </h5>
 
-    <b-modal
-      id="install-content-modal"
-      size="xl"
-      centered
-      :visible="visible"
-      :hideFooter="true"
-      @hide="$emit('hide')"
-    >
-      <b-container>
-        <h1 class="text-primary">
-          Downloading&hellip;
-        </h1>
-        <h5 class="text-muted">
-          You may close this window and explore content while
-          the collection is downloading.
-        </h5>
+      <hr>
 
-        <hr>
-
-        <b-row class="my-5">
-          <b-col cols="5">
-            <h6 class="text-muted">
-              {{ collection.metadata.subtitle }} Collection {{ collection.metadata.title }}
-            </h6>
-          </b-col>
-          <b-col>
-            <b-progress
-              :max="100"
+      <b-row class="my-5">
+        <b-col cols="5">
+          <h6 class="text-muted">
+            {{ statusLabel }}
+          </h6>
+        </b-col>
+        <b-col>
+          <b-progress
+            v-if="status !== null"
+            :max="1"
+          >
+            <b-progress-bar
+              :value="status.progress"
+              animated
             >
-              <b-progress-bar
-                :value="progress"
-                animated
-              >
-                {{ progress.toFixed(0) }}%
-              </b-progress-bar>
-            </b-progress>
-          </b-col>
-        </b-row>
+              {{ (status.progress * 100).toFixed() }}%
+            </b-progress-bar>
+          </b-progress>
+        </b-col>
+      </b-row>
 
-        <hr>
+      <hr>
 
-        <b-button
-          class="mb-2 mt-3"
-          variant="primary"
-          @click="$emit('hide')"
-        >
-          Explore
-        </b-button>
-
-      </b-container>
-    </b-modal>
-  </div>
+    </b-container>
+  </b-modal>
 
 </template>
 
@@ -73,157 +53,134 @@
 
   import client from 'kolibri.client';
   import urls from 'kolibri.urls';
-  import ProgressDownloadIcon from 'vue-material-design-icons/ProgressDownload.vue';
+
+  const UPDATE_DELAY = 1500;
 
   export default {
     name: 'InstallContentModal',
-    components: {
-      ProgressDownloadIcon,
-    },
-    emits: ['hide', 'showModal', 'newContent'],
-    props: {
-      visible: {
-        type: Boolean,
-        default: false,
-      },
-      collection: {
-        type: Object,
-        default: null,
-      },
-      grade: {
-        type: String,
-        default: 'primary',
-      },
-    },
+    components: {},
+    emits: ['completed'],
+    props: {},
     data() {
       return {
-        pollingId: null,
-        jobs: null,
-        channelsDownloaded: 0,
-        downloading: false,
+        status: null,
+        updateIntervalId: null,
       };
     },
     computed: {
-      progress() {
-        const jobs = this.jobs.map(j => {
-          if (j.percentage > 1 || !j.channel_name) {
-            return 0;
+      titleLabel() {
+        if (this.status !== null) {
+          if (this.status.stage === 'IMPORTING_CONTENT') {
+            return this.$tr('titleDownloading');
+          } else if (this.status.stage === 'COMPLETED') {
+            return this.$tr('titleCompleted');
           }
-          if (j.status === 'FAILED') {
-            return 1;
+        }
+        return this.$tr('titlePreparing');
+      },
+      subtitleLabel() {
+        if (this.status !== null) {
+          if (this.status.stage === 'IMPORTING_CONTENT') {
+            return this.$tr('subtitleDownloading');
+          } else if (this.status.stage === 'COMPLETED') {
+            return this.$tr('subtitleCompleted');
           }
-          return j.percentage;
-        });
-        const sum = jobs.reduce((a, b) => a + b, 0);
-        return (100 * sum) / this.jobs.length;
-      },
-      buttonStyles() {
-        const stop = this.progress;
-        const color2 = 'rgba(255, 255, 255, 0.2)';
-        const color1 = 'rgba(255, 255, 255, 0)';
-        return {
-          background:
-            'linear-gradient(90deg,' +
-            `${color1} 0%, ${color1} ${stop}%,` +
-            `${color2} ${stop}%, ${color2} 100%)`,
-        };
-      },
-    },
-    watch: {
-      collection() {
-        if (this.collection) {
-          this.downloadContent();
         }
+        return this.$tr('subtitlePreparing');
       },
-      visible() {
-        if (this.visible && !this.downloading) {
-          this.downloadContent();
+      statusLabel() {
+        if (this.status !== null) {
+          if (this.status.stage === 'IMPORTING_CHANNELS') {
+            return this.$tr('statusPreparing', {
+              current: this.status.current_task_number,
+              total: this.status.total_tasks_number,
+            });
+          } else if (this.status.stage === 'IMPORTING_CONTENT') {
+            const channel = this.status.extra_metadata.channel_name;
+            const count = this.status.total_tasks_number - this.status.current_task_number;
+            if (channel) {
+              if (count > 0) {
+                return this.$tr('statusDownloadingChannel', { channel, count });
+              } else {
+                return this.$tr('statusDownloadingLastChannel', { channel });
+              }
+            } else {
+              if (count > 0) {
+                return this.$tr('statusDownloading', { count });
+              } else {
+                return this.$tr('statusDownloadingLast');
+              }
+            }
+          }
         }
+        return '';
       },
     },
-    beforeDestroy() {
-      clearTimeout(this.pollingId);
-    },
-    methods: {
-      downloadContent() {
-        if (this.downloading) {
+    mounted() {
+      return this.getDownloadStatus().then(status => {
+        this.status = status;
+        if (this.checkCompleted()) {
           return;
         }
-
-        this.downloading = true;
-        this.jobs = [];
-        const collection = this.collection.metadata.subtitle.toLowerCase();
-        const grade = this.grade.toLowerCase();
-        client({
-          url: urls['kolibri:kolibri_explore_plugin:endless_learning_collection'](),
+        if (this.status.stage !== 'NOT_STARTED') {
+          this.updateIntervalId = setInterval(this.updateLoop, UPDATE_DELAY);
+        }
+      });
+    },
+    beforeDestroy() {
+      this.clearUpdateInterval();
+    },
+    methods: {
+      checkCompleted() {
+        if (this.status && this.status.stage === 'COMPLETED') {
+          this.$emit('completed');
+          return true;
+        }
+        return false;
+      },
+      updateLoop() {
+        return this.updateDownload().then(status => {
+          this.status = status;
+          if (this.checkCompleted()) {
+            this.clearUpdateInterval();
+          }
+        });
+      },
+      clearUpdateInterval() {
+        if (this.updateIntervalId !== null) {
+          clearInterval(this.updateIntervalId);
+          this.updateIntervalId = null;
+        }
+      },
+      getDownloadStatus() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:get_download_status'](),
+        }).then(({ data }) => {
+          return data.status;
+        });
+      },
+      updateDownload() {
+        return client({
+          url: urls['kolibri:kolibri_explore_plugin:update_download'](),
           method: 'POST',
-          data: { grade, collection },
-        })
-          .then(() => {
-            this.pollJobs();
-          })
-          .catch(error => {
-            this.$emit('hide', error);
-            this.downloading = false;
-          });
+        }).then(({ data }) => {
+          return data.status;
+        });
       },
-      pollJobs() {
-        clearTimeout(this.pollingId);
-
-        client({
-          url: urls['kolibri:kolibri_explore_plugin:endless_learning_collection'](),
-        })
-          .then(({ data }) => {
-            this.jobs = data.jobs;
-            const completedJobs = this.jobs.filter(j => j.status === 'COMPLETED');
-            const queuedJobs = this.jobs.filter(j => j.status === 'QUEUED');
-            const runningJobs = this.jobs.filter(j => j.status === 'RUNNING');
-            const failedJobs = this.jobs.filter(j => j.status === 'FAILED');
-
-            const completed = completedJobs.length + failedJobs.length;
-
-            console.log('Downloading: ');
-            console.log(`  Total Jobs: ${this.jobs.length}`);
-            console.log(`      Queued: ${queuedJobs.length}`);
-            console.log(`     Running: ${runningJobs.length}`);
-            console.log(`      Failed: ${failedJobs.length}`);
-            console.log(`   Completed: ${completedJobs.length}`);
-            console.log(`    Progress: ${this.progress}`);
-            for (var i = 0; i < this.jobs.length; i++) {
-              const job = this.jobs[i];
-              console.log(`       JOB: ${job.channel_name}|${job.status} ${job.percentage}`);
-            }
-
-            if (completed > 0 && completed === this.jobs.length) {
-              // Download is completed
-              this.$emit('newContent');
-              this.$emit('hide');
-              this.downloading = false;
-            } else {
-              this.downloading = true;
-              if (completed !== this.channelsDownloaded) {
-                this.channelsDownloaded = completed;
-                this.$emit('newContent');
-              }
-
-              this.downloading = this.jobs.some(
-                j => j.status !== 'COMPLETED' && j.status !== 'FAILED'
-              );
-              if (this.downloading) {
-                this.pollingId = setTimeout(() => this.pollJobs(), 1500);
-              } else {
-                this.$emit('newContent');
-                this.$emit('hide');
-                this.downloading = false;
-              }
-            }
-          })
-          .catch(() => {
-            if (this.downloading) {
-              this.pollingId = setTimeout(() => this.pollJobs(), 1500);
-            }
-          });
-      },
+    },
+    $trs: {
+      titleDownloading: 'Downloading…',
+      subtitleDownloading: 'Please wait a moment while the collection is downloading.',
+      titleCompleted: 'Download completed.',
+      subtitleCompleted: 'You can now navigate the content.',
+      titlePreparing: 'Preparing to download',
+      subtitlePreparing: 'Please wait a moment while the content is being prepared to download.',
+      statusPreparing: 'Preparing download ({current} of {total})…',
+      statusDownloadingChannel:
+        'Downloading content for channel {channel} ({count} more channels left)…',
+      statusDownloadingLastChannel: 'Downloading content for channel {channel}…',
+      statusDownloading: 'Downloading content ({count} more channels left)…',
+      statusDownloadingLast: 'Downloading content…',
     },
   };
 
@@ -238,35 +195,6 @@
     color: black;
     text-align: center;
     background-color: white;
-  }
-
-  .card {
-    border: 1px solid;
-    border-radius: $border-radius-lg;
-  }
-
-  ::v-deep .card-subtitle {
-    font-weight: bold;
-    color: black !important;
-  }
-
-  .install-content {
-    position: fixed;
-    top: $spacer + $navbar-height;
-    left: $spacer;
-    z-index: $zindex-fixed;
-    // Remove 2px border from the actual size to match the slidable cards row:
-    width: $circled-button-size + 4px;
-    height: $circled-button-size + 4px;
-    padding: 0;
-  }
-
-  .button-progress {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
   }
 
 </style>

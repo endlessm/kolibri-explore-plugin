@@ -123,6 +123,8 @@ export function showChannels(store) {
   return store.dispatch('setAndCheckChannels').then(
     channels => {
       if (!channels.length) {
+        store.commit('CORE_SET_PAGE_LOADING', false);
+        store.commit('CORE_SET_ERROR', null);
         return;
       }
       const channelRootIds = channels.map(channel => channel.root);
