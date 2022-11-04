@@ -9,7 +9,7 @@
       </h5>
     </b-container>
 
-    <template v-if="core.loading">
+    <template v-if="loading">
       <CarouselPlaceholder />
     </template>
 
@@ -27,7 +27,7 @@
 
     <div class="flex-fill main">
 
-      <template v-if="core.loading">
+      <template v-if="loading">
         <CardGridPlaceholder />
       </template>
       <template v-else>
@@ -56,7 +56,9 @@
     mixins: [commonCoreStrings],
     computed: {
       ...mapState('topicsRoot', { carouselNodes: 'carouselNodes' }),
-      ...mapState(['core']),
+      ...mapState({
+        loading: state => state.core.loading,
+      }),
       searchTerms() {
         return searchTerms;
       },
