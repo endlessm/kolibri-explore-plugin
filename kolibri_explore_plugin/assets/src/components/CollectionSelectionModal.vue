@@ -13,11 +13,10 @@
     >
       <b-container>
         <h1 class="text-primary">
-          Choose your collection
+          {{ $tr('header') }}
         </h1>
         <h6 class="text-muted">
-          The small collection will give you just a taste of each channel and is
-          recommended if you have limited free space on your computer.
+          {{ $tr('description') }}
         </h6>
 
         <b-card-group deck class="py-5">
@@ -35,7 +34,8 @@
               variant="primary"
               :disabled="!collection.available"
             >
-              Download <strong>{{ collection.metadata.required_gigabytes }} GB</strong>
+              {{ $tr('downloadAction') }}
+              <strong>{{ collection.metadata.required_gigabytes }} GB</strong>
             </b-button>
           </WelcomeCard>
         </b-card-group>
@@ -45,7 +45,7 @@
             variant="link"
             @click="$emit('goBack')"
           >
-            Back
+            {{ coreString('backAction') }}
           </b-button>
         </div>
 
@@ -58,14 +58,24 @@
 
 <script>
 
+  import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
+
   export default {
     name: 'CollectionSelectionModal',
     emits: ['nameSelected', 'goBack'],
+    mixins: [commonCoreStrings],
     props: {
       gradeInfo: {
         type: Object,
         default: null,
       },
+    },
+    $trs: {
+      header: 'Choose your collection',
+      description:
+        'The small collection will give you just a taste of each channel and is' +
+        ' recommended if you have limited free space on your computer.',
+      downloadAction: 'Download',
     },
   };
 

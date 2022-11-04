@@ -71,38 +71,46 @@
       titleLabel() {
         if (this.status !== null) {
           if (this.status.stage === 'IMPORTING_CONTENT') {
-            return 'Downloading…';
+            return this.$tr('titleDownloading');
           } else if (this.status.stage === 'COMPLETED') {
-            return 'Download completed.';
+            return this.$tr('titleCompleted');
           }
         }
-        return 'Preparing to download';
+        return this.$tr('titlePreparing');
       },
       subtitleLabel() {
         if (this.status !== null) {
           if (this.status.stage === 'IMPORTING_CONTENT') {
-            return 'Please wait a moment while the collection is downloading.';
+            return this.$tr('subtitleDownloading');
           } else if (this.status.stage === 'COMPLETED') {
-            return 'You can now navigate the content.';
+            return this.$tr('subtitleCompleted');
           }
         }
-        return 'Please wait a moment while the content is being prepared to download.';
+        return this.$tr('subtitlePreparing');
       },
       statusLabel() {
         if (this.status !== null) {
           if (this.status.stage === 'IMPORTING_CHANNELS') {
-            return `Preparing download (${this.status.current_task_number} of ${this.status.total_tasks_number})…`;
+            return this.$tr('statusPreparing', {
+              current: this.status.current_task_number,
+              total: this.status.total_tasks_number,
+            });
           } else if (this.status.stage === 'IMPORTING_CONTENT') {
-            let label = 'Downloading content';
-            if (this.status.extra_metadata.channel_name) {
-              label += ` for channel ${this.status.extra_metadata.channel_name}`;
+            const channel = this.status.extra_metadata.channel_name;
+            const count = this.status.total_tasks_number - this.status.current_task_number;
+            if (channel) {
+              if (count > 0) {
+                return this.$tr('statusDownloadingChannel', { channel, count });
+              } else {
+                return this.$tr('statusDownloadingLastChannel', { channel });
+              }
+            } else {
+              if (count > 0) {
+                return this.$tr('statusDownloading', { count });
+              } else {
+                return this.$tr('statusDownloadingLast');
+              }
             }
-            const remaining = this.status.total_tasks_number - this.status.current_task_number;
-            if (remaining > 0) {
-              label += ` (${remaining} more channels left)`;
-            }
-            label += '…';
-            return label;
           }
         }
         return '';
@@ -159,6 +167,20 @@
           return data.status;
         });
       },
+    },
+    $trs: {
+      titleDownloading: 'Downloading…',
+      subtitleDownloading: 'Please wait a moment while the collection is downloading.',
+      titleCompleted: 'Download completed.',
+      subtitleCompleted: 'You can now navigate the content.',
+      titlePreparing: 'Preparing to download',
+      subtitlePreparing: 'Please wait a moment while the content is being prepared to download.',
+      statusPreparing: 'Preparing download ({current} of {total})…',
+      statusDownloadingChannel:
+        'Downloading content for channel {channel} ({count} more channels left)…',
+      statusDownloadingLastChannel: 'Downloading content for channel {channel}…',
+      statusDownloading: 'Downloading content ({count} more channels left)…',
+      statusDownloadingLast: 'Downloading content…',
     },
   };
 

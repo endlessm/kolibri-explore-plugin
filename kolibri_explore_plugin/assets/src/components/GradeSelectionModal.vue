@@ -12,7 +12,7 @@
   >
     <b-container>
       <h1 class="text-primary">
-        Select grade range
+        {{ $tr('header') }}
       </h1>
 
       <b-card-group deck class="py-5">
@@ -35,7 +35,7 @@
           variant="primary"
           @click="onNext"
         >
-          Next
+          {{ $tr('nextAction') }}
         </b-button>
       </div>
 
@@ -77,6 +77,10 @@
       onNext() {
         this.$emit('gradeSelected', this.selection);
       },
+    },
+    $trs: {
+      header: 'Select grade range',
+      nextAction: 'Next',
     },
   };
 
