@@ -11,6 +11,7 @@ from kolibri.core.content.utils.content_manifest import ContentManifest
 from kolibri.core.content.utils.content_manifest import (
     ContentManifestParseError,
 )
+from kolibri.core.tasks.job import Priority
 from kolibri.core.tasks.job import State as JobState
 from kolibri.core.tasks.main import job_storage
 from kolibri.utils import conf
@@ -435,7 +436,7 @@ def _remotechannelimport(user, channel_id):
             "channel_name": "foo",
         },
     )
-    job_id = remotechannelimport.enqueue(job=job)
+    job_id = remotechannelimport.enqueue(job=job, priority=Priority.HIGH)
     return job_id
 
 
@@ -451,7 +452,7 @@ def _remotecontentimport(user, channel_id, node_ids, exclude_node_ids):
             "exclude_node_ids": exclude_node_ids,
         },
     )
-    job_id = remotecontentimport.enqueue(job=job)
+    job_id = remotecontentimport.enqueue(job=job, priority=Priority.HIGH)
     return job_id
 
 
