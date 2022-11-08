@@ -268,20 +268,21 @@ class CollectionDownloadManager:
             duration = 0
             if self._enqueue_timestamp is not None:
                 duration = time.time() - self._enqueue_timestamp
-            logger.debug(
-                f"Enqueue in progress duration={duration}"
-                f" for task {self._current_task}"
+            logger.info(
+                f"Enqueue still in progress for task {self._current_task}"
+                f" duration={duration}"
             )
             return False
 
         job = job_storage.get_job(self._current_job_id)
-        logger.debug(f"Checking state of job {job}")
         if job.state in [JobState.CANCELED, JobState.FAILED]:
             # Current job was canceled or failed so it needs to be restarted.
             # FIXME give up after a number of failures.
+            old_job_id = self._current_job_id
             self._current_job_id = job_storage.restart_job(
                 self._current_job_id
             )
+            logger.info(f"Restarted job with ID {old_job_id} as {job}")
             return True
         elif job.state in [
             JobState.PENDING,
@@ -291,10 +292,12 @@ class CollectionDownloadManager:
             JobState.CANCELING,
         ]:
             # Current job hasn't completed yet
+            logger.info(f"Current job {job} still going")
             return False
 
         # Current task was completed
         assert job.state == JobState.COMPLETED
+        logger.info(f"Job {job} completed!")
         self._tasks_completed.append(self._current_task)
         self._current_task = None
         self._current_job_id = None
@@ -387,6 +390,7 @@ class CollectionDownloadManager:
 
     def _set_next_stage(self):
         if self._stage == DownloadStage.COMPLETED:
+            logger.info("Download completed!")
             return
 
         self._stage = DownloadStage(self._stage + 1)
@@ -399,12 +403,13 @@ class CollectionDownloadManager:
         self._tasks_pending = tasks
         self._tasks_previously_completed.extend(self._tasks_completed)
         self._tasks_completed = []
+        logger.info(f"Started download stage: {self._stage.name}")
 
     def _enqueue_current_task(self, user):
         self._current_task = self._tasks_pending.pop(0)
 
         self._enqueue_timestamp = time.time()
-        logger.debug(
+        logger.info(
             f"Enqueuing task {self._current_task}"
             f" at {self._enqueue_timestamp}"
         )
@@ -417,7 +422,7 @@ class CollectionDownloadManager:
         params = self._current_task["params"]
         self._current_job_id = fn(user=user, **params)
         self._enqueue_timestamp = None
-        logger.debug(f"Enqueued job id {self._current_job_id}")
+        logger.info(f"Enqueued job id {self._current_job_id}")
 
 
 def _remotechannelimport(user, channel_id):
@@ -576,6 +581,7 @@ def resume_download(request):
         grade = saved_state["grade"]
         name = saved_state["name"]
         logger.info(f"Download resumed for grade={grade} name={name}")
+        logger.info(f"Resumed download state: {saved_state}")
     except DownloadError as err:
         raise APIException(err)
 
