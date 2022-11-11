@@ -26,6 +26,7 @@
       <component
         :is="currentPage"
         v-if="currentPage"
+        v-bind="currentPageProperties"
         @loading="onLoading"
         @load="onLoad"
       />
@@ -108,6 +109,12 @@
       }),
       currentPage() {
         return pageNameToComponentMap[this.pageName] || null;
+      },
+      currentPageProperties() {
+        if (this.pageName === PageNames.TOPICS_ROOT) {
+          return { downloading: this.downloadInitiated && !this.downloadCompleted };
+        }
+        return {};
       },
       showBuildInfo() {
         return window.showBuildInfo;

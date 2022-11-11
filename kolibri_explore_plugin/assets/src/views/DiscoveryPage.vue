@@ -9,7 +9,7 @@
       </h5>
     </b-container>
 
-    <template v-if="loading || carouselNodes.length === 0">
+    <template v-if="loading || downloading">
       <CarouselPlaceholder />
     </template>
 
@@ -27,7 +27,7 @@
 
     <div class="flex-fill main">
 
-      <template v-if="loading || rootNodes.length === 0">
+      <template v-if="loading || downloading">
         <CardGridPlaceholder />
       </template>
       <template v-else>
@@ -54,8 +54,14 @@
     name: 'DiscoveryPage',
     components: { CategorizedList, DiscoveryNavBar },
     mixins: [commonCoreStrings],
+    props: {
+      downloading: {
+        type: Boolean,
+        default: false,
+      },
+    },
     computed: {
-      ...mapState('topicsRoot', { rootNodes: 'rootNodes', carouselNodes: 'carouselNodes' }),
+      ...mapState('topicsRoot', { carouselNodes: 'carouselNodes' }),
       ...mapState({
         loading: state => state.core.loading,
       }),
