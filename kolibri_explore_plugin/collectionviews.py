@@ -212,7 +212,8 @@ class CollectionDownloadManager:
         self._tasks_pending = []
         self._tasks_completed = []
         self._tasks_previously_completed = []
-        self._enqueue_timestamp = None
+        self._enqueuing_timestamp = None
+        self._enqueued_timestamp = None
 
     def from_manifest(self, manifest):
         """Start downloading a collection manifest."""
@@ -268,11 +269,11 @@ class CollectionDownloadManager:
             # Enqueue still in progress
             # FIXME: The download can potentially stall here!
             duration = 0
-            if self._enqueue_timestamp is not None:
-                duration = time.time() - self._enqueue_timestamp
+            if self._enqueuing_timestamp is not None:
+                duration = time.time() - self._enqueuing_timestamp
             logger.info(
                 f"Enqueue still in progress for task {self._current_task}"
-                f" duration={duration}"
+                f" duration: {duration}"
             )
             return False
 
@@ -294,12 +295,18 @@ class CollectionDownloadManager:
             JobState.CANCELING,
         ]:
             # Current job hasn't completed yet
-            logger.info(f"Current job {job} still going")
+            duration = 0
+            if self._enqueued_timestamp is not None:
+                duration = time.time() - self._enqueued_timestamp
+            logger.info(f"Current job {job} still going, duration: {duration}")
             return False
 
         # Current task was completed
         assert job.state == JobState.COMPLETED
-        logger.info(f"Job {job} completed!")
+        duration = 0
+        if self._enqueued_timestamp is not None:
+            duration = time.time() - self._enqueued_timestamp
+        logger.info(f"Job {job} completed! duration: {duration}")
         self._tasks_completed.append(self._current_task)
         self._current_task = None
         self._current_job_id = None
@@ -410,10 +417,11 @@ class CollectionDownloadManager:
     def _enqueue_current_task(self, user):
         self._current_task = self._tasks_pending.pop(0)
 
-        self._enqueue_timestamp = time.time()
+        self._enqueuing_timestamp = time.time()
+        self._enqueued_timestamp = None
         logger.info(
             f"Enqueuing task {self._current_task}"
-            f" at {self._enqueue_timestamp}"
+            f" at {self._enqueuing_timestamp}"
         )
 
         tasks_mapping = {
@@ -423,7 +431,8 @@ class CollectionDownloadManager:
         fn = tasks_mapping[self._current_task["task"]]
         params = self._current_task["params"]
         self._current_job_id = fn(user=user, **params)
-        self._enqueue_timestamp = None
+        self._enqueuing_timestamp = None
+        self._enqueued_timestamp = time.time()
         logger.info(f"Enqueued job id {self._current_job_id}")
 
 
