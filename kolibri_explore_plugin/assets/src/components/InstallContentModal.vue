@@ -53,6 +53,7 @@
 
   import client from 'kolibri.client';
   import urls from 'kolibri.urls';
+  import { mapState } from 'vuex';
 
   const UPDATE_DELAY = 1500;
 
@@ -68,6 +69,9 @@
       };
     },
     computed: {
+      ...mapState({
+        pageVisible: state => state.core.pageVisible,
+      }),
       titleLabel() {
         if (this.status !== null) {
           if (this.status.stage === 'IMPORTING_CONTENT') {
@@ -116,16 +120,20 @@
         return '';
       },
     },
+    watch: {
+      pageVisible() {
+        if (!this.pageVisible && this.updateIntervalId !== null) {
+          console.debug('Download: Update poll paused.');
+          clearInterval(this.updateIntervalId);
+          this.updateIntervalId = null;
+        } else if (this.pageVisible && this.updateIntervalId === null) {
+          console.debug('Download: Update poll resumed.');
+          return this.setUpdateInterval();
+        }
+      },
+    },
     mounted() {
-      return this.getDownloadStatus().then(status => {
-        this.status = status;
-        if (this.checkCompleted()) {
-          return;
-        }
-        if (this.status.stage !== 'NOT_STARTED') {
-          this.updateIntervalId = setInterval(this.updateLoop, UPDATE_DELAY);
-        }
-      });
+      return this.setUpdateInterval();
     },
     beforeDestroy() {
       this.clearUpdateInterval();
@@ -143,6 +151,17 @@
           this.status = status;
           if (this.checkCompleted()) {
             this.clearUpdateInterval();
+          }
+        });
+      },
+      setUpdateInterval() {
+        return this.getDownloadStatus().then(status => {
+          this.status = status;
+          if (this.checkCompleted()) {
+            return;
+          }
+          if (this.status.stage !== 'NOT_STARTED') {
+            this.updateIntervalId = setInterval(this.updateLoop, UPDATE_DELAY);
           }
         });
       },
