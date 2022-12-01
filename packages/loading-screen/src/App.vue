@@ -19,23 +19,23 @@ export default {
   },
   mounted() {
     window.show_retry = () => {
-      this.$router.replace('/loading/retry');
+      this.$router.push('/loading/retry');
     }
 
     window.show_error = () => {
-      this.$router.replace('/loading/error');
+      this.$router.push('/loading/error');
     }
 
     window.show_loading = () => {
-      this.$router.replace('/loading/default');
+      this.$router.push('/loading/default');
     }
 
     window.clean = () => {
-      this.$router.replace('/loading/default');
+      this.$router.push('/loading/default');
     }
 
     window.show_welcome = () => {
-      this.$router.replace('/welcome');
+      this.$router.push('/welcome');
     }
 
     window.show_endless_key = () => {
@@ -64,7 +64,7 @@ export default {
 
     window.firstLaunch = () => {
       this.firstLaunch = true;
-      this.$router.replace('/welcome');
+      this.$router.push('/welcome');
     }
   },
   beforeDestroy() {

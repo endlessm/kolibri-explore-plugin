@@ -11,7 +11,7 @@
       <div class="pt-5">
         <b-button
           variant="primary"
-          @click="goToContentSourceSelection"
+          to="select-source"
         >
           Get Started
         </b-button>
@@ -26,11 +26,6 @@
 
   export default {
     name: 'Welcome',
-    methods: {
-      goToContentSourceSelection() {
-        this.$router.replace('/select-source');
-      },
-    },
   };
 
 </script>

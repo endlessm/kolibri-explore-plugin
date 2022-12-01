@@ -66,11 +66,11 @@
     },
     methods: {
       downloadContent() {
-        this.$router.replace('/loading/default');
+        this.$router.push('/loading/default');
         window.EndlessAPI.load();
       },
       useEndlessKeyUSB() {
-        this.$router.replace('/endless-key');
+        this.$router.push('/endless-key');
       },
       setSelection(selection) {
         this.selection = selection;
