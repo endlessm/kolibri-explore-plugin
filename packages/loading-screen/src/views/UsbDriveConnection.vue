@@ -61,10 +61,10 @@
     methods: {
       loadWithUSB() {
         if (this.needsPermission) {
-          this.$router.replace('/grant-permissions');
+          this.$router.push('/grant-permissions');
         }
         else {
-          this.$router.replace('/loading/default');
+          this.$router.push('/loading/default');
           window.EndlessAPI.loadWithUSB();
         }
       },

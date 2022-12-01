@@ -42,7 +42,7 @@
     },
     methods: {
       openSystemPermission() {
-        this.$router.replace('/loading/default');
+        this.$router.push('/loading/default');
         window.EndlessAPI.loadWithUSB();
       },
     },

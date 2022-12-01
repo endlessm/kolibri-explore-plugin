@@ -40,7 +40,7 @@
     },
     methods: {
       loadWithUSB() {
-        this.$router.replace('/loading/default');
+        this.$router.push('/loading/default');
         window.EndlessAPI.loadWithUSB();
       },
     },
