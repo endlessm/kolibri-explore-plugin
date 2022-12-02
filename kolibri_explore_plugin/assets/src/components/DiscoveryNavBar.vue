@@ -23,9 +23,18 @@
     <b-navbar-nav>
       <b-nav-text
         v-b-modal.about-modal
+        class="btn d-md-block d-none"
+        @click="$root.$emit('setAboutSection', 'privacy-policy-link')"
+      >
+        {{ $tr('privacyPolicyLabel') }}
+      </b-nav-text>
+    </b-navbar-nav>
+    <b-navbar-nav>
+      <b-nav-text
+        v-b-modal.about-modal
         class="btn d-md-block d-none pr-0"
       >
-        About Endless Key
+        {{ $tr('aboutLabel') }}
       </b-nav-text>
     </b-navbar-nav>
   </NavBar>
@@ -77,6 +86,10 @@
       currentIsSearch() {
         return this.$route.name === PageNames.SEARCH;
       },
+    },
+    $trs: {
+      aboutLabel: 'About',
+      privacyPolicyLabel: 'Privacy Policy',
     },
   };
 
