@@ -31,28 +31,21 @@
             <h3 id="about-section" class="pt-3 text-primary">
               Endless Key — learning and discovery resources, no internet required.
             </h3>
-
             <p>
-              The Endless Key Initiative is a project created to help offline
-              kids access great educational and learning resources, even
-              without an internet connection.
+              The Endless Key unlocks the potential for student
+              curiosity and choice through independent
+              learning. Curated to be interest-based and inclusive,
+              our collection of content encourages students to
+              discover knowledge and skills that will support them now
+              and in their futures. The Endless Key is designed to
+              complement the broadband-for-all roll-out in the United
+              States and provide offline students with equitable
+              access to engaging content. Students can access Endless
+              Key content by downloading the Endless Key app
+              (available for ChromeOS and Windows). After the initial
+              download, no internet is required to interact with the
+              content.
             </p>
-
-            <p>
-              The Endless OS Foundation has partnered with Common Sense and
-              Learning Equality to launch the Endless Key initiative. The Key
-              is designed as a complement to the USA's broadband-for-all
-              rollout, and offline students' distance learning challenges.
-            </p>
-
-            <p>
-              Endless Key is a 128 gigabyte USB drive that is designed to
-              provide a robust, engaging and safe digital learning environment,
-              with high-quality learning and discovery resources that can be
-              accessed offline (without internet) by students using Windows
-              computers.
-            </p>
-
             <hr>
             <template v-if="buildInfo">
               <h5>Release information</h5>
