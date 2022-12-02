@@ -20,6 +20,7 @@ import GridPage from './components/GridPage.vue';
 import Keywords from './components/Keywords.vue';
 import NavBar from './components/NavBar.vue';
 import PlayButton from './components/PlayButton.vue';
+import PrivacyPolicyText from './components/PrivacyPolicyText.vue';
 import SearchBar from './components/SearchBar.vue';
 import SlidableCardGrid from './components/SlidableCardGrid.vue';
 import SlidableGrid from './components/SlidableGrid.vue';
@@ -57,6 +58,7 @@ const components = {
   Keywords,
   NavBar,
   PlayButton,
+  PrivacyPolicyText,
   SearchBar,
   SlidableCardGrid,
   SlidableGrid,
