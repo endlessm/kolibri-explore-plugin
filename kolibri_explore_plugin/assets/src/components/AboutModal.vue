@@ -5,6 +5,8 @@
     headerCloseVariant="light"
     size="xl"
     centered
+    @shown="onShown"
+    @hidden="onHidden"
   >
     <div class="bg-white text-dark wrapper">
       <b-row>
@@ -13,6 +15,7 @@
             <b-list-group-item
               v-for="item in menuItems"
               :id="item.id"
+              :ref="'ref-' + item.id"
               :key="item.id"
               :active="item.id === activeItemId"
               :href="item.href"
@@ -84,6 +87,12 @@
               </a>.
             </p>
             <hr>
+          </div>
+          <div>
+            <h3 id="privacy-policy-section" class="pt-3 text-primary">
+              {{ $tr('privacyPolicyHeader') }}
+            </h3>
+            <PrivacyPolicyText />
           </div>
           <div>
             <h3 id="credits-section" class="pt-3 text-primary">
@@ -264,9 +273,11 @@
 <script>
 
   import urls from 'kolibri.urls';
+  import PrivacyPolicyText from 'eos-components/src/components/PrivacyPolicyText.vue';
 
   export default {
     name: 'AboutModal',
+    components: { PrivacyPolicyText },
     props: {
       id: {
         type: String,
@@ -277,6 +288,7 @@
       return {
         buildInfo: null,
         activeItemId: null,
+        initialItem: null,
         menuItems: [
           {
             id: 'about-link',
@@ -287,6 +299,11 @@
             id: 'support-link',
             label: 'Support',
             href: '#support-section',
+          },
+          {
+            id: 'privacy-policy-link',
+            label: 'Privacy Policy',
+            href: '#privacy-policy-section',
           },
           {
             id: 'credits-link',
@@ -302,7 +319,10 @@
       },
     },
     mounted() {
-      this.activeItemId = this.menuItems[0].id;
+      this.$root.$on('setAboutSection', section => {
+        this.initialItem = section;
+      });
+      this.activeItemId = this.menuItems[2].id;
       this.getBuildInfo();
     },
     methods: {
@@ -320,6 +340,18 @@
             console.error(error);
           });
       },
+      onShown() {
+        if (this.initialItem) {
+          const component = this.$refs['ref-' + this.initialItem][0];
+          component.$el.click();
+        }
+      },
+      onHidden() {
+        this.initialItem = null;
+      },
+    },
+    $trs: {
+      privacyPolicyHeader: 'Privacy Policy',
     },
   };
 
