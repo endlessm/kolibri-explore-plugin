@@ -51,7 +51,7 @@
               <h5>Release information</h5>
               <b-list-group class="bg-light p-3 rounded-lg">
                 <b-list-group-item class="bg-light rounded-0">
-                  Release: {{ buildInfo.last_release }}
+                  Release: {{ buildInfo.version_name }} {{ buildInfo.last_release }}
                 </b-list-group-item>
                 <b-list-group-item class="bg-light rounded-0">
                   Date: {{ buildInfo.date }}

@@ -1,10 +1,13 @@
 #!/usr/bin/env python
+import os.path
 import re
 import subprocess
 import sys
 
 from bumpversion.cli import main
 from bumpversion.vcs import Git
+
+VERSION_FILENAME = os.path.join("kolibri_explore_plugin", "VERSION")
 
 usage_message = """
 
@@ -18,7 +21,7 @@ bump to 'minor'.
 
 def _update_version_name(version_name):
     print(f"Commiting new version name: {version_name}")
-    with open("VERSION", "w") as fd:
+    with open(VERSION_FILENAME, "w") as fd:
         fd.write(version_name.strip() + "\n")
     subprocess.check_output(["git", "add", "--update", "VERSION"])
     subprocess.check_output(["git", "commit", "--message", "Update VERSION"])
