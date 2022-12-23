@@ -151,13 +151,16 @@ Then run the script:
 If everything goes well, the `highlighted-content.json` file will be
 updated. You then need to commit the file.
 
-### Making a release
+### Releasing
 
-If you are releasing a new version, first please bump to either major,
-minor or patch. This should be done from the `stable` branch. Eg:
+To release a new version first please bump the version number to
+either major or minor. This should be done from the `stable`
+branch. Note that the major version also needs a version name for
+branding. Eg:
 
 ```
-yarn bump-version patch
+yarn bump-version minor
+yarn bump-version major "Komodo Dragon"
 ```
 
 That creates a new commit and a git tag. Please push them to the
