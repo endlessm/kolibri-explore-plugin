@@ -2,7 +2,7 @@
 
 HEAD=$(git rev-parse --verify HEAD --short)
 DATE=$(TZ=UTC git show --quiet --date=local --format="%cd")
-LAST_RELEASE=$(git describe --tags --abbrev=0)
+LAST_RELEASE=$(git describe --tags $(git rev-list --tags --max-count=1))
 COMMITS=$(git log --no-merges --pretty=format:'%h|%s|%aN' $LAST_RELEASE..HEAD)
 
 echo '{
