@@ -2,12 +2,14 @@
 
 HEAD=$(git rev-parse --verify HEAD --short)
 DATE=$(TZ=UTC git show --quiet --date=local --format="%cd")
+VERSION_NAME=$(cat kolibri_explore_plugin/VERSION)
 LAST_RELEASE=$(git describe --tags $(git rev-list --tags --max-count=1))
 COMMITS=$(git log --no-merges --pretty=format:'%h|%s|%aN' $LAST_RELEASE..HEAD)
 
 echo '{
     "commit": "'$HEAD'",
     "date": "'$DATE'",
+    "version_name": "'$VERSION_NAME'",
     "last_release": "'$LAST_RELEASE'",
     "log": ['
 
