@@ -32,7 +32,7 @@
       Services. We will never sell your data nor use it to market
       products or services to you.
     </p>
-    <h5>The information we collect via this Service:</h5>
+    <h5>Information We Collect</h5>
     <p>
       We collect the following information automatically when you use
       the Service:
@@ -73,7 +73,7 @@
         </ul>
       </li>
     </ul>
-    <h5>How we use the information we collect.</h5>
+    <h5>How We Use Information</h5>
     <p>
       We may process the information collected from your use of the
       Services for carefully considered and specific purposes which
@@ -103,7 +103,7 @@
       sold to third parties, nor will it be used to advertise or
       market external products or services to users.
     </p>
-    <h5>When we disclose information.</h5>
+    <h5>When We Disclose Information</h5>
     <ul>
       <li>
         We may provide access to or share your information with third
@@ -149,7 +149,7 @@
         required, the responsible parent.
       </li>
     </ul>
-    <h5>Third-Party Websites:</h5>
+    <h5>Third-Party Websites</h5>
     <p>
       The Service may contain features or links to websites and
       services provided by third parties. Any information you provide
@@ -163,7 +163,7 @@
       third parties’ privacy and security policies before providing
       them with information.
     </p>
-    <h5>Data Security:</h5>
+    <h5>Data Security</h5>
     <p>
       We use certain physical, managerial, and technical safeguards
       that are designed to improve the integrity and security of your
@@ -174,7 +174,7 @@
       destroyed by breach of any of our physical, technical, or
       managerial safeguards.
     </p>
-    <h5>Legal Bases for Use:</h5>
+    <h5>Legal Bases for Use</h5>
     <p>
       The laws of some jurisdictions, including the European Economic
       Area and the United Kingdom, require that companies only process
@@ -200,7 +200,7 @@
         partners and in fundraising activities.
       </li>
     </ul>
-    <h5>International Visitors:</h5>
+    <h5>International Visitors</h5>
     <p>
       Data collected via the Service is transmitted to our processing
       systems in the United States. If you choose to use the Service
@@ -212,7 +212,7 @@
       other countries or regions in connection with storage and
       processing of data, and fulfilling your requests.
     </p>
-    <h5>Modifications:</h5>
+    <h5>Modifications</h5>
     <p>
       This Policy may be updated or modified at any time to reflect
       changes in the law, our data collection and use practices, the
@@ -225,7 +225,7 @@
       formally notified us of their use of the Service will also
       receive email notification of such changes.
     </p>
-    <h5>Our Contact Information:</h5>
+    <h5>Our Contact Information</h5>
     <p>
       Please contact us with any questions or comments about this
       Policy, your personal information, our use and disclosure
