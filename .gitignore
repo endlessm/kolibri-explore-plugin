@@ -2,6 +2,9 @@
 
 node_modules
 
+# vscode files
+.vscode/
+
 # Built and cached files
 kolibri_explore_plugin/apps/**/*.zip
 kolibri_explore_plugin/loadingScreen/
@@ -23,3 +26,6 @@ packages/template-ui/src/overrides
 
 # Environment file with secrets
 /.env
+
+# Collection files. These are bundled in apps
+kolibri_explore_plugin/static/collections/
