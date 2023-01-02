@@ -21,6 +21,7 @@ from rest_framework.decorators import api_view
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 
+from .tasks import applyexternaltags
 
 logger = logging.getLogger(__name__)
 
@@ -156,6 +157,31 @@ class EndlessKeyContentManifest(ContentManifest):
 
         return tasks
 
+    def get_applyexternaltags_tasks(self):
+        """Return a serializable object to create applyexternaltags tasks
+
+        As defined in this content manifest metadata.
+        """
+        if "tagged_node_ids" not in self.metadata:
+            return []
+
+        tasks = []
+
+        for tagged in self.metadata["tagged_node_ids"]:
+            node_id = tagged["node_id"]
+            tags = tagged["tags"]
+            tasks.append(
+                {
+                    "task": "applyexternaltags",
+                    "params": {
+                        "node_id": node_id,
+                        "tags": tags,
+                    },
+                }
+            )
+
+        return tasks
+
     def _get_node_ids_for_channel(self, channel_metadata, channel_id):
         """Get node IDs regardless of the version
 
@@ -193,6 +219,7 @@ class DownloadStage(IntEnum):
     NOT_STARTED = auto()
     IMPORTING_CHANNELS = auto()
     IMPORTING_CONTENT = auto()
+    APPLYING_EXTERNAL_TAGS = auto()
     COMPLETED = auto()
 
 
@@ -331,7 +358,10 @@ class CollectionDownloadManager:
         if self._stage == DownloadStage.NOT_STARTED:
             progress = 0
 
-        elif self._stage == DownloadStage.IMPORTING_CHANNELS:
+        elif self._stage in [
+            DownloadStage.IMPORTING_CHANNELS,
+            DownloadStage.APPLYING_EXTERNAL_TAGS,
+        ]:
             progress = current_task_number / total_tasks_number
             # Making the last channel import appear like it still
             # needs progress
@@ -409,6 +439,8 @@ class CollectionDownloadManager:
             tasks = self._content_manifest.get_channelimport_tasks()
         elif self._stage == DownloadStage.IMPORTING_CONTENT:
             tasks = self._content_manifest.get_contentimport_tasks()
+        elif self._stage == DownloadStage.APPLYING_EXTERNAL_TAGS:
+            tasks = self._content_manifest.get_applyexternaltags_tasks()
         self._tasks_pending = tasks
         self._tasks_previously_completed.extend(self._tasks_completed)
         self._tasks_completed = []
@@ -427,6 +459,7 @@ class CollectionDownloadManager:
         tasks_mapping = {
             "remotechannelimport": _remotechannelimport,
             "remotecontentimport": _remotecontentimport,
+            "applyexternaltags": _applyexternaltags,
         }
         fn = tasks_mapping[self._current_task["task"]]
         params = self._current_task["params"]
@@ -462,6 +495,21 @@ def _remotecontentimport(user, channel_id, node_ids, exclude_node_ids):
             "channel_name": "foo",
             "node_ids": node_ids,
             "exclude_node_ids": exclude_node_ids,
+        },
+    )
+    job_id = job_storage.enqueue_job(
+        job, queue=DEFAULT_QUEUE, priority=Priority.HIGH
+    )
+    return job_id
+
+
+def _applyexternaltags(user, node_id, tags):
+    """Create, validate and enqueue a applyexternaltags job."""
+    job = applyexternaltags.validate_job_data(
+        user,
+        {
+            "node_id": node_id,
+            "tags": tags,
         },
     )
     job_id = job_storage.enqueue_job(
