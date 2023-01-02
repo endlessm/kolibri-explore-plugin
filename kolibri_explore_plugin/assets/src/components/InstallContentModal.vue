@@ -76,6 +76,8 @@
         if (this.status !== null) {
           if (this.status.stage === 'IMPORTING_CONTENT') {
             return this.$tr('titleDownloading');
+          } else if (this.status.stage === 'APPLYING_EXTERNAL_TAGS') {
+            return this.$tr('titleDownloading');
           } else if (this.status.stage === 'COMPLETED') {
             return this.$tr('titleCompleted');
           }
@@ -85,6 +87,8 @@
       subtitleLabel() {
         if (this.status !== null) {
           if (this.status.stage === 'IMPORTING_CONTENT') {
+            return this.$tr('subtitleDownloading');
+          } else if (this.status.stage === 'APPLYING_EXTERNAL_TAGS') {
             return this.$tr('subtitleDownloading');
           } else if (this.status.stage === 'COMPLETED') {
             return this.$tr('subtitleCompleted');
@@ -96,6 +100,11 @@
         if (this.status !== null) {
           if (this.status.stage === 'IMPORTING_CHANNELS') {
             return this.$tr('statusPreparing', {
+              current: this.status.current_task_number,
+              total: this.status.total_tasks_number,
+            });
+          } else if (this.status.stage === 'APPLYING_EXTERNAL_TAGS') {
+            return this.$tr('statusFinishing', {
               current: this.status.current_task_number,
               total: this.status.total_tasks_number,
             });
@@ -195,6 +204,7 @@
       titlePreparing: 'Preparing to download',
       subtitlePreparing: 'Please wait a moment while the content is being prepared to download.',
       statusPreparing: 'Preparing download ({current} of {total})…',
+      statusFinishing: 'Finishing download ({current} of {total})…',
       statusDownloadingChannel:
         'Downloading content for channel {channel} ({count} more channels left)…',
       statusDownloadingLastChannel: 'Downloading content for channel {channel}…',
