@@ -119,6 +119,9 @@ class EndlessKeyContentManifest(ContentManifest):
                     "task": "remotechannelimport",
                     "params": {
                         "channel_id": channel_id,
+                        # FIXME: The channel_name is needed
+                        # since commit b53d7baa
+                        "channel_name": "foo",
                     },
                 }
             )
@@ -139,6 +142,9 @@ class EndlessKeyContentManifest(ContentManifest):
                     "task": "remotecontentimport",
                     "params": {
                         "channel_id": channel_id,
+                        # FIXME: The channel_name is needed
+                        # since commit b53d7baa
+                        "channel_name": "foo",
                         "node_ids": list(
                             self._get_node_ids_for_channel(
                                 channel_metadata, channel_id
@@ -457,61 +463,21 @@ class CollectionDownloadManager:
         )
 
         tasks_mapping = {
-            "remotechannelimport": _remotechannelimport,
-            "remotecontentimport": _remotecontentimport,
-            "applyexternaltags": _applyexternaltags,
+            "remotechannelimport": remotechannelimport,
+            "remotecontentimport": remotecontentimport,
+            "applyexternaltags": applyexternaltags,
         }
-        fn = tasks_mapping[self._current_task["task"]]
+        task = tasks_mapping[self._current_task["task"]]
         params = self._current_task["params"]
-        self._current_job_id = fn(user=user, **params)
+        self._current_job_id = _call_task(task, user, **params)
         self._enqueuing_timestamp = None
         self._enqueued_timestamp = time.time()
         logger.info(f"Enqueued job id {self._current_job_id}")
 
 
-def _remotechannelimport(user, channel_id):
-    """Create, validate and enqueue a remotechannelimport job."""
-    job = remotechannelimport.validate_job_data(
-        user,
-        {
-            "channel_id": channel_id,
-            # FIXME: The channel_name is needed since commit b53d7baa
-            "channel_name": "foo",
-        },
-    )
-    job_id = job_storage.enqueue_job(
-        job, queue=DEFAULT_QUEUE, priority=Priority.HIGH
-    )
-    return job_id
-
-
-def _remotecontentimport(user, channel_id, node_ids, exclude_node_ids):
-    """Create, validate and enqueue a remotecontentimport job."""
-    job = remotecontentimport.validate_job_data(
-        user,
-        {
-            "channel_id": channel_id,
-            # FIXME: The channel_name is needed since commit b53d7baa
-            "channel_name": "foo",
-            "node_ids": node_ids,
-            "exclude_node_ids": exclude_node_ids,
-        },
-    )
-    job_id = job_storage.enqueue_job(
-        job, queue=DEFAULT_QUEUE, priority=Priority.HIGH
-    )
-    return job_id
-
-
-def _applyexternaltags(user, node_id, tags):
-    """Create, validate and enqueue a applyexternaltags job."""
-    job = applyexternaltags.validate_job_data(
-        user,
-        {
-            "node_id": node_id,
-            "tags": tags,
-        },
-    )
+def _call_task(task, user, **params):
+    """Create, validate and enqueue a job."""
+    job = task.validate_job_data(user, params)
     job_id = job_storage.enqueue_job(
         job, queue=DEFAULT_QUEUE, priority=Priority.HIGH
     )
