@@ -100,17 +100,17 @@
         if (this.status !== null) {
           if (this.status.stage === 'IMPORTING_CHANNELS') {
             return this.$tr('statusPreparing', {
-              current: this.status.current_task_number,
-              total: this.status.total_tasks_number,
+              current: this.status.current_task_number || '0',
+              total: this.status.total_tasks_number || '0',
             });
           } else if (this.status.stage === 'APPLYING_EXTERNAL_TAGS') {
             return this.$tr('statusFinishing', {
-              current: this.status.current_task_number,
-              total: this.status.total_tasks_number,
+              current: this.status.current_task_number || '0',
+              total: this.status.total_tasks_number || '0',
             });
           } else if (this.status.stage === 'IMPORTING_CONTENT') {
             const channel = this.status.extra_metadata.channel_name;
-            const count = this.status.total_tasks_number - this.status.current_task_number;
+            const count = this.status.total_tasks_number - this.status.current_task_number || '0';
             if (channel) {
               if (count > 0) {
                 return this.$tr('statusDownloadingChannel', { channel, count });
