@@ -368,11 +368,14 @@ class CollectionDownloadManager:
             DownloadStage.IMPORTING_CHANNELS,
             DownloadStage.APPLYING_EXTERNAL_TAGS,
         ]:
-            progress = current_task_number / total_tasks_number
-            # Making the last channel import appear like it still
-            # needs progress
-            if progress == 1:
-                progress = 0.98
+            if total_tasks_number > 0:
+                progress = current_task_number / total_tasks_number
+                # Making the last channel import appear like it still
+                # needs progress
+                if progress == 1:
+                    progress = 0.98
+            else:
+                progress = 0
 
         elif self._stage == DownloadStage.IMPORTING_CONTENT:
             if self._current_job_id is None:
