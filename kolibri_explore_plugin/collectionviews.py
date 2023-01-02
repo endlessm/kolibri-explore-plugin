@@ -441,15 +441,16 @@ class CollectionDownloadManager:
             logger.info("Download completed!")
             return
 
-        self._stage = DownloadStage(self._stage + 1)
-
         tasks = []
-        if self._stage == DownloadStage.IMPORTING_CHANNELS:
-            tasks = self._content_manifest.get_channelimport_tasks()
-        elif self._stage == DownloadStage.IMPORTING_CONTENT:
-            tasks = self._content_manifest.get_contentimport_tasks()
-        elif self._stage == DownloadStage.APPLYING_EXTERNAL_TAGS:
-            tasks = self._content_manifest.get_applyexternaltags_tasks()
+        while not tasks and self._stage != DownloadStage.COMPLETED:
+            self._stage = DownloadStage(self._stage + 1)
+            if self._stage == DownloadStage.IMPORTING_CHANNELS:
+                tasks = self._content_manifest.get_channelimport_tasks()
+            elif self._stage == DownloadStage.IMPORTING_CONTENT:
+                tasks = self._content_manifest.get_contentimport_tasks()
+            elif self._stage == DownloadStage.APPLYING_EXTERNAL_TAGS:
+                tasks = self._content_manifest.get_applyexternaltags_tasks()
+
         self._tasks_pending = tasks
         self._tasks_previously_completed.extend(self._tasks_completed)
         self._tasks_completed = []
