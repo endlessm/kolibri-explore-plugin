@@ -5,13 +5,13 @@ from morango.models import UUIDField
 
 class ExternalContentTag(models.Model):
     id = UUIDField(primary_key=True)
-    tag_name = models.CharField(max_length=100)
+    tag_name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.tag_name
 
 
-class TaggedContent(models.Model):
+class ContentNodeExtras(models.Model):
     content_node = models.OneToOneField(
         ContentNode, on_delete=models.CASCADE, primary_key=True
     )
