@@ -5,7 +5,6 @@ from kolibri.core.content.models import ContentNode
 from kolibri.core.tasks.management.commands.base import AsyncCommand
 
 from kolibri_explore_plugin.models import ExternalContentTag
-from kolibri_explore_plugin.models import TaggedContent
 
 
 class Command(AsyncCommand):
@@ -37,9 +36,6 @@ class Command(AsyncCommand):
         except ValueError:
             raise CommandError(f"{options['node_id']} is not a valid node ID")
 
-        tagged_content = TaggedContent(content_node=content_node)
-        tagged_content.save()
-
         for tag_name in options["tags"]:
             tag_name = tag_name.strip()
             if tag_name == "":
@@ -54,7 +50,7 @@ class Command(AsyncCommand):
                 )
                 tag.save()
 
-            tagged_content.tags.add(tag)
+            tag.content_nodes.add(content_node)
 
         self.stdout.write(
             self.style.SUCCESS(f"Added external tags to node: {content_node}")
