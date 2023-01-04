@@ -54,9 +54,12 @@ export const ItemsPerPage = 16;
 export const KeywordIconSize = 20;
 export const SearchBarDebounce = 2000;
 
+export const CollectionsSections = ['highlight', 'skill', 'career', 'curious'];
+
 export default {
   AuthorFilterName,
   CarouselInterval,
+  CollectionsSections,
   DefaultKindLabel,
   FilterTagsBadList,
   ItemsPerPage,
