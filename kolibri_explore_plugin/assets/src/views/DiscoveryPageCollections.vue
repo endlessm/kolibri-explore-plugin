@@ -14,6 +14,7 @@
           </h5>
           <CardGrid
             :nodes="sectionNodes['highlight']"
+            :itemsPerSlide="{ lg: 3, md: 2, sm: 1 }"
           />
         </template>
         <template v-if="hasNodesForSection('skill')">
@@ -36,6 +37,7 @@
           </h5>
           <CardGrid
             :nodes="sectionNodes['career']"
+            :itemsPerSlide="{ lg: 3, md: 2, sm: 1 }"
           />
         </template>
         <template v-if="hasNodesForSection('curious')">
