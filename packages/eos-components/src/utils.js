@@ -117,6 +117,12 @@ export function getSlug(title) {
     .replace(/-+/g, '-');
 }
 
+/** Validators **/
+
+export function validateItemsPerSlide(value) {
+  return 'sm' in value && 'md' in value && 'lg' in value;
+}
+
 // Borrowed from https://stackoverflow.com/a/40975730
 export function getDayOfYearNumber() {
     const date = new Date();
@@ -142,4 +148,5 @@ export default {
   getCardSubtitle,
   getSlug,
   getDayOfYearNumber,
+  validateItemsPerSlide,
 };

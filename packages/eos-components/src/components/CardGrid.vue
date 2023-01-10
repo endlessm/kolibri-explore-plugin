@@ -10,6 +10,7 @@
       :nodes="nodes"
       :hasMoreNodes="hasMoreNodes"
       :itemsPerPage="itemsPerPage"
+      :itemsPerSlide="itemsPerSlide"
       :mediaQuality="mediaQuality"
       :cardColumns="cardColumns"
       @loadMoreNodes="$emit('loadMoreNodes')"
@@ -18,7 +19,8 @@
 </template>
 
 <script>
-import { ItemsPerPage, MediaQuality } from '../constants';
+import { ItemsPerPage, ItemsPerSlide, MediaQuality } from '../constants';
+import { validateItemsPerSlide } from '../utils';
 
 export default {
   name: 'CardGrid',
@@ -52,6 +54,11 @@ export default {
     itemsPerPage: {
       type: Number,
       default: ItemsPerPage,
+    },
+    itemsPerSlide: {
+      type: Object,
+      default: () => ItemsPerSlide,
+      validator: validateItemsPerSlide,
     },
   },
   computed: {
