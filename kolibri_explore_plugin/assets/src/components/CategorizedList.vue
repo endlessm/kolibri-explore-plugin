@@ -16,9 +16,7 @@
           v-slot="slotProps"
           :nodes="getSlidableGridNodes(channels, contentPicks)"
           :hasWhiteBackground="true"
-          :itemsPerSlideLarge="3"
-          :itemsPerSlideMedium="2"
-          :itemsPerSlideSmall="1"
+          :itemsPerSlide="{ lg: 3, md: 2, sm: 1 }"
         >
           <template
             v-for="node in slotProps.slideNodes"

@@ -4,6 +4,7 @@
     class="pb-4"
     :nodes="nodes"
     :hasMoreNodes="hasMoreNodes"
+    :itemsPerSlide="itemsPerSlide"
     @loadMoreNodes="$emit('loadMoreNodes')"
   >
     <Card
@@ -16,7 +17,8 @@
 </template>
 
 <script>
-import { MediaQuality } from '../constants';
+import { ItemsPerSlide, MediaQuality } from '../constants';
+import { validateItemsPerSlide } from '../utils';
 
 export default {
   name: 'SlidableCardGrid',
@@ -32,6 +34,11 @@ export default {
     mediaQuality: {
       type: String,
       default: MediaQuality.REGULAR,
+    },
+    itemsPerSlide: {
+      type: Object,
+      default: () => ItemsPerSlide,
+      validator: validateItemsPerSlide,
     },
   },
 };

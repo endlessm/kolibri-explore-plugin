@@ -58,6 +58,7 @@ import _ from 'underscore';
 import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue';
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue';
 import { ItemsPerSlide } from '../constants';
+import { validateItemsPerSlide } from '../utils';
 import responsiveMixin from './mixins/responsiveMixin';
 
 export default {
@@ -77,17 +78,10 @@ export default {
       type: Boolean,
       default: false,
     },
-    itemsPerSlideSmall: {
-      type: Number,
-      default: Math.ceil(ItemsPerSlide / 4),
-    },
-    itemsPerSlideMedium: {
-      type: Number,
-      default: Math.ceil(ItemsPerSlide / 2),
-    },
-    itemsPerSlideLarge: {
-      type: Number,
-      default: Math.ceil(ItemsPerSlide),
+    itemsPerSlide: {
+      type: Object,
+      default: () => ItemsPerSlide,
+      validator: validateItemsPerSlide,
     },
   },
   data() {
@@ -97,20 +91,20 @@ export default {
     };
   },
   computed: {
-    itemsPerSlide() {
+    itemsPerSlideComputed() {
       if (this.xs) {
-        return this.itemsPerSlideSmall;
+        return this.itemsPerSlide.sm;
       }
       if (this.sm || this.md) {
-        return this.itemsPerSlideMedium;
+        return this.itemsPerSlide.md;
       }
-      return this.itemsPerSlideLarge;
+      return this.itemsPerSlide.lg;
     },
     slides() {
-      return _.chunk(this.nodes, this.itemsPerSlide);
+      return _.chunk(this.nodes, this.itemsPerSlideComputed);
     },
     emptyCardsNumber() {
-      return this.slides.length * this.itemsPerSlide - this.nodes.length;
+      return this.slides.length * this.itemsPerSlideComputed - this.nodes.length;
     },
     hasMultipleSlides() {
       return this.slides.length > 1;
