@@ -7,6 +7,7 @@
 
 <script>
 
+  import plugin_data from 'plugin_data';
   import DiscoveryPageCollections from './DiscoveryPageCollections';
   import DiscoveryPageFullContent from './DiscoveryPageFullContent';
 
@@ -15,8 +16,8 @@
     components: { DiscoveryPageCollections, DiscoveryPageFullContent },
     computed: {
       showCollectionsPage() {
-        // FIXME read this from a setting.
-        return false;
+        // FIXME return false if "use EK USB" was selected in the onboarding.
+        return plugin_data.newCollectionsPageFeature;
       },
       pageVariant() {
         if (this.showCollectionsPage) {
