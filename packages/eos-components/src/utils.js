@@ -33,24 +33,24 @@ export function getStructuredTags(node, matchKey) {
   return tagValues;
 }
 
-function addStructuredTag(n) {
+export function addStructuredTag(node) {
     // Add structured tags to the node metadata:
-    n.structuredTags = {};
+    node.structuredTags = {};
     Object.values(StructuredTags).forEach((matchKey) => {
-      const tags = getStructuredTags(n, matchKey);
-      n.structuredTags[matchKey] = tags;
+      const tags = getStructuredTags(node, matchKey);
+      node.structuredTags[matchKey] = tags;
     });
-    return n;
+    return node;
 };
 
-export function parseNodes(nodes, isBundle=false) {
-  return nodes.map(addStructuredTag).map((n) => {
-    // Use the parent URL in leaf nodes if the channel is a bundle:
-    if (isBundle && n.kind !== 'topic' && n.parent) {
-      n.nodeUrl = `/t/${n.parent}`;
+export function updateExploreNodeUrl(node) {
+    const base = `/topics/${node.channel_id}`;
+    if (node.kind === 'topic') {
+        node.nodeUrl = `${base}/t/${node.id}`;
+    } else {
+        node.nodeUrl = `${base}/c/${node.id}`;
     }
-    return n;
-  });
+    return node;
 };
 
 /** Card information **/
@@ -141,7 +141,6 @@ export default {
   getAllStructuredTags,
   getFirstStructuredTag,
   getStructuredTags,
-  parseNodes,
   getNodeUrl,
   getLeaves,
   getTopicCardSubtitle,
@@ -149,4 +148,6 @@ export default {
   getSlug,
   getDayOfYearNumber,
   validateItemsPerSlide,
+  addStructuredTag,
+  updateExploreNodeUrl,
 };

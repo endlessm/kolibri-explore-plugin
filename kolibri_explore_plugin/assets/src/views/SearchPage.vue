@@ -107,7 +107,6 @@
   import _ from 'underscore';
   import { mapMutations, mapState } from 'vuex';
   import { utils, constants, responsiveMixin } from 'eos-components';
-  import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 
   import { PageNames } from '../constants';
   import { searchChannelsOnce } from '../modules/topicsRoot/handlers';
@@ -186,19 +185,10 @@
         const groups = this.resultKinds
           .map(k => {
             const results = _.get(this.searchResult, [k, 'results'], []);
-            // Add tags to nodes
-            const nodes = utils.parseNodes(results);
-            // Add thumbnails and links to nodes
-            nodes.forEach(node => {
-              const thumbnailUrl = getContentNodeThumbnail(node);
-              node.thumbnail = thumbnailUrl;
-              const base = `/topics/${node.channel_id}`;
-              if (node.kind === 'topic') {
-                node.nodeUrl = `${base}/t/${node.id}`;
-              } else {
-                node.nodeUrl = `${base}/c/${node.id}`;
-              }
-            });
+            const nodes = results
+              // Tweak the nodes with EK customizations:
+              .map(utils.addStructuredTag)
+              .map(utils.updateExploreNodeUrl);
 
             return [k, nodes];
           })
