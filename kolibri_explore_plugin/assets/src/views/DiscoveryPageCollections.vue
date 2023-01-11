@@ -61,7 +61,7 @@
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
 
-  import { constants } from 'eos-components';
+  import { utils, constants } from 'eos-components';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
   import { ContentNodeExtrasResource } from '../apiResources';
 
@@ -89,7 +89,11 @@
         return Promise.all(
           constants.CollectionsSections.map(tag => {
             return ContentNodeExtrasResource.fetchByExternalTag(tag).then(({ data }) => {
-              this.sectionNodes[tag] = data;
+              const nodes = data
+                // Tweak the nodes with EK customizations:
+                .map(utils.addStructuredTag)
+                .map(utils.updateExploreNodeUrl);
+              this.sectionNodes[tag] = nodes;
               this.loadingNodes = false;
             });
           })
