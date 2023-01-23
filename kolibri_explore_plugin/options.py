@@ -24,5 +24,12 @@ option_spec = {
                 standalone.
             """,
         },
+        "NEW_COLLECTIONS_PAGE_FEATURE": {
+            "type": "boolean",
+            "default": False,
+            "description": """
+              Dev feature flag to test the new collections page.
+            """,
+        },
     },
 }

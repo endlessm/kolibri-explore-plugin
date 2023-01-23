@@ -80,7 +80,7 @@
   .basicCard {
     cursor: pointer;
     border-radius: $border-radius-lg !important;
-    background-color: #EFF0F3 !important;
+    background-color: $gray-300 !important;
     transition: all 0.3s ease;
   }
 

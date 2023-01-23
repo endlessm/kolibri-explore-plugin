@@ -9,7 +9,7 @@
         @click="goToChannels"
       >
         <ViewDashboardOutlineIcon />
-        Discover
+        {{ $tr('discoveryLabel') }}
       </b-nav-text>
       <b-nav-text
         class="btn discovery-tab py-3 rounded-0 text-primary"
@@ -17,7 +17,7 @@
         @click="goToSearch"
       >
         <MagnifyIcon />
-        Search Library
+        {{ $tr('libraryLabel') }}
       </b-nav-text>
     </b-button-group>
     <b-navbar-nav>
@@ -88,6 +88,8 @@
       },
     },
     $trs: {
+      discoveryLabel: 'Discovery',
+      libraryLabel: 'Library',
       aboutLabel: 'About',
       privacyPolicyLabel: 'Privacy Policy',
     },

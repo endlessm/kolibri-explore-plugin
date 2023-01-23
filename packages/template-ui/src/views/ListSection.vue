@@ -49,7 +49,7 @@
 import { mapState, mapGetters } from 'vuex';
 import { constants } from 'eos-components';
 
-const sectionPageSize = 2 * constants.ItemsPerSlide;
+const sectionPageSize = 2 * constants.ItemsPerSlide.lg;
 
 export default {
   name: 'ListSection',

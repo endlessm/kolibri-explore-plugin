@@ -48,15 +48,18 @@ export const ThumbnailSize = {
 
 export const CarouselInterval = 10000;
 
-export const ItemsPerSlide = 4;
+export const ItemsPerSlide = {lg: 4, md: 2, sm: 1};
 export const ItemsPerPage = 16;
 
 export const KeywordIconSize = 20;
 export const SearchBarDebounce = 2000;
 
+export const CollectionsSections = ['highlight', 'skill', 'career', 'curious'];
+
 export default {
   AuthorFilterName,
   CarouselInterval,
+  CollectionsSections,
   DefaultKindLabel,
   FilterTagsBadList,
   ItemsPerPage,
