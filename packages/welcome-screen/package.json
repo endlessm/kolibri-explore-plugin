@@ -1,12 +1,12 @@
 {
-  "name": "loading-screen",
+  "name": "welcome-screen",
   "version": "0.1.0",
   "license": "AGPL-3.0",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "../../scripts/set_override.py default && vue-cli-service build && yarn zip",
     "lint": "vue-cli-service lint",
-    "zip": "../../scripts/bundle_zip.py loading-screen.zip"
+    "zip": "../../scripts/bundle_zip.py welcome-screen.zip"
   },
   "dependencies": {
     "bootstrap": "^4.6.1",

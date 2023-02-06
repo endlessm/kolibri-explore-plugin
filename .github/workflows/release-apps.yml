@@ -35,4 +35,4 @@ jobs:
       with:
         files: |
           apps-bundle.zip
-          packages/loading-screen/loading-screen.zip
+          packages/welcome-screen/welcome-screen.zip
