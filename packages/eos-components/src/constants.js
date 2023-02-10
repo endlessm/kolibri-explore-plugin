@@ -56,6 +56,39 @@ export const SearchBarDebounce = 2000;
 
 export const CollectionsSections = ['highlight', 'skill', 'career', 'curious'];
 
+export const PackMetadata = [
+    {
+        id: 'explorer',
+        title: 'Explorer',
+        subtitle: 'I like to learn about different cultures, places and ideas.',
+    },
+    {
+        id: 'artist',
+        title: 'Artist',
+        subtitle: 'I am creative and enjoy making things, music and dancing.',
+    },
+    {
+        id: 'scientist',
+        title: 'Scientist',
+        subtitle: 'I love to investigate the world and do fun experiments.',
+    },
+    {
+        id: 'inventor',
+        title: 'Inventor',
+        subtitle: 'I like to build things and solve problems.',
+    },
+    {
+        id: 'athlete',
+        title: 'Athlete',
+        subtitle: 'I like to move my body and spend time with friends.',
+    },
+    {
+        id: 'curious',
+        title: 'Curious',
+        subtitle: 'I like to experiment a bit of everything.',
+    },
+];
+
 export default {
   AuthorFilterName,
   CarouselInterval,
@@ -69,6 +102,7 @@ export default {
   MediaFilterName,
   MediaQuality,
   MediaTypeVerbs,
+  PackMetadata,
   SearchBarDebounce,
   StructuredTags,
   StructuredTagsRegExp,
