@@ -4,7 +4,8 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import eosComponents from 'eos-components';
 import App from '@/App.vue';
 
-import ContentSourceSelection from '@/views/ContentSourceSelection.vue';
+import PackSelection from '@/views/PackSelection.vue';
+import PackReady from '@/views/PackReady.vue';
 import UsbDriveConnection from '@/views/UsbDriveConnection.vue';
 import PermissionsExplanation from '@/views/PermissionsExplanation.vue';
 import PermissionsCancelled from '@/views/PermissionsCancelled.vue';
@@ -30,7 +31,8 @@ const routes = [
   { path: '/loading/error', component: LoadingError },
   { path: '/loading/retry', component: LoadingRetry },
   { path: '/welcome', component: Welcome },
-  { path: '/select-source', component: ContentSourceSelection },
+  { path: '/select-pack', component: PackSelection },
+  { path: '/pack-ready', component: PackReady },
   { path: '/endless-key', component: UsbDriveConnection },
   {
     path: '/endless-key-required',

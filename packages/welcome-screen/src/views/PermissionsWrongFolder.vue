@@ -18,7 +18,7 @@
       </b-button>
       <p class="mt-5">
         View your
-        <b-link to="select-source">
+        <b-link to="select-pack">
           download choices
         </b-link>
         instead.
