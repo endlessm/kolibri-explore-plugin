@@ -8,14 +8,14 @@
              to your computer to explore its contents."
       >
       <b-button
-        class="mt-5"
+        class="mb-4 mt-5"
         variant="primary"
         :disabled="!hasUSB"
         @click="loadWithUSB"
       >
         Next
       </b-button>
-      <p v-if="!required" class="mt-5">
+      <p v-if="!required">
         View your
         <b-link to="select-pack">
           download choices

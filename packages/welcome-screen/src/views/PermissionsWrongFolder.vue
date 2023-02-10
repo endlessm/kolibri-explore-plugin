@@ -16,7 +16,7 @@
       >
         Allow Access
       </b-button>
-      <p class="mt-5">
+      <p class="mt-4">
         View your
         <b-link to="select-pack">
           download choices

@@ -2,13 +2,10 @@
   <div class="d-flex flex-column flex-grow-1 w-100">
     <div class="flex-grow-1 welcome-background-top"></div>
     <div class="content p-3 pb-5 position-relative">
-      <h1 class="text-primary">
+      <h1>
         Welcome to Endless Key!
       </h1>
-      <h5 class="font-weight-normal text-muted">
-        Let's begin by helping you find your content.
-      </h5>
-      <div class="pb-4 pt-5">
+      <div class="mb-4 mt-4">
         <b-button
           variant="primary"
           to="select-pack"
@@ -16,7 +13,7 @@
           Get Started
         </b-button>
       </div>
-      <p class="font-weight-normal text-muted">
+      <p class="font-weight-normal">
         Check our
         <b-link
           v-b-modal.privacy-policy-modal

@@ -7,7 +7,7 @@
     >
       <slot name="header">
         <slot name="header-top"></slot>
-        <h1 v-if="title" class="mb-3" :class="titleVariant || 'text-primary'">
+        <h1 v-if="title" class="mb-3" :class="titleVariant">
           {{ title }}
         </h1>
       </slot>
