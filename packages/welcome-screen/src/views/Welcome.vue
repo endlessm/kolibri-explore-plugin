@@ -11,7 +11,7 @@
       <div class="pb-4 pt-5">
         <b-button
           variant="primary"
-          to="select-source"
+          to="select-pack"
         >
           Get Started
         </b-button>
