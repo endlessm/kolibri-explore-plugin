@@ -1,7 +1,7 @@
 <template>
   <WelcomeBase title="Endless Key needs access to your device">
     <template #body>
-      <h5 class="font-weight-normal mb-5 text-muted">
+      <h5 class="font-weight-normal mb-4 text-muted">
         This will let you see and experience the content
         from the external device on your Endless Key app.
       </h5>
