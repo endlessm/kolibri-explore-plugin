@@ -30,7 +30,6 @@
 <script>
   import usbBackgroundConnect from '../assets/usb-connect.jpg';
   import usbBackgroundConnected from '../assets/usb-connected.jpg';
-  import { store } from "../store.js";
   import WelcomeBase from './WelcomeBase.vue';
 
   export default {
@@ -46,10 +45,10 @@
     },
     computed: {
       hasUSB() {
-        return store.state.isUsbConnected;
+        return this.$store.state.isUsbConnected;
       },
       needsPermission() {
-        return store.state.needsPermission;
+        return this.$store.state.needsPermission;
       },
       usbBackground() {
         if (this.hasUSB) {

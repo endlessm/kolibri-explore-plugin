@@ -14,7 +14,7 @@ import LoadingInitial from '@/views/LoadingInitial.vue';
 import LoadingError from '@/views/LoadingError.vue';
 import LoadingRetry from '@/views/LoadingRetry.vue';
 import Welcome from '@/views/Welcome.vue';
-import { store } from "@/store.js";
+import store from "@/store";
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
@@ -48,6 +48,6 @@ const router = new VueRouter({
 
 window.app = new Vue({
   router,
-  data: store.state,
+  store,
   render: (h) => h(App),
 }).$mount('#app');

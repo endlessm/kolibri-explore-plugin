@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import { store } from "./store.js";
 
 export default {
   name: 'App',
@@ -55,11 +54,11 @@ export default {
     }
 
     window.setHasUSB = (isUsbConnected) => {
-      store.setUsbConnected(isUsbConnected);
+      this.$store.commit('setUsbConnected', isUsbConnected);
     }
 
     window.setNeedsPermission = (needsPermission) => {
-      store.setNeedsPermission(needsPermission);
+      this.$store.commit('setNeedsPermission', needsPermission);
     }
 
     window.firstLaunch = () => {

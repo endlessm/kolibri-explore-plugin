@@ -1,12 +1,25 @@
-export const store = {
+import Vue from 'vue';
+import Vuex from 'vuex';
+
+Vue.use(Vuex);
+
+const store = new Vuex.Store({
   state: {
     isUsbConnected: false,
     needsPermission: false,
+    packSelected: null,
   },
-  setUsbConnected (isUsbConnected) {
-    this.state.isUsbConnected = isUsbConnected;
+  mutations: {
+    setUsbConnected (state, isUsbConnected) {
+      state.isUsbConnected = isUsbConnected;
+    },
+    setNeedsPermission (state, needsPermission) {
+      state.needsPermission = needsPermission;
+    },
+    setPackSelected (state, packId) {
+      state.packSelected = packId;
+    },
   },
-  setNeedsPermission (needsPermission) {
-    this.state.needsPermission = needsPermission;
-  },
-};
+});
+
+export default store;
