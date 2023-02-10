@@ -16,6 +16,9 @@ export default {
       firstLaunch: false,
     };
   },
+  created () {
+    document.title = "Welcome";
+  },
   mounted() {
     window.show_retry = () => {
       this.$router.push('/loading/retry');
@@ -68,7 +71,7 @@ export default {
   },
   beforeDestroy() {
     function fallback() {
-      console.log('No loading screen');
+      console.log('No welcome screen');
     };
     window.show_retry = fallback;
     window.show_error = fallback;

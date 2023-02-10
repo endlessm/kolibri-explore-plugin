@@ -46,6 +46,12 @@ const router = new VueRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  // This only helps with debugging:
+  document.title = to.path;
+  next();
+})
+
 window.app = new Vue({
   router,
   store,
