@@ -40,7 +40,7 @@
     methods: {
       downloadContent() {
         this.$router.push('/loading/default');
-        window.EndlessAPI.load();
+        window.WelcomeWrapper.startWithNetwork();
       },
       onOffline() {
           this.isOffline = true;
