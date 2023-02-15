@@ -16,6 +16,7 @@
 
 
 <script>
+  import { mapState } from 'vuex';
   import WelcomeBase from './WelcomeBase.vue';
 
   export default {
@@ -27,6 +28,9 @@
       return {
         isOffline: false,
       };
+    },
+    computed: {
+      ...mapState(['packSelected']),
     },
     created() {
       this.isOffline = !navigator.onLine;
@@ -40,7 +44,7 @@
     methods: {
       downloadContent() {
         this.$router.push('/loading/default');
-        window.WelcomeWrapper.startWithNetwork();
+        window.WelcomeWrapper.startWithNetwork(this.packSelected);
       },
       onOffline() {
           this.isOffline = true;
