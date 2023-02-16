@@ -11,37 +11,25 @@
     :hideHeaderClose="true"
   >
     <b-container>
-      <h1 class="text-primary">
+      <h1>
         {{ titleLabel }}
       </h1>
-      <h5 class="text-muted">
-        {{ subtitleLabel }}
-      </h5>
 
-      <hr>
-
-      <b-row class="my-5">
-        <b-col cols="5">
-          <h6 class="text-muted">
-            {{ statusLabel }}
-          </h6>
-        </b-col>
-        <b-col>
-          <b-progress
-            v-if="status !== null"
-            :max="1"
+      <template v-if="isDownloading">
+        <b-progress v-if="status !== null" :max="1">
+          <b-progress-bar
+            :value="status.progress"
+            animated
           >
-            <b-progress-bar
-              :value="status.progress"
-              animated
-            >
-              {{ (status.progress * 100).toFixed() }}%
-            </b-progress-bar>
-          </b-progress>
-        </b-col>
-      </b-row>
-
-      <hr>
+            {{ (status.progress * 100).toFixed() }}%
+          </b-progress-bar>
+        </b-progress>
+      </template>
+      <template v-else>
+        <b-button variant="primary" @click="onConfirm">
+          {{ $tr('confirmLabel') }}
+        </b-button>
+      </template>
 
     </b-container>
   </b-modal>
@@ -60,73 +48,35 @@
   export default {
     name: 'InstallContentModal',
     components: {},
-    emits: ['completed'],
+    emits: ['downloadConfirmed'],
     props: {},
     data() {
       return {
         status: null,
         updateIntervalId: null,
+        // FIXME: Read the starter pack from plugin options.
+        packName: 'Explorer',
       };
     },
     computed: {
       ...mapState({
         pageVisible: state => state.core.pageVisible,
       }),
+      isCompleted() {
+        return this.status && this.status.stage === 'COMPLETED';
+      },
+      isDownloading() {
+        return !this.isCompleted;
+      },
       titleLabel() {
-        if (this.status !== null) {
-          if (this.status.stage === 'IMPORTING_CONTENT') {
-            return this.$tr('titleDownloading');
-          } else if (this.status.stage === 'APPLYING_EXTERNAL_TAGS') {
-            return this.$tr('titleDownloading');
-          } else if (this.status.stage === 'COMPLETED') {
-            return this.$tr('titleCompleted');
-          }
+        if (this.isDownloading) {
+          return this.$tr('titleDownloading', {
+            packName: this.packName,
+          });
         }
-        return this.$tr('titlePreparing');
-      },
-      subtitleLabel() {
-        if (this.status !== null) {
-          if (this.status.stage === 'IMPORTING_CONTENT') {
-            return this.$tr('subtitleDownloading');
-          } else if (this.status.stage === 'APPLYING_EXTERNAL_TAGS') {
-            return this.$tr('subtitleDownloading');
-          } else if (this.status.stage === 'COMPLETED') {
-            return this.$tr('subtitleCompleted');
-          }
-        }
-        return this.$tr('subtitlePreparing');
-      },
-      statusLabel() {
-        if (this.status !== null) {
-          if (this.status.stage === 'IMPORTING_CHANNELS') {
-            return this.$tr('statusPreparing', {
-              current: this.status.current_task_number || '0',
-              total: this.status.total_tasks_number || '0',
-            });
-          } else if (this.status.stage === 'APPLYING_EXTERNAL_TAGS') {
-            return this.$tr('statusFinishing', {
-              current: this.status.current_task_number || '0',
-              total: this.status.total_tasks_number || '0',
-            });
-          } else if (this.status.stage === 'IMPORTING_CONTENT') {
-            const channel = this.status.extra_metadata.channel_name;
-            const count = this.status.total_tasks_number - this.status.current_task_number || '0';
-            if (channel) {
-              if (count > 0) {
-                return this.$tr('statusDownloadingChannel', { channel, count });
-              } else {
-                return this.$tr('statusDownloadingLastChannel', { channel });
-              }
-            } else {
-              if (count > 0) {
-                return this.$tr('statusDownloading', { count });
-              } else {
-                return this.$tr('statusDownloadingLast');
-              }
-            }
-          }
-        }
-        return '';
+        return this.$tr('titleCompleted', {
+          packName: this.packName,
+        });
       },
     },
     watch: {
@@ -148,17 +98,13 @@
       this.clearUpdateInterval();
     },
     methods: {
-      checkCompleted() {
-        if (this.status && this.status.stage === 'COMPLETED') {
-          this.$emit('completed');
-          return true;
-        }
-        return false;
+      onConfirm() {
+        this.$emit('downloadConfirmed');
       },
       updateLoop() {
         return this.updateDownload().then(status => {
           this.status = status;
-          if (this.checkCompleted()) {
+          if (this.isCompleted) {
             this.clearUpdateInterval();
           }
         });
@@ -166,7 +112,7 @@
       setUpdateInterval() {
         return this.getDownloadStatus().then(status => {
           this.status = status;
-          if (this.checkCompleted()) {
+          if (this.isCompleted) {
             return;
           }
           if (this.status.stage !== 'NOT_STARTED') {
@@ -197,19 +143,9 @@
       },
     },
     $trs: {
-      titleDownloading: 'Downloading…',
-      subtitleDownloading: 'Please wait a moment while the collection is downloading.',
-      titleCompleted: 'Download completed.',
-      subtitleCompleted: 'You can now navigate the content.',
-      titlePreparing: 'Preparing to download',
-      subtitlePreparing: 'Please wait a moment while the content is being prepared to download.',
-      statusPreparing: 'Preparing download ({current} of {total})…',
-      statusFinishing: 'Finishing download ({current} of {total})…',
-      statusDownloadingChannel:
-        'Downloading content for channel {channel} ({count} more channels left)…',
-      statusDownloadingLastChannel: 'Downloading content for channel {channel}…',
-      statusDownloading: 'Downloading content ({count} more channels left)…',
-      statusDownloadingLast: 'Downloading content…',
+      titleDownloading: 'Downloading {packName} Starter Pack!',
+      titleCompleted: '{packName} Starter Pack has been delivered!',
+      confirmLabel: 'Show me',
     },
   };
 

@@ -5,7 +5,7 @@
     <div>
       <InstallContentModal
         v-if="installModalVisible"
-        @completed="onDownloadCompleted"
+        @downloadConfirmed="onDownloadCompleted"
       />
     </div>
     <ContentModal />
