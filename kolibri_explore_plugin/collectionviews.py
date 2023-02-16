@@ -34,6 +34,11 @@ if conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]:
 COLLECTION_GRADES = ["primary", "intermediate", "secondary"]
 COLLECTION_NAMES = ["small", "large"]
 
+PROGRESS_STEPS = {
+    "importing": 0.1,
+    "downloading": 0.95,
+}
+
 # FIXME: Move this metadata to the collections repo.
 GRADES_METADATA = {
     "primary": {
@@ -359,38 +364,53 @@ class CollectionDownloadManager:
             1 if self._current_task else 0
         )
         total_tasks_number = current_task_number + pending_tasks_number
-        extra_metadata = {}
 
         if self._stage == DownloadStage.NOT_STARTED:
             progress = 0
 
-        elif self._stage in [
-            DownloadStage.IMPORTING_CHANNELS,
-            DownloadStage.APPLYING_EXTERNAL_TAGS,
-        ]:
+        elif self._stage == DownloadStage.IMPORTING_CHANNELS:
             if total_tasks_number > 0:
-                progress = current_task_number / total_tasks_number
-                # Making the last channel import appear like it still
-                # needs progress
-                if progress == 1:
-                    progress = 0.98
+                progress = (
+                    PROGRESS_STEPS["importing"]
+                    * current_task_number
+                    / total_tasks_number
+                )
+            else:
+                progress = 0
+
+        elif self._stage == DownloadStage.APPLYING_EXTERNAL_TAGS:
+            if total_tasks_number > 0:
+                progress = (
+                    PROGRESS_STEPS["downloading"]
+                    + (1 - PROGRESS_STEPS["downloading"])
+                    * current_task_number
+                    / total_tasks_number
+                )
             else:
                 progress = 0
 
         elif self._stage == DownloadStage.IMPORTING_CONTENT:
             if self._current_job_id is None:
-                progress = 0
+                progress = PROGRESS_STEPS["importing"]
             else:
                 job = job_storage.get_job(self._current_job_id)
-                if job.total_progress == 0:
-                    progress = 0
-                else:
-                    progress = job.progress / job.total_progress
-            if (
-                self._current_task is not None
-                and "extra_metadata" in self._current_task
-            ):
-                extra_metadata.update(self._current_task["extra_metadata"])
+
+                current_job_factor = (
+                    0
+                    if job.total_progress == 0
+                    else job.progress / job.total_progress
+                )
+
+                # TODO: ideally weight by channel size:
+                progress_per_channel = (
+                    PROGRESS_STEPS["downloading"] - PROGRESS_STEPS["importing"]
+                ) / total_tasks_number
+
+                progress = (
+                    PROGRESS_STEPS["importing"]
+                    + progress_per_channel * len(self._tasks_completed)
+                    + progress_per_channel * current_job_factor
+                )
 
         elif self._stage == DownloadStage.COMPLETED:
             progress = 1
@@ -398,9 +418,6 @@ class CollectionDownloadManager:
         return {
             "stage": self._stage.name,
             "progress": progress,
-            "current_task_number": current_task_number,
-            "total_tasks_number": total_tasks_number,
-            "extra_metadata": extra_metadata,
         }
 
     def to_state(self):
