@@ -11,7 +11,7 @@
         class="mb-4 mt-5"
         variant="primary"
         :disabled="!hasUSB"
-        @click="loadWithUSB"
+        @click="onClick"
       >
         Next
       </b-button>
@@ -58,13 +58,13 @@
       },
     },
     methods: {
-      loadWithUSB() {
+      onClick() {
         if (this.needsPermission) {
           this.$router.push('/grant-permissions');
         }
         else {
           this.$router.push('/loading/default');
-          window.EndlessAPI.loadWithUSB();
+          window.WelcomeWrapper.startWithUSB();
         }
       },
     },

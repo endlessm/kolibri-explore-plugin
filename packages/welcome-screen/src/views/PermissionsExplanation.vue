@@ -21,7 +21,7 @@
       <b-button
         class="mt-5"
         variant="primary"
-        @click="openSystemPermission"
+        @click="onClick"
       >
         Allow
       </b-button>
@@ -41,9 +41,9 @@
       WelcomeBase,
     },
     methods: {
-      openSystemPermission() {
+      onClick() {
         this.$router.push('/loading/default');
-        window.EndlessAPI.loadWithUSB();
+        window.WelcomeWrapper.startWithUSB();
       },
     },
   };

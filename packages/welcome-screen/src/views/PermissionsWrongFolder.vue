@@ -12,7 +12,7 @@
       </h5>
       <b-button
         variant="primary"
-        @click="loadWithUSB"
+        @click="onClick"
       >
         Allow Access
       </b-button>
@@ -39,9 +39,9 @@
       WelcomeBase,
     },
     methods: {
-      loadWithUSB() {
+      onClick() {
         this.$router.push('/loading/default');
-        window.EndlessAPI.loadWithUSB();
+        window.WelcomeWrapper.startWithUSB();
       },
     },
   };

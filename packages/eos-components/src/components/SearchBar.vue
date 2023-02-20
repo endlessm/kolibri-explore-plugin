@@ -39,7 +39,7 @@
 </template>
 
 <script>
-  import _ from 'underscore';
+  import _ from 'lodash';
   import CloseIcon from 'vue-material-design-icons/CloseCircleOutline.vue';
   import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
   import { SearchBarDebounce } from '../constants.js';

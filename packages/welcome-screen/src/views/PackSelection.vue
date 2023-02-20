@@ -16,6 +16,14 @@
           </b-col>
         </b-row>
       </b-container>
+      <p class="mb-5">
+        <UsbIcon />
+        <SdIcon />
+        If you have an Endless Key USB device or SD card,
+        <b-link to="endless-key">
+          press here to get your pack!
+        </b-link>
+      </p>
     </template>
   </WelcomeBase>
 </template>
@@ -23,11 +31,15 @@
 
 <script>
   import { PackMetadata } from 'eos-components/src/constants';
+  import UsbIcon from 'vue-material-design-icons/Usb.vue';
+  import SdIcon from 'vue-material-design-icons/Sd.vue';
   import WelcomeBase from './WelcomeBase.vue';
 
   export default {
     name: 'PackSelection',
     components: {
+      UsbIcon,
+      SdIcon,
       WelcomeBase,
     },
     data() {

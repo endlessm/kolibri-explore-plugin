@@ -499,16 +499,22 @@ def _read_content_manifests():
 
     free_space_gb = get_free_space() / 1024**3
 
+    def _create_manifest(grade, name):
+        manifest = EndlessKeyContentManifest()
+        manifest.read_from_static_collection(grade, name, validate=True)
+        manifest.set_availability(free_space_gb)
+        _content_manifests.append(manifest)
+
+        if grade not in _content_manifests_by_grade_name:
+            _content_manifests_by_grade_name[grade] = {}
+        _content_manifests_by_grade_name[grade][name] = manifest
+
+    # FIXME: Adding the sample starter pack in a hacky way for now.
+    _create_manifest("explorer", "0001")
+
     for grade in COLLECTION_GRADES:
         for name in COLLECTION_NAMES:
-            manifest = EndlessKeyContentManifest()
-            manifest.read_from_static_collection(grade, name, validate=True)
-            manifest.set_availability(free_space_gb)
-            _content_manifests.append(manifest)
-
-            if grade not in _content_manifests_by_grade_name:
-                _content_manifests_by_grade_name[grade] = {}
-            _content_manifests_by_grade_name[grade][name] = manifest
+            _create_manifest(grade, name)
 
 
 _read_content_manifests()

@@ -11,78 +11,46 @@
 
 export default {
   name: 'App',
-  data() {
-    return {
-      firstLaunch: false,
-    };
-  },
   created () {
     document.title = "Welcome";
   },
   mounted() {
-    window.show_retry = () => {
-      this.$router.push('/loading/retry');
-    }
-
-    window.show_error = () => {
-      this.$router.push('/loading/error');
-    }
-
-    window.show_loading = () => {
-      this.$router.push('/loading/default');
-    }
-
-    window.clean = () => {
-      this.$router.push('/loading/default');
-    }
-
-    window.show_welcome = () => {
-      this.$router.push('/welcome');
-    }
-
-    window.show_endless_key = () => {
-      this.$router.push('/endless-key');
-    }
-
-    window.show_endless_key_required = () => {
-      this.$router.push('/endless-key-required');
-    }
-
-    window.show_permissions_cancelled = () => {
-      this.$router.push('/permissions-cancelled');
-    }
-
-    window.show_wrong_folder = () => {
-      this.$router.push('/permissions-wrong-folder');
-    }
-
-    window.setHasUSB = (isUsbConnected) => {
-      this.$store.commit('setUsbConnected', isUsbConnected);
-    }
-
-    window.setNeedsPermission = (needsPermission) => {
-      this.$store.commit('setNeedsPermission', needsPermission);
-    }
-
-    window.firstLaunch = () => {
-      this.firstLaunch = true;
-      this.$router.push('/welcome');
-    }
-  },
-  beforeDestroy() {
-    function fallback() {
-      console.log('No welcome screen');
+    window.WelcomeApp = {
+      showLoadingRetry: () => {
+        this.navigateTo('/loading/retry');
+      },
+      showLoadingError: () => {
+        this.navigateTo('/loading/error');
+      },
+      showWelcome: () => {
+        this.navigateTo('/welcome');
+      },
+      showConnectKey: () => {
+        this.navigateTo('/endless-key');
+      },
+      showConnectKeyRequired: () => {
+        this.navigateTo('/endless-key-required');
+      },
+      showPermissionsCancelled: () => {
+        this.navigateTo('/permissions-cancelled');
+      },
+      showPermissionsWrongFolder: () => {
+        this.navigateTo('/permissions-wrong-folder');
+      },
+      setHasUSB: (isUsbConnected) => {
+        this.$store.commit('setUsbConnected', isUsbConnected);
+      },
+      setNeedsPermission: (needsPermission) => {
+        this.$store.commit('setNeedsPermission', needsPermission);
+      },
     };
-    window.show_retry = fallback;
-    window.show_error = fallback;
-    window.show_loading = fallback;
-    window.clean = fallback;
-    window.firstLaunch = fallback;
-    window.show_welcome = fallback;
-    window.show_endless_key = fallback;
-    window.show_endless_key_required = fallback;
-    window.show_permissions_cancelled = fallback;
-    window.show_wrong_folder = fallback;
+  },
+  methods: {
+    navigateTo(path) {
+      if (this.$route.path != path) {
+          this.$router.push(path);
+        }
+    },
   },
 };
 </script>

@@ -18,7 +18,7 @@
 <script>
 
   import { mapState } from 'vuex';
-  import _ from 'underscore';
+  import _ from 'lodash';
   import { responsiveMixin } from 'eos-components';
   import { PageNames } from '../constants';
 

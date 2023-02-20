@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import _ from 'underscore';
+  import _ from 'lodash';
   import { utils } from 'eos-components';
   import footerLogos from '../assets/footer-logos.png';
   import elinorLogo from '../assets/elinor-wonders-why.png';

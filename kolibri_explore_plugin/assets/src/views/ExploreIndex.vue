@@ -3,17 +3,6 @@
   <div>
     <BackToTop />
     <div>
-      <GradeSelectionModal
-        v-if="gradeModalVisible"
-        :collectionsInfo="collectionsInfo"
-        @gradeSelected="onGradeSelected"
-      />
-      <CollectionSelectionModal
-        v-if="collectionModalVisible"
-        :gradeInfo="gradeInfo"
-        @nameSelected="onNameSelected"
-        @goBack="onBackToGradeSelection"
-      />
       <InstallContentModal
         v-if="installModalVisible"
         @completed="onDownloadCompleted"
@@ -54,8 +43,6 @@
   import { showChannels } from '../modules/topicsRoot/handlers';
   import { PageNames } from '../constants';
   import AboutModal from '../components/AboutModal';
-  import GradeSelectionModal from '../components/GradeSelectionModal';
-  import CollectionSelectionModal from '../components/CollectionSelectionModal';
   import InstallContentModal from '../components/InstallContentModal';
   import commonExploreStrings from './commonExploreStrings';
   import DiscoveryPage from './DiscoveryPage';
@@ -81,8 +68,6 @@
       AboutModal,
       ContentModal,
       DevTag,
-      GradeSelectionModal,
-      CollectionSelectionModal,
       InstallContentModal,
     },
     mixins: [commonCoreStrings, commonExploreStrings, responsiveWindowMixin],
@@ -121,26 +106,6 @@
       },
       loadingImg() {
         return LoadingImage;
-      },
-      gradeInfo() {
-        return this.collectionsInfo.find(col => col.grade === this.grade);
-      },
-      needsToSelectCollection() {
-        if (
-          this.coreLoading ||
-          this.loadingCollections ||
-          this.downloadInitiated ||
-          this.downloadCompleted
-        ) {
-          return false;
-        }
-        return true;
-      },
-      gradeModalVisible() {
-        return this.needsToSelectCollection && this.grade === null;
-      },
-      collectionModalVisible() {
-        return this.needsToSelectCollection && this.grade !== null && this.name === null;
       },
       installModalVisible() {
         if (this.coreLoading || this.loadingCollections || this.downloadCompleted) {
@@ -217,7 +182,10 @@
                 if (this.downloadCompleted) {
                   console.debug('Conditions not met to download, assuming as completed.');
                 } else {
-                  console.debug('Display collection selection.');
+                  // FIXME: Read the starter pack from plugin options.
+                  this.onGradeSelected('explorer');
+                  this.onNameSelected('0001');
+                  console.debug('Downloading starter pack.');
                 }
               }
             }
@@ -280,9 +248,6 @@
         this.startDownload().then(() => {
           this.downloadInitiated = true;
         });
-      },
-      onBackToGradeSelection() {
-        this.grade = null;
       },
       onDownloadCompleted() {
         this.downloadCompleted = true;
