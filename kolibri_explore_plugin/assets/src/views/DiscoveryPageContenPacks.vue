@@ -66,7 +66,7 @@
   import { ContentNodeExtrasResource } from '../apiResources';
 
   export default {
-    name: 'DiscoveryPageCollections',
+    name: 'DiscoveryPageContenPacks',
     components: { DiscoveryNavBar },
     mixins: [commonCoreStrings],
     data() {

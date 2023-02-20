@@ -46,10 +46,10 @@
   import { mapState } from 'vuex';
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
   import { PageNames } from '../constants';
-  import { CategorizedIds } from '../customApps';
+  import { EkIguanaSections } from '../customApps';
 
   export default {
-    name: 'CategorizedList',
+    name: 'EkIguanaList',
     data() {
       return {
         contentPickNodes: {},
@@ -65,7 +65,7 @@
           return result;
         }, {});
 
-        const perCategory = CategorizedIds.map(recommended => {
+        const perCategory = EkIguanaSections.map(recommended => {
           const contentPicks = this.contentPickNodes[recommended.name] || [];
           const channels = recommended.channels
             // Remove inexisting channel IDs:
@@ -115,7 +115,7 @@
       fetchAll() {
         this.loadingContentPickNodes = true;
         return Promise.all(
-          CategorizedIds.map(recommended => {
+          EkIguanaSections.map(recommended => {
             const contentPicks = recommended.contentPicks;
             return (
               Promise.all(

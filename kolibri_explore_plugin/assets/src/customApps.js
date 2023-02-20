@@ -60,7 +60,7 @@ export function getAppNameByID(id) {
 }
 
 // The order here is important because is how they appear in the landing page.
-export const CategorizedIds = [
+export const EkIguanaSections = [
   {
     name: 'Curiosity and Reference',
     channels: [
