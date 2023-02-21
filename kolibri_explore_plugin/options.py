@@ -33,5 +33,13 @@ option_spec = {
               tagged accordingly to fill the sections of the landing page.
             """,
         },
+        "INITIAL_CONTENT_PACK": {
+            "type": "string",
+            "default": "explorer",
+            "description": """
+                Id of the initial content pack. One of: explorer, artist,
+                scientist, inventor, athlete, curious.
+            """,
+        },
     },
 }
