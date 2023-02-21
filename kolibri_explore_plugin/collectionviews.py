@@ -31,28 +31,22 @@ COLLECTION_PATHS = os.path.join(
 if conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]:
     COLLECTION_PATHS = conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]
 
-COLLECTION_GRADES = ["primary", "intermediate", "secondary"]
-COLLECTION_NAMES = ["small", "large"]
+# FIXME: Rename to PACK_IDS
+COLLECTION_GRADES = [
+    "explorer",
+    "artist",
+    "scientist",
+    "inventor",
+    "athlete",
+    "curious",
+]
+
+# FIXME: Rename to PACK_VERSIONS
+COLLECTION_NAMES = ["0001"]
 
 PROGRESS_STEPS = {
     "importing": 0.1,
     "downloading": 0.95,
-}
-
-# FIXME: Move this metadata to the collections repo.
-GRADES_METADATA = {
-    "primary": {
-        "title": "for students ages 6-9",
-        "subtitle": "(in grades K-3)",
-    },
-    "intermediate": {
-        "title": "for students ages 10-13",
-        "subtitle": "(in grades 4-7)",
-    },
-    "secondary": {
-        "title": "for students ages 14+",
-        "subtitle": "(in grades 8+)",
-    },
 }
 
 
@@ -518,16 +512,18 @@ def _read_content_manifests():
 
     def _create_manifest(grade, name):
         manifest = EndlessKeyContentManifest()
-        manifest.read_from_static_collection(grade, name, validate=True)
-        manifest.set_availability(free_space_gb)
-        _content_manifests.append(manifest)
+        try:
+            # TODO: Validate the manifest files or remove validation
+            # https://phabricator.endlessm.com/T34355
+            manifest.read_from_static_collection(grade, name, validate=False)
+        except ContentManifestParseError as err:
+            logger.error(err)
+        else:
+            manifest.set_availability(free_space_gb)
+            _content_manifests.append(manifest)
 
-        if grade not in _content_manifests_by_grade_name:
-            _content_manifests_by_grade_name[grade] = {}
-        _content_manifests_by_grade_name[grade][name] = manifest
-
-    # FIXME: Adding the sample starter pack in a hacky way for now.
-    _create_manifest("explorer", "0001")
+            _content_manifests_by_grade_name.setdefault(grade, {})
+            _content_manifests_by_grade_name[grade][name] = manifest
 
     for grade in COLLECTION_GRADES:
         for name in COLLECTION_NAMES:
@@ -547,6 +543,21 @@ def _save_state_in_request_session(request):
     request.session["COLLECTIONS_STATE"] = new_state
 
 
+def _get_collections_info_by_grade_name(grade, name):
+    if grade not in _content_manifests_by_grade_name:
+        return None
+    if name not in _content_manifests_by_grade_name[grade]:
+        return None
+    manifest = _content_manifests_by_grade_name[grade][name]
+    return {
+        "grade": manifest.grade,
+        "name": manifest.name,
+        "metadata": manifest.metadata,
+        "available": manifest.available,
+        "channelsCount": manifest.get_channels_count(),
+    }
+
+
 @api_view(["GET"])
 def get_collections_info(request):
     """Return the collections and their availability."""
@@ -555,18 +566,11 @@ def get_collections_info(request):
         grade_info = {
             "grade": grade,
             "collections": [],
-            "metadata": GRADES_METADATA[grade],
         }
         for name in COLLECTION_NAMES:
-            manifest = _content_manifests_by_grade_name[grade][name]
-            collection_info = {
-                "grade": manifest.grade,
-                "name": manifest.name,
-                "metadata": manifest.metadata,
-                "available": manifest.available,
-                "channelsCount": manifest.get_channels_count(),
-            }
-            grade_info["collections"].append(collection_info)
+            collection_info = _get_collections_info_by_grade_name(grade, name)
+            if collection_info is not None:
+                grade_info["collections"].append(collection_info)
         info.append(grade_info)
 
     return Response({"collectionsInfo": info})
@@ -575,8 +579,15 @@ def get_collections_info(request):
 @api_view(["GET"])
 def get_should_resume(request):
     """Return if there is a saved state that should be resumed."""
-    has_saved_state = "COLLECTIONS_STATE" in request.session
-    return Response({"shouldResume": has_saved_state})
+    saved_state = request.session.get("COLLECTIONS_STATE")
+    grade = None
+    name = None
+    if saved_state is not None:
+        grade = saved_state["grade"]
+        name = saved_state["name"]
+    return Response(
+        {"shouldResume": saved_state is not None, "grade": grade, "name": name}
+    )
 
 
 @api_view(["POST"])
