@@ -25,12 +25,13 @@
             :nodes="sectionNodes['skill']"
           />
         </template>
-        <template>
+        <!-- TODO: commenting week's channel for now. -->
+        <!-- <template>
           <h5 class="mt-2 text-center text-muted">
             {{ $tr('channelLabel', { channel: 'test' }) }}
           </h5>
           <CardGridPlaceholder />
-        </template>
+        </template> -->
         <template v-if="hasNodesForSection('career')">
           <h5 class="mt-2 text-center text-muted">
             {{ $tr('careerLabel') }}
@@ -66,7 +67,7 @@
   import { ContentNodeExtrasResource } from '../apiResources';
 
   export default {
-    name: 'DiscoveryPageCollections',
+    name: 'DiscoveryPageContenPacks',
     components: { DiscoveryNavBar },
     mixins: [commonCoreStrings],
     data() {
@@ -108,7 +109,8 @@
     $trs: {
       highlightLabel: 'Just for you',
       skillLabel: 'Learn a new skill',
-      channelLabel: "This week's channel: {channel}",
+      // TODO: commenting week's channel for now.
+      // channelLabel: "This week's channel: {channel}",
       careerLabel: 'Explore careers',
       curiousLabel: 'Feeling curious?',
     },

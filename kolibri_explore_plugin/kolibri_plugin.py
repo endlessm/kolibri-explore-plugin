@@ -50,8 +50,9 @@ class ExploreAsset(webpack_hooks.WebpackBundleHook):
             "showAsStandaloneChannel": conf.OPTIONS["Explore"][
                 "SHOW_AS_STANDALONE_CHANNEL"
             ],
-            "newCollectionsPageFeature": conf.OPTIONS["Explore"][
-                "NEW_COLLECTIONS_PAGE_FEATURE"
+            "useEkIguanaPage": conf.OPTIONS["Explore"]["USE_EK_IGUANA_PAGE"],
+            "initialContentPack": conf.OPTIONS["Explore"][
+                "INITIAL_CONTENT_PACK"
             ],
         }
 

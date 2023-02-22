@@ -31,7 +31,7 @@
         <CardGridPlaceholder />
       </template>
       <template v-else>
-        <CategorizedList />
+        <EkIguanaList />
       </template>
 
     </div>
@@ -47,12 +47,12 @@
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import { PageNames, searchTerms } from '../constants';
 
-  import CategorizedList from '../components/CategorizedList';
+  import EkIguanaList from '../components/EkIguanaList';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
 
   export default {
-    name: 'DiscoveryPageFullContent',
-    components: { CategorizedList, DiscoveryNavBar },
+    name: 'DiscoveryPageEkIguana',
+    components: { EkIguanaList, DiscoveryNavBar },
     mixins: [commonCoreStrings],
     props: {
       downloading: {

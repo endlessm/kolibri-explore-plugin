@@ -5,6 +5,7 @@
     <div>
       <InstallContentModal
         v-if="installModalVisible"
+        :packTitle="packTitle"
         @downloadConfirmed="onDownloadCompleted"
       />
     </div>
@@ -40,6 +41,7 @@
   import LoadingImage from 'eos-components/src/assets/loading-animation.gif';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
   import { ChannelResource, ContentNodeResource } from 'kolibri.resources';
+  import plugin_data from 'plugin_data';
   import { showChannels } from '../modules/topicsRoot/handlers';
   import { PageNames } from '../constants';
   import AboutModal from '../components/AboutModal';
@@ -92,6 +94,13 @@
       ...mapState({
         coreLoading: state => state.core.loading,
       }),
+      packTitle() {
+        if (!this.collectionsInfo || !this.grade || !this.name) {
+          return '';
+        }
+        const pack = this.collectionsInfo.find(c => c.grade === this.grade);
+        return pack['collections'].find(p => p.name === this.name).metadata.title;
+      },
       currentPage() {
         return pageNameToComponentMap[this.pageName] || null;
       },
@@ -161,7 +170,7 @@
           this.getDownloadStatus(),
           this.getShouldResume(),
         ])
-          .then(([collectionsInfo, status, shouldResume]) => {
+          .then(([collectionsInfo, status, { shouldResume, grade, name }]) => {
             this.collectionsInfo = collectionsInfo;
             if (status.stage === 'COMPLETED') {
               console.debug('Download completed.');
@@ -174,16 +183,20 @@
                 console.debug('Resuming previous collections download...');
                 return this.resumeDownload().then(() => {
                   this.downloadInitiated = true;
+                  this.grade = grade;
+                  this.name = name;
                 });
               } else {
-                // Check conditions in order to select collections:
+                // Check conditions to prevent starting the download:
+                // - using EK Iguana page, or:
+                // - there is downloaded content already (can be forced True with a debug setting)
                 const hasContent = this.rootNodes.length > 0;
-                this.downloadCompleted = hasContent && !this.debugForceDownloadSelection;
+                this.downloadCompleted =
+                  plugin_data.useEkIguanaPage || (hasContent && !this.debugForceDownloadSelection);
                 if (this.downloadCompleted) {
                   console.debug('Conditions not met to download, assuming as completed.');
                 } else {
-                  // FIXME: Read the starter pack from plugin options.
-                  this.onGradeSelected('explorer');
+                  this.onGradeSelected(plugin_data.initialContentPack);
                   this.onNameSelected('0001');
                   console.debug('Downloading starter pack.');
                 }
@@ -212,7 +225,7 @@
         return client({
           url: urls['kolibri:kolibri_explore_plugin:get_should_resume'](),
         }).then(({ data }) => {
-          return data.shouldResume;
+          return data;
         });
       },
       resumeDownload() {
@@ -255,7 +268,7 @@
         ContentNodeResource.clearCache();
         ChannelResource.useContentCacheKey = false;
         ChannelResource.clearCache();
-        showChannels(this.$store);
+        return showChannels(this.$store).then(() => location.reload());
       },
     },
   };

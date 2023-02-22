@@ -24,11 +24,21 @@ option_spec = {
                 standalone.
             """,
         },
-        "NEW_COLLECTIONS_PAGE_FEATURE": {
+        "USE_EK_IGUANA_PAGE": {
             "type": "boolean",
             "default": False,
             "description": """
-              Dev feature flag to test the new collections page.
+              Wheter to use the hardcoded sections from EK Iguana release
+              in the landing page. Otherwise it is expected that content is
+              tagged accordingly to fill the sections of the landing page.
+            """,
+        },
+        "INITIAL_CONTENT_PACK": {
+            "type": "string",
+            "default": "explorer",
+            "description": """
+                Id of the initial content pack. One of: explorer, artist,
+                scientist, inventor, athlete, curious.
             """,
         },
     },

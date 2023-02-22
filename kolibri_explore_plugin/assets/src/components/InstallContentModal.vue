@@ -49,13 +49,16 @@
     name: 'InstallContentModal',
     components: {},
     emits: ['downloadConfirmed'],
-    props: {},
+    props: {
+      packTitle: {
+        type: String,
+        required: true,
+      },
+    },
     data() {
       return {
         status: null,
         updateIntervalId: null,
-        // FIXME: Read the starter pack from plugin options.
-        packName: 'Explorer',
       };
     },
     computed: {
@@ -71,11 +74,11 @@
       titleLabel() {
         if (this.isDownloading) {
           return this.$tr('titleDownloading', {
-            packName: this.packName,
+            packTitle: this.packTitle,
           });
         }
         return this.$tr('titleCompleted', {
-          packName: this.packName,
+          packTitle: this.packTitle,
         });
       },
     },
@@ -143,8 +146,8 @@
       },
     },
     $trs: {
-      titleDownloading: 'Downloading {packName} Starter Pack!',
-      titleCompleted: '{packName} Starter Pack has been delivered!',
+      titleDownloading: 'Downloading {packTitle} Starter Pack!',
+      titleCompleted: '{packTitle} Starter Pack has been delivered!',
       confirmLabel: 'Show me',
     },
   };
