@@ -268,7 +268,7 @@
         ContentNodeResource.clearCache();
         ChannelResource.useContentCacheKey = false;
         ChannelResource.clearCache();
-        showChannels(this.$store);
+        return showChannels(this.$store).then(() => location.reload());
       },
     },
   };
