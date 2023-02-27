@@ -66,6 +66,7 @@
         status: null,
         errorMessage: null,
         updateIntervalId: null,
+        retry: false,
       };
     },
     computed: {
@@ -116,6 +117,7 @@
       },
       onRetry() {
         this.errorMessage = null;
+        this.retry = true;
         return this.setUpdateInterval();
       },
       updateLoop() {
@@ -156,9 +158,14 @@
         });
       },
       updateDownload() {
+        const data = this.retry ? { retry: true } : {};
+        if (this.retry) {
+          this.retry = false;
+        }
         return client({
           url: urls['kolibri:kolibri_explore_plugin:update_download'](),
           method: 'POST',
+          data,
         }).then(({ data }) => {
           return data.status;
         });

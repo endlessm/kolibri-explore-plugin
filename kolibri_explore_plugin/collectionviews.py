@@ -280,7 +280,7 @@ class CollectionDownloadManager:
 
         self._set_empty_state()
 
-    def update(self, user):
+    def update(self, user, retry=False):
         """Go to the next download step when possible.
 
         If the current task was completed move to the next task. If
@@ -314,7 +314,8 @@ class CollectionDownloadManager:
         job = job_storage.get_job(self._current_job_id)
 
         if (
-            job.state == JobState.FAILED
+            not retry
+            and job.state == JobState.FAILED
             and job.exception == InsufficientStorageSpaceError.__name__
         ):
             raise DownloadError(
@@ -681,8 +682,11 @@ def update_download(request):
 
     Returns download status.
     """
+    retry = request.data.get("retry") is not None
     try:
-        changed = _collection_download_manager.update(request.user)
+        changed = _collection_download_manager.update(
+            request.user, retry=retry
+        )
         if changed:
             _save_state_in_request_session(request)
     except DownloadError as err:
