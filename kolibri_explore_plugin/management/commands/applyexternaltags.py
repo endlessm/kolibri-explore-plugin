@@ -1,3 +1,4 @@
+import logging
 import uuid
 
 from django.core.management.base import CommandError
@@ -6,6 +7,8 @@ from kolibri.core.tasks.management.commands.base import AsyncCommand
 
 from kolibri_explore_plugin.models import ContentNodeExtras
 from kolibri_explore_plugin.models import ExternalContentTag
+
+logger = logging.getLogger(__name__)
 
 
 class Command(AsyncCommand):
@@ -31,9 +34,10 @@ class Command(AsyncCommand):
         try:
             content_node = ContentNode.objects.get(id=options["node_id"])
         except ContentNode.DoesNotExist:
-            raise CommandError(
-                f"There isn't any node with ID {options['node_id']}."
+            logger.warning(
+                f"There isn't any node with ID {options['node_id']}. Skipping"
             )
+            return
         except ValueError:
             raise CommandError(f"{options['node_id']} is not a valid node ID")
 
