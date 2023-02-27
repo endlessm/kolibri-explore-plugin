@@ -15,7 +15,13 @@
         {{ titleLabel }}
       </h1>
 
-      <template v-if="isDownloading">
+      <template v-if="gotDownloadError">
+        <p>{{ errorMessage }}</p>
+        <b-button variant="primary" @click="onRetry">
+          {{ $tr('retryLabel') }}
+        </b-button>
+      </template>
+      <template v-else-if="isDownloading">
         <b-progress v-if="status !== null" :max="1">
           <b-progress-bar
             :value="status.progress"
@@ -58,6 +64,7 @@
     data() {
       return {
         status: null,
+        errorMessage: null,
         updateIntervalId: null,
       };
     },
@@ -70,6 +77,9 @@
       },
       isDownloading() {
         return !this.isCompleted;
+      },
+      gotDownloadError() {
+        return this.errorMessage != null;
       },
       titleLabel() {
         if (this.isDownloading) {
@@ -104,13 +114,22 @@
       onConfirm() {
         this.$emit('downloadConfirmed');
       },
+      onRetry() {
+        this.errorMessage = null;
+        return this.setUpdateInterval();
+      },
       updateLoop() {
-        return this.updateDownload().then(status => {
-          this.status = status;
-          if (this.isCompleted) {
+        return this.updateDownload()
+          .then(status => {
+            this.status = status;
+            if (this.isCompleted) {
+              this.clearUpdateInterval();
+            }
+          })
+          .catch(error => {
+            this.errorMessage = error.response.data.detail;
             this.clearUpdateInterval();
-          }
-        });
+          });
       },
       setUpdateInterval() {
         return this.getDownloadStatus().then(status => {
@@ -149,6 +168,7 @@
       titleDownloading: 'Downloading {packTitle} Starter Pack!',
       titleCompleted: '{packTitle} Starter Pack has been delivered!',
       confirmLabel: 'Show me',
+      retryLabel: 'Retry',
     },
   };
 

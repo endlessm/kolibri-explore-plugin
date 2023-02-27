@@ -4,6 +4,8 @@ import time
 from enum import auto
 from enum import IntEnum
 
+from django.utils.translation import gettext_lazy as _
+from kolibri.core.content.errors import InsufficientStorageSpaceError
 from kolibri.core.content.models import ChannelMetadata
 from kolibri.core.content.tasks import remotechannelimport
 from kolibri.core.content.tasks import remotecontentimport
@@ -310,7 +312,19 @@ class CollectionDownloadManager:
             return False
 
         job = job_storage.get_job(self._current_job_id)
-        if job.state in [JobState.CANCELED, JobState.FAILED]:
+
+        if (
+            job.state == JobState.FAILED
+            and job.exception == InsufficientStorageSpaceError.__name__
+        ):
+            raise DownloadError(
+                _(
+                    "Not enough space to download. "
+                    "Please free up some space and try again."
+                )
+            )
+
+        elif job.state in [JobState.CANCELED, JobState.FAILED]:
             # Current job was canceled or failed so it needs to be restarted.
             # FIXME give up after a number of failures.
             old_job_id = self._current_job_id
