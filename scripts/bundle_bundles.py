@@ -11,7 +11,7 @@ from _common import get_available_overrides
 from _common import TEMPLATE_WORKSPACE
 
 DEFAULT_ZIP_FILENAME = "custom-channel-ui.zip"
-SKIP_WORKSPACES = ["kolibri-api", "welcome-screen", TEMPLATE_WORKSPACE]
+SKIP_WORKSPACES = ["welcome-screen", TEMPLATE_WORKSPACE]
 
 
 def validate_dir_path(path):
