@@ -3,7 +3,7 @@
   <div class="channels-page d-flex flex-column min-vh-100">
     <DiscoveryNavBar />
 
-    <template v-if="loading && loadingNodes">
+    <template v-if="loading || loadingNodes">
       <CardGridPlaceholder />
     </template>
     <template v-else>
@@ -95,7 +95,6 @@
                 .map(utils.addStructuredTag)
                 .map(utils.updateExploreNodeUrl);
               this.sectionNodes[tag] = nodes;
-              this.loadingNodes = false;
             });
           })
         ).then(() => {
