@@ -6,7 +6,7 @@
     class="custom-presentation-iframe"
     frameBorder="0"
     :src="rooturl"
-    @load="$emit('load')"
+    @load="$emit('customPresentationLoadCompleted')"
   >
   </iframe>
 
@@ -31,6 +31,7 @@
 
   export default {
     name: 'CustomChannelPresentationApp',
+    emits: ['customPresentationLoadStarted', 'customPresentationLoadCompleted'],
     data: function() {
       return {
         apiIsReady: false,
@@ -65,11 +66,11 @@
     },
     mounted() {
       window.addEventListener('message', this.onMessage);
-      this.$emit('loading');
+      this.$emit('customPresentationLoadStarted');
     },
     beforeDestroy() {
       window.removeEventListener('message', this.onMessage);
-      this.$emit('load');
+      this.$emit('customPresentationLoadCompleted');
     },
     methods: {
       onMessage(event) {
