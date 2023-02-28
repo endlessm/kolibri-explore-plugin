@@ -3,7 +3,7 @@
     alwaysCastShadow
     class="channel-navbar"
   >
-    <a v-if="showClose" class="close-link mr-3" @click="goToChannelList">
+    <a v-if="showClose" class="close-link mr-3" @click="onClick">
       <CloseIcon />
     </a>
     <b-navbar-nav
@@ -23,7 +23,6 @@
 <script>
 import CloseIcon from 'vue-material-design-icons/Close.vue';
 import { mapState } from 'vuex';
-import { goToChannelList } from 'kolibri-api';
 
 export default {
   name: 'ChannelNavBar',
@@ -47,8 +46,8 @@ export default {
     },
   },
   methods: {
-    goToChannelList() {
-      goToChannelList();
+    onClick() {
+      window.kolibri.closeCustomPresentation();
     },
   },
 };

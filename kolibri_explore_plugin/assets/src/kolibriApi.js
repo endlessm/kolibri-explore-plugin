@@ -3,10 +3,11 @@ import { ChannelResource, ContentNodeResource, ContentNodeSearchResource } from 
 
 import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
 
-import Store from 'kolibri.coreVue.vuex.store';
+import router from 'kolibri.coreVue.router';
+import store from 'kolibri.coreVue.vuex.store';
 import { utils } from 'eos-components';
 import { showTopicsContentInLightbox } from './modules/topicsTree/handlers';
-
+import { PageNames } from './constants';
 import { getChannelIcon } from './customApps';
 
 class KolibriApi {
@@ -38,7 +39,14 @@ class KolibriApi {
   }
 
   navigateTo(nodeId) {
-    showTopicsContentInLightbox(Store, nodeId);
+    showTopicsContentInLightbox(store, nodeId);
+  }
+
+  closeCustomPresentation() {
+    const backPage = store.state.topicsTree.backFromCustomPage;
+    router.push({
+      name: backPage || PageNames.TOPICS_ROOT,
+    });
   }
 
   getContentByFilter(options) {

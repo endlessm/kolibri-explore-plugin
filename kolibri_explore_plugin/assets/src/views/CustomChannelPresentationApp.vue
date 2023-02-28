@@ -20,7 +20,6 @@
 
   import plugin_data from 'plugin_data';
   import { getAppNameByID } from '../customApps';
-  import { PageNames } from '../constants';
   import { KolibriApi } from '../kolibriApi';
 
   function serializeUrlParameters(parameters) {
@@ -51,7 +50,7 @@
         }
         return url;
       },
-      ...mapState('topicsTree', ['backFromCustomPage', 'channel', 'customAppParameters']),
+      ...mapState('topicsTree', ['channel', 'customAppParameters']),
       iframeWindow() {
         return this.$refs.iframe.contentWindow;
       },
@@ -65,32 +64,12 @@
       },
     },
     mounted() {
-      window.addEventListener('message', this.onMessage);
       this.$emit('customPresentationLoadStarted');
     },
     beforeDestroy() {
-      window.removeEventListener('message', this.onMessage);
       this.$emit('customPresentationLoadCompleted');
     },
-    methods: {
-      onMessage(event) {
-        if (
-          !event.data.event ||
-          !event.data.nameSpace ||
-          event.data.nameSpace !== 'customChannelPresentation'
-        ) {
-          return;
-        }
-        if (event.data.event === 'goToChannelList') {
-          this.goToChannelList();
-        }
-      },
-      goToChannelList() {
-        this.$router.push({
-          name: this.backFromCustomPage || PageNames.TOPICS_ROOT,
-        });
-      },
-    },
+    methods: {},
   };
 
 </script>
