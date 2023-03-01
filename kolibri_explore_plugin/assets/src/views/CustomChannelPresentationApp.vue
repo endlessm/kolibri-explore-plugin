@@ -1,12 +1,12 @@
 <template>
 
   <iframe
-    v-show="apiIsReady"
+    v-show="isKolibriApiInjected"
     ref="iframe"
     class="custom-presentation-iframe"
     frameBorder="0"
     :src="rooturl"
-    @load="$emit('customPresentationLoadCompleted')"
+    @load="onIframeLoad"
   >
   </iframe>
 
@@ -33,10 +33,14 @@
     emits: ['customPresentationLoadStarted', 'customPresentationLoadCompleted'],
     data: function() {
       return {
-        apiIsReady: false,
+        isIframeloaded: false,
+        isKolibriApiInjected: false,
       };
     },
     computed: {
+      canInjectKolibriApi() {
+        return !this.coreLoading && this.isIframeloaded;
+      },
       rooturl() {
         const app = getAppNameByID(this.channel.id);
         const url = urls['kolibri:kolibri_explore_plugin:app_custom_presentation']({ app: app });
@@ -51,16 +55,21 @@
         return url;
       },
       ...mapState('topicsTree', ['channel', 'customAppParameters']),
+      ...mapState({
+        coreLoading: state => state.core.loading,
+      }),
       iframeWindow() {
         return this.$refs.iframe.contentWindow;
       },
     },
     watch: {
-      channel() {
-        this.$nextTick(function() {
-          this.iframeWindow.kolibri = new KolibriApi(this.channel.id);
-          this.apiIsReady = true;
-        });
+      canInjectKolibriApi() {
+        if (!this.canInjectKolibriApi || this.isKolibriApiInjected) {
+          return;
+        }
+        this.iframeWindow.kolibri = new KolibriApi(this.channel.id);
+        this.isKolibriApiInjected = true;
+        this.$emit('customPresentationLoadCompleted');
       },
     },
     mounted() {
@@ -69,7 +78,11 @@
     beforeDestroy() {
       this.$emit('customPresentationLoadCompleted');
     },
-    methods: {},
+    methods: {
+      onIframeLoad() {
+        this.isIframeloaded = true;
+      },
+    },
   };
 
 </script>
