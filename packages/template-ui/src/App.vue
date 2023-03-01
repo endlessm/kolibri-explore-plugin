@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="d-flex flex-column h-100">
+  <div v-if="isKolibriApiInjected" id="app" class="d-flex flex-column h-100">
     <BackToTop />
     <!-- Wrapper needed to fix flexbox footer positioning on IE11 -->
     <div class="flex-fill flex-shrink-0">
@@ -14,48 +14,66 @@
 <script>
 import { mapState } from 'vuex';
 
+const CHECK_DELAY = 100;
+
 export default {
   name: 'App',
+  data() {
+    return {
+      checkIntervalId: null,
+      isKolibriApiInjected: false,
+    };
+  },
   computed: {
     ...mapState(['hasFilters', 'hasFlatGrid', 'showFooter']),
   },
   created() {
-    window.kolibri.themeRenderer({
+    this.checkIntervalId = setInterval(this.checkKolibriApiInjected, CHECK_DELAY);
+  },
+  methods: {
+    checkKolibriApiInjected() {
+      if (window.kolibri) {
+        clearInterval(this.checkIntervalId);
+        this.checkIntervalId = null;
+        this.isKolibriApiInjected = true;
+        return this.onKolibriApiReady();
+      }
+    },
+    onKolibriApiReady() {
+      window.kolibri.themeRenderer({
         appBarColor: null,
         textColor: null,
         backdropColor: null,
         backgroundColor: null,
-    });
-    console.debug(`Running under Kolibri version: ${window.kolibri.version}`);
-    const promises = [];
-
-    const channelPromise = window.kolibri.getChannelMetadata()
-      .then((channel) => {
-        this.$store.commit('setChannelInformation', { channel });
       });
-    promises.push(channelPromise);
+      console.debug(`Running under Kolibri version: ${window.kolibri.version}`);
+      const promises = [];
 
-    if (this.hasFilters) {
-      const filterOptionsPromise = window.kolibri.getChannelFilterOptions()
-        .then((filterOptions) => {
-          this.$store.commit('filters/setFilterOptions', filterOptions);
+      const channelPromise = window.kolibri.getChannelMetadata()
+        .then((channel) => {
+          this.$store.commit('setChannelInformation', { channel });
         });
-      promises.push(filterOptionsPromise);
-    }
+      promises.push(channelPromise);
 
-    // Flat presentations don't need the main sections:
-    if (!this.hasFlatGrid) {
-      const sectionsPromise = window.kolibri.getContentByFilter({ parent: 'self', onlyTopics: true })
-        .then((page) => {
-          this.$store.commit('setMainSections', { mainSections: page.results });
-          this.handleRedirects();
-        });
-      promises.push(sectionsPromise);
-    }
+      if (this.hasFilters) {
+        const filterOptionsPromise = window.kolibri.getChannelFilterOptions()
+          .then((filterOptions) => {
+            this.$store.commit('filters/setFilterOptions', filterOptions);
+          });
+        promises.push(filterOptionsPromise);
+      }
 
-    return Promise.all(promises);
-  },
-  methods: {
+      // Flat presentations don't need the main sections:
+      if (!this.hasFlatGrid) {
+        const sectionsPromise = window.kolibri.getContentByFilter({ parent: 'self', onlyTopics: true })
+          .then((page) => {
+            this.$store.commit('setMainSections', { mainSections: page.results });
+            this.handleRedirects();
+          });
+        promises.push(sectionsPromise);
+      }
+      return Promise.all(promises);
+    },
     handleRedirects() {
       const uri = window.location.search.substring(1);
       const params = new URLSearchParams(uri);
