@@ -46,7 +46,16 @@ class ExploreAsset(webpack_hooks.WebpackBundleHook):
 
     @property
     def plugin_data(self):
+        from kolibri.core.content.api import ChannelMetadataViewSet
+
+        channel_viewset = ChannelMetadataViewSet()
+
+        channels = channel_viewset.serialize(
+            channel_viewset.get_queryset().filter(root__available=True)
+        )
+
         return {
+            "channels": channels,
             "showAsStandaloneChannel": conf.OPTIONS["Explore"][
                 "SHOW_AS_STANDALONE_CHANNEL"
             ],

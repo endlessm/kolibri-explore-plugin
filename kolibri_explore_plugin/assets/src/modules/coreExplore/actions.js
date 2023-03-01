@@ -1,4 +1,8 @@
+import { get } from '@vueuse/core';
+import useChannels from '../../composables/useChannels';
 import { pageNameToModuleMap } from '../../constants';
+
+const { channels } = useChannels();
 
 export function resetModuleState(store, lastPageName) {
   const moduleName = pageNameToModuleMap[lastPageName];
@@ -7,16 +11,8 @@ export function resetModuleState(store, lastPageName) {
   }
 }
 
-export function setAndCheckChannels(store) {
-  return store.dispatch('setChannelInfo').then(
-    channels => {
-      return channels;
-    },
-    error => {
-      store.dispatch('handleApiError', error);
-      return error;
-    }
-  );
+export function setAndCheckChannels() {
+  return get(channels);
 }
 
 export function setFacilitiesAndConfig(store) {
