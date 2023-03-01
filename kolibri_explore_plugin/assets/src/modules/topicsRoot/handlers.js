@@ -3,7 +3,7 @@ import { utils } from 'eos-components';
 import { ChannelResource, ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
 import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 
-import { CarouselItemsLength, PageNames, SEARCH_MAX_RESULTS } from '../../constants';
+import { CarouselItemsLength, SEARCH_MAX_RESULTS } from '../../constants';
 import { CustomChannelApps, getBigThumbnail, getChannelIcon } from '../../customApps';
 import { _collectionState } from '../coreExplore/utils';
 
@@ -46,10 +46,6 @@ function _findNodes(channels, channelCollection) {
       return node;
     })
     .filter(Boolean);
-}
-
-function _filterCustomApp(channel) {
-  return !!CustomChannelApps[channel.id];
 }
 
 function _fetchCarouselNodes(store) {
@@ -142,35 +138,6 @@ export function showChannels(store) {
         })
         .then(carouselNodes => {
           store.commit('topicsRoot/SET_CAROUSEL_NODES', carouselNodes);
-          store.commit('CORE_SET_PAGE_LOADING', false);
-          store.commit('CORE_SET_ERROR', null);
-        });
-    },
-    error => {
-      store.dispatch('handleApiError', error);
-      return error;
-    }
-  );
-}
-
-export function showFilteredChannels(store) {
-  store.commit('CORE_SET_PAGE_LOADING', true);
-  store.commit('SET_PAGE_NAME', PageNames.TOPICS_ROOT);
-
-  return store.dispatch('setAndCheckChannels').then(
-    channels => {
-      const filteredChannels = channels.filter(_filterCustomApp);
-
-      if (!filteredChannels.length) {
-        return;
-      }
-      const channelRootIds = filteredChannels.map(channel => channel.root);
-      ContentNodeResource.fetchCollection({
-        getParams: { ids: channelRootIds, user_kind: store.getters.getUserKind },
-      })
-        .then(collection => _findNodes(filteredChannels, collection))
-        .then(rootNodes => {
-          store.commit('topicsRoot/SET_STATE', { rootNodes });
           store.commit('CORE_SET_PAGE_LOADING', false);
           store.commit('CORE_SET_ERROR', null);
         });
