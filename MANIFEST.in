@@ -11,6 +11,7 @@ recursive-include kolibri_explore_plugin/migrations *
 recursive-include kolibri_explore_plugin/management *
 recursive-include kolibri_explore_plugin/templates *.*
 recursive-include kolibri_explore_plugin/static *.*
+recursive-exclude kolibri_explore_plugin/static/collections *
 recursive-include kolibri_explore_plugin/build *.json
 recursive-include kolibri_explore_plugin/locale *.mo
 recursive-include kolibri_explore_plugin/locale *.json
