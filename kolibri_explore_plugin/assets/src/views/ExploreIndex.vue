@@ -17,11 +17,11 @@
         :is="currentPage"
         v-if="currentPage"
         v-bind="currentPageProperties"
-        @loading="onLoading"
-        @load="onLoad"
+        @customPresentationLoadStarted="onCustomPresentationLoadStarted"
+        @customPresentationLoadCompleted="onCustomPresentationLoadCompleted"
       />
     </keep-alive>
-    <b-overlay :show="isLoading" noWrap>
+    <b-overlay :show="isCustomPresentationLoading" noWrap>
       <template #overlay>
         <img :src="loadingImg">
       </template>
@@ -76,7 +76,7 @@
     data() {
       return {
         lastRoute: null,
-        isLoading: false,
+        isCustomPresentationLoading: false,
         // Collections selection and download data:
         loadingCollections: true,
         collectionsInfo: null,
@@ -153,11 +153,11 @@
       },
     },
     methods: {
-      onLoading() {
-        this.isLoading = true;
+      onCustomPresentationLoadStarted() {
+        this.isCustomPresentationLoading = true;
       },
-      onLoad() {
-        this.isLoading = false;
+      onCustomPresentationLoadCompleted() {
+        this.isCustomPresentationLoading = false;
       },
       setupCollections() {
         // If a download is ongoing then display the progress.

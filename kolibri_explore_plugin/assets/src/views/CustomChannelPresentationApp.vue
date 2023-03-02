@@ -1,12 +1,12 @@
 <template>
 
   <iframe
-    v-show="apiIsReady"
+    v-show="isKolibriApiInjected"
     ref="iframe"
     class="custom-presentation-iframe"
     frameBorder="0"
     :src="rooturl"
-    @load="$emit('load')"
+    @load="onIframeLoad"
   >
   </iframe>
 
@@ -20,7 +20,6 @@
 
   import plugin_data from 'plugin_data';
   import { getAppNameByID } from '../customApps';
-  import { PageNames } from '../constants';
   import { KolibriApi } from '../kolibriApi';
 
   function serializeUrlParameters(parameters) {
@@ -31,12 +30,17 @@
 
   export default {
     name: 'CustomChannelPresentationApp',
+    emits: ['customPresentationLoadStarted', 'customPresentationLoadCompleted'],
     data: function() {
       return {
-        apiIsReady: false,
+        isIframeloaded: false,
+        isKolibriApiInjected: false,
       };
     },
     computed: {
+      canInjectKolibriApi() {
+        return !this.coreLoading && this.isIframeloaded;
+      },
       rooturl() {
         const app = getAppNameByID(this.channel.id);
         const url = urls['kolibri:kolibri_explore_plugin:app_custom_presentation']({ app: app });
@@ -50,44 +54,33 @@
         }
         return url;
       },
-      ...mapState('topicsTree', ['backFromCustomPage', 'channel', 'customAppParameters']),
+      ...mapState('topicsTree', ['channel', 'customAppParameters']),
+      ...mapState({
+        coreLoading: state => state.core.loading,
+      }),
       iframeWindow() {
         return this.$refs.iframe.contentWindow;
       },
     },
     watch: {
-      channel() {
-        this.$nextTick(function() {
-          this.iframeWindow.kolibri = new KolibriApi(this.channel.id);
-          this.apiIsReady = true;
-        });
+      canInjectKolibriApi() {
+        if (!this.canInjectKolibriApi || this.isKolibriApiInjected) {
+          return;
+        }
+        this.iframeWindow.kolibri = new KolibriApi(this.channel.id);
+        this.isKolibriApiInjected = true;
+        this.$emit('customPresentationLoadCompleted');
       },
     },
     mounted() {
-      window.addEventListener('message', this.onMessage);
-      this.$emit('loading');
+      this.$emit('customPresentationLoadStarted');
     },
     beforeDestroy() {
-      window.removeEventListener('message', this.onMessage);
-      this.$emit('load');
+      this.$emit('customPresentationLoadCompleted');
     },
     methods: {
-      onMessage(event) {
-        if (
-          !event.data.event ||
-          !event.data.nameSpace ||
-          event.data.nameSpace !== 'customChannelPresentation'
-        ) {
-          return;
-        }
-        if (event.data.event === 'goToChannelList') {
-          this.goToChannelList();
-        }
-      },
-      goToChannelList() {
-        this.$router.push({
-          name: this.backFromCustomPage || PageNames.TOPICS_ROOT,
-        });
+      onIframeLoad() {
+        this.isIframeloaded = true;
       },
     },
   };

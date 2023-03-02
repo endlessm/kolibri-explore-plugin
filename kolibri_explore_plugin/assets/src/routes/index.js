@@ -22,15 +22,14 @@ export default [
         store.commit('SET_SEARCH_TERM', toRoute.params.query);
       }
       store.commit('SET_PAGE_NAME', PageNames.SEARCH);
+      showChannels(store);
     },
   },
   {
     name: PageNames.TOPICS_ROOT,
     path: '/topics',
-    handler: (toRoute, fromRoute) => {
-      if (fromRoute) {
-        store.commit('topicsTree/SET_BACK_FROM_CUSTOM_PAGE', fromRoute.name);
-      }
+    handler: () => {
+      store.commit('SET_PAGE_NAME', PageNames.TOPICS_ROOT);
       showChannels(store);
     },
   },
