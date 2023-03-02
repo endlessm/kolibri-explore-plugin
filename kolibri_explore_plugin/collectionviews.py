@@ -600,8 +600,12 @@ def get_should_resume(request):
     if saved_state is not None:
         grade = saved_state["grade"]
         name = saved_state["name"]
+    should_resume = (
+        saved_state is not None
+        and saved_state["stage"] != DownloadStage.COMPLETED.name
+    )
     return Response(
-        {"shouldResume": saved_state is not None, "grade": grade, "name": name}
+        {"shouldResume": should_resume, "grade": grade, "name": name}
     )
 
 
