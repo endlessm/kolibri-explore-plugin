@@ -127,50 +127,6 @@ export function showTopicsChannel(store, id) {
   });
 }
 
-export function showTopicsContent(store, id) {
-  store.commit('CORE_SET_PAGE_LOADING', true);
-  store.commit('SET_PAGE_NAME', PageNames.TOPICS_CONTENT);
-
-  const promises = [
-    ContentNodeResource.fetchModel({ id }),
-    ContentNodeResource.fetchNextContent(id),
-    store.dispatch('setChannelInfo'),
-  ];
-  const shouldResolve = samePageCheckGenerator(store);
-  Promise.all(promises).then(
-    ([content, nextContent]) => {
-      if (shouldResolve()) {
-        const currentChannel = store.getters.getChannelObject(content.channel_id);
-        if (!currentChannel) {
-          router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
-          return;
-        }
-        store.commit('topicsTree/SET_STATE', {
-          content: contentState(content, nextContent),
-          channel: currentChannel,
-        });
-
-        const appName = getAppNameByID(content.channel_id);
-        if (appName) {
-          _getAppMetadata(appName)
-            .then(({ data }) => {
-              store.commit('topicsTree/SET_APP_METADATA', _parseAppMetadata(data, appName));
-            })
-            .catch(() => {
-              console.log(`no metadata ${appName}`);
-            });
-        }
-
-        store.commit('CORE_SET_PAGE_LOADING', false);
-        store.commit('CORE_SET_ERROR', null);
-      }
-    },
-    error => {
-      shouldResolve() ? store.dispatch('handleApiError', error) : null;
-    }
-  );
-}
-
 export function showTopicsContentInLightbox(store, id) {
   const promises = [
     ContentNodeResource.fetchModel({ id }),
