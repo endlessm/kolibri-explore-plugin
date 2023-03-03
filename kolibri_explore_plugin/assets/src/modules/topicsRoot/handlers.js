@@ -209,6 +209,9 @@ function setSearchResults(store, searchResults, kind) {
   store.commit('CORE_SET_PAGE_LOADING', true);
   const { rootNodes } = store.state.topicsRoot;
   const { channel_ids, results } = searchResults;
+  if (!results.length) {
+    return;
+  }
   const nodes = results.map(n => ({
     ...n,
     channel: rootNodes.find(c => c.id === n.channel_id),
