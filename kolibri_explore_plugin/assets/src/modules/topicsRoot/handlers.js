@@ -1,11 +1,20 @@
 import urls from 'kolibri.urls';
 import { utils } from 'eos-components';
+import router from 'kolibri.coreVue.router';
+import plugin_data from 'plugin_data';
 import { ChannelResource, ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
 import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 
-import { CarouselItemsLength, SEARCH_MAX_RESULTS } from '../../constants';
+import { CarouselItemsLength, SEARCH_MAX_RESULTS, PageNames } from '../../constants';
 import { CustomChannelApps, getBigThumbnail, getChannelIcon } from '../../customApps';
-import { _collectionState } from '../coreExplore/utils';
+import {
+  cancelDownload,
+  getDownloadStatus,
+  getShouldResume,
+  resumeDownload,
+  startDownload,
+  _collectionState,
+} from '../coreExplore/utils';
 
 function _findNodes(channels, channelCollection) {
   // we want them to be in the same order as the channels list
@@ -112,12 +121,77 @@ function _fetchCarouselNodes(store) {
   );
 }
 
+function _isDownloadOngoing(status) {
+  return status.stage !== 'COMPLETED' && status.stage !== 'NOT_STARTED';
+}
+
+function _goToDownloadPage(store, grade, name) {
+  // The catch here is needed for ignoring redundant navigation errors.
+  router.replace({ name: PageNames.DOWNLOAD, params: { grade, name } }).catch(() => {});
+  store.commit('SET_PAGE_NAME', PageNames.DOWNLOAD);
+  store.commit('CORE_SET_PAGE_LOADING', false);
+  store.commit('CORE_SET_ERROR', null);
+}
+
+export function decideDownload(store) {
+  store.commit('CORE_SET_PAGE_LOADING', true);
+
+  const grade = plugin_data.initialContentPack;
+  const name = '0001';
+
+  if (plugin_data.useEkIguanaPage) {
+    router.replace({ name: PageNames.TOPICS_ROOT });
+    store.commit('CORE_SET_PAGE_LOADING', false);
+    store.commit('CORE_SET_ERROR', null);
+    return Promise.resolve();
+  }
+
+  const forceStartDownload = false; // This flag is for debugging purposes only.
+
+  return Promise.all([getDownloadStatus(), getShouldResume()]).then(
+    ([status, { shouldResume, grade: resumeGrade, name: resumeName }]) => {
+      if (_isDownloadOngoing(status)) {
+        console.debug('A collections download is ongoing...');
+        _goToDownloadPage(store, grade, name);
+      } else if (shouldResume) {
+        console.debug('Resuming previous collections download...');
+        return resumeDownload().then(() => {
+          _goToDownloadPage(store, resumeGrade, resumeName);
+        });
+      } else {
+        return store.dispatch('setAndCheckChannels').then(channels => {
+          if (!channels.length || forceStartDownload) {
+            const afterStart = () => {
+              _goToDownloadPage(store, grade, name);
+            };
+            if (forceStartDownload) {
+              console.debug('Downloading starter pack (forcing)...');
+              return cancelDownload()
+                .then(() => startDownload(grade, name))
+                .then(afterStart);
+            } else {
+              console.debug('Downloading starter pack...');
+              return startDownload(grade, name).then(afterStart);
+            }
+          } else {
+            console.debug('Conditions not met to download, assuming as completed.');
+            router.replace({ name: PageNames.TOPICS_ROOT });
+            store.commit('CORE_SET_PAGE_LOADING', false);
+            store.commit('CORE_SET_ERROR', null);
+          }
+        });
+      }
+    }
+  );
+}
+
 export function showChannels(store) {
   store.commit('CORE_SET_PAGE_LOADING', true);
 
   return store.dispatch('setAndCheckChannels').then(
     channels => {
       if (!channels.length) {
+        router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
         store.commit('CORE_SET_PAGE_LOADING', false);
         store.commit('CORE_SET_ERROR', null);
         return;

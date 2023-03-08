@@ -1,7 +1,6 @@
 import store from 'kolibri.coreVue.vuex.store';
-import router from 'kolibri.coreVue.router';
 import { showTopicsChannel } from '../modules/topicsTree/handlers';
-import { showChannels } from '../modules/topicsRoot/handlers';
+import { decideDownload, showChannels } from '../modules/topicsRoot/handlers';
 import { PageNames } from '../constants';
 
 export default [
@@ -9,9 +8,17 @@ export default [
     name: PageNames.ROOT,
     path: '/',
     handler: () => {
-      return router.replace({
-        name: PageNames.TOPICS_ROOT,
-      });
+      decideDownload(store);
+    },
+  },
+  {
+    name: PageNames.DOWNLOAD,
+    path: '/download/:grade/:name',
+    handler: (_toRoute, fromRoute) => {
+      if (fromRoute.name !== PageNames.ROOT) {
+        // If not coming from the / redirect, do it here:
+        decideDownload(store);
+      }
     },
   },
   {
