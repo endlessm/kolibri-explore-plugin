@@ -9,6 +9,7 @@ export const PageNames = {
   CONTENT_UNAVAILABLE: 'CONTENT_UNAVAILABLE',
   SEARCH: 'SEARCH',
   CONTENT: 'CONTENT',
+  DOWNLOAD: 'DOWNLOAD',
 };
 
 // switch between modes

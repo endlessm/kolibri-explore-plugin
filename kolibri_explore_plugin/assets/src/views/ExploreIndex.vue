@@ -52,6 +52,7 @@
   import ContentUnavailablePage from './ContentUnavailablePage';
   import SearchPage from './SearchPage';
   import ContentPage from './ContentPage';
+  import DownloadPage from './DownloadPage';
   import DevTag from './DevTag';
   import ContentModal from './ContentModal';
 
@@ -62,6 +63,7 @@
     [PageNames.CONTENT_UNAVAILABLE]: ContentUnavailablePage,
     [PageNames.SEARCH]: SearchPage,
     [PageNames.CONTENT]: ContentPage,
+    [PageNames.DOWNLOAD]: DownloadPage,
   };
 
   export default {
