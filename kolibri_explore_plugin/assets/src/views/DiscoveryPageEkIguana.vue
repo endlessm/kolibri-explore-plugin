@@ -9,7 +9,7 @@
       </h5>
     </b-container>
 
-    <template v-if="loading || downloading">
+    <template v-if="loading">
       <CarouselPlaceholder />
     </template>
 
@@ -27,7 +27,7 @@
 
     <div class="flex-fill main">
 
-      <template v-if="loading || downloading">
+      <template v-if="loading">
         <CardGridPlaceholder />
       </template>
       <template v-else>
@@ -54,12 +54,7 @@
     name: 'DiscoveryPageEkIguana',
     components: { EkIguanaList, DiscoveryNavBar },
     mixins: [commonCoreStrings],
-    props: {
-      downloading: {
-        type: Boolean,
-        default: false,
-      },
-    },
+    props: {},
     computed: {
       ...mapState('topicsRoot', { carouselNodes: 'carouselNodes' }),
       ...mapState({
