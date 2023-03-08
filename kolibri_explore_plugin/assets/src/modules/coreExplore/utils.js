@@ -1,3 +1,5 @@
+import client from 'kolibri.client';
+import urls from 'kolibri.urls';
 import { ContentNodeProgressResource } from 'kolibri.resources';
 import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
 import { assessmentMetaDataState } from 'kolibri.coreVue.vuex.mappers';
@@ -43,4 +45,65 @@ export function updateContentNodeProgress(channelId, contentId, progressFraction
    * made on this ContentNode.
    */
   ContentNodeProgressResource.getModel(contentId).set({ progress_fraction: progressFraction });
+}
+
+export function getCollectionInfo(grade, name) {
+  return client({
+    url: urls['kolibri:kolibri_explore_plugin:get_collection_info'](),
+    params: { grade, name },
+  }).then(({ data }) => {
+    return data.collectionInfo;
+  });
+}
+
+export function getAllCollectionsInfo() {
+  return client({
+    url: urls['kolibri:kolibri_explore_plugin:get_all_collections_info'](),
+  }).then(({ data }) => {
+    return data.allCollectionsInfo;
+  });
+}
+
+export function getDownloadStatus() {
+  return client({
+    url: urls['kolibri:kolibri_explore_plugin:get_download_status'](),
+  }).then(({ data }) => {
+    return data.status;
+  });
+}
+
+export function getShouldResume() {
+  return client({
+    url: urls['kolibri:kolibri_explore_plugin:get_should_resume'](),
+  }).then(({ data }) => {
+    return data;
+  });
+}
+
+export function resumeDownload() {
+  return client({
+    url: urls['kolibri:kolibri_explore_plugin:resume_download'](),
+    method: 'POST',
+  }).then(({ data }) => {
+    return data.status;
+  });
+}
+
+export function startDownload(grade, name) {
+  return client({
+    url: urls['kolibri:kolibri_explore_plugin:start_download'](),
+    method: 'POST',
+    data: { grade, name },
+  }).then(({ data }) => {
+    return data.status;
+  });
+}
+
+export function cancelDownload() {
+  return client({
+    url: urls['kolibri:kolibri_explore_plugin:cancel_download'](),
+    method: 'DELETE',
+  }).then(({ data }) => {
+    return data.status;
+  });
 }
