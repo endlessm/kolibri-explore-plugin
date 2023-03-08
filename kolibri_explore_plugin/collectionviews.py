@@ -574,8 +574,17 @@ def _get_collections_info_by_grade_name(grade, name):
 
 
 @api_view(["GET"])
-def get_collections_info(request):
-    """Return the collections and their availability."""
+def get_collection_info(request):
+    """Return the collection metadata and availability."""
+    grade = request.query_params.get("grade")
+    name = request.query_params.get("name")
+    collection_info = _get_collections_info_by_grade_name(grade, name)
+    return Response({"collectionInfo": collection_info})
+
+
+@api_view(["GET"])
+def get_all_collections_info(request):
+    """Return all the collections metadata and their availability."""
     info = []
     for grade in COLLECTION_GRADES:
         grade_info = {
@@ -588,7 +597,7 @@ def get_collections_info(request):
                 grade_info["collections"].append(collection_info)
         info.append(grade_info)
 
-    return Response({"collectionsInfo": info})
+    return Response({"allCollectionsInfo": info})
 
 
 @api_view(["GET"])

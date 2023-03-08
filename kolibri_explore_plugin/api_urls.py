@@ -3,7 +3,8 @@ from django.conf.urls import url
 from rest_framework import routers
 
 from .collectionviews import cancel_download
-from .collectionviews import get_collections_info
+from .collectionviews import get_all_collections_info
+from .collectionviews import get_collection_info
 from .collectionviews import get_download_status
 from .collectionviews import get_should_resume
 from .collectionviews import resume_download
@@ -29,9 +30,14 @@ router.register(
 urlpatterns = [
     url(r"^", include(router.urls)),
     url(
-        r"ek-collections/get-collections-info",
-        get_collections_info,
-        name="get_collections_info",
+        r"ek-collections/get-collection-info",
+        get_collection_info,
+        name="get_collection_info",
+    ),
+    url(
+        r"ek-collections/get-all-collections-info",
+        get_all_collections_info,
+        name="get_all_collections_info",
     ),
     url(
         r"ek-collections/get-should-resume",
