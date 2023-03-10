@@ -1,18 +1,27 @@
 <template>
   <WelcomeBase title="Which option sounds most like you?">
     <template #body>
+
       <b-container class="no-container-padding text-left">
-        <b-row>
-          <b-col v-for="pack in PackMetadata" :key="pack.id" md="4" sm="12">
+        <SlidableGrid
+          v-slot="slotProps"
+          class="mb-3"
+          :nodes="PackMetadata"
+          :hasWhiteBackground="true"
+          :itemsPerSlide="{ lg: 3, md: 2, sm: 1 }"
+        >
+          <template
+            v-for="pack in slotProps.slideNodes"
+          >
             <PackCard
-              class="mb-3"
+              :key="pack.id"
               :packId="pack.id"
               :title="pack.title"
               :subTitle="pack.subtitle"
               @click="choosePack(pack.id)"
             />
-          </b-col>
-        </b-row>
+          </template>
+        </SlidableGrid>
       </b-container>
     </template>
   </WelcomeBase>
