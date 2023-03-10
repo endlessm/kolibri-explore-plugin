@@ -15,6 +15,13 @@
         </b-button>
       </div>
       <p>
+        <UsbIcon />
+        <SdIcon />
+        If you have an Endless Key USB device or SD card,
+        <b-link to="endless-key">
+          press here to get your pack!
+        </b-link>
+        <br>
         Check our
         <b-link v-b-modal.privacy-policy-modal>
           Privacy Policy.
@@ -40,12 +47,14 @@
 
 
 <script>
+import UsbIcon from 'vue-material-design-icons/Usb.vue';
+import SdIcon from 'vue-material-design-icons/Sd.vue';
 import PrivacyPolicyText from 'eos-components/src/components/PrivacyPolicyText.vue';
 
 
   export default {
     name: "Welcome",
-    components: { PrivacyPolicyText }
+    components: { UsbIcon, SdIcon, PrivacyPolicyText }
 };
 
 </script>
