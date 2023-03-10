@@ -9,9 +9,7 @@
               :packId="pack.id"
               :title="pack.title"
               :subTitle="pack.subtitle"
-              :selected="selectedPack === pack.id"
-              @click="selectPack(pack.id)"
-              @choosePack="choosePack(pack.id)"
+              @click="choosePack(pack.id)"
             />
           </b-col>
         </b-row>
@@ -32,14 +30,10 @@
     },
     data() {
       return {
-        selectedPack: null,
         PackMetadata,
       };
     },
     methods: {
-      selectPack(packId) {
-        this.selectedPack = packId;
-      },
       choosePack(packId) {
         this.$store.commit('setPackSelected', packId);
         this.$router.push('/pack-ready');
