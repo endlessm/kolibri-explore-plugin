@@ -9,8 +9,13 @@
         variant="primary"
         @click="downloadContent"
       >
-        Download Pack
+        Download My Starter Pack
       </b-button>
+      <p>
+        <b-link to="select-pack">
+          Not sure? Let's go back to all the options.
+        </b-link>
+      </p>
     </template>
   </WelcomeBase>
 </template>
