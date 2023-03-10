@@ -7,19 +7,18 @@
       </h1>
       <div class="mb-4 mt-4">
         <b-button
+          pill
           variant="primary"
           to="select-pack"
         >
           Get Started
         </b-button>
       </div>
-      <p class="font-weight-normal">
+      <p>
         Check our
-        <b-link
-          v-b-modal.privacy-policy-modal
-        >
-          Privacy Policy
-        </b-link>.
+        <b-link v-b-modal.privacy-policy-modal>
+          Privacy Policy.
+        </b-link>
       </p>
     </div>
     <div class="flex-grow-1 welcome-background-bottom"></div>

@@ -8,6 +8,7 @@
              to your computer to explore its contents."
       >
       <b-button
+        pill
         class="mb-4 mt-5"
         variant="primary"
         :disabled="!hasUSB"

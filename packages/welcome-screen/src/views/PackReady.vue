@@ -3,6 +3,7 @@
     <template #body>
       <div class="pack-background"></div>
       <b-button
+        pill
         class="mb-4 mt-4"
         :disabled="isOffline"
         variant="primary"

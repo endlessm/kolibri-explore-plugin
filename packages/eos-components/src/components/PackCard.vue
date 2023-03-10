@@ -20,7 +20,7 @@
         <p>
           {{ subTitle }}
         </p>
-        <b-button variant="primary" @click="onChoosePack">
+        <b-button pill variant="primary" @click="onChoosePack">
           Choose
         </b-button>
       </div>

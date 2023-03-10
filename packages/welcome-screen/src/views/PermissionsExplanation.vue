@@ -19,6 +19,7 @@
         </b-list-group-item>
       </b-list-group>
       <b-button
+        pill
         class="mt-5"
         variant="primary"
         @click="onClick"
