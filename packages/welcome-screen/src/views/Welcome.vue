@@ -21,10 +21,10 @@
         <b-link to="endless-key">
           press here to get your pack!
         </b-link>
-        <br>
-        Check our
+      </p>
+      <p>
         <b-link v-b-modal.privacy-policy-modal>
-          Privacy Policy.
+          Privacy Policy
         </b-link>
       </p>
     </div>
