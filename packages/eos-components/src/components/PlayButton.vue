@@ -4,7 +4,7 @@
     :size="size"
     :block="block"
     :variant="`${kind}-${variant}`"
-    class="pb-1 pl-1 play-button pt-1 text-nowrap"
+    class="pb-1 pl-1 pt-1 text-nowrap"
     @click.stop.prevent="$emit('click')"
   >
     <component

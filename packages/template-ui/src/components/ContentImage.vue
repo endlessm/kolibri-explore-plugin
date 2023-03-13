@@ -14,10 +14,9 @@
       <PlayButton
         v-if="node.kind"
         size="lg"
-        block
         :kind="node.kind"
         :style="buttonStyle"
-        class="mt-3 mx-auto play-button py-2"
+        class="mt-3 mx-auto py-2 w-100"
         @click="goToContent()"
       />
     </b-card>
@@ -88,10 +87,6 @@ export default {
 .card {
   box-shadow: $box-shadow;
   min-width: $content-card-min-width;
-}
-
-a:hover {
-  text-decoration: none;
 }
 
 .content-image img,
