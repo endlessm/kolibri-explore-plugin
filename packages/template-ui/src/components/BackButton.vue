@@ -1,6 +1,7 @@
 <template>
   <b-button
     class="back-button rounded-circle"
+    :disabled="isDisabled"
     :class="variant"
     @click="$router.go(-1)"
   >
@@ -19,6 +20,14 @@
         type: String,
         default: 'light',
       },
+    },
+    data() {
+      return {
+        isDisabled: true,
+      };
+    },
+    mounted() {
+      this.isDisabled = window.history.length === 1;
     },
   }
 </script>
@@ -39,18 +48,26 @@
   .back-button.light {
     background-color: rgba($gray-700, 0.1);
     color: $gray-700;
+    &.disabled {
+      background-color: rgba($gray-500, 0.1);
+      color: $gray-500;
+    }
   }
 
-  .back-button.light:hover {
+  .back-button.light:hover:not(.disabled) {
     background-color: rgba($gray-700, 0.2);
   }
 
   .back-button.dark {
     background-color: rgba($white, 0.1);
     color: $white;
+    &.disabled {
+      background-color: rgba($white, 0.05);
+      color: $gray-500;
+    }
   }
 
-  .back-button.dark:hover {
+  .back-button.dark:hover:not(.disabled) {
     background-color: rgba($white, 0.2);
   }
 
