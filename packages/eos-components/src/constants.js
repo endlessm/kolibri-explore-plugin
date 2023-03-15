@@ -80,7 +80,7 @@ export const PackMetadata = [
     {
         id: 'athlete',
         title: 'Athlete',
-        subtitle: 'I like to move my body and spend time with friends.',
+        subtitle: 'I like to move my body and be with friends.',
     },
     {
         id: 'curious',
