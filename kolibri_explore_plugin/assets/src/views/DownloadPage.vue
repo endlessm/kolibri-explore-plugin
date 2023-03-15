@@ -9,30 +9,34 @@
       <b-container
         class="d-flex flex-column flex-grow-1 justify-content-center no-container-padding"
       >
-        <h1>
+        <h1 class="mb-3">
           {{ titleLabel }}
         </h1>
+        <div
+          class="pack-background"
+          :style="{ backgroundImage: packBackgroundUrl }"
+        >
+        </div>
 
-        <b-row class="justify-content-center">
+        <b-row class="justify-content-center mt-4">
           <b-col cols="12" sm="8">
+            <b-progress
+              :max="1"
+              :value="displayProgress"
+              variant="secondary"
+              animated
+            />
+            <p class="mt-1">
+              {{ (displayProgress * 100).toFixed() }}%
+            </p>
             <template v-if="gotDownloadError">
               <p>{{ errorMessage }}</p>
-              <b-button variant="primary" @click="onRetry">
+              <b-button pill variant="primary" @click="onRetry">
                 {{ $tr('retryLabel') }}
               </b-button>
             </template>
-            <template v-else-if="isDownloading">
-              <b-progress v-if="status !== null" :max="1">
-                <b-progress-bar
-                  :value="status.progress"
-                  animated
-                >
-                  {{ (status.progress * 100).toFixed() }}%
-                </b-progress-bar>
-              </b-progress>
-            </template>
-            <template v-else>
-              <b-button variant="primary" :to="homePageLink">
+            <template v-else-if="isCompleted">
+              <b-button pill variant="primary" :to="homePageLink">
                 {{ $tr('confirmLabel') }}
               </b-button>
             </template>
@@ -95,6 +99,17 @@
         return this.$tr('titleCompleted', {
           packTitle: this.packTitle,
         });
+      },
+      displayProgress() {
+        if (this.status === null) {
+          return 0;
+        }
+        return this.status.progress;
+      },
+      packBackgroundUrl() {
+        const assetName = this.isDownloading ? 'pack-downloading' : 'pack-ready';
+        const assetUrl = urls.static(`download/${assetName}.png`);
+        return `url('${assetUrl}')`;
       },
     },
     watch: {
@@ -203,6 +218,16 @@
     @include media-breakpoint-down(xs) {
       padding-right: $spacer;
       padding-left: $spacer;
+    }
+  }
+
+  .pack-background {
+    height: 170px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    @include media-breakpoint-down(sm) {
+      height: 120px;
     }
   }
 

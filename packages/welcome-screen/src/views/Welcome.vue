@@ -7,19 +7,25 @@
       </h1>
       <div class="mb-4 mt-4">
         <b-button
+          pill
           variant="primary"
           to="select-pack"
         >
           Get Started
         </b-button>
       </div>
-      <p class="font-weight-normal">
-        Check our
-        <b-link
-          v-b-modal.privacy-policy-modal
-        >
+      <p>
+        <UsbIcon />
+        <SdIcon />
+        If you have an Endless Key USB device or SD card,
+        <b-link to="endless-key">
+          press here to get your pack!
+        </b-link>
+      </p>
+      <p>
+        <b-link v-b-modal.privacy-policy-modal>
           Privacy Policy
-        </b-link>.
+        </b-link>
       </p>
     </div>
     <div class="flex-grow-1 welcome-background-bottom"></div>
@@ -41,12 +47,14 @@
 
 
 <script>
+import UsbIcon from 'vue-material-design-icons/Usb.vue';
+import SdIcon from 'vue-material-design-icons/Sd.vue';
 import PrivacyPolicyText from 'eos-components/src/components/PrivacyPolicyText.vue';
 
 
   export default {
     name: "Welcome",
-    components: { PrivacyPolicyText }
+    components: { UsbIcon, SdIcon, PrivacyPolicyText }
 };
 
 </script>

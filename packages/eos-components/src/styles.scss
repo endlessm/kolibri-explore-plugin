@@ -1,12 +1,12 @@
 // Bootstrap theme variables:
-$primary: #F15A22;
-$secondary: #14BF96;
+$secondary: #F15A22;
 $gray-300: #EFF0F3;
 $gray-400: #D8DDE1;
 $gray-500: #A1A8A9;
 $gray-600: #6C757D;
 $gray-700: #12272A;
 $gray-800: #091415;
+$primary: $gray-800;
 
 $light: $gray-300;
 $dark: $gray-600;
@@ -78,6 +78,8 @@ $border-radius-lg: 1rem;
 $body-bg: $gray-300;
 $font-family-sans-serif: "Lato", sans-serif;
 $headings-font-family: "Poppins", sans-serif;
+
+$link-decoration: underline;
 
 $btn-font-family: $headings-font-family;
 $btn-font-size: 0.875rem;
@@ -183,7 +185,7 @@ $list-group-active-bg: $white;
 $list-group-active-border-color: $list-group-border-color;
 
 // Calculate header color:
-$header-color: scale-color($secondary, $lightness: 50%) !default;
+$header-color: scale-color(#14BF96, $lightness: 50%) !default;
 
 // Calculate navbar height:
 $navbar-height: $navbar-brand-height +

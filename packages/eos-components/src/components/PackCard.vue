@@ -2,11 +2,8 @@
   <b-card
     overlay
     noBody
-    :class="{ active: selected }"
-    :footerClass="packId"
   >
     <b-link
-      v-if="!selected"
       href="#"
       class="stretched-link"
       @click="onClick"
@@ -16,14 +13,9 @@
 
     <template #footer>
       <h5>{{ title }}</h5>
-      <div v-if="selected">
-        <p>
-          {{ subTitle }}
-        </p>
-        <b-button variant="primary" @click="onChoosePack">
-          Choose
-        </b-button>
-      </div>
+      <p>
+        {{ subTitle }}
+      </p>
     </template>
   </b-card>
 </template>
@@ -31,12 +23,8 @@
 <script>
   export default {
     name: 'PackCard',
-    emits: ['click', 'choosePack'],
+    emits: ['click'],
     props: {
-      selected: {
-        type: Boolean,
-        default: false,
-      },
       packId: {
         type: String,
         required: true,
@@ -54,9 +42,6 @@
       onClick() {
         this.$emit('click');
       },
-      onChoosePack() {
-        this.$emit('choosePack');
-      },
     },
   }
 </script>
@@ -64,11 +49,17 @@
 <style lang="scss" scoped>
 @import '../styles.scss';
 
-// This number should overpass the footer height when unfolded (card selected)
-$pack-card-height: 250px;
+// This number should overpass the footer height
+$pack-card-height: 300px;
 
 .card {
   border-radius: $border-radius-lg;
+  transition: all ease .4s;
+  margin-bottom: $spacer !important;
+  box-shadow: $box-shadow-sm !important;
+  &:hover {
+    box-shadow: $box-shadow !important;
+  }
 }
 
 .pack-card-background {
@@ -98,16 +89,10 @@ $pack-card-height: 250px;
 
 .card-footer {
   border-radius: 0 0 $border-radius-lg $border-radius-lg !important;
-  color: $white;
   position: absolute;
   width: 100%;
   bottom: 0;
-  &.explorer { background-color: #606530; }
-  &.artist { background-color: #C84070; }
-  &.scientist { background-color: #5E94AA; }
-  &.inventor { background-color: #494562; }
-  &.athlete { background-color: #EB492C; }
-  &.curious { background-color: #D19012; }
+  background-color: $gray-300;
 }
 
 </style>

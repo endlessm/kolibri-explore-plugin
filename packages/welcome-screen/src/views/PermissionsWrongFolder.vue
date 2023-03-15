@@ -11,6 +11,7 @@
         Please make sure to select the "KOLIBRI_DATA" folder in your external device.
       </h5>
       <b-button
+        pill
         variant="primary"
         @click="onClick"
       >

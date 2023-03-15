@@ -9,42 +9,52 @@
     <template v-else>
       <b-container class="mb-2 mt-4 no-container-padding">
         <template v-if="hasNodesForSection('highlight')">
-          <h5 class="mt-2 text-center text-muted">
-            {{ $tr('highlightLabel') }}
-          </h5>
+          <b-container>
+            <h5 class="mt-2 text-muted">
+              {{ $tr('highlightLabel') }}
+            </h5>
+          </b-container>
           <CardGrid
             :nodes="sectionNodes['highlight']"
             :itemsPerSlide="{ lg: 3, md: 2, sm: 1 }"
           />
         </template>
         <template v-if="hasNodesForSection('skill')">
-          <h5 class="mt-2 text-center text-muted">
-            {{ $tr('skillLabel') }}
-          </h5>
+          <b-container>
+            <h5 class="mt-2 text-muted">
+              {{ $tr('skillLabel') }}
+            </h5>
+          </b-container>
           <CardGrid
             :nodes="sectionNodes['skill']"
           />
         </template>
         <!-- TODO: commenting week's channel for now. -->
         <!-- <template>
-          <h5 class="mt-2 text-center text-muted">
-            {{ $tr('channelLabel', { channel: 'test' }) }}
-          </h5>
+          <b-container>
+            <h5 class="mt-2 text-muted">
+              {{ $tr('channelLabel', { channel: 'test' }) }}
+            </h5>
+          </b-container>
           <CardGridPlaceholder />
         </template> -->
         <template v-if="hasNodesForSection('career')">
-          <h5 class="mt-2 text-center text-muted">
-            {{ $tr('careerLabel') }}
-          </h5>
+          <b-container>
+            <h5 class="mt-2 text-muted">
+              {{ $tr('careerLabel') }}
+            </h5>
+          </b-container>
           <CardGrid
             :nodes="sectionNodes['career']"
             :itemsPerSlide="{ lg: 3, md: 2, sm: 1 }"
           />
         </template>
         <template v-if="hasNodesForSection('curious')">
-          <h5 class="mt-2 text-center text-muted">
-            {{ $tr('curiousLabel') }}
-          </h5>
+          <b-container>
+            <h5 class="mt-2 text-muted">
+              {{ $tr('curiousLabel') }}
+            </h5>
+          </b-container>
           <CardGrid
             :nodes="sectionNodes['curious']"
           />

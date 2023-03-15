@@ -2,37 +2,10 @@
   <div class="root">
     <b-container class="bg-white pt-5">
       <h3 class="">
-        Breadcrumb:
+        Progress:
       </h3>
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="#">Home</a>
-          </li>
-          <li class="breadcrumb-item">
-            <a href="#">Library</a>
-          </li>
-          <li class="active breadcrumb-item" aria-current="page">
-            Data
-          </li>
-        </ol>
-      </nav>
 
-      <hr>
-
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="#">Home</a>
-          </li>
-          <li class="active breadcrumb-item" aria-current="page">
-            ...
-          </li>
-          <li class="breadcrumb-item">
-            <a href="#">Library</a>
-          </li>
-        </ol>
-      </nav>
+      <b-progress value="0.75" max="1" animated />
 
       <hr>
 
@@ -64,7 +37,7 @@
 
       <hr>
 
-      <h3>Buttons:</h3>
+      <h3>Buttons: (secondary is the default)</h3>
       <b-button pill size="sm" variant="primary" class="mb-1 mr-1">
         Primary
       </b-button>
@@ -75,7 +48,7 @@
         Outline
       </b-button>
       <b-button pill size="sm" variant="light" class="mb-1 mr-1">
-        Normal
+        Light
       </b-button>
       <hr>
       <b-button pill variant="primary" class="mb-1 mr-1">
@@ -88,7 +61,7 @@
         Outline
       </b-button>
       <b-button pill variant="light" class="mb-1 mr-1">
-        Normal
+        Light
       </b-button>
       <hr>
       <b-button pill size="lg" variant="primary" class="mb-1 mr-1">
@@ -101,7 +74,7 @@
         Outline
       </b-button>
       <b-button pill size="lg" variant="light" class="mb-1 mr-1">
-        Normal
+        Light
       </b-button>
       <hr>
       <h3>Media Buttons:</h3>
