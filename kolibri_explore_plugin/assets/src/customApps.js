@@ -39,6 +39,10 @@ export const CustomChannelApps = {
   '2f95235c3709511fa12d007f31ed6a7b': 'steam',
   '1520f018610256549c98ca0140cceebe': 'virtual-field-trips',
   '59b8deeb90f544da923187e77c8d3820': 'wikihow',
+  '1b1fc9bd453a4c52bb5628d9ae804ede': 'scigirls', // scigirls english
+  ee52db4a62a94e9683599af8782f2d03: 'scigirls', // scigirls spanish
+  f1ada7abc4194ff48a958337a31972c7: 'eie-families', // eie english
+  '359e048230974c8f80db1a95dc80d544': 'eie-families', // eie spanish
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment',
@@ -207,6 +211,10 @@ export const ChannelCardThumbnails = {
   '2f95235c3709511fa12d007f31ed6a7b': 'steam.jpg',
   '1520f018610256549c98ca0140cceebe': 'virtual-field-trips.jpg',
   '59b8deeb90f544da923187e77c8d3820': 'wikihow.jpg',
+  '1b1fc9bd453a4c52bb5628d9ae804ede': 'scigirls.jpg', // scigirls english
+  ee52db4a62a94e9683599af8782f2d03: 'scigirls.jpg', // scigirls spanish
+  f1ada7abc4194ff48a958337a31972c7: 'eie-families.jpg', // eie english
+  '359e048230974c8f80db1a95dc80d544': 'eie-families.jpg', // eie spanish
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.jpg',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment.jpg',
@@ -258,6 +266,10 @@ export const ChannelCardIcons = {
   '2f95235c3709511fa12d007f31ed6a7b': 'steam.png',
   '1520f018610256549c98ca0140cceebe': 'virtual-field-trips.png',
   '59b8deeb90f544da923187e77c8d3820': 'wikihow.png',
+  '1b1fc9bd453a4c52bb5628d9ae804ede': 'scigirls.png', // scigirls english
+  ee52db4a62a94e9683599af8782f2d03: 'scigirls.png', // scigirls spanish
+  f1ada7abc4194ff48a958337a31972c7: 'eie-families.png', // eie english
+  '359e048230974c8f80db1a95dc80d544': 'eie-families.png', // eie spanish
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.png',
 };
