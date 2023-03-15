@@ -1,22 +1,34 @@
 <template>
 
-  <b-container>
-    <h1>{{ $tr('header') }}</h1>
-    <p>
-      <b-link v-if="deviceContentUrl" :href="deviceContentUrl">
-        {{ $tr('adminLink') }}
-      </b-link>
-    </p>
-    <p>{{ $tr('learnerText') }}</p>
-  </b-container>
+  <div
+    class="d-flex main-container min-vh-100 text-center"
+  >
+    <b-container
+      class="d-flex flex-column flex-grow-1 no-container-padding welcome-container"
+    >
+      <b-container
+        class="d-flex flex-column flex-grow-1 justify-content-center no-container-padding"
+      >
+        <h1 class="mb-3">
+          {{ $tr('titleLabel') }}
+        </h1>
+        <b-row class="justify-content-center mt-3">
+          <b-col cols="12" sm="8">
+            <b-button pill variant="primary" :to="homePageLink">
+              {{ $tr('retryLink') }}
+            </b-button>
+          </b-col>
+        </b-row>
+      </b-container>
+    </b-container>
+  </div>
 
 </template>
 
 
 <script>
 
-  import { mapGetters } from 'vuex';
-  import urls from 'kolibri.urls';
+  import { PageNames } from '../constants';
 
   export default {
     name: 'ContentUnavailablePage',
@@ -26,20 +38,15 @@
       };
     },
     computed: {
-      ...mapGetters(['canManageContent']),
-      deviceContentUrl() {
-        const deviceContentUrl = urls['kolibri:kolibri.plugins.device:device_management'];
-        if (deviceContentUrl && this.canManageContent) {
-          return `${deviceContentUrl()}#/content`;
-        }
-
-        return '';
+      homePageLink() {
+        return {
+          name: PageNames.TOPICS_ROOT,
+        };
       },
     },
     $trs: {
-      header: 'No resources available',
-      adminLink: 'As an administrator you can import channels',
-      learnerText: 'Please ask your coach or administrator for assistance',
+      titleLabel: 'Something went wrong!',
+      retryLink: 'Try again',
       documentTitle: {
         message: 'Content Unavailable',
         context: '\nThis string should actually say "Resource unavailable"',
@@ -48,3 +55,24 @@
   };
 
 </script>
+
+
+<style lang="scss" scoped>
+
+  @import '../styles';
+
+  .main-container {
+    background-color: white;
+  }
+
+  .welcome-container {
+    padding-top: $spacer;
+    padding-bottom: $spacer;
+
+    @include media-breakpoint-down(xs) {
+      padding-right: $spacer;
+      padding-left: $spacer;
+    }
+  }
+
+</style>
