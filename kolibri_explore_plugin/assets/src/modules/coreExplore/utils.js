@@ -107,3 +107,9 @@ export function cancelDownload() {
     return data.status;
   });
 }
+
+export function isUsUser() {
+  const allUsTimezones = new Intl.Locale('en-US').timeZones;
+  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  return allUsTimezones.includes(userTimezone);
+}
