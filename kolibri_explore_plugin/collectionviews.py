@@ -51,6 +51,11 @@ PROGRESS_STEPS = {
     "downloading": 0.95,
 }
 
+# FIXME, remove quick patch with a proper per-region content solution:
+# https://phabricator.endlessm.com/T34589
+is_us_user = True
+US_ONLY_CONTENT = ["38eaaf9ec82a44f9ab6e7a44cb730f07"]  # pbs-kids
+
 
 class EndlessKeyContentManifest(ContentManifest):
     def __init__(self):
@@ -103,6 +108,14 @@ class EndlessKeyContentManifest(ContentManifest):
             )
         else:
             self.available = False
+
+    def get_channel_ids(self):
+        channel_ids = super().get_channel_ids()
+        if is_us_user:
+            return channel_ids
+        return list(
+            filter(lambda _id: _id not in US_ONLY_CONTENT, channel_ids)
+        )
 
     def get_channels_count(self):
         return len(self.get_channel_ids())
@@ -616,6 +629,15 @@ def get_should_resume(request):
     return Response(
         {"shouldResume": should_resume, "grade": grade, "name": name}
     )
+
+
+# FIXME, remove quick patch with a proper per-region content solution:
+# https://phabricator.endlessm.com/T34589
+@api_view(["POST"])
+def set_is_us_user(request):
+    global is_us_user
+    is_us_user = request.data.get("is_us_user")
+    return Response({})
 
 
 @api_view(["POST"])
