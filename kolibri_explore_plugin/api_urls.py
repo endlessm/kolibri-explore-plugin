@@ -8,6 +8,7 @@ from .collectionviews import get_collection_info
 from .collectionviews import get_download_status
 from .collectionviews import get_should_resume
 from .collectionviews import resume_download
+from .collectionviews import set_is_us_user
 from .collectionviews import start_download
 from .collectionviews import update_download
 from .viewsets import ContentNodeExtrasViewset
@@ -68,5 +69,10 @@ urlpatterns = [
         r"ek-collections/get-download-status",
         get_download_status,
         name="get_download_status",
+    ),
+    url(
+        r"ek-collections/set-is-us-user",
+        set_is_us_user,
+        name="set_is_us_user",
     ),
 ]
