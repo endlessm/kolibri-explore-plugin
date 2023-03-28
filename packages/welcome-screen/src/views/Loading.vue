@@ -5,11 +5,6 @@
         <img :src="loadingImage" class="mb-1" width="128">
       </div>
     </template>
-    <template #body>
-      <h4 class="font-weight-normal text-muted">
-        Please wait, this might take a few minutes.
-      </h4>
-    </template>
   </WelcomeBase>
 </template>
 
