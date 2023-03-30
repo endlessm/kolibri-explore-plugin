@@ -36,8 +36,18 @@
 
 // Change buttons variant:
 @each $color, $value in $theme-colors {
-  .btn-#{$color}-primary {
+  .btn-#{$color} {
     $hover-value: scale-color($value, $lightness: $hover-lightness);
+    @include button-variant(
+      $background: $value,
+      $border: $value,
+      $hover-background: $hover-value,
+      $active-background: $hover-value,
+      $active-border: $hover-value);
+  }
+
+  .btn-#{$color}-primary {
+    $hover-value: scale-color($value, $lightness: $hover-primary-lightness);
     @include button-variant(
       $background: $value,
       $border: $value,
