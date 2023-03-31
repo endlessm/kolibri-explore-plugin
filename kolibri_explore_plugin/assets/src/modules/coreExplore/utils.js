@@ -109,9 +109,14 @@ export function cancelDownload() {
 }
 
 function _isUsUser() {
-  const allUsTimezones = new Intl.Locale('en-US').timeZones;
-  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  return allUsTimezones.includes(userTimezone);
+  try {
+    const allUsTimezones = new Intl.Locale('en-US').timeZones;
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    return allUsTimezones.includes(userTimezone);
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
 }
 
 export function setIsUsUser() {
