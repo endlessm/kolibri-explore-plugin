@@ -129,7 +129,6 @@
         return getCollectionInfo(this.$route.params.grade, this.$route.params.name).then(
           collectionsInfo => {
             this.packTitle = collectionsInfo.metadata.title;
-            return this.setUpdateInterval();
           }
         );
       });
