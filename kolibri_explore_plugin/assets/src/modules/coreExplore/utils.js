@@ -107,22 +107,3 @@ export function cancelDownload() {
     return data.status;
   });
 }
-
-function _isUsUser() {
-  try {
-    const allUsTimezones = new Intl.Locale('en-US').timeZones;
-    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return allUsTimezones.includes(userTimezone);
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-}
-
-export function setIsUsUser() {
-  return client({
-    url: urls['kolibri:kolibri_explore_plugin:set_is_us_user'](),
-    method: 'POST',
-    data: { is_us_user: _isUsUser() },
-  });
-}

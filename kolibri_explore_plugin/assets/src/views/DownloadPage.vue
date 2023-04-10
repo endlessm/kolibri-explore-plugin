@@ -55,7 +55,7 @@
   import urls from 'kolibri.urls';
   import { mapState } from 'vuex';
   import { PageNames } from '../constants';
-  import { setIsUsUser, getCollectionInfo } from '../modules/coreExplore/utils';
+  import { getCollectionInfo } from '../modules/coreExplore/utils';
 
   const UPDATE_DELAY = 1500;
 
@@ -125,14 +125,12 @@
       },
     },
     mounted() {
-      return setIsUsUser().then(() => {
-        return getCollectionInfo(this.$route.params.grade, this.$route.params.name).then(
-          collectionsInfo => {
-            this.packTitle = collectionsInfo.metadata.title;
-            return this.setUpdateInterval();
-          }
-        );
-      });
+      return getCollectionInfo(this.$route.params.grade, this.$route.params.name).then(
+        collectionsInfo => {
+          this.packTitle = collectionsInfo.metadata.title;
+          return this.setUpdateInterval();
+        }
+      );
     },
     beforeDestroy() {
       this.clearUpdateInterval();
