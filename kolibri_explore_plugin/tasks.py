@@ -32,7 +32,6 @@ class ExternalTagsJobValidator(JobValidator):
     cancellable=True,
     permission_classes=[CanManageContent],
     queue=QUEUE,
-    long_running=True,
 )
 def applyexternaltags(node_id, tags=None):
     call_command("applyexternaltags", node_id, tags=tags)
