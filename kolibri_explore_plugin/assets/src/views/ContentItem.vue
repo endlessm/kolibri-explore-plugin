@@ -12,7 +12,6 @@
 
       <AssessmentWrapper
         v-else
-        :id="content.id"
         class="content-renderer"
         :class="{ 'without-fullscreen-bar': withoutFullscreenBar }"
         v-bind="exerciseProps"
@@ -70,7 +69,7 @@
       };
     },
     props: {
-      content: {
+      contentNode: {
         type: Object,
         required: true,
       },
@@ -91,10 +90,7 @@
         fullName: state => state.core.session.full_name,
       }),
       withoutFullscreenBar() {
-        return GameAppIDs.includes(this.content.channel_id);
-      },
-      contentNode() {
-        return this.content;
+        return GameAppIDs.includes(this.contentNode.channel_id);
       },
       contentIsExercise() {
         return this.contentNode.kind === ContentNodeKinds.EXERCISE;
@@ -149,9 +145,6 @@
           totalattempts: this.totalattempts,
         };
       },
-      contentNodeId() {
-        return this.contentNode.id;
-      },
       assessment() {
         if (this.contentNode.kind !== ContentNodeKinds.EXERCISE) {
           return null;
@@ -162,7 +155,7 @@
     },
     created() {
       return this.initContentSession({
-        nodeId: this.contentNodeId,
+        node: this.contentNode,
       }).then(() => {
         this.sessionReady = true;
         this.setWasIncomplete();
@@ -180,7 +173,7 @@
        * source of truth for referencing progress of content nodes.
        */
       cacheProgress() {
-        setContentNodeProgress({ content_id: this.content.content_id, progress: this.progress });
+        setContentNodeProgress({ content_id: this.contentNode.id, progress: this.progress });
       },
       updateInteraction({ progress, interaction }) {
         this.updateContentSession({
@@ -206,6 +199,11 @@
 <style lang="scss" scoped>
 
   @import '../styles';
+
+  .content-renderer {
+    // Needs to be one less than the ScrollingHeader's z-index of 4
+    z-index: 3;
+  }
 
   // Fix icon offset in the Kolibri plugins:
   .content-renderer::v-deep .button img,
