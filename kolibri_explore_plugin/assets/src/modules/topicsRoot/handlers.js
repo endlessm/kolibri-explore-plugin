@@ -188,39 +188,46 @@ export function decideDownload(store) {
 export function showChannels(store) {
   store.commit('CORE_SET_PAGE_LOADING', true);
 
-  return store.dispatch('setAndCheckChannels').then(
-    channels => {
-      if (!channels.length) {
-        router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
-        store.commit('CORE_SET_PAGE_LOADING', false);
-        store.commit('CORE_SET_ERROR', null);
-        return;
-      }
-      const channelRootIds = channels.map(channel => channel.root);
-      ContentNodeResource.fetchCollection({
-        getParams: { ids: channelRootIds, user_kind: store.getters.getUserKind },
-      })
-        .then(collection => _findNodes(channels, collection))
-        .then(rootNodes => {
-          const rootNodesWithCustomIcons = rootNodes.map(n => {
-            n.bigThumbnail = getBigThumbnail(n);
-            n.thumbnail = getChannelIcon(n);
-            return n;
-          });
-          store.commit('topicsRoot/SET_STATE', { rootNodes: rootNodesWithCustomIcons });
-          return _fetchCarouselNodes(store);
-        })
-        .then(carouselNodes => {
-          store.commit('topicsRoot/SET_CAROUSEL_NODES', carouselNodes);
+  ChannelResource.useContentCacheKey = false;
+  ChannelResource.clearCache();
+  return store
+    .dispatch('setAndCheckChannels')
+    .then(
+      channels => {
+        if (!channels.length) {
+          router.replace({ name: PageNames.CONTENT_UNAVAILABLE });
           store.commit('CORE_SET_PAGE_LOADING', false);
           store.commit('CORE_SET_ERROR', null);
-        });
-    },
-    error => {
-      store.dispatch('handleApiError', error);
-      return error;
-    }
-  );
+          return;
+        }
+        const channelRootIds = channels.map(channel => channel.root);
+        ContentNodeResource.fetchCollection({
+          getParams: { ids: channelRootIds, user_kind: store.getters.getUserKind },
+        })
+          .then(collection => _findNodes(channels, collection))
+          .then(rootNodes => {
+            const rootNodesWithCustomIcons = rootNodes.map(n => {
+              n.bigThumbnail = getBigThumbnail(n);
+              n.thumbnail = getChannelIcon(n);
+              return n;
+            });
+            store.commit('topicsRoot/SET_STATE', { rootNodes: rootNodesWithCustomIcons });
+            return _fetchCarouselNodes(store);
+          })
+          .then(carouselNodes => {
+            store.commit('topicsRoot/SET_CAROUSEL_NODES', carouselNodes);
+            store.commit('CORE_SET_PAGE_LOADING', false);
+            store.commit('CORE_SET_ERROR', null);
+          });
+      },
+      error => {
+        store.dispatch('handleApiError', error);
+        return error;
+      }
+    )
+    .finally(() => {
+      ChannelResource.useContentCacheKey = true;
+    });
 }
 
 export function searchChannelsOnce(store, search, kind) {
