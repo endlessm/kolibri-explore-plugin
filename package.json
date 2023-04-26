@@ -17,7 +17,7 @@
     "lint-frontend": "kolibri-tools lint -p 'kolibri_explore_plugin/assets/**/*.{js,vue,scss,less,css}'",
     "lint-frontend:format": "yarn run lint-frontend --write",
     "bump-version": "./scripts/bump_version.py",
-    "deploy:welcome": "cp -rf packages/welcome-screen/dist kolibri_explore_plugin/welcomeScreen && rm kolibri_explore_plugin/welcomeScreen/js/*map",
+    "deploy:welcome": "cp -rf packages/welcome-screen/dist kolibri_explore_plugin/welcomeScreen && rm -f kolibri_explore_plugin/welcomeScreen/js/*map",
     "release": "./scripts/check_can_relese.sh && twine upload -s dist/*"
   },
   "workspaces": [
