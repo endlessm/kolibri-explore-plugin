@@ -1,4 +1,5 @@
 import store from 'kolibri.coreVue.vuex.store';
+import plugin_data from 'plugin_data';
 import { showTopicsChannel } from '../modules/topicsTree/handlers';
 import { decideDownload, showChannels } from '../modules/topicsRoot/handlers';
 import { PageNames } from '../constants';
@@ -7,6 +8,8 @@ export default [
   {
     name: PageNames.ROOT,
     path: '/',
+    // Redirect to Search page if Discovery is hidden.
+    redirect: plugin_data.hideDiscoveryTab ? { name: PageNames.SEARCH } : undefined,
     handler: () => {
       decideDownload(store);
     },
@@ -35,6 +38,8 @@ export default [
   {
     name: PageNames.TOPICS_ROOT,
     path: '/topics',
+    // Redirect to Search page if Discovery is hidden.
+    redirect: plugin_data.hideDiscoveryTab ? { name: PageNames.SEARCH } : undefined,
     handler: () => {
       store.commit('SET_PAGE_NAME', PageNames.TOPICS_ROOT);
       showChannels(store);
