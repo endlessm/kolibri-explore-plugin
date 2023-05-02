@@ -54,6 +54,7 @@ class ExploreAsset(webpack_hooks.WebpackBundleHook):
             "initialContentPack": conf.OPTIONS["Explore"][
                 "INITIAL_CONTENT_PACK"
             ],
+            "hideDiscoveryTab": conf.OPTIONS["Explore"]["HIDE_DISCOVERY_TAB"],
         }
 
 

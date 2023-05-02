@@ -4,6 +4,7 @@
     <img class="logo mr-3" :src="logo">
     <b-button-group class="mx-auto">
       <b-nav-text
+        v-if="showDiscoveryTab"
         class="btn discovery-tab py-3 rounded-0 text-primary"
         :class="{ active: currentIsChannels() }"
         @click="goToChannels"
@@ -46,6 +47,7 @@
 
   import ViewDashboardOutlineIcon from 'vue-material-design-icons/ViewDashboardOutline.vue';
   import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
+  import plugin_data from 'plugin_data';
 
   import { mapMutations } from 'vuex';
   import { assets } from 'eos-components';
@@ -57,6 +59,9 @@
     computed: {
       logo() {
         return assets.EndlessLogo;
+      },
+      showDiscoveryTab() {
+        return !plugin_data.hideDiscoveryTab;
       },
     },
     methods: {

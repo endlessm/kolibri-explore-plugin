@@ -41,5 +41,12 @@ option_spec = {
                 scientist, inventor, athlete, curious.
             """,
         },
+        "HIDE_DISCOVERY_TAB": {
+            "type": "boolean",
+            "default": False,
+            "description": """
+                Whether to hide the Discovery tab and redirect to Search.
+            """,
+        },
     },
 }
