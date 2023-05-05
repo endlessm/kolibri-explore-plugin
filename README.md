@@ -1,27 +1,30 @@
 # Kolibri Explore Plugin
 
-This is an alternative to the Kolibri Learn plugin, intended for
-self-guided learners.
+This plugin adds the Endless Key experience on top of Kolibri:
+
+- A content navigation view exposed in the `/explore` URL. As an
+  alternative to the Kolibri Learn plugin for self-guided learners.
+
+- Branding and layout customizations for several channels.
+
+- Download of content packs with extra metadata.
 
 ## Usage
 
-Install a release from PyPi:
+This is a plugin for Kolibri, so it must be installed in your Kolibri
+environment.
+
+Install latest release from PyPi:
 
 ```
 pip install kolibri-explore-plugin
 ```
 
-Or build a `whl` file with the instructions below and install it:
-
-```
-pip install path/to/kolibri_explore_plugin-VERSION.whl
-```
-
-Then enable it in Kolibri, and disable the Learn plugin:
+Then enable it in Kolibri and run migrations:
 
 ```
 kolibri plugin enable kolibri_explore_plugin
-kolibri plugin disable kolibri.plugins.learn
+kolibri manage migrate
 ```
 
 Download the `apps-bundle.zip` from the [GitHub releases
@@ -30,7 +33,12 @@ extract them to the `kolibri_explore_plugin/apps` folder.  Note that
 this is not ideal, because you should know where has `pip` installed
 the plugin.
 
-Now start Kolibri.  You should be able to navigate to a Explore tab.
+Download the JSON files from the
+[endless-key-collections](https://github.com/endlessm/endless-key-collections/tree/main/json)
+repo and place them in `kolibri_explore_plugin/static/collections/`.
+
+Now start Kolibri. You should be able to navigate to `/explore` if `/`
+doesn't redirect you already.
 
 ## Setup
 
@@ -40,32 +48,41 @@ Either if you want to build or develop the plugin, please run:
 ./scripts/bootstrap.sh
 ```
 
-Just like kolibri, we use a Python virtual environment along with Node
+Just like Kolibri, we use a Python virtual environment along with Node
 to obtain the exact same dependencies.
 
 ## Building
 ### Creating the `.whl` file
 
-With all the dependencies installed, it's now possible to build for
-distribution running:
+With all the dependencies installed, it's now possible to build the
+plugin by running:
 
 ```
 yarn build-dist
 ```
 
-An installable `.whl` file will be created in the `dist/` folder.
+A `.whl` file will be created in the `dist/` folder. You
+can then install it:
+
+```
+pip install dist/kolibri_explore_plugin-*.whl
+```
 
 ## Development
 ### Getting started with development
 
-Instead of installing a build like in the Usage section above, install
-the repository as an editable package, which creates a symlink:
+For developing you could build and install the `.whl` file over and
+over for each iteration. But is much easier to install the project in
+editable mode, which basically creates a symlink:
 
 ```
-pip install -e .
+pip install --editable .
 ```
 
-And then run the Javascript in watch mode:
+**Note:** you still need to enable the plugin and run migrations as in
+Usage above!
+
+Then serve the plugin in watch mode:
 
 ```
 yarn dev
@@ -74,19 +91,31 @@ yarn dev
 Usually you will also be developing Kolibri, as described in
 [the Kolibri developer documentation](https://kolibri-dev.readthedocs.io/en/develop/getting_started.html).
 
-So probably you have the following in another Terminal tab:
+So probably you have the following running in another Terminal tab:
 
 ```
 yarn run devserver-hot
 ```
 
-Which should pick the plugin. And you can edit both the plugin and
-Kolibri in live mode. Further, you can also edit a custom channel
-presentation in another Terminal tab following the section below.
+And you can edit both the plugin and Kolibri in live-mode. Further,
+you can also edit a custom channel presentation in another Terminal
+tab. See "Developing custom channel presentations" section below.
+
+### Configuring the precommit hook
+
+To run checks before any commit just run this command:
+
+```
+pre-commit install -f --install-hooks
+```
+
+There is a continuous integration tool in Github that will run the
+same checks for each pull request.
 
 ### Bundling custom channel presentations
 
-This is done automatically on each release. To do it yourself:
+There is a Github action that does this automatically on each
+release. To do it locally yourself:
 
 ```
 yarn build:apps
@@ -97,12 +126,12 @@ All custom presentation app bundles should be added in the
 The zip bundle should be named `custom-channel-ui.zip` and it should
 be placed inside the corresponding app folder.
 
-### Using real content while developing a custom channel presentation
+### Developing custom channel presentations
 
 Instead of bundling the custom channel presentation inside the apps
 directory, it's possible to work with a proxy for development. Note
-that the proxy will be used for all the channels, not only for the app
-in question.
+that the proxy will be used for all the channels, not only for the
+channel in question.
 
 1. Run the custom channel presentation development server. For
    instance to run the template:
@@ -121,18 +150,7 @@ $ PROXY_CUSTOM_CHANNEL=1 yarn run devserver-hot
 ```
 
 Every request to the `custom-channel-ui.zip` will be proxied to the
-devserver.  The hot reloading should work here too!
-
-### Configuring the precommit hook
-
-To run checks before any commit just run this command:
-
-```
-pre-commit install -f --install-hooks
-```
-
-There is a continuous integration tool that will run the same checks
-per pull request.
+devserver. The hot reloading should work here too!
 
 ### Ingesting highlighted content
 
@@ -159,7 +177,10 @@ branch. Note that the major version also needs a version name for
 branding. Eg:
 
 ```
+# For a minor release:
 yarn bump-version minor
+
+# For a major release:
 yarn bump-version major "Komodo Dragon"
 ```
 
