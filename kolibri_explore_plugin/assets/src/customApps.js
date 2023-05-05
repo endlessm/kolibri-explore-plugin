@@ -43,6 +43,7 @@ export const CustomChannelApps = {
   ee52db4a62a94e9683599af8782f2d03: 'scigirls', // scigirls spanish
   f1ada7abc4194ff48a958337a31972c7: 'eie-families', // eie english
   '359e048230974c8f80db1a95dc80d544': 'eie-families', // eie spanish
+  '217c7164c2974a4da9877a20ae38b98e': 'cas', // California Academy of Sciences
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment',
@@ -215,6 +216,7 @@ export const ChannelCardThumbnails = {
   ee52db4a62a94e9683599af8782f2d03: 'scigirls.jpg', // scigirls spanish
   f1ada7abc4194ff48a958337a31972c7: 'eie-families.jpg', // eie english
   '359e048230974c8f80db1a95dc80d544': 'eie-families.jpg', // eie spanish
+  '217c7164c2974a4da9877a20ae38b98e': 'cas.jpg', // California Academy of Sciences
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.jpg',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment.jpg',
@@ -270,6 +272,7 @@ export const ChannelCardIcons = {
   ee52db4a62a94e9683599af8782f2d03: 'scigirls.png', // scigirls spanish
   f1ada7abc4194ff48a958337a31972c7: 'eie-families.png', // eie english
   '359e048230974c8f80db1a95dc80d544': 'eie-families.png', // eie spanish
+  '217c7164c2974a4da9877a20ae38b98e': 'cas.png', // California Academy of Sciences
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.png',
 };
