@@ -8,7 +8,7 @@
     @shown="onShown"
     @hidden="onHidden"
   >
-    <div class="bg-white text-dark wrapper">
+    <div ref="mainDiv" tabindex="0" class="bg-white text-dark wrapper" @keyup="onKeyUp">
       <b-row>
         <b-col class="pt-3" md="3" sm="12">
           <b-list-group v-b-scrollspy:sections-column>
@@ -268,6 +268,8 @@
   import urls from 'kolibri.urls';
   import PrivacyPolicyText from 'eos-components/src/components/PrivacyPolicyText.vue';
 
+  const DEVICE_CHEATCODE = 'showmedevice';
+
   export default {
     name: 'AboutModal',
     components: { PrivacyPolicyText },
@@ -304,11 +306,19 @@
             href: '#credits-section',
           },
         ],
+        pendingDeviceCheatCode: DEVICE_CHEATCODE,
       };
     },
     computed: {
       kolibriVersion() {
         return window.kolibriCoreAppGlobal.version;
+      },
+      deviceContentUrl() {
+        const deviceContentUrl = urls['kolibri:kolibri.plugins.device:device_management'];
+        if (deviceContentUrl) {
+          return `${deviceContentUrl()}#/content`;
+        }
+        return '';
       },
     },
     mounted() {
@@ -334,6 +344,11 @@
           });
       },
       onShown() {
+        // Reset cheat code state and focus div to receive keyboard input:
+        this.pendingDeviceCheatCode = DEVICE_CHEATCODE;
+        const mainDivRef = this.$refs.mainDiv;
+        mainDivRef.focus();
+
         if (this.initialItem) {
           const component = this.$refs['ref-' + this.initialItem][0];
           component.$el.click();
@@ -341,6 +356,19 @@
       },
       onHidden() {
         this.initialItem = null;
+      },
+      onKeyUp(event) {
+        if (event.key === this.pendingDeviceCheatCode.charAt(0)) {
+          // User pressed the next key in cheat code:
+          this.pendingDeviceCheatCode = this.pendingDeviceCheatCode.substring(1);
+          if (this.pendingDeviceCheatCode.length === 0) {
+            // User wrote the entire cheat code:
+            window.open(this.deviceContentUrl, '_self');
+          }
+        } else {
+          // Not the next key in cheat code, reset it:
+          this.pendingDeviceCheatCode = DEVICE_CHEATCODE;
+        }
       },
     },
     $trs: {
