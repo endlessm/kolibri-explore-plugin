@@ -13,7 +13,13 @@ import { ContentNodeProgressResource } from 'kolibri.resources';
 const contentNodeProgressMap = reactive({});
 
 export function setContentNodeProgress(progress) {
-  set(contentNodeProgressMap, progress.content_id, progress.progress);
+  // Avoid setting stale progress data - assume that progress increases monotonically
+  if (
+    !contentNodeProgressMap[progress.content_id] ||
+    progress.progress > contentNodeProgressMap[progress.content_id]
+  ) {
+    set(contentNodeProgressMap, progress.content_id, progress.progress);
+  }
 }
 
 export default function useContentNodeProgress() {
@@ -32,7 +38,7 @@ export default function useContentNodeProgress() {
       force: true,
     }).then(progressData => {
       const progresses = progressData ? progressData : [];
-      for (let progress of progresses) {
+      for (const progress of progresses) {
         setContentNodeProgress(progress);
       }
     });
@@ -53,7 +59,7 @@ export default function useContentNodeProgress() {
       id,
     }).then(progressData => {
       const progresses = progressData ? progressData : [];
-      for (let progress of progresses) {
+      for (const progress of progresses) {
         setContentNodeProgress(progress);
       }
     });

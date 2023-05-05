@@ -507,7 +507,7 @@ class CollectionDownloadManager:
 
 def _call_task(task, user, **params):
     """Create, validate and enqueue a job."""
-    job = task.validate_job_data(user, params)
+    job, _enqueue_args = task.validate_job_data(user, params)
     job_id = job_storage.enqueue_job(
         job, queue=DEFAULT_QUEUE, priority=Priority.HIGH
     )

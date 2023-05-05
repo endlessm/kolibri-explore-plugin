@@ -128,14 +128,10 @@ export function showTopicsChannel(store, id) {
 }
 
 export function showTopicsContentInLightbox(store, id) {
-  const promises = [
-    ContentNodeResource.fetchModel({ id }),
-    ContentNodeResource.fetchNextContent(id),
-    store.dispatch('setChannelInfo'),
-  ];
+  const promises = [ContentNodeResource.fetchModel({ id }), store.dispatch('setChannelInfo')];
   const shouldResolve = samePageCheckGenerator(store);
   Promise.all(promises).then(
-    ([content, nextContent]) => {
+    ([content]) => {
       if (shouldResolve()) {
         const currentChannel = store.getters.getChannelObject(content.channel_id);
         if (!currentChannel) {
@@ -143,7 +139,7 @@ export function showTopicsContentInLightbox(store, id) {
           return;
         }
         store.commit('topicsTree/SET_STATE', {
-          content: contentState(content, nextContent),
+          content: contentState(content),
           channel: currentChannel,
         });
 

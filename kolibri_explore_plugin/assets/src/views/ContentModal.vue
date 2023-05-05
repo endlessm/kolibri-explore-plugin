@@ -10,7 +10,7 @@
     :title="content.title"
     headerCloseVariant="light"
   >
-    <ContentItem isDark :content="content" />
+    <ContentItem isDark :contentNode="content" />
   </b-modal>
 
 </template>
