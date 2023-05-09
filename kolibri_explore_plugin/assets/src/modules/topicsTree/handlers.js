@@ -127,7 +127,7 @@ export function showTopicsChannel(store, id) {
   });
 }
 
-export function showTopicsContentInLightbox(store, id) {
+function showTopicsContentInLightbox(store, id) {
   const promises = [ContentNodeResource.fetchModel({ id }), store.dispatch('setChannelInfo')];
   const shouldResolve = samePageCheckGenerator(store);
   Promise.all(promises).then(
@@ -161,6 +161,22 @@ export function showTopicsContentInLightbox(store, id) {
   );
 }
 
-export function hideTopicsContentFromLightbox(store) {
+function showTopicsContentInLearnTab(learnUrl, id) {
+  // Pass current URL as prevName:
+  const prevName = encodeURIComponent(window.location.href);
+  const contentViewerUrl = `${learnUrl()}#/topics/c/${id}?prevName=${prevName}`;
+  window.location.replace(contentViewerUrl);
+}
+
+export function showTopicsContent(store, id) {
+  const learnUrl = urls['kolibri:kolibri.plugins.learn:learn'];
+  if (learnUrl) {
+    showTopicsContentInLearnTab(learnUrl, id);
+  } else {
+    showTopicsContentInLightbox(store, id);
+  }
+}
+
+export function hideTopicsContent(store) {
   store.commit('topicsTree/RESET_CONTENT');
 }
