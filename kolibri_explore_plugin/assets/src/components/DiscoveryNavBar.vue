@@ -21,6 +21,16 @@
         {{ $tr('libraryLabel') }}
       </b-nav-text>
     </b-button-group>
+    <b-navbar-nav>
+      <b-nav-item
+        class="d-block pr-0"
+        :href="feedbackUrl"
+        target="_blank"
+      >
+        <span class="d-inline"><MessageReplyTextOutlineIcon /></span>
+        <span class="d-none d-sm-inline">{{ $tr('feedbackLabel') }}</span>
+      </b-nav-item>
+    </b-navbar-nav>
   </NavBar>
 
 </template>
@@ -30,6 +40,7 @@
 
   import ViewDashboardOutlineIcon from 'vue-material-design-icons/ViewDashboardOutline.vue';
   import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
+  import MessageReplyTextOutlineIcon from 'vue-material-design-icons/MessageReplyTextOutline.vue';
   import plugin_data from 'plugin_data';
 
   import { mapMutations } from 'vuex';
@@ -38,10 +49,17 @@
 
   export default {
     name: 'DiscoveryNavBar',
-    components: { ViewDashboardOutlineIcon, MagnifyIcon },
+    components: {
+      ViewDashboardOutlineIcon,
+      MagnifyIcon,
+      MessageReplyTextOutlineIcon,
+    },
     computed: {
       logo() {
         return assets.EndlessLogo;
+      },
+      feedbackUrl() {
+        return 'https://endlessos.org/key-feedback';
       },
       showDiscoveryTab() {
         return !plugin_data.hideDiscoveryTab;
@@ -78,6 +96,7 @@
     $trs: {
       discoveryLabel: 'Discovery',
       libraryLabel: 'Library',
+      feedbackLabel: 'Feedback',
     },
   };
 
