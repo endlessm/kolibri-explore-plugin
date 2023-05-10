@@ -21,23 +21,6 @@
         {{ $tr('libraryLabel') }}
       </b-nav-text>
     </b-button-group>
-    <b-navbar-nav>
-      <b-nav-text
-        v-b-modal.about-modal
-        class="btn d-md-block d-none"
-        @click="$root.$emit('setAboutSection', 'privacy-policy-link')"
-      >
-        {{ $tr('privacyPolicyLabel') }}
-      </b-nav-text>
-    </b-navbar-nav>
-    <b-navbar-nav>
-      <b-nav-text
-        v-b-modal.about-modal
-        class="btn d-md-block d-none pr-0"
-      >
-        {{ $tr('aboutLabel') }}
-      </b-nav-text>
-    </b-navbar-nav>
   </NavBar>
 
 </template>
@@ -95,8 +78,6 @@
     $trs: {
       discoveryLabel: 'Discovery',
       libraryLabel: 'Library',
-      aboutLabel: 'About',
-      privacyPolicyLabel: 'Privacy Policy',
     },
   };
 
