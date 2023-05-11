@@ -26,6 +26,7 @@
         class="d-block pr-0"
         :href="feedbackUrl"
         target="_blank"
+        :disabled="isOffline"
       >
         <span class="d-inline"><MessageReplyTextOutlineIcon /></span>
         <span class="d-none d-sm-inline">{{ $tr('feedbackLabel') }}</span>
@@ -54,6 +55,11 @@
       MagnifyIcon,
       MessageReplyTextOutlineIcon,
     },
+    data() {
+      return {
+        isOffline: false,
+      };
+    },
     computed: {
       logo() {
         return assets.EndlessLogo;
@@ -64,6 +70,15 @@
       showDiscoveryTab() {
         return !plugin_data.hideDiscoveryTab;
       },
+    },
+    created() {
+      this.isOffline = !navigator.onLine;
+      window.addEventListener('offline', this.onOffline);
+      window.addEventListener('online', this.onOnline);
+    },
+    destroyed() {
+      window.removeEventListener('offline', this.onOffline);
+      window.removeEventListener('online', this.onOnline);
     },
     methods: {
       ...mapMutations({
@@ -91,6 +106,12 @@
       },
       currentIsSearch() {
         return this.$route.name === PageNames.SEARCH;
+      },
+      onOffline() {
+        this.isOffline = true;
+      },
+      onOnline() {
+        this.isOffline = false;
       },
     },
     $trs: {
