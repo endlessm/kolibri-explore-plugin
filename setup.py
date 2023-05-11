@@ -14,7 +14,7 @@ setup(
     name=dist_name,
     description=description,
     version=kolibri_explore_plugin.__version__,
-    author="EndlessOS",
+    author="Endless OS Foundation",
     author_email="danigm@endless.org",
     url="https://github.com/endlessm/kolibri-explore-plugin",
     packages=["kolibri_explore_plugin"],
