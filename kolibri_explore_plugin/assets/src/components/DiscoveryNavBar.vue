@@ -1,7 +1,7 @@
 <template>
 
   <NavBar class="discovery-navbar">
-    <img class="logo mr-3" :src="logo">
+    <img class="logo ml-3 mr-5" :src="logo">
     <b-button-group class="mx-auto">
       <b-nav-text
         v-if="showDiscoveryTab"
