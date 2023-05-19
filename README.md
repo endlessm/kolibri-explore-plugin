@@ -42,6 +42,8 @@ doesn't redirect you already.
 
 ## Setup
 
+Make sure you already have the **latest** `pipenv`.
+
 Either if you want to build or develop the plugin, please run:
 
 ```
