@@ -1,7 +1,7 @@
 <template>
 
   <NavBar class="discovery-navbar">
-    <img class="logo mr-3" :src="logo">
+    <img class="logo ml-3 mr-5" :src="logo">
     <b-button-group class="mx-auto">
       <b-nav-text
         v-if="showDiscoveryTab"
@@ -22,21 +22,15 @@
       </b-nav-text>
     </b-button-group>
     <b-navbar-nav>
-      <b-nav-text
-        v-b-modal.about-modal
-        class="btn d-md-block d-none"
-        @click="$root.$emit('setAboutSection', 'privacy-policy-link')"
+      <b-nav-item
+        class="d-block pr-0"
+        :href="feedbackUrl"
+        target="_blank"
+        :disabled="isOffline"
       >
-        {{ $tr('privacyPolicyLabel') }}
-      </b-nav-text>
-    </b-navbar-nav>
-    <b-navbar-nav>
-      <b-nav-text
-        v-b-modal.about-modal
-        class="btn d-md-block d-none pr-0"
-      >
-        {{ $tr('aboutLabel') }}
-      </b-nav-text>
+        <span class="d-inline"><MessageReplyTextOutlineIcon /></span>
+        <span class="d-none d-sm-inline">{{ $tr('feedbackLabel') }}</span>
+      </b-nav-item>
     </b-navbar-nav>
   </NavBar>
 
@@ -47,6 +41,7 @@
 
   import ViewDashboardOutlineIcon from 'vue-material-design-icons/ViewDashboardOutline.vue';
   import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
+  import MessageReplyTextOutlineIcon from 'vue-material-design-icons/MessageReplyTextOutline.vue';
   import plugin_data from 'plugin_data';
 
   import { mapMutations } from 'vuex';
@@ -55,14 +50,35 @@
 
   export default {
     name: 'DiscoveryNavBar',
-    components: { ViewDashboardOutlineIcon, MagnifyIcon },
+    components: {
+      ViewDashboardOutlineIcon,
+      MagnifyIcon,
+      MessageReplyTextOutlineIcon,
+    },
+    data() {
+      return {
+        isOffline: false,
+      };
+    },
     computed: {
       logo() {
         return assets.EndlessLogo;
       },
+      feedbackUrl() {
+        return 'https://endlessos.org/key-feedback';
+      },
       showDiscoveryTab() {
         return !plugin_data.hideDiscoveryTab;
       },
+    },
+    created() {
+      this.isOffline = !navigator.onLine;
+      window.addEventListener('offline', this.onOffline);
+      window.addEventListener('online', this.onOnline);
+    },
+    destroyed() {
+      window.removeEventListener('offline', this.onOffline);
+      window.removeEventListener('online', this.onOnline);
     },
     methods: {
       ...mapMutations({
@@ -91,12 +107,17 @@
       currentIsSearch() {
         return this.$route.name === PageNames.SEARCH;
       },
+      onOffline() {
+        this.isOffline = true;
+      },
+      onOnline() {
+        this.isOffline = false;
+      },
     },
     $trs: {
       discoveryLabel: 'Discovery',
       libraryLabel: 'Library',
-      aboutLabel: 'About',
-      privacyPolicyLabel: 'Privacy Policy',
+      feedbackLabel: 'Feedback',
     },
   };
 
