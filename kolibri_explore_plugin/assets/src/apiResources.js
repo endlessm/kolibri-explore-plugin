@@ -8,7 +8,7 @@ export const ExternalContentTagResource = new Resource({
 export const ContentNodeExtrasResource = new Resource({
   name: 'contentnodeextras',
   namespace: 'kolibri_explore_plugin',
-  fetchByExternalTag(tag) {
-    return this.getListEndpoint('by_external_tag', { tag });
+  fetchByExternalTag(tag, getParams = {}) {
+    return this.getListEndpoint('by_external_tag', { tag, ...getParams });
   },
 });
