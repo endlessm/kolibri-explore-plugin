@@ -81,7 +81,7 @@
               Explore
             </h3>
             <h5>
-              <b-link @click="goBack">
+              <b-link @click="clearInput">
                 See all channels <b-icon-arrow-right />
               </b-link>
             </h5>
@@ -234,11 +234,6 @@
         setSearchResult: 'topicsRoot/SET_SEARCH_RESULT',
         setSearchTerm: 'SET_SEARCH_TERM',
       }),
-      goBack() {
-        this.$router.push({
-          name: PageNames.TOPICS_ROOT,
-        });
-      },
       goToChannel(channelId) {
         this.$router.push({
           name: PageNames.TOPICS_CHANNEL,
