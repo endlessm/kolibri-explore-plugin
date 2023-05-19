@@ -45,11 +45,12 @@
 
   import { mapState } from 'vuex';
   import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
-  import { PageNames } from '../constants';
   import { EkIguanaSections } from '../customApps';
+  import navigationMixin from '../mixins/navigationMixin';
 
   export default {
     name: 'EkIguanaList',
+    mixins: [navigationMixin],
     data() {
       return {
         contentPickNodes: {},
@@ -157,12 +158,6 @@
       },
       getSlidableGridNodes(channels, contentPicks) {
         return channels.concat(contentPicks);
-      },
-      goToChannel(channelId) {
-        this.$router.push({
-          name: PageNames.TOPICS_CHANNEL,
-          params: { channel_id: channelId },
-        });
       },
     },
   };

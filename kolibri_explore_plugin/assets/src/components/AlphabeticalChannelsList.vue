@@ -20,11 +20,11 @@
   import { mapState } from 'vuex';
   import _ from 'lodash';
   import { responsiveMixin } from 'ek-components';
-  import { PageNames } from '../constants';
+  import navigationMixin from '../mixins/navigationMixin';
 
   export default {
     name: 'AlphabeticalChannelsList',
-    mixins: [responsiveMixin],
+    mixins: [navigationMixin, responsiveMixin],
 
     computed: {
       ...mapState('topicsRoot', { rootNodes: 'rootNodes' }),
@@ -49,12 +49,6 @@
     methods: {
       chunk(channels) {
         return _.chunk(channels, this.columns);
-      },
-      goToChannel(channelId) {
-        this.$router.push({
-          name: PageNames.TOPICS_CHANNEL,
-          params: { channel_id: channelId },
-        });
       },
     },
   };

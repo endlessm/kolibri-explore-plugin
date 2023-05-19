@@ -108,8 +108,8 @@
   import { mapMutations, mapState } from 'vuex';
   import { utils, constants, responsiveMixin } from 'ek-components';
 
-  import { PageNames } from '../constants';
   import { searchChannelsOnce } from '../modules/topicsRoot/handlers';
+  import navigationMixin from '../mixins/navigationMixin';
 
   import AlphabeticalChannelsList from '../components/AlphabeticalChannelsList';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
@@ -119,7 +119,7 @@
   export default {
     name: 'SearchPage',
     components: { AlphabeticalChannelsList, DiscoveryNavBar },
-    mixins: [responsiveMixin],
+    mixins: [navigationMixin, responsiveMixin],
     data() {
       return {
         query: '',
@@ -234,12 +234,6 @@
         setSearchResult: 'topicsRoot/SET_SEARCH_RESULT',
         setSearchTerm: 'SET_SEARCH_TERM',
       }),
-      goToChannel(channelId) {
-        this.$router.push({
-          name: PageNames.TOPICS_CHANNEL,
-          params: { channel_id: channelId },
-        });
-      },
       search(query) {
         this.setSearchResult({});
         this.resultKinds = [];

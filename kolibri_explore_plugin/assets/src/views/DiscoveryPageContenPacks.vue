@@ -96,11 +96,12 @@
   import { utils, constants } from 'ek-components';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
   import { ContentNodeExtrasResource } from '../apiResources';
+  import navigationMixin from '../mixins/navigationMixin';
 
   export default {
     name: 'DiscoveryPageContenPacks',
     components: { DiscoveryNavBar },
-    mixins: [commonCoreStrings],
+    mixins: [commonCoreStrings, navigationMixin],
     data() {
       return {
         sectionNodes: {},
