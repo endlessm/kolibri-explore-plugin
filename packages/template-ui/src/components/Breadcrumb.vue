@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { utils, responsiveMixin } from 'eos-components';
+import { utils, responsiveMixin } from 'ek-components';
 import { mapState } from 'vuex';
 
 

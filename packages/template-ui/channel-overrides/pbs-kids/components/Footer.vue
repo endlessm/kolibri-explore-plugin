@@ -27,7 +27,7 @@
 
 <script>
   import _ from 'lodash';
-  import { utils } from 'eos-components';
+  import { utils } from 'ek-components';
   import footerLogos from '../assets/footer-logos.png';
   import elinorLogo from '../assets/elinor-wonders-why.png';
   import pegcatLogo from '../assets/peg-cat.png';

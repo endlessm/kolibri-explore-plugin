@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { cardMixin } from 'eos-components';
+import { cardMixin } from 'ek-components';
 import { mapGetters } from 'vuex';
 import { cardSpacerX, contentImageMinWidth } from '../styles.scss';
 

@@ -29,7 +29,7 @@
 
 
 <script>
-  import { PackMetadata } from 'eos-components/src/constants';
+  import { PackMetadata } from 'ek-components/src/constants';
   import WelcomeBase from './WelcomeBase.vue';
 
   export default {

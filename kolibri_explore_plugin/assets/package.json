@@ -8,7 +8,7 @@
     "bootstrap": "^4.6.1",
     "bootstrap-vue": "^2.22.0",
     "deep-object-diff": "^1.1.0",
-    "eos-components": "^0.1.0",
+    "ek-components": "^0.1.0",
     "lodash": "^4.17.21",
     "vue-material-design-icons": "^4.12.1",
     "kolibri-constants": "0.1.42"

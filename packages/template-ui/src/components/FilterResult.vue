@@ -20,7 +20,7 @@
 
 <script>
   import { mapState } from 'vuex';
-  import { constants } from 'eos-components';
+  import { constants } from 'ek-components';
 
   export default {
     name: 'FilterResult',

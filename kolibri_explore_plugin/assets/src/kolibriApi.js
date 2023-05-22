@@ -5,7 +5,7 @@ import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
 
 import router from 'kolibri.coreVue.router';
 import store from 'kolibri.coreVue.vuex.store';
-import { utils } from 'eos-components';
+import { utils } from 'ek-components';
 import { showTopicsContentInLightbox } from './modules/topicsTree/handlers';
 import { PageNames } from './constants';
 import { getChannelIcon } from './customApps';

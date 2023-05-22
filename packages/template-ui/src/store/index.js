@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { constants as ComponentConstants } from 'eos-components';
+import { constants as ComponentConstants } from 'ek-components';
 
 import filters from './modules/filters';
 import dynamicRequireAsset from '@/dynamicRequireAsset';

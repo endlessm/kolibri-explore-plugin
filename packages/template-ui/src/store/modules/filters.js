@@ -1,4 +1,4 @@
-import { constants } from 'eos-components';
+import { constants } from 'ek-components';
 
 let storeData;
 try {

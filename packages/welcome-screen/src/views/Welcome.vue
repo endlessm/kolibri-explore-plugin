@@ -49,7 +49,7 @@
 <script>
 import UsbIcon from 'vue-material-design-icons/Usb.vue';
 import SdIcon from 'vue-material-design-icons/Sd.vue';
-import PrivacyPolicyText from 'eos-components/src/components/PrivacyPolicyText.vue';
+import PrivacyPolicyText from 'ek-components/src/components/PrivacyPolicyText.vue';
 
 
   export default {

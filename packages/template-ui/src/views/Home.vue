@@ -59,7 +59,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { constants } from 'eos-components';
+import { constants } from 'ek-components';
 
 const sectionPageSize = 2 * constants.ItemsPerSlide.lg;
 

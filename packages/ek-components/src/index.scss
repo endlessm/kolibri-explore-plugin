@@ -31,7 +31,7 @@
 // Change button dark outline variant:
 .btn-outline-dark {
   $value: theme-color("dark");
-  @include eos-button-outline-variant($value, $color-hover: $value, $border-color: $gray-500, $active-background: transparent, $active-border: $primary);
+  @include ek-button-outline-variant($value, $color-hover: $value, $border-color: $gray-500, $active-background: transparent, $active-border: $primary);
 }
 
 // Change buttons variant:
@@ -67,7 +67,7 @@
 
   .btn-#{$color}-outline-dark {
     $value: theme-color("dark");
-    @include eos-button-outline-variant($value, $color-hover: $value, $border-color: $gray-500, $active-background: transparent, $active-border: $primary);
+    @include ek-button-outline-variant($value, $color-hover: $value, $border-color: $gray-500, $active-background: transparent, $active-border: $primary);
   }
 }
 

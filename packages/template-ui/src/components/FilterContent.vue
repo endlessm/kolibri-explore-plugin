@@ -19,7 +19,7 @@
 
 <script>
 import { mapState, mapGetters, mapMutations } from 'vuex';
-import { constants } from 'eos-components';
+import { constants } from 'ek-components';
 
 export default {
   name: 'FilterContent',

@@ -1,5 +1,5 @@
 import { mapState, mapGetters } from 'vuex';
-import { utils } from 'eos-components';
+import { utils } from 'ek-components';
 import { headerLogoWidth } from '@/styles.scss';
 import dynamicRequireAsset from '@/dynamicRequireAsset';
 

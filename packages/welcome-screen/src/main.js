@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
-import eosComponents from 'eos-components';
+import EkComponents from 'ek-components';
 import App from '@/App.vue';
 
 import PackSelection from '@/views/PackSelection.vue';
@@ -20,7 +20,7 @@ import store from "@/store";
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(VueRouter);
-Vue.use(eosComponents);
+Vue.use(EkComponents);
 
 Vue.config.productionTip = false;
 

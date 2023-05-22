@@ -49,7 +49,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { constants, utils } from 'eos-components';
+import { constants, utils } from 'ek-components';
 
 export default {
   name: 'Content',

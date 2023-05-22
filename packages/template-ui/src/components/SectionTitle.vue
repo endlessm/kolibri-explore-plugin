@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { utils } from 'eos-components';
+import { utils } from 'ek-components';
 import { mapState } from 'vuex';
 import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue';
 

@@ -266,7 +266,7 @@
 <script>
 
   import urls from 'kolibri.urls';
-  import PrivacyPolicyText from 'eos-components/src/components/PrivacyPolicyText.vue';
+  import PrivacyPolicyText from 'ek-components/src/components/PrivacyPolicyText.vue';
 
   const DEVICE_CHEATCODE = 'showmedevice';
 

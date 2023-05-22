@@ -45,7 +45,7 @@
   import plugin_data from 'plugin_data';
 
   import { mapMutations } from 'vuex';
-  import { assets } from 'eos-components';
+  import { assets } from 'ek-components';
   import { PageNames } from '../constants';
 
   export default {

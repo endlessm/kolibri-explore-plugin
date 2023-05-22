@@ -106,7 +106,7 @@
 
   import _ from 'lodash';
   import { mapMutations, mapState } from 'vuex';
-  import { utils, constants, responsiveMixin } from 'eos-components';
+  import { utils, constants, responsiveMixin } from 'ek-components';
 
   import { PageNames } from '../constants';
   import { searchChannelsOnce } from '../modules/topicsRoot/handlers';
