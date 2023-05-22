@@ -1,7 +1,7 @@
 <template>
 
   <div>
-    <BackToTop />
+    <EkBackToTop />
     <ContentModal />
     <AboutModal id="about-modal" />
     <DevTag v-if="showBuildInfo" />

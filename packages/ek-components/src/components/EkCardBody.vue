@@ -11,7 +11,7 @@
     <!-- FIXME only for debugging: -->
     <span class="debug-node-id sr-only">{{ node.id }}</span>
     <div v-if="showChannelIcon" class="align-items-center d-flex mb-3">
-      <ChannelLogo class="mr-2" :channel="node.channel" size="sm" />
+      <EkChannelLogo class="mr-2" :channel="node.channel" size="sm" />
       <span class="channel-title text-muted text-truncate">{{ node.channel.title }}</span>
     </div>
     <p v-else class="mb-1 subtitle text-muted">
@@ -29,7 +29,7 @@
 import VClamp from 'vue-clamp';
 
 export default {
-  name: 'CardBody',
+  name: 'EkCardBody',
   components: {
     VClamp,
   },

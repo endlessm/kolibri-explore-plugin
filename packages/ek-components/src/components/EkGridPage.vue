@@ -7,7 +7,7 @@
       :md="cardColumns.md"
       :lg="cardColumns.lg"
     >
-      <Card :node="node" :mediaQuality="mediaQuality" />
+      <EkCard :node="node" :mediaQuality="mediaQuality" />
     </b-col>
   </transition-group>
 </template>
@@ -16,7 +16,7 @@
 import { MediaQuality } from '../constants';
 
 export default {
-  name: 'GridPage',
+  name: 'EkGridPage',
   props: {
     nodes: {
       type: Array,

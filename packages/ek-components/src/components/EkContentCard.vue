@@ -7,7 +7,7 @@
       'shadow': isHovered,
     }"
   >
-    <ContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
+    <EkContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
       <b-card-body>
         <div
           class="card-img"
@@ -17,14 +17,14 @@
           <span class="sr-only">{{ node.title }}</span>
         </div>
         <div class="body-wrapper">
-          <CardBody :node="node" :subtitle="subtitle" />
-          <PlayButton
+          <EkCardBody :node="node" :subtitle="subtitle" />
+          <EkPlayButton
             :kind="kind"
             @click="onClick"
           />
         </div>
       </b-card-body>
-    </ContentLink>
+    </EkContentLink>
   </b-card>
 </template>
 
@@ -34,7 +34,7 @@ import { getCardSubtitle } from '../utils';
 import cardMixin from './mixins/cardMixin.js';
 
 export default {
-  name: 'ContentCard',
+  name: 'EkContentCard',
   mixins: [cardMixin],
   props: {
     node: {

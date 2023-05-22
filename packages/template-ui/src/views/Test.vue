@@ -78,12 +78,12 @@
       </b-button>
       <hr>
       <h3>Media Buttons:</h3>
-      <PlayButton kind="video" class="mb-1 mr-1" />
-      <PlayButton kind="html5" class="mb-1 mr-1" />
-      <PlayButton kind="exercise" class="mb-1 mr-1" />
-      <PlayButton kind="document" class="mb-1 mr-1" />
-      <PlayButton kind="bundle" class="mb-1 mr-1" />
-      <PlayButton kind="audio" class="mb-1 mr-1" />
+      <EkPlayButton kind="video" class="mb-1 mr-1" />
+      <EkPlayButton kind="html5" class="mb-1 mr-1" />
+      <EkPlayButton kind="exercise" class="mb-1 mr-1" />
+      <EkPlayButton kind="document" class="mb-1 mr-1" />
+      <EkPlayButton kind="bundle" class="mb-1 mr-1" />
+      <EkPlayButton kind="audio" class="mb-1 mr-1" />
 
       <hr>
 
@@ -109,7 +109,7 @@
           md="6"
           xs="12"
         >
-          <Card :node="node" mediaQuality="regular" />
+          <EkCard :node="node" mediaQuality="regular" />
         </b-col>
       </b-row>
 
@@ -124,7 +124,7 @@
           md="6"
           xs="12"
         >
-          <Card :node="node" mediaQuality="regular" />
+          <EkCard :node="node" mediaQuality="regular" />
         </b-col>
       </b-row>
 
@@ -139,7 +139,7 @@
           md="6"
           xs="12"
         >
-          <Card :node="node" mediaQuality="regular" />
+          <EkCard :node="node" mediaQuality="regular" />
         </b-col>
         <b-col
           v-for="node in [...topicNodes.slice(0, 1), ...contentNodes.slice(0, 1)]"
@@ -148,7 +148,7 @@
           md="6"
           xs="12"
         >
-          <Card :node="node" mediaQuality="low" />
+          <EkCard :node="node" mediaQuality="low" />
         </b-col>
       </b-row>
 

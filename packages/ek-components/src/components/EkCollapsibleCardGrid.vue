@@ -1,6 +1,6 @@
 <template>
   <span>
-    <GridPage
+    <EkGridPage
       :nodes="visibleNodes"
       :cardColumns="cardColumns"
       :mediaQuality="mediaQuality"
@@ -38,7 +38,7 @@ import { ItemsPerPage, MediaQuality } from '../constants';
 import responsiveMixin from './mixins/responsiveMixin';
 
 export default {
-  name: 'CollapsibleCardGrid',
+  name: 'EkCollapsibleCardGrid',
   mixins: [responsiveMixin],
   props: {
     nodes: {

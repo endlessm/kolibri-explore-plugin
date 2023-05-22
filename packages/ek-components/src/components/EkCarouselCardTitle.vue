@@ -21,7 +21,7 @@ import VClamp from 'vue-clamp';
 import { getCardSubtitle } from '../utils';
 
 export default {
-  name: 'CarouselCardTitle',
+  name: 'EkCarouselCardTitle',
   components: {
     VClamp,
   },

@@ -1,9 +1,9 @@
 <template>
   <div class="text-muted">
-    <Footer>
+    <EkFooter>
       <template #left>
         <div class="align-items-center d-flex pb-3">
-          <ChannelLogo class="mr-3" :channel="channel" size="md" />
+          <EkChannelLogo class="mr-3" :channel="channel" size="md" />
           <h6>{{ channel.name }}</h6>
         </div>
         <p class="pt-2">
@@ -18,7 +18,7 @@
           <img :src="logo" aria-hidden="true">
         </div>
       </template>
-    </Footer>
+    </EkFooter>
   </div>
 </template>
 

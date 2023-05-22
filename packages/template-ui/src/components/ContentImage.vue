@@ -11,7 +11,7 @@
         :alt="node.title"
         class="border d-block mx-auto rounded"
       />
-      <PlayButton
+      <EkPlayButton
         v-if="node.kind"
         size="lg"
         :kind="node.kind"

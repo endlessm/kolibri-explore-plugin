@@ -49,7 +49,7 @@
   }
 
   export default {
-    name: 'Footer',
+    name: 'EkFooter',
     data() {
       return {
         footerLogos,

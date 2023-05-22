@@ -9,7 +9,7 @@
     <b-card-header
       :class="{ withBigThumbnail: hasBigThumbnail, 'pb-3': !isSmall }"
     >
-      <ChannelLogo class="mr-3 rounded-logo" :channel="channel" size="md" />
+      <EkChannelLogo class="mr-3 rounded-logo" :channel="channel" size="md" />
       <h6>
         {{ channel.title }}
       </h6>
@@ -29,7 +29,7 @@
   import VClamp from 'vue-clamp';
 
   export default {
-    name: 'ChannelCard',
+    name: 'EkChannelCard',
     components: {
       VClamp,
     },

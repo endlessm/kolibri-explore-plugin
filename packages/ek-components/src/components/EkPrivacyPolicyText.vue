@@ -243,6 +243,6 @@
 
 <script>
 export default {
-  name: 'PrivacyPolicyText',
+  name: 'EkPrivacyPolicyText',
 }
 </script>

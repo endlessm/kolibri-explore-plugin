@@ -23,7 +23,7 @@ import { ItemsPerPage, ItemsPerSlide, MediaQuality } from '../constants';
 import { validateItemsPerSlide } from '../utils';
 
 export default {
-  name: 'CardGrid',
+  name: 'EkCardGrid',
   props: {
     nodes: {
       type: Array,
@@ -65,10 +65,10 @@ export default {
     displayVariant() {
       switch (this.variant) {
         case 'collapsible':
-          return 'CollapsibleCardGrid';
+          return 'EkCollapsibleCardGrid';
         case 'slidable':
         default:
-          return 'SlidableCardGrid';
+          return 'EkSlidableCardGrid';
       }
     },
   },

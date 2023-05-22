@@ -1,5 +1,5 @@
 <template>
-  <SlidableGrid
+  <EkSlidableGrid
     v-slot="slotProps"
     class="pb-4"
     :nodes="nodes"
@@ -7,13 +7,13 @@
     :itemsPerSlide="itemsPerSlide"
     @loadMoreNodes="$emit('loadMoreNodes')"
   >
-    <Card
+    <EkCard
       v-for="node in slotProps.slideNodes"
       :key="node.id"
       :node="node"
       :mediaQuality="mediaQuality"
     />
-  </SlidableGrid>
+  </EkSlidableGrid>
 </template>
 
 <script>
@@ -21,7 +21,7 @@ import { ItemsPerSlide, MediaQuality } from '../constants';
 import { validateItemsPerSlide } from '../utils';
 
 export default {
-  name: 'SlidableCardGrid',
+  name: 'EkSlidableCardGrid',
   props: {
     nodes: {
       type: Array,

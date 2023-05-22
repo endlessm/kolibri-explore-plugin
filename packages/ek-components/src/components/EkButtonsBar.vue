@@ -49,7 +49,7 @@
   import responsiveMixin from './mixins/responsiveMixin';
 
   export default {
-    name: 'ButtonsBar',
+    name: 'EkButtonsBar',
     mixins: [responsiveMixin],
     props: {
       buttons: {

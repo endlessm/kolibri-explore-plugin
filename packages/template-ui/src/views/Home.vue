@@ -7,24 +7,24 @@
     <SectionsSearchRow v-if="hasSectionsSearch" />
 
     <template v-if="loadingCarouselNodes">
-      <CarouselPlaceholder v-if="hasCarousel" />
+      <EkCarouselPlaceholder v-if="hasCarousel" />
     </template>
     <template v-else>
-      <Carousel v-if="hasCarousel" :nodes="carouselNodes" />
+      <EkCarousel v-if="hasCarousel" :nodes="carouselNodes" />
       <b-container v-if="hasCarousel">
         <hr>
       </b-container>
     </template>
 
     <template v-if="loadingContentNodes || loadingSectionNodes">
-      <CardGridPlaceholder />
+      <EkCardGridPlaceholder />
     </template>
     <template v-else>
       <FilterContent v-if="hasFilters" />
 
       <template v-if="isFilterEmpty">
         <template v-if="contentNodes.nodes.length">
-          <CardGrid
+          <EkCardGrid
             :nodes="contentNodes.nodes"
             :variant="hasFlatGrid ? 'collapsible' : 'slidable'"
             :mediaQuality="mediaQuality"
@@ -37,7 +37,7 @@
           v-for="section in mainSections"
           :key="section.id"
         >
-          <CardGrid
+          <EkCardGrid
             :id="section.id"
             :nodes="sectionNodes[section.id].nodes"
             :hasMoreNodes="sectionNodes[section.id].hasMoreNodes"
@@ -45,7 +45,7 @@
             @loadMoreNodes="onLoadMoreSectionNodes(section.id)"
           >
             <SectionTitle :section="section" />
-          </CardGrid>
+          </EkCardGrid>
         </div>
       </template>
 

@@ -4,7 +4,7 @@
     <h5 class="text-muted">
       Channels from A-Z
     </h5>
-    <ChannelCardGroup
+    <EkChannelCardGroup
       class="pb-4"
       :rows="chunk(orderedChannels)"
       :columns="columns"

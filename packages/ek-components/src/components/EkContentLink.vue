@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'ContentLink',
+  name: 'EkContentLink',
   props: {
     url: {
       type: String,

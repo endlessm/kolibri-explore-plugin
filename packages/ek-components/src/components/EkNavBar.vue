@@ -10,7 +10,7 @@
   import _ from 'lodash';
 
   export default {
-    name: 'NavBar',
+    name: 'EkNavBar',
     props: {
       alwaysCastShadow: {
         type: Boolean,

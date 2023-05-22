@@ -6,7 +6,7 @@
       class="card-row"
       deck
     >
-      <ChannelCard
+      <EkChannelCard
         v-for="channel in row"
         :key="channel.id"
         :channel="channel"
@@ -26,12 +26,12 @@
 </template>
 
 <script>
-  import ChannelCard from './ChannelCard';
+  import EkChannelCard from './EkChannelCard';
 
   export default {
-    name: 'ChannelCardGroup',
+    name: 'EkChannelCardGroup',
     components: {
-      ChannelCard,
+      EkChannelCard,
     },
     props: {
       rows: {

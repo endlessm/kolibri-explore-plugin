@@ -17,7 +17,7 @@
 
 <script>
   export default {
-    name: 'CarouselPlaceholder',
+    name: 'EkCarouselPlaceholder',
   }
 </script>
 

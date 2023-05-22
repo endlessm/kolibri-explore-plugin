@@ -12,7 +12,7 @@
         </h5>
       </b-container>
       <b-container class="no-container-padding">
-        <SlidableGrid
+        <EkSlidableGrid
           v-slot="slotProps"
           :nodes="getSlidableGridNodes(channels, contentPicks)"
           :hasWhiteBackground="true"
@@ -21,19 +21,19 @@
           <template
             v-for="node in slotProps.slideNodes"
           >
-            <ChannelCard
+            <EkChannelCard
               v-if="node !== undefined && node.kind === 'channel'"
               :key="node.id"
               :channel="node"
               @click.native="goToChannel(node.id)"
             />
-            <Card
+            <EkCard
               v-else
               :key="node.id"
               :node="node"
             />
           </template>
-        </SlidableGrid>
+        </EkSlidableGrid>
       </b-container>
     </div>
   </div>

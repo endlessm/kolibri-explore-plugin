@@ -8,13 +8,13 @@
       <b-card-text>
         <div class="card-content">
           <div class="d-lg-block d-none dh3 mb-1 title" :class="{ 'text-primary': isHovered }">
-            <CarouselCardTitle
+            <EkCarouselCardTitle
               :node="node"
               :showDescription="!showChannelIcon"
             />
           </div>
           <div class="d-lg-none dh4 mb-1 title" :class="{ 'text-primary': isHovered }">
-            <CarouselCardTitle
+            <EkCarouselCardTitle
               tag="h4"
               :node="node"
               :lines="3"
@@ -24,12 +24,12 @@
 
           <div class="align-items-center d-flex justify-content-between">
             <div v-if="showChannelIcon" class="align-items-center d-flex">
-              <ChannelLogo class="mr-2" :channel="node.channel" size="sm" />
+              <EkChannelLogo class="mr-2" :channel="node.channel" size="sm" />
               <span class="d-md-block d-none pr-2 text-muted text-truncate">
                 {{ node.channel.title }}
               </span>
             </div>
-            <PlayButton
+            <EkPlayButton
               class="ml-auto"
               :kind="node.kind"
               @click="goToContent()"
@@ -45,7 +45,7 @@
 import cardMixin from './mixins/cardMixin';
 
 export default {
-  name: 'CarouselCard',
+  name: 'EkCarouselCard',
   mixins: [cardMixin],
   props: {
     node: {

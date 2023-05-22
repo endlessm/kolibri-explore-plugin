@@ -1,6 +1,6 @@
 <template>
   <div v-if="kolibriApiReady" id="app" class="d-flex flex-column h-100">
-    <BackToTop />
+    <EkBackToTop />
     <!-- Wrapper needed to fix flexbox footer positioning on IE11 -->
     <div class="flex-fill flex-shrink-0">
       <keep-alive include="Search,Home">

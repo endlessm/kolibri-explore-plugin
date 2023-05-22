@@ -39,7 +39,7 @@
         <h3 class="pt-3 text-primary">
           Privacy Policy
         </h3>
-        <PrivacyPolicyText class="pb-3" />
+        <EkPrivacyPolicyText class="pb-3" />
       </div>
     </b-modal>
   </div>
@@ -49,12 +49,12 @@
 <script>
 import UsbIcon from 'vue-material-design-icons/Usb.vue';
 import SdIcon from 'vue-material-design-icons/Sd.vue';
-import PrivacyPolicyText from 'ek-components/src/components/PrivacyPolicyText.vue';
+import EkPrivacyPolicyText from 'ek-components/src/components/EkPrivacyPolicyText.vue';
 
 
   export default {
     name: "Welcome",
-    components: { UsbIcon, SdIcon, PrivacyPolicyText }
+    components: { UsbIcon, SdIcon, EkPrivacyPolicyText }
 };
 
 </script>

@@ -21,7 +21,7 @@
   import ChevronUpIcon from 'vue-material-design-icons/ChevronUp.vue';
 
   export default {
-    name: 'BackToTop',
+    name: 'EkBackToTop',
     components: { ChevronUpIcon },
     data() {
       return {

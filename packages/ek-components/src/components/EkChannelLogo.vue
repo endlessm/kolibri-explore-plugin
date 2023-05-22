@@ -9,7 +9,7 @@
 
 <script>
   export default {
-    name: 'ChannelLogo',
+    name: 'EkChannelLogo',
     props: {
       channel: {
         type: Object,

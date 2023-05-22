@@ -4,7 +4,7 @@
     :style="{ backgroundImage: backgroundImageURL }"
   >
     <ChannelNavBar />
-    <SearchBar
+    <EkSearchBar
       v-model="query"
       @clear-input="onClearInput"
     />
@@ -19,7 +19,7 @@
       </h5>
     </EmptyResultsMessage>
 
-    <CardGrid
+    <EkCardGrid
       v-if="!resultNodes.length"
       :nodes="mainSections"
       :mediaQuality="mediaQuality"
@@ -32,8 +32,8 @@
           </h4>
         </b-container>
       </b-row>
-    </CardGrid>
-    <CardGrid
+    </EkCardGrid>
+    <EkCardGrid
       v-else
       :nodes="resultNodes"
       :mediaQuality="mediaQuality"
@@ -42,9 +42,9 @@
     >
       <div class="font-weight-bold my-4 text-muted">
         {{ totalResults }} Results
-        <Keywords :words="keywords" @click="removeKeyword" />
+        <EkKeywords :words="keywords" @click="removeKeyword" />
       </div>
-    </CardGrid>
+    </EkCardGrid>
 
   </div>
 </template>

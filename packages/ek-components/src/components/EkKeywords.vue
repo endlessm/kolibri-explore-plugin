@@ -21,7 +21,7 @@ import CloseIcon from 'vue-material-design-icons/CloseCircle.vue';
 import { KeywordIconSize } from '../constants.js'
 
 export default {
-  name: 'Keywords',
+  name: 'EkKeywords',
   components: {
     CloseIcon,
   },

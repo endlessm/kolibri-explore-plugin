@@ -8,7 +8,7 @@
       :class="{ 'gray-background': !isEmpty, 'white-background': isEmpty }"
     >
 
-      <SearchBar
+      <EkSearchBar
         v-model="query"
         class="search-row"
         :progress="progress"
@@ -21,12 +21,12 @@
 
       <template v-else>
         <b-container>
-          <Keywords :words="keywords" @click="removeKeyword" />
+          <EkKeywords :words="keywords" @click="removeKeyword" />
         </b-container>
 
         <template v-if="resultCards">
           <div v-for="[kind, nodes] in resultCards" :key="kind">
-            <CardGrid
+            <EkCardGrid
               id="root"
               variant="collapsible"
               :itemsPerPage="4"
@@ -42,13 +42,13 @@
                   to {{ groupVerb(kind) }}
                 </h4>
               </div>
-            </CardGrid>
+            </EkCardGrid>
             <hr>
           </div>
         </template>
 
         <template v-if="isLoading" class="placeholder">
-          <CardGridPlaceholder />
+          <EkCardGridPlaceholder />
         </template>
 
         <b-container class="pb-5">
@@ -67,7 +67,7 @@
           <h4 class="text-muted">
             {{ resultChannels.length }} channels related to "{{ cleanedQuery }}"
           </h4>
-          <ChannelCardGroup
+          <EkChannelCardGroup
             variant="smallCard"
             :rows="resultChannelsColumns"
             :columns="columns"
@@ -85,7 +85,7 @@
                 See all channels <b-icon-arrow-right />
               </b-link>
             </h5>
-            <ChannelCardGroup
+            <EkChannelCardGroup
               :rows="recommended"
               :columns="columns"
               @card-click="goToChannel"

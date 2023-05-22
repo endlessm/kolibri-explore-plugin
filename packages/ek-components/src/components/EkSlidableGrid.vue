@@ -62,7 +62,7 @@ import { validateItemsPerSlide } from '../utils';
 import responsiveMixin from './mixins/responsiveMixin';
 
 export default {
-  name: 'SlidableGrid',
+  name: 'EkSlidableGrid',
   components: { ChevronLeftIcon, ChevronRightIcon },
   mixins: [responsiveMixin],
   props: {

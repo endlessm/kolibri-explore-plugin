@@ -10,25 +10,25 @@
     </b-container>
 
     <template v-if="loading">
-      <CarouselPlaceholder />
+      <EkCarouselPlaceholder />
     </template>
 
     <template v-else>
       <b-container class="mb-2 mt-2">
-        <ButtonsBar
+        <EkButtonsBar
           class="mr-3 mt-1"
           title="More Topics"
           :buttons="Array.from(searchTerms.keys())"
           @click="goToTerm"
         />
       </b-container>
-      <Carousel class="pt-3" :nodes="carouselNodes" :showChannelIcon="true" />
+      <EkCarousel class="pt-3" :nodes="carouselNodes" :showChannelIcon="true" />
     </template>
 
     <div class="flex-fill main">
 
       <template v-if="loading">
-        <CardGridPlaceholder />
+        <EkCardGridPlaceholder />
       </template>
       <template v-else>
         <EkIguanaList />

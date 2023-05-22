@@ -13,7 +13,7 @@ import { MediaQuality } from '../constants';
 import { getNodeUrl } from '../utils';
 
 export default {
-  name: 'Card',
+  name: 'EkCard',
   props: {
     node: {
       type: Object,
@@ -27,9 +27,9 @@ export default {
   computed: {
     cardVariant() {
       if (this.node.kind !== 'topic' || this.isBundle) {
-        return 'ContentCard';
+        return 'EkContentCard';
       }
-      return 'TopicCard';
+      return 'EkTopicCard';
     },
     showAsBundle() {
       // If there are no topics children we can show as bundle

@@ -27,7 +27,7 @@ import VideoIcon from 'vue-material-design-icons/PlayCircleOutline.vue';
 import { MediaTypeVerbs } from '../constants';
 
 export default {
-  name: 'PlayButton',
+  name: 'EkPlayButton',
   components: {
     AudioIcon,
     DocumentIcon,

@@ -51,8 +51,8 @@
           </div>
         </b-col>
         <b-col v-if="displayLogoInHeader" class="d-none d-sm-flex justify-content-end">
-          <ChannelLogo class="d-lg-none d-none d-sm-block" :channel="channel" size="lg" />
-          <ChannelLogo class="d-lg-block d-none" :channel="channel" size="xl" />
+          <EkChannelLogo class="d-lg-none d-none d-sm-block" :channel="channel" size="lg" />
+          <EkChannelLogo class="d-lg-block d-none" :channel="channel" size="xl" />
         </b-col>
       </b-row>
     </template>

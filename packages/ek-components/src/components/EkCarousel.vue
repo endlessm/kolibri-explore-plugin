@@ -13,12 +13,12 @@
       >
         <template #img>
 
-          <ContentLink :url="getNodeUrl(node)">
-            <CarouselCard
+          <EkContentLink :url="getNodeUrl(node)">
+            <EkCarouselCard
               :showChannelIcon="showChannelIcon"
               :node="node"
             />
-          </ContentLink>
+          </EkContentLink>
         </template>
       </b-carousel-slide>
     </b-carousel>
@@ -31,7 +31,7 @@ import { CarouselInterval } from '../constants';
 import { getNodeUrl } from '../utils';
 
 export default {
-  name: 'Carousel',
+  name: 'EkCarousel',
   props: {
     nodes: {
       type: Array,

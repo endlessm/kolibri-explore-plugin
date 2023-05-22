@@ -45,7 +45,7 @@
   import { SearchBarDebounce } from '../constants.js';
 
   export default {
-    name: 'SearchBar',
+    name: 'EkSearchBar',
     components: {
       CloseIcon,
       MagnifyIcon,

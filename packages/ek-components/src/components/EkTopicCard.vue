@@ -7,7 +7,7 @@
       'shadow': isHovered,
     }"
   >
-    <ContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
+    <EkContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
       <b-card-body class="bg-primary">
         <div
           class="card-img"
@@ -39,7 +39,7 @@
           </div>
           <b-card-text class="my-1">
             <div v-if="showChannelIcon" class="align-items-center d-flex">
-              <ChannelLogo class="mr-2" :channel="node.channel" size="sm" />
+              <EkChannelLogo class="mr-2" :channel="node.channel" size="sm" />
               <span class="channel-title subtitle text-truncate">{{ node.channel.title }}</span>
             </div>
             <div v-else>
@@ -51,7 +51,7 @@
           </b-card-text>
         </div>
       </b-card-body>
-    </ContentLink>
+    </EkContentLink>
   </b-card>
 </template>
 
@@ -62,7 +62,7 @@ import { MediaQuality } from '../constants';
 import cardMixin from './mixins/cardMixin.js';
 
 export default {
-  name: 'TopicCard',
+  name: 'EkTopicCard',
   components: {
     BundleIcon,
     VClamp,

@@ -1,32 +1,30 @@
-import BackToTop from './components/BackToTop.vue';
-import ButtonsBar from './components/ButtonsBar.vue';
-import Card from './components/Card.vue';
-import CardBody from './components/CardBody.vue';
-import CardGrid from './components/CardGrid.vue';
-import CardGridPlaceholder from './components/CardGridPlaceholder.vue';
-import Carousel from './components/Carousel.vue';
-import CarouselCard from './components/CarouselCard.vue';
-import CarouselCardTitle from './components/CarouselCardTitle.vue';
-import CarouselPlaceholder from './components/CarouselPlaceholder.vue';
-import ChannelCard from './components/ChannelCard.vue';
-import ChannelCardGroup from './components/ChannelCardGroup.vue';
-import ChannelLogo from './components/ChannelLogo.vue';
-import CollapsibleCardGrid from './components/CollapsibleCardGrid.vue';
-import ContentCard from './components/ContentCard.vue';
-import ContentLink from './components/ContentLink.vue';
-import DummyButton from './components/DummyButton.vue';
-import Footer from './components/Footer.vue';
-import GridPage from './components/GridPage.vue';
-import Keywords from './components/Keywords.vue';
-import NavBar from './components/NavBar.vue';
-import PlayButton from './components/PlayButton.vue';
-import PrivacyPolicyText from './components/PrivacyPolicyText.vue';
-import SearchBar from './components/SearchBar.vue';
-import SlidableCardGrid from './components/SlidableCardGrid.vue';
-import SlidableGrid from './components/SlidableGrid.vue';
-import TopicCard from './components/TopicCard.vue';
-import WelcomeCard from './components/WelcomeCard.vue';
-import PackCard from './components/PackCard.vue';
+import EkBackToTop from './components/EkBackToTop.vue';
+import EkButtonsBar from './components/EkButtonsBar.vue';
+import EkCard from './components/EkCard.vue';
+import EkCardBody from './components/EkCardBody.vue';
+import EkCardGrid from './components/EkCardGrid.vue';
+import EkCardGridPlaceholder from './components/EkCardGridPlaceholder.vue';
+import EkCarousel from './components/EkCarousel.vue';
+import EkCarouselCard from './components/EkCarouselCard.vue';
+import EkCarouselCardTitle from './components/EkCarouselCardTitle.vue';
+import EkCarouselPlaceholder from './components/EkCarouselPlaceholder.vue';
+import EkChannelCard from './components/EkChannelCard.vue';
+import EkChannelCardGroup from './components/EkChannelCardGroup.vue';
+import EkChannelLogo from './components/EkChannelLogo.vue';
+import EkCollapsibleCardGrid from './components/EkCollapsibleCardGrid.vue';
+import EkContentCard from './components/EkContentCard.vue';
+import EkContentLink from './components/EkContentLink.vue';
+import EkFooter from './components/EkFooter.vue';
+import EkGridPage from './components/EkGridPage.vue';
+import EkKeywords from './components/EkKeywords.vue';
+import EkNavBar from './components/EkNavBar.vue';
+import EkPlayButton from './components/EkPlayButton.vue';
+import EkPrivacyPolicyText from './components/EkPrivacyPolicyText.vue';
+import EkSearchBar from './components/EkSearchBar.vue';
+import EkSlidableCardGrid from './components/EkSlidableCardGrid.vue';
+import EkSlidableGrid from './components/EkSlidableGrid.vue';
+import EkTopicCard from './components/EkTopicCard.vue';
+import EkPackCard from './components/EkPackCard.vue';
 
 import cardMixin from './components/mixins/cardMixin.js';
 import responsiveMixin from './components/mixins/responsiveMixin.js';
@@ -37,35 +35,33 @@ import constants from './constants.js';
 import EndlessLogo from './assets/EndlessLogo.svg';
 
 const components = {
-  BackToTop,
-  ButtonsBar,
-  Card,
-  CardBody,
-  CardGrid,
-  CardGridPlaceholder,
-  Carousel,
-  CarouselCard,
-  CarouselCardTitle,
-  CarouselPlaceholder,
-  ChannelCard,
-  ChannelCardGroup,
-  ChannelLogo,
-  CollapsibleCardGrid,
-  ContentCard,
-  ContentLink,
-  DummyButton,
-  Footer,
-  GridPage,
-  Keywords,
-  NavBar,
-  PackCard,
-  PlayButton,
-  PrivacyPolicyText,
-  SearchBar,
-  SlidableCardGrid,
-  SlidableGrid,
-  TopicCard,
-  WelcomeCard,
+  EkBackToTop,
+  EkButtonsBar,
+  EkCard,
+  EkCardBody,
+  EkCardGrid,
+  EkCardGridPlaceholder,
+  EkCarousel,
+  EkCarouselCard,
+  EkCarouselCardTitle,
+  EkCarouselPlaceholder,
+  EkChannelCard,
+  EkChannelCardGroup,
+  EkChannelLogo,
+  EkCollapsibleCardGrid,
+  EkContentCard,
+  EkContentLink,
+  EkFooter,
+  EkGridPage,
+  EkKeywords,
+  EkNavBar,
+  EkPackCard,
+  EkPlayButton,
+  EkPrivacyPolicyText,
+  EkSearchBar,
+  EkSlidableCardGrid,
+  EkSlidableGrid,
+  EkTopicCard,
 };
 
 const plugin = {

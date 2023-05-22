@@ -15,7 +15,7 @@
         </b-col>
       </b-row>
     </b-container>
-    <CardGrid
+    <EkCardGrid
       v-if="showTopics"
       :nodes="mainSections"
       :mediaQuality="mediaQuality"
@@ -28,7 +28,7 @@
           </h4>
         </b-container>
       </b-row>
-    </CardGrid>
+    </EkCardGrid>
   </div>
 </template>
 
