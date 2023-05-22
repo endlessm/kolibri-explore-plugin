@@ -20,10 +20,7 @@
 
   import { mapState } from 'vuex';
   import { responsiveMixin } from 'eos-components';
-  import {
-    hideTopicsContentFromLightbox,
-    showTopicsContentInLightbox,
-  } from '../modules/topicsTree/handlers';
+  import { hideTopicsContent, showTopicsContent } from '../modules/topicsTree/handlers';
   import ContentItem from './ContentItem';
 
   export default {
@@ -86,10 +83,10 @@
       },
 
       goToContent(id) {
-        showTopicsContentInLightbox(this.$store, id);
+        showTopicsContent(this.$store, id);
       },
       onClose() {
-        hideTopicsContentFromLightbox(this.$store);
+        hideTopicsContent(this.$store);
       },
     },
   };

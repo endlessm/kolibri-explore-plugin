@@ -7,7 +7,7 @@
       'shadow': isHovered,
     }"
   >
-    <ContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
+    <ContentLink :url="url" :nodeId="node.id" @isHovered="(hovered) => isHovered = hovered">
       <b-card-body>
         <div
           class="card-img"

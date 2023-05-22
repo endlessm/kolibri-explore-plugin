@@ -17,6 +17,11 @@ export default {
       type: String,
       required: true,
     },
+    nodeId: {
+      type: String,
+      required: false,
+      default: null,
+    },
   },
   emits: ['isHovered'],
   methods: {
@@ -24,7 +29,12 @@ export default {
       this.$emit('isHovered', hovered);
     },
     onClick() {
-      this.$router.push(this.url);
+      if (this.nodeId) {
+        window.kolibri.navigateTo(this.nodeId);
+      }
+      else {
+        this.$router.push(this.url);
+      }
     },
   },
 };
