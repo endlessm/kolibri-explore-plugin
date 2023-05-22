@@ -1,6 +1,6 @@
 <template>
   <span :class="variant">
-    <PlayButton
+    <EkPlayButton
       v-for="option in filter.options"
       :key="option.kind"
       :size="size"

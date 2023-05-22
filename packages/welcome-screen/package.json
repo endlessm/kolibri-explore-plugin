@@ -11,7 +11,7 @@
   "dependencies": {
     "bootstrap": "^4.6.1",
     "bootstrap-vue": "^2.22.0",
-    "eos-components": "^0.1.0",
+    "ek-components": "^0.1.0",
     "vue": "^2.6.11"
   },
   "devDependencies": {

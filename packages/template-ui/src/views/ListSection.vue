@@ -6,16 +6,16 @@
 
     <div v-if="isInlineLevel">
       <template v-if="loadingSubsectionNodes">
-        <CardGridPlaceholder
+        <EkCardGridPlaceholder
           v-for="subsection in sectionNodes.nodes"
           :id="subsection.id"
           :key="subsection.id"
         >
           <SectionTitle :section="subsection" />
-        </CardGridPlaceholder>
+        </EkCardGridPlaceholder>
       </template>
       <template v-else>
-        <CardGrid
+        <EkCardGrid
           v-for="subsection in sectionNodes.nodes"
           :id="subsection.id"
           :key="subsection.id"
@@ -26,11 +26,11 @@
           @loadMoreNodes="onLoadMoreSubsectionNodes(subsection.id)"
         >
           <SectionTitle :section="subsection" />
-        </CardGrid>
+        </EkCardGrid>
       </template>
     </div>
     <div v-else>
-      <CardGrid
+      <EkCardGrid
         :id="section.id"
         :key="section.id"
         :nodes="sectionNodes.nodes"
@@ -47,7 +47,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { constants } from 'eos-components';
+import { constants } from 'ek-components';
 
 const sectionPageSize = 2 * constants.ItemsPerSlide.lg;
 

@@ -16,7 +16,7 @@
 
 <script>
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
-import { constants } from 'eos-components';
+import { constants } from 'ek-components';
 
 export default {
   name: 'SectionsSearchRow',

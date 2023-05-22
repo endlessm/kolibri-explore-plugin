@@ -30,6 +30,6 @@ export default function () {
   }
 
   dynamicLoadComponents(require.context(
-    'eos-components/src/components', false, /.vue$/,
+    'ek-components/src/components', false, /.vue$/,
   ));
 }

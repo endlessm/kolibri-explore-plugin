@@ -3,7 +3,7 @@
     <template #body>
 
       <b-container class="no-container-padding text-left">
-        <SlidableGrid
+        <EkSlidableGrid
           v-slot="slotProps"
           class="mb-3"
           :nodes="PackMetadata"
@@ -13,7 +13,7 @@
           <template
             v-for="pack in slotProps.slideNodes"
           >
-            <PackCard
+            <EkPackCard
               :key="pack.id"
               :packId="pack.id"
               :title="pack.title"
@@ -21,7 +21,7 @@
               @click="choosePack(pack.id)"
             />
           </template>
-        </SlidableGrid>
+        </EkSlidableGrid>
       </b-container>
     </template>
   </WelcomeBase>
@@ -29,7 +29,7 @@
 
 
 <script>
-  import { PackMetadata } from 'eos-components/src/constants';
+  import { PackMetadata } from 'ek-components/src/constants';
   import WelcomeBase from './WelcomeBase.vue';
 
   export default {

@@ -4,7 +4,7 @@
     <DiscoveryNavBar />
 
     <template v-if="loading || loadingNodes">
-      <CardGridPlaceholder />
+      <EkCardGridPlaceholder />
     </template>
     <template v-else>
       <b-container class="mb-2 mt-4 no-container-padding">
@@ -14,7 +14,7 @@
               {{ $tr('highlightLabel') }}
             </h5>
           </b-container>
-          <CardGrid
+          <EkCardGrid
             :nodes="sectionNodes['highlight']"
             :itemsPerSlide="{ lg: 3, md: 2, sm: 1 }"
           />
@@ -25,7 +25,7 @@
               {{ $tr('skillLabel') }}
             </h5>
           </b-container>
-          <CardGrid
+          <EkCardGrid
             :nodes="sectionNodes['skill']"
           />
         </template>
@@ -36,7 +36,7 @@
               {{ $tr('channelLabel', { channel: 'test' }) }}
             </h5>
           </b-container>
-          <CardGridPlaceholder />
+          <EkCardGridPlaceholder />
         </template> -->
         <template v-if="hasNodesForSection('career')">
           <b-container>
@@ -44,7 +44,7 @@
               {{ $tr('careerLabel') }}
             </h5>
           </b-container>
-          <CardGrid
+          <EkCardGrid
             :nodes="sectionNodes['career']"
             :itemsPerSlide="{ lg: 3, md: 2, sm: 1 }"
           />
@@ -55,7 +55,7 @@
               {{ $tr('curiousLabel') }}
             </h5>
           </b-container>
-          <CardGrid
+          <EkCardGrid
             :nodes="sectionNodes['curious']"
           />
         </template>
@@ -93,7 +93,7 @@
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
 
-  import { utils, constants } from 'eos-components';
+  import { utils, constants } from 'ek-components';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
   import { ContentNodeExtrasResource } from '../apiResources';
 

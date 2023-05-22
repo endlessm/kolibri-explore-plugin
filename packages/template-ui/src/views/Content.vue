@@ -28,10 +28,10 @@
       </div>
     </component>
     <template v-if="loading">
-      <CardGridPlaceholder />
+      <EkCardGridPlaceholder />
     </template>
     <template v-else>
-      <CardGrid
+      <EkCardGrid
         v-if="nextNodesInTopic.length && showNextContent"
         :nodes="nextNodesInTopic"
         :cardColumns="cardColumns"
@@ -42,14 +42,14 @@
             Next in {{ sectionTitle }}
           </h4>
         </b-container>
-      </CardGrid>
+      </EkCardGrid>
     </template>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import { constants, utils } from 'eos-components';
+import { constants, utils } from 'ek-components';
 
 export default {
   name: 'Content',

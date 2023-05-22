@@ -11,7 +11,7 @@
         :alt="node.title"
         class="border d-block mx-auto rounded"
       />
-      <PlayButton
+      <EkPlayButton
         v-if="node.kind"
         size="lg"
         :kind="node.kind"
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { cardMixin } from 'eos-components';
+import { cardMixin } from 'ek-components';
 import { mapGetters } from 'vuex';
 import { cardSpacerX, contentImageMinWidth } from '../styles.scss';
 

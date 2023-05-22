@@ -19,7 +19,7 @@
 <script>
 
   import { mapState } from 'vuex';
-  import { responsiveMixin } from 'eos-components';
+  import { responsiveMixin } from 'ek-components';
   import {
     hideTopicsContentFromLightbox,
     showTopicsContentInLightbox,

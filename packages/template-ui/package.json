@@ -14,7 +14,7 @@
     "bootstrap": "^4.6.1",
     "bootstrap-vue": "^2.22.0",
     "core-js": "^3.6.5",
-    "eos-components": "^0.1.0",
+    "ek-components": "^0.1.0",
     "lodash": "^4.17.21",
     "vue": "^2.6.11",
     "vue-clamp": "^0.3.1",

@@ -4,7 +4,7 @@
     <h5 class="text-muted">
       Channels from A-Z
     </h5>
-    <ChannelCardGroup
+    <EkChannelCardGroup
       class="pb-4"
       :rows="chunk(orderedChannels)"
       :columns="columns"
@@ -19,7 +19,7 @@
 
   import { mapState } from 'vuex';
   import _ from 'lodash';
-  import { responsiveMixin } from 'eos-components';
+  import { responsiveMixin } from 'ek-components';
   import { PageNames } from '../constants';
 
   export default {

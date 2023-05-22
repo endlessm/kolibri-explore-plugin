@@ -1,7 +1,7 @@
 <template>
 
   <div>
-    <BackToTop />
+    <EkBackToTop />
     <ContentModal />
     <AboutModal id="about-modal" />
     <DevTag v-if="showBuildInfo" />
@@ -29,7 +29,7 @@
 
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
-  import LoadingImage from 'eos-components/src/assets/loading-animation.gif';
+  import LoadingImage from 'ek-components/src/assets/loading-animation.gif';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
   import { PageNames } from '../constants';
   import AboutModal from '../components/AboutModal';

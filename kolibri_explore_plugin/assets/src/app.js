@@ -2,7 +2,7 @@ import Vue from 'vue';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import router from 'kolibri.coreVue.router';
 import KolibriApp from 'kolibri_app';
-import eosComponents from 'eos-components';
+import EkComponents from 'ek-components';
 import RootVue from './views/ExploreIndex';
 import routes from './routes';
 import { setFacilitiesAndConfig } from './modules/coreExplore/actions';
@@ -14,7 +14,7 @@ Vue.use(IconsPlugin);
 
 Vue.config.productionTip = false;
 
-Vue.use(eosComponents);
+Vue.use(EkComponents);
 
 /* eslint-disable class-methods-use-this */
 class ExploreModule extends KolibriApp {

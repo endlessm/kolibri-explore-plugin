@@ -1,5 +1,5 @@
 {
-  "name": "eos-discovery",
+  "name": "kolibri-explore-plugin",
   "description": "Monorepo with kolibri's Discovery page and custom channel presentations.",
   "private": true,
   "scripts": {

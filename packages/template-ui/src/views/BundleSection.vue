@@ -33,7 +33,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { utils } from 'eos-components';
+import { utils } from 'ek-components';
 
 export default {
   name: 'BundleSection',

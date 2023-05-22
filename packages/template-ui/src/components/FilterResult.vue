@@ -1,11 +1,11 @@
 <template>
   <div>
-    <CardGridPlaceholder v-if="loading" />
+    <EkCardGridPlaceholder v-if="loading" />
     <div v-else>
       <div v-if="!filteredNodes.length">
         <EmptyResultsMessage />
       </div>
-      <CardGrid
+      <EkCardGrid
         v-else
         variant="collapsible"
         :nodes="filteredNodes"
@@ -20,7 +20,7 @@
 
 <script>
   import { mapState } from 'vuex';
-  import { constants } from 'eos-components';
+  import { constants } from 'ek-components';
 
   export default {
     name: 'FilterResult',

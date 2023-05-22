@@ -85,7 +85,7 @@
             <h3 id="privacy-policy-section" class="pt-3 text-primary">
               {{ $tr('privacyPolicyHeader') }}
             </h3>
-            <PrivacyPolicyText />
+            <EkPrivacyPolicyText />
           </div>
           <div>
             <h3 id="credits-section" class="pt-3 text-primary">
@@ -266,13 +266,13 @@
 <script>
 
   import urls from 'kolibri.urls';
-  import PrivacyPolicyText from 'eos-components/src/components/PrivacyPolicyText.vue';
+  import EkPrivacyPolicyText from 'ek-components/src/components/EkPrivacyPolicyText.vue';
 
   const DEVICE_CHEATCODE = 'showmedevice';
 
   export default {
     name: 'AboutModal',
-    components: { PrivacyPolicyText },
+    components: { EkPrivacyPolicyText },
     props: {
       id: {
         type: String,

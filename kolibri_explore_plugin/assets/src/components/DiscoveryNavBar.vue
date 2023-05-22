@@ -1,6 +1,6 @@
 <template>
 
-  <NavBar class="discovery-navbar">
+  <EkNavBar class="discovery-navbar">
     <img class="logo ml-3 mr-5" :src="logo">
     <b-button-group class="mx-auto">
       <b-nav-text
@@ -32,7 +32,7 @@
         <span class="d-none d-sm-inline">{{ $tr('feedbackLabel') }}</span>
       </b-nav-item>
     </b-navbar-nav>
-  </NavBar>
+  </EkNavBar>
 
 </template>
 
@@ -45,7 +45,7 @@
   import plugin_data from 'plugin_data';
 
   import { mapMutations } from 'vuex';
-  import { assets } from 'eos-components';
+  import { assets } from 'ek-components';
   import { PageNames } from '../constants';
 
   export default {

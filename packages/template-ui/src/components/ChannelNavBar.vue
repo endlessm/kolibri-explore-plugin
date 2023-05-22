@@ -1,5 +1,5 @@
 <template>
-  <NavBar
+  <EkNavBar
     alwaysCastShadow
     class="channel-navbar"
   >
@@ -13,11 +13,11 @@
         class="align-self-center d-none d-sm-block"
         :to="{ name: 'Home', query: { clearFilters: true } }"
       >
-        <ChannelLogo :channel="channel" size="sm" />
+        <EkChannelLogo :channel="channel" size="sm" />
       </b-link>
       <Breadcrumb v-if="!atHome" :node="node" class="mt-3" />
     </b-navbar-nav>
-  </NavBar>
+  </EkNavBar>
 </template>
 
 <script>

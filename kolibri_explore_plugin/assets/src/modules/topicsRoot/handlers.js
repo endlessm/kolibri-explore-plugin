@@ -1,5 +1,5 @@
 import urls from 'kolibri.urls';
-import { utils } from 'eos-components';
+import { utils } from 'ek-components';
 import router from 'kolibri.coreVue.router';
 import plugin_data from 'plugin_data';
 import { ChannelResource, ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
