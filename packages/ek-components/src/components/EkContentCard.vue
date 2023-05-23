@@ -20,6 +20,7 @@
           <EkCardBody :node="node" :subtitle="subtitle" />
           <EkPlayButton
             :kind="kind"
+            :enabled="node.available"
             @click="onClick"
           />
         </div>

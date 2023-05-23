@@ -32,6 +32,7 @@
             <EkPlayButton
               class="ml-auto"
               :kind="node.kind"
+              :enabled="node.available"
               @click="goToContent()"
             />
           </div>

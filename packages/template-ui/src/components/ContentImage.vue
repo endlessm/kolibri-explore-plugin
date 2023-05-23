@@ -15,6 +15,7 @@
         v-if="node.kind"
         size="lg"
         :kind="node.kind"
+        :enabled="node.available"
         :style="buttonStyle"
         class="mt-3 mx-auto py-2 w-100"
         @click="goToContent()"
