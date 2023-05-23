@@ -1,7 +1,7 @@
 <template>
 
   <div v-if="content">
-    <ContentItem isDark expand :content="content" />
+    <ContentItem isDark expand :contentNode="content" />
   </div>
 
 </template>
