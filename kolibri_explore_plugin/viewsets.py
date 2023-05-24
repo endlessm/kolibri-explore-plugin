@@ -24,4 +24,13 @@ class ContentNodeExtrasViewset(ContentNodeViewset):
         queryset = queryset & ContentNode.objects.filter_by_uuids(
             matching_extras, validate=False
         )
+
+        only_root_nodes = self.request.query_params.get(
+            "only_root_nodes", False
+        )
+        if only_root_nodes:
+            queryset = queryset & ContentNode.objects.filter(
+                parent__isnull=True
+            )
+
         return Response(self.serialize(queryset))

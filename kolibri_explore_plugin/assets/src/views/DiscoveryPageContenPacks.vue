@@ -8,6 +8,25 @@
     </template>
     <template v-else>
       <b-container class="mb-2 mt-4 no-container-padding">
+        <template v-if="hasNodesForSection('featured-channel')">
+          <b-container>
+            <h5 class="mt-2 text-muted">
+              {{ $tr('channelLabel') }}
+            </h5>
+          </b-container>
+          <EkSlidableGrid
+            v-slot="slotProps"
+            :nodes="sectionNodes['featured-channel']"
+          >
+            <EkChannelCard
+              v-for="node in slotProps.slideNodes"
+              :key="node.id"
+              :channel="node"
+              :hasWhiteBackground="true"
+              @click.native="goToChannel(node.id)"
+            />
+          </EkSlidableGrid>
+        </template>
         <template v-if="hasNodesForSection('highlight')">
           <b-container>
             <h5 class="mt-2 text-muted">
@@ -29,15 +48,6 @@
             :nodes="sectionNodes['skill']"
           />
         </template>
-        <!-- TODO: commenting week's channel for now. -->
-        <!-- <template>
-          <b-container>
-            <h5 class="mt-2 text-muted">
-              {{ $tr('channelLabel', { channel: 'test' }) }}
-            </h5>
-          </b-container>
-          <EkCardGridPlaceholder />
-        </template> -->
         <template v-if="hasNodesForSection('career')">
           <b-container>
             <h5 class="mt-2 text-muted">
@@ -96,11 +106,13 @@
   import { utils, constants } from 'ek-components';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
   import { ContentNodeExtrasResource } from '../apiResources';
+  import navigationMixin from '../mixins/navigationMixin';
+  import { getBigThumbnail, getChannelIcon } from '../customApps';
 
   export default {
     name: 'DiscoveryPageContenPacks',
     components: { DiscoveryNavBar },
-    mixins: [commonCoreStrings],
+    mixins: [commonCoreStrings, navigationMixin],
     data() {
       return {
         sectionNodes: {},
@@ -118,17 +130,28 @@
     methods: {
       fetchHighlighted() {
         this.loadingNodes = true;
-        return Promise.all(
-          constants.CollectionsSections.map(tag => {
-            return ContentNodeExtrasResource.fetchByExternalTag(tag).then(({ data }) => {
-              const nodes = data
-                // Tweak the nodes with EK customizations:
-                .map(utils.addStructuredTag)
-                .map(utils.updateExploreNodeUrl);
-              this.sectionNodes[tag] = nodes;
-            });
-          })
-        ).then(() => {
+        const promises = constants.CollectionsSections.map(tag => {
+          return ContentNodeExtrasResource.fetchByExternalTag(tag).then(({ data }) => {
+            const nodes = data
+              // Tweak the nodes with EK customizations:
+              .map(utils.addStructuredTag)
+              .map(utils.updateExploreNodeUrl);
+            this.sectionNodes[tag] = nodes;
+          });
+        });
+
+        const featuredPromise = ContentNodeExtrasResource.fetchByExternalTag('featured-channel', {
+          only_root_nodes: true,
+        }).then(({ data }) => {
+          const nodes = data.map(n => {
+            n.bigThumbnail = getBigThumbnail(n);
+            n.thumbnail = getChannelIcon(n);
+            return n;
+          });
+          this.sectionNodes['featured-channel'] = nodes;
+        });
+
+        return Promise.all([featuredPromise, ...promises]).then(() => {
           this.loadingNodes = false;
         });
       },
@@ -139,8 +162,7 @@
     $trs: {
       highlightLabel: 'Just for you',
       skillLabel: 'Learn a new skill',
-      // TODO: commenting week's channel for now.
-      // channelLabel: "This week's channel: {channel}",
+      channelLabel: 'Your channels',
       careerLabel: 'Explore careers',
       curiousLabel: 'Feeling curious?',
       aboutLabel: 'About Endless Key',
