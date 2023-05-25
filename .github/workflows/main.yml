@@ -41,3 +41,40 @@ jobs:
           files: |
             apps-bundle.zip
             packages/welcome-screen/welcome-screen.zip
+
+
+  build_kolibri-explore-plugin_whl:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          # Should be same version as in scripts/bootstrap.sh
+          node-version: '16.14.0'
+
+      - name: Install latest pipenv
+        run: |
+          python3 -m pip install --upgrade pipenv
+
+      - name: Install dependencies in pipenv
+        run: |
+          sh ./scripts/bootstrap.sh
+
+      - name: Build
+        run: |
+          pipenv run yarn build-dist
+          ls -l dist/
+
+      - name: Release to PyPI
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
