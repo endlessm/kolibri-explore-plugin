@@ -16,6 +16,8 @@ import {
   _collectionState,
 } from '../coreExplore/utils';
 
+const NO_AVAILABLE_FILTERING = plugin_data.navigateUnavailable;
+
 function _findNodes(channels, channelCollection) {
   // we want them to be in the same order as the channels list
   return channels
@@ -202,7 +204,11 @@ export function showChannels(store) {
         }
         const channelRootIds = channels.map(channel => channel.root);
         ContentNodeResource.fetchCollection({
-          getParams: { ids: channelRootIds, user_kind: store.getters.getUserKind },
+          getParams: {
+            ids: channelRootIds,
+            user_kind: store.getters.getUserKind,
+            ...(NO_AVAILABLE_FILTERING && { no_available_filtering: true }),
+          },
         })
           .then(collection => _findNodes(channels, collection))
           .then(rootNodes => {
@@ -236,6 +242,7 @@ export function searchChannelsOnce(store, search, kind) {
       search,
       kind,
       max_results: SEARCH_MAX_RESULTS,
+      ...(NO_AVAILABLE_FILTERING && { no_available_filtering: true }),
     },
   });
   store.commit('topicsRoot/SET_LAST_SEARCH_PROMISE', { kind, searchPromise });

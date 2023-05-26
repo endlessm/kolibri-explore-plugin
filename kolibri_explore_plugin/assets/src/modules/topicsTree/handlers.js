@@ -35,7 +35,7 @@ export function showTopicsTopic(store, { id, isRoot = false }) {
     store.commit('SET_PAGE_NAME', isRoot ? PageNames.TOPICS_CHANNEL : PageNames.TOPICS_TOPIC);
     const promises = [
       ContentNodeResource.fetchModel({ id, force: true }), // the topic
-      store.dispatch('setChannelInfo'),
+      store.dispatch('setEkChannelInfo'),
     ];
 
     const shouldResolve = samePageCheckGenerator(store);
@@ -83,7 +83,7 @@ export function showTopicsTopic(store, { id, isRoot = false }) {
 export function showCustomContent(store, id) {
   store.commit('CORE_SET_PAGE_LOADING', true);
 
-  const promises = [store.dispatch('setChannelInfo')];
+  const promises = [store.dispatch('setEkChannelInfo')];
 
   const shouldResolve = samePageCheckGenerator(store);
   Promise.all(promises).then(
@@ -128,7 +128,7 @@ export function showTopicsChannel(store, id) {
 }
 
 export function showTopicsContentInLightbox(store, id) {
-  const promises = [ContentNodeResource.fetchModel({ id }), store.dispatch('setChannelInfo')];
+  const promises = [ContentNodeResource.fetchModel({ id }), store.dispatch('setEkChannelInfo')];
   const shouldResolve = samePageCheckGenerator(store);
   Promise.all(promises).then(
     ([content]) => {
