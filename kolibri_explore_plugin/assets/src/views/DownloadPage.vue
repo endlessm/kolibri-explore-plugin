@@ -61,6 +61,11 @@
 
   export default {
     name: 'DownloadPage',
+    metaInfo() {
+      return {
+        title: this.$tr('documentTitle'),
+      };
+    },
     components: {},
     props: {},
     data() {
@@ -197,6 +202,7 @@
       titleCompleted: '{packTitle} Starter Pack has been delivered!',
       confirmLabel: 'Show me',
       retryLabel: 'Retry',
+      documentTitle: 'Downloading',
     },
   };
 

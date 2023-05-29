@@ -47,10 +47,7 @@
     $trs: {
       titleLabel: 'Something went wrong!',
       retryLink: 'Try again',
-      documentTitle: {
-        message: 'Content Unavailable',
-        context: '\nThis string should actually say "Resource unavailable"',
-      },
+      documentTitle: 'Resource Unavailable',
     },
   };
 

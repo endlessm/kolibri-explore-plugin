@@ -13,6 +13,11 @@
 
   export default {
     name: 'DiscoveryPage',
+    metaInfo() {
+      return {
+        title: this.$tr('documentTitle'),
+      };
+    },
     components: { DiscoveryPageContenPacks, DiscoveryPageEkIguana },
     computed: {
       pageVariant() {
@@ -21,6 +26,9 @@
         }
         return 'DiscoveryPageContenPacks';
       },
+    },
+    $trs: {
+      documentTitle: 'Discovery',
     },
   };
 
