@@ -118,6 +118,11 @@
 
   export default {
     name: 'SearchPage',
+    metaInfo() {
+      return {
+        title: this.$tr('documentTitle'),
+      };
+    },
     components: { AlphabeticalChannelsList, DiscoveryNavBar },
     mixins: [navigationMixin, responsiveMixin],
     data() {
@@ -260,6 +265,9 @@
         this.query = words.join(' ');
         this.$router.push({ params: { query: this.query } });
       },
+    },
+    $trs: {
+      documentTitle: 'Library',
     },
   };
 
