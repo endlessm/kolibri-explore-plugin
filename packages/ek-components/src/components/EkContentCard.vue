@@ -7,7 +7,11 @@
       'shadow': isHovered,
     }"
   >
-    <EkContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
+    <EkContentLink
+      :enabled="node.available"
+      :url="url"
+      @isHovered="(hovered) => isHovered = hovered"
+    >
       <b-card-body>
         <div
           class="card-img"

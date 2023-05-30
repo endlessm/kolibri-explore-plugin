@@ -3,6 +3,7 @@
     v-b-hover="handleHover"
     role="button"
     class="text-decoration-none text-reset"
+    :disabled="contentLinkDisabled"
     @click.stop="onClick"
   >
     <slot></slot>
@@ -17,6 +18,15 @@ export default {
       type: String,
       required: true,
     },
+    enabled: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  computed: {
+    contentLinkDisabled() {
+      return !this.enabled;
+    },
   },
   emits: ['isHovered'],
   methods: {
@@ -24,7 +34,8 @@ export default {
       this.$emit('isHovered', hovered);
     },
     onClick() {
-      this.$router.push(this.url);
+      if (this.enabled)
+        this.$router.push(this.url);
     },
   },
 };
