@@ -69,27 +69,9 @@
             :nodes="sectionNodes['curious']"
           />
         </template>
-        <b-container class="mb-5">
-          <b-row class="d-flex justify-content-center" cols="3">
-            <b-col class="col-auto d-flex justify-content-center">
-              <button
-                v-b-modal.about-modal
-                class="btn d-md-block d-none shadow-none"
-              >
-                {{ $tr('aboutLabel') }}
-              </button>
-            </b-col>
-            <b-col class="col-auto d-flex justify-content-center">
-              <button
-                v-b-modal.about-modal
-                class="btn d-md-block d-none shadow-none"
-                @click="$root.$emit('setAboutSection', 'privacy-policy-link')"
-              >
-                {{ $tr('privacyPolicyLabel') }}
-              </button>
-            </b-col>
-          </b-row>
-        </b-container>
+
+        <AboutFooter />
+
       </b-container>
     </template>
 
@@ -105,13 +87,14 @@
 
   import { utils, constants } from 'ek-components';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
+  import AboutFooter from '../components/AboutFooter';
   import { ContentNodeExtrasResource } from '../apiResources';
   import navigationMixin from '../mixins/navigationMixin';
   import { getBigThumbnail, getChannelIcon } from '../customApps';
 
   export default {
     name: 'DiscoveryPageContenPacks',
-    components: { DiscoveryNavBar },
+    components: { DiscoveryNavBar, AboutFooter },
     mixins: [commonCoreStrings, navigationMixin],
     data() {
       return {
@@ -165,8 +148,6 @@
       channelLabel: 'Your channels',
       careerLabel: 'Explore careers',
       curiousLabel: 'Feeling curious?',
-      aboutLabel: 'About Endless Key',
-      privacyPolicyLabel: 'Privacy Policy',
     },
   };
 
