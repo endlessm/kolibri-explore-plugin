@@ -3,9 +3,11 @@
     noBody
     class="my-2 rounded-lg"
     :class="{
-      'shadow-sm': !isHovered,
-      'shadow': isHovered,
+      'shadow-sm': !isHovered && node.available,
+      'shadow': isHovered && node.available,
+      'disabled': !node.available,
     }"
+    :disabled="!node.available"
   >
     <EkContentLink
       :enabled="node.available"
@@ -104,8 +106,17 @@ export default {
 
 .card {
   transition: all ease .4s;
-  &:hover {
+  &:hover:not(.disabled) {
     color: $primary;
+  }
+  &.disabled {
+    background: transparent;
+    outline: solid 1px $gray-400;
+    outline-offset: -1px;
+
+    & > span {
+      cursor: default;
+    }
   }
 }
 
