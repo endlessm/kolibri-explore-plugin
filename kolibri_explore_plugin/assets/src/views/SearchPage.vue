@@ -95,6 +95,8 @@
 
       </template>
 
+      <AboutFooter />
+
     </div>
 
   </div>
@@ -113,6 +115,7 @@
 
   import AlphabeticalChannelsList from '../components/AlphabeticalChannelsList';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
+  import AboutFooter from '../components/AboutFooter';
 
   const kinds = Object.keys(constants.MediaTypeVerbs);
 
@@ -123,7 +126,7 @@
         title: this.$tr('documentTitle'),
       };
     },
-    components: { AlphabeticalChannelsList, DiscoveryNavBar },
+    components: { AlphabeticalChannelsList, DiscoveryNavBar, AboutFooter },
     mixins: [navigationMixin, responsiveMixin],
     data() {
       return {
