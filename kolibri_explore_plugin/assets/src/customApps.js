@@ -45,6 +45,7 @@ export const CustomChannelApps = {
   '359e048230974c8f80db1a95dc80d544': 'eie-families', // eie spanish
   '217c7164c2974a4da9877a20ae38b98e': 'cas', // California Academy of Sciences
   '08897e003ea9489eb3d86fc94ba08c21': 'support-ukraine',
+  '608fd926be60462aba2feccba6c050c9': 'harper-collins',
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment',
@@ -219,6 +220,7 @@ export const ChannelCardThumbnails = {
   '359e048230974c8f80db1a95dc80d544': 'eie-families.jpg', // eie spanish
   '217c7164c2974a4da9877a20ae38b98e': 'cas.jpg', // California Academy of Sciences
   '08897e003ea9489eb3d86fc94ba08c21': 'support-ukraine.png',
+  '608fd926be60462aba2feccba6c050c9': 'harper-collins',
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.jpg',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment.jpg',
@@ -276,6 +278,7 @@ export const ChannelCardIcons = {
   '359e048230974c8f80db1a95dc80d544': 'eie-families.png', // eie spanish
   '217c7164c2974a4da9877a20ae38b98e': 'cas.png', // California Academy of Sciences
   '08897e003ea9489eb3d86fc94ba08c21': 'support-ukraine.png',
+  '608fd926be60462aba2feccba6c050c9': 'harper-collins',
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.png',
 };
