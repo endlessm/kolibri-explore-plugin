@@ -36,6 +36,8 @@
 
     </div>
 
+    <AboutFooter class="pt-3" />
+
   </div>
 
 </template>
@@ -49,10 +51,11 @@
 
   import EkIguanaList from '../components/EkIguanaList';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
+  import AboutFooter from '../components/AboutFooter';
 
   export default {
     name: 'DiscoveryPageEkIguana',
-    components: { EkIguanaList, DiscoveryNavBar },
+    components: { EkIguanaList, DiscoveryNavBar, AboutFooter },
     mixins: [commonCoreStrings],
     props: {},
     computed: {
