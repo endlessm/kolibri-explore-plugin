@@ -4,6 +4,7 @@
     :size="size"
     :block="block"
     :variant="`${kind}-${variant}`"
+    :disabled="buttonDisabled"
     class="pb-1 pl-1 pt-1 text-nowrap"
     @click.stop.prevent="$emit('click')"
   >
@@ -37,6 +38,10 @@ export default {
     VideoIcon,
   },
   props: {
+    enabled: {
+      type: Boolean,
+      default: true,
+    },
     kind: {
       type: String,
       required: true,
@@ -59,6 +64,9 @@ export default {
     },
   },
   computed: {
+    buttonDisabled() {
+      return !this.enabled;
+    },
     icon() {
       switch (this.kind) {
         case 'audio':
@@ -103,6 +111,11 @@ export default {
   line-height: 12px;
   vertical-align: middle;
   text-transform: uppercase;
+}
+
+button:disabled {
+  opacity: 33%;
+  background-color: $play-button-disabled-bg-color;
 }
 
 </style>

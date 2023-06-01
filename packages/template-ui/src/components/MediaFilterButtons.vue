@@ -8,6 +8,7 @@
       :kind="option.kind"
       :label="option.label"
       :variant="buttonVariant(filter, option.kind)"
+      :enabled="node.available"
       @click="onClick(filter, option)"
     />
   </span>

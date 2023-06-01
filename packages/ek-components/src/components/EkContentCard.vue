@@ -3,11 +3,17 @@
     noBody
     class="my-2 rounded-lg"
     :class="{
-      'shadow-sm': !isHovered,
-      'shadow': isHovered,
+      'shadow-sm': !isHovered && node.available,
+      'shadow': isHovered && node.available,
+      'disabled': !node.available,
     }"
+    :disabled="!node.available"
   >
-    <EkContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
+    <EkContentLink
+      :enabled="node.available"
+      :url="url"
+      @isHovered="(hovered) => isHovered = hovered"
+    >
       <b-card-body>
         <div
           class="card-img"
@@ -20,6 +26,7 @@
           <EkCardBody :node="node" :subtitle="subtitle" />
           <EkPlayButton
             :kind="kind"
+            :enabled="node.available"
             @click="onClick"
           />
         </div>
@@ -99,8 +106,17 @@ export default {
 
 .card {
   transition: all ease .4s;
-  &:hover {
+  &:hover:not(.disabled) {
     color: $primary;
+  }
+  &.disabled {
+    background: transparent;
+    outline: solid 1px $gray-400;
+    outline-offset: -1px;
+
+    & > span {
+      cursor: default;
+    }
   }
 }
 
