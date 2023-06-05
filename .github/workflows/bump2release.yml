@@ -22,6 +22,8 @@ jobs:
     env:
       GIT_USERNAME: ${{ github.actor }}
       GIT_USEREMAIL: "${{ github.actor }}@endlessos.org"
+    outputs:
+      tagname: ${{ steps.bump_version.outputs.tagname }}
 
     steps:
       - uses: actions/checkout@v3
@@ -74,3 +76,19 @@ jobs:
 
           tagname=$(git describe --always --tags --match 'v*')
           git push origin ${{ github.ref_name }} $tagname
+
+          echo "tagname=$tagname" >> $GITHUB_OUTPUT
+
+
+  build_for_tag:
+    # Using the GITHUB_TOKEN in a workflow will not create a new workflow run to
+    # prevent from accidentally creating recursive workflow runs. So, call the
+    # following workflow here and inherit the secrets by design.
+    # https://docs.github.com/en/actions/security-guides/automatic-token-authentication#using-the-github_token-in-a-workflow
+    name: Build for release
+    needs: bump_version
+    if: startsWith(needs.bump_version.outputs.tagname, 'v')
+    uses: ./.github/workflows/main.yml
+    with:
+      tagname: ${{ needs.bump-version.outputs.tagname }}
+    secrets: inherit
