@@ -114,3 +114,34 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
+
+
+  trigger_endless-key-app:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/') || startsWith(inputs.tagname, 'v')
+    needs: [build_apps-bundle, build_kolibri-explore-plugin_whl]
+
+    steps:
+      - name: Get tag name as the release version when at a tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          echo "VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Get tag name as the release version from input
+        if: ${{ !startsWith(github.ref, 'refs/tags/') && startsWith(inputs.tagname, 'v') }}
+        run: |
+          echo "VERSION=${{ inputs.tagname }}" >> $GITHUB_ENV
+
+      - name: Trigger building endless-key-app
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.REPOSITORY_DISPATCH_TOKEN }}
+          script: |
+            await github.rest.repos.createDispatchEvent({
+              owner: "endlessm",
+              repo: "endless-key-app",
+              event_type: "kolibri-explore-plugin-release",
+              client_payload: {
+                VERSION: "$VERSION",
+              }
+            })
