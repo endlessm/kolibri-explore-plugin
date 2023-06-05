@@ -1,0 +1,94 @@
+name: Bump version to release
+
+on:
+  workflow_dispatch:
+    inputs:
+      MAJOR_OR_MINOR:
+        type: choice
+        description: major/minor release
+        options:
+          - minor
+          - major
+        default: minor
+        required: true
+      VERSION_NAME:
+        type: string
+        description: major version name
+        default: ''
+
+jobs:
+  bump_version:
+    runs-on: ubuntu-latest
+    env:
+      GIT_USERNAME: ${{ github.actor }}
+      GIT_USEREMAIL: "${{ github.actor }}@endlessos.org"
+    outputs:
+      tagname: ${{ steps.bump_version.outputs.tagname }}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # Need to fetch everything so that 'git describe' can see the tags
+          fetch-depth: 0
+
+      - name: Set up Git environment
+        run: |
+          git config --global user.name $GIT_USERNAME
+          git config --global user.email $GIT_USEREMAIL
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          # Should be same version as in scripts/bootstrap.sh
+          node-version: '16.14.0'
+      - name: Install latest pipenv
+        run: |
+          python3 -m pip install --upgrade pipenv
+
+      - name: Install dependencies in pipenv
+        run: |
+          sh ./scripts/bootstrap.sh
+
+      - name: Bump minor version
+        if: ${{ inputs.MAJOR_OR_MINOR != 'major' }}
+        run: |
+          pipenv run yarn bump-version minor
+
+      - name: Bump major version
+        if: ${{ inputs.MAJOR_OR_MINOR == 'major' }}
+        run: |
+          if [ ${{ inputs.VERSION_NAME }} = '' ]
+          then
+            echo "Inputs' VERSION_NAME must be set with a non-empty string"
+            exit 22
+          fi
+
+          pipenv run yarn bump-version major ${{ inputs.VERSION_NAME }}
+
+      - name: Push bump commit & tag to stable branch
+        run: |
+          git show
+
+          tagname=$(git describe --always --tags --match 'v*')
+          git push origin ${{ github.ref_name }} $tagname
+
+          echo "tagname=$tagname" >> $GITHUB_OUTPUT
+
+
+  build_for_tag:
+    # Using the GITHUB_TOKEN in a workflow will not create a new workflow run to
+    # prevent from accidentally creating recursive workflow runs. So, call the
+    # following workflow here and inherit the secrets by design.
+    # https://docs.github.com/en/actions/security-guides/automatic-token-authentication#using-the-github_token-in-a-workflow
+    name: Build for release
+    needs: bump_version
+    if: startsWith(needs.bump_version.outputs.tagname, 'v')
+    uses: ./.github/workflows/main.yml
+    with:
+      tagname: ${{ needs.bump-version.outputs.tagname }}
+    secrets: inherit

@@ -174,9 +174,8 @@ updated. You then need to commit the file.
 ### Releasing
 
 To release a new version first please bump the version number to
-either major or minor. This should be done from the `stable`
-branch. Note that the major version also needs a version name for
-branding. Eg:
+either major or minor. Note that the major version also needs a version
+name for branding. Eg:
 
 ```
 # For a minor release:
@@ -205,6 +204,9 @@ And finally upload the built `.whl` file to PyPi:
 ```
 yarn release
 ```
+
+**Note:** These release steps can be done by triggering
+`bump2release.yml` action.
 
 ### How to display the build information
 
