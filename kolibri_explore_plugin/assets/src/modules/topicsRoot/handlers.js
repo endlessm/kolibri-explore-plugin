@@ -1,3 +1,4 @@
+import partial from 'lodash/partial';
 import urls from 'kolibri.urls';
 import { utils } from 'ek-components';
 import router from 'kolibri.coreVue.router';
@@ -267,10 +268,8 @@ function setSearchResults(store, searchResults, kind) {
   if (!results.length) {
     return;
   }
-  const nodes = results.map(n => ({
-    ...n,
-    channel: rootNodes.find(c => c.id === n.channel_id),
-  }));
+  const addChannelToNode = partial(utils.addChannelToNode, rootNodes);
+  const nodes = results.map(addChannelToNode);
   const promises = channel_ids.map(id => ChannelResource.fetchModel({ id }));
   Promise.all(promises).then(collection => {
     const channels = collection

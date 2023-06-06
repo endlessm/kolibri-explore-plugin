@@ -53,6 +53,11 @@ export function updateExploreNodeUrl(node) {
     return node;
 };
 
+export function addChannelToNode(rootNodes, node) {
+  node.channel = rootNodes.find(c => c.id === node.channel_id);
+  return node;
+}
+
 /** Card information **/
 
 export function getNodeUrl(node, channelId) {
@@ -150,4 +155,5 @@ export default {
   validateItemsPerSlide,
   addStructuredTag,
   updateExploreNodeUrl,
+  addChannelToNode,
 };
