@@ -82,6 +82,7 @@
 
 <script>
 
+  import partial from 'lodash/partial';
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
 
@@ -103,22 +104,31 @@
       };
     },
     computed: {
+      ...mapState('topicsRoot', { rootNodes: 'rootNodes' }),
       ...mapState({
         loading: state => state.core.loading,
       }),
     },
-    mounted() {
-      return this.fetchHighlighted();
+    watch: {
+      loading() {
+        if (!this.loading) {
+          return this.fetchHighlighted();
+        }
+      },
     },
     methods: {
       fetchHighlighted() {
         this.loadingNodes = true;
+
+        const addChannelToNode = partial(utils.addChannelToNode, this.rootNodes);
+
         const promises = constants.CollectionsSections.map(tag => {
           return ContentNodeExtrasResource.fetchByExternalTag(tag).then(({ data }) => {
             const nodes = data
               // Tweak the nodes with EK customizations:
               .map(utils.addStructuredTag)
-              .map(utils.updateExploreNodeUrl);
+              .map(utils.updateExploreNodeUrl)
+              .map(addChannelToNode);
             this.sectionNodes[tag] = nodes;
           });
         });
