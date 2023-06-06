@@ -237,13 +237,13 @@ export function showChannels(store) {
     });
 }
 
-export function searchChannelsOnce(store, search, kind) {
+export function searchChannelsOnce(store, search, kind, includeUnavailable) {
   const searchPromise = ContentNodeSearchResource.fetchCollection({
     getParams: {
       search,
       kind,
       max_results: SEARCH_MAX_RESULTS,
-      ...(NO_AVAILABLE_FILTERING && { no_available_filtering: true }),
+      ...(includeUnavailable && { no_available_filtering: true }),
     },
   });
   store.commit('topicsRoot/SET_LAST_SEARCH_PROMISE', { kind, searchPromise });

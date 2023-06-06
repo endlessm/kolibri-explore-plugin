@@ -109,6 +109,7 @@
   import _ from 'lodash';
   import { mapMutations, mapState } from 'vuex';
   import { utils, constants, responsiveMixin } from 'ek-components';
+  import plugin_data from 'plugin_data';
 
   import { searchChannelsOnce } from '../modules/topicsRoot/handlers';
   import navigationMixin from '../mixins/navigationMixin';
@@ -139,6 +140,7 @@
         mediaQuality: constants.MediaQuality.REGULAR,
         progress: 100,
         resultKinds: [],
+        showUnavailable: plugin_data.navigateUnavailable,
       };
     },
     computed: {
@@ -251,7 +253,7 @@
 
         this.progress = 0;
         kinds.forEach(k => {
-          searchChannelsOnce(this.$store, query, k).then(() => {
+          searchChannelsOnce(this.$store, query, k, this.showUnavailable).then(() => {
             this.resultKinds.push(k);
             this.progress += 100 / kinds.length;
           });
