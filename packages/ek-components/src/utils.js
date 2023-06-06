@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import get from 'lodash/get';
 
 import {
   StructuredTagsRegExp,
@@ -10,7 +10,7 @@ import {
 /** Structured tags **/
 
 export function getAllStructuredTags(node, matchKey) {
-  return _.get(node.structuredTags, matchKey, []);
+  return get(node.structuredTags, matchKey, []);
 };
 
 export function getFirstStructuredTag(node, matchKey) {
