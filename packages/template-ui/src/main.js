@@ -11,6 +11,12 @@ Vue.use(IconsPlugin);
 
 Vue.config.productionTip = false;
 
+// FIXME hook i18n. This is a workaround to allow EK components that
+// use internationalization in the template-ui.
+Vue.prototype.$tr = function $tr(messageId) {
+  return this.$options.$trs[messageId];
+};
+
 dynamicLoadComponents();
 
 window.app = new Vue({
