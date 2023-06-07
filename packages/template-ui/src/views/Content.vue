@@ -50,6 +50,7 @@
 <script>
 import { mapState } from 'vuex';
 import { constants, utils } from 'ek-components';
+import plugin_data from 'plugin_data';
 
 export default {
   name: 'Content',
@@ -58,6 +59,7 @@ export default {
       content: {},
       nextNodesInTopic: [],
       loading: true,
+      showUnavailable: plugin_data.navigateUnavailable,
     };
   },
   computed: {
@@ -107,7 +109,10 @@ export default {
     },
     fetchNextNodesInTopic() {
       const currentOrder = this.content.sort_order;
-      return window.kolibri.getContentByFilter({ parent: this.content.parent })
+      return window.kolibri.getContentByFilter({
+        parent: this.content.parent,
+        includeUnavailable: this.showUnavailable,
+      })
         .then((page) => {
           // FIXME query by sort order > current order:
           this.nextNodesInTopic = page.results.filter((node) => node.sort_order > currentOrder);

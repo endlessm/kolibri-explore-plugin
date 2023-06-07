@@ -1,5 +1,4 @@
 import urls from 'kolibri.urls';
-import plugin_data from 'plugin_data';
 import { ChannelResource, ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
 
 import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
@@ -10,8 +9,6 @@ import { utils } from 'ek-components';
 import { showTopicsContentInLightbox } from './modules/topicsTree/handlers';
 import { PageNames } from './constants';
 import { getChannelIcon } from './customApps';
-
-const NO_AVAILABLE_FILTERING = plugin_data.navigateUnavailable;
 
 class KolibriApi {
   constructor(channelId) {
@@ -53,7 +50,7 @@ class KolibriApi {
   }
 
   getContentByFilter(options) {
-    const { kinds, onlyContent, onlyTopics } = options;
+    const { kinds, onlyContent, onlyTopics, includeUnavailable } = options;
 
     if (onlyContent && onlyTopics) {
       const err = new Error('onlyContent and onlyTopics can not be used at the same time');
@@ -72,7 +69,7 @@ class KolibriApi {
         kind: kind,
         kind_in: kinds,
         descendant_of: options.descendantOf,
-        ...(NO_AVAILABLE_FILTERING && { no_available_filtering: true }),
+        ...(includeUnavailable && { no_available_filtering: true }),
       },
     }).then(contentNodes => {
       const { more, results } = contentNodes;

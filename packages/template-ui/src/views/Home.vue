@@ -60,6 +60,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import { constants } from 'ek-components';
+import plugin_data from 'plugin_data';
 
 const sectionPageSize = 2 * constants.ItemsPerSlide.lg;
 
@@ -73,6 +74,7 @@ export default {
       loadingCarouselNodes: true,
       loadingContentNodes: true,
       loadingSectionNodes: true,
+      showUnavailable: plugin_data.navigateUnavailable,
     };
   },
   computed: {
@@ -115,7 +117,10 @@ export default {
       }
       this.loadingCarouselNodes = true;
       if (this.carouselNodeIds.length) {
-        return window.kolibri.getContentByFilter({ ids: this.carouselNodeIds })
+        return window.kolibri.getContentByFilter({
+          ids: this.carouselNodeIds,
+          includeUnavailable: this.showUnavailable,
+        })
           .then((page) => {
             this.carouselNodes = page.results;
             this.loadingCarouselNodes = false;
@@ -138,6 +143,7 @@ export default {
       return window.kolibri.getContentByFilter({
         ...options,
           maxResults: constants.ItemsPerPage,
+          includeUnavailable: this.showUnavailable,
       })
         .then((pageResult) => {
           this.contentNodes = {
@@ -160,6 +166,7 @@ export default {
         return window.kolibri.getContentByFilter({
             parent: section.id,
             maxResults: sectionPageSize,
+            includeUnavailable: this.showUnavailable,
           })
           .then((pageResult) => {
             this.$set(this.sectionNodes, section.id, {

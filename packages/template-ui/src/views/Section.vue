@@ -14,6 +14,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { constants } from 'ek-components';
+import plugin_data from 'plugin_data';
 import ListSection from '@/views/ListSection';
 import BundleSection from '@/views/BundleSection';
 
@@ -28,6 +29,7 @@ export default {
       section: {},
       sectionNodes: { nodes: [], hasMoreNodes: false, pagination: null },
       loading: true,
+      showUnavailable: plugin_data.navigateUnavailable,
     };
   },
   computed: {
@@ -75,6 +77,7 @@ export default {
       return window.kolibri.getContentByFilter({
         parent: this.section.id,
         maxResults: constants.ItemsPerPage,
+        includeUnavailable: this.showUnavailable,
       })
         .then((pageResult) => {
           this.sectionNodes = {

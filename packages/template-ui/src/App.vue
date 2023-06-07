@@ -13,6 +13,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import plugin_data from 'plugin_data';
 
 const CHECK_DELAY = 100;
 
@@ -22,6 +23,7 @@ export default {
     return {
       checkIntervalId: null,
       kolibriApiReady: false,
+      showUnavailable: plugin_data.navigateUnavailable,
     };
   },
   computed: {
@@ -66,7 +68,11 @@ export default {
 
       // Flat presentations don't need the main sections:
       if (!this.hasFlatGrid) {
-        const sectionsPromise = window.kolibri.getContentByFilter({ parent: 'self', onlyTopics: true })
+        const sectionsPromise = window.kolibri.getContentByFilter({
+          parent: 'self',
+          onlyTopics: true,
+          includeUnavailable: this.showUnavailable,
+        })
           .then((page) => {
             this.$store.commit('setMainSections', { mainSections: page.results });
             this.handleRedirects();

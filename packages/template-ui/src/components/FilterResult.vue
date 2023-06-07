@@ -21,6 +21,7 @@
 <script>
   import { mapState } from 'vuex';
   import { constants } from 'ek-components';
+  import plugin_data from 'plugin_data';
 
   export default {
     name: 'FilterResult',
@@ -35,6 +36,7 @@
         filteredNodes: [],
         loading: false,
         pagination: null,
+        showUnavailable: plugin_data.navigateUnavailable,
       };
     },
     computed: {
@@ -46,6 +48,7 @@
         const params = {
           maxResults: constants.ItemsPerPage,
           descendantOf: this.node ? this.node.id : null,
+          includeUnavailable: this.showUnavailable,
         };
 
         const kinds = this.query[constants.MediaFilterName];
