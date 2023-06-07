@@ -19,7 +19,12 @@
 
       <!-- Download button -->
       <b-col v-if="showDownloadButton" md="auto">
-        <b-button pill class="font-weight-bold text-nowrap" variant="outline-dark">
+        <b-button
+          pill
+          class="font-weight-bold text-nowrap"
+          variant="outline-dark"
+          @click="downloadChannel()"
+        >
           <CloudDownloadOutlineIcon :size="iconSize" class="mr-1" />
           Download full channel
         </b-button>
@@ -45,6 +50,11 @@ export default {
     },
     showDownloadButton() {
       return !this.channel.available;
+    },
+  },
+  methods: {
+    downloadChannel() {
+      window.kolibri.downloadChannel();
     },
   },
 };
