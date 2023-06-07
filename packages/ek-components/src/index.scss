@@ -32,6 +32,9 @@
 .btn-outline-dark {
   $value: theme-color("dark");
   @include ek-button-outline-variant($value, $color-hover: $value, $border-color: $gray-500, $active-background: transparent, $active-border: $primary);
+  &:focus {
+    box-shadow: $btn-focus-box-shadow;
+  }
 }
 
 // Change buttons variant:
@@ -44,6 +47,9 @@
       $hover-background: $hover-value,
       $active-background: $hover-value,
       $active-border: $hover-value);
+    &:focus {
+      box-shadow: $btn-focus-box-shadow;
+    }
   }
 
   .btn-#{$color}-primary {
@@ -55,6 +61,9 @@
       $active-background: $hover-value,
       $active-border: $hover-value);
     border: 0;
+    &:focus {
+      box-shadow: $btn-focus-box-shadow;
+    }
   }
 
   .btn-#{$color}-light {
@@ -63,6 +72,9 @@
       $border: $light,
       $hover-border: $value);
     border: 0;
+    &:focus {
+      box-shadow: $btn-focus-box-shadow;
+    }
   }
 
   .btn-#{$color}-outline-dark {
@@ -77,6 +89,10 @@
 
 .close.text-light {
   text-shadow: none;
+}
+
+.btn-outline-primary:focus, .btn-outline-primary.focus {
+  box-shadow: $btn-focus-box-shadow;
 }
 
 // Change breadcrumbs:
