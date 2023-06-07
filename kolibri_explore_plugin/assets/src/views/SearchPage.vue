@@ -21,7 +21,16 @@
 
       <template v-else>
         <b-container>
-          <EkKeywords :words="keywords" @click="removeKeyword" />
+          <b-row alignH="between">
+            <b-col>
+              <b-form-checkbox v-model="showUnavailable" name="check-show-unavailable" switch>
+                {{ $tr('showUnavailableLabel') }}
+              </b-form-checkbox>
+            </b-col>
+            <b-col class="text-right">
+              <EkKeywords :words="keywords" @click="removeKeyword" />
+            </b-col>
+          </b-row>
         </b-container>
 
         <template v-if="resultCards">
@@ -230,6 +239,10 @@
       searchTerm() {
         this.query = this.searchTerm || '';
       },
+      showUnavailable() {
+        this.setSearchTerm(this.query);
+        this.search(this.cleanedQuery);
+      },
     },
     created() {
       this.query = this.searchTerm || '';
@@ -273,6 +286,7 @@
     },
     $trs: {
       documentTitle: 'Library',
+      showUnavailableLabel: 'Show unavailable content',
     },
   };
 
