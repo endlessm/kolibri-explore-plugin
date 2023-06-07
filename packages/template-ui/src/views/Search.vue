@@ -51,6 +51,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import plugin_data from 'plugin_data';
 
 // Escapes the RegExp special characters in string.
 function escapeRegExp(string) {
@@ -65,6 +66,7 @@ export default {
       resultNodes: [],
       page: null,
       searching: false,
+      showUnavailable: plugin_data.navigateUnavailable,
     };
   },
   computed: {
@@ -108,7 +110,10 @@ export default {
   },
   methods: {
     search() {
-      return window.kolibri.searchContent({ keyword: this.cleanedQuery })
+      return window.kolibri.searchContent({
+        keyword: this.cleanedQuery,
+        includeUnavailable: this.showUnavailable,
+      })
         .then((page) => {
           this.page = page;
           this.resultNodes = page.results;

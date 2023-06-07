@@ -105,7 +105,7 @@ class KolibriApi {
 
   searchContent(options) {
     let searchPromise;
-    const { keyword } = options;
+    const { keyword, includeUnavailable } = options;
     if (!keyword) {
       searchPromise = Promise.resolve({
         page: 0,
@@ -117,7 +117,7 @@ class KolibriApi {
         getParams: {
           search: keyword,
           channel_id: this.channelId,
-          ...(NO_AVAILABLE_FILTERING && { no_available_filtering: true }),
+          ...(includeUnavailable && { no_available_filtering: true }),
         },
       });
     }
