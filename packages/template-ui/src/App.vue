@@ -13,6 +13,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import mockKolibriApi from './mockKolibriApi';
 
 const CHECK_DELAY = 100;
 
@@ -32,6 +33,12 @@ export default {
   },
   methods: {
     checkKolibriApiReady() {
+
+      // Use a mock of Kolibri API when showing the test page:
+      if (this.$router.history.current.name === 'Test') {
+        window.kolibri = mockKolibriApi;
+      }
+
       if (window.kolibri) {
         clearInterval(this.checkIntervalId);
         this.onKolibriApiReady().then(() => {
