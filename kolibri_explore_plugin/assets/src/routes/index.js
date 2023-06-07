@@ -4,6 +4,8 @@ import { showTopicsChannel } from '../modules/topicsTree/handlers';
 import { decideDownload, showChannels } from '../modules/topicsRoot/handlers';
 import { PageNames } from '../constants';
 
+const includeUnavailable = plugin_data.navigateUnavailable;
+
 export default [
   {
     name: PageNames.ROOT,
@@ -32,7 +34,7 @@ export default [
         store.commit('SET_SEARCH_TERM', toRoute.params.query);
       }
       store.commit('SET_PAGE_NAME', PageNames.SEARCH);
-      showChannels(store);
+      showChannels(store, includeUnavailable);
     },
   },
   {
@@ -42,7 +44,7 @@ export default [
     redirect: plugin_data.hideDiscoveryTab ? { name: PageNames.SEARCH } : undefined,
     handler: () => {
       store.commit('SET_PAGE_NAME', PageNames.TOPICS_ROOT);
-      showChannels(store);
+      showChannels(store, includeUnavailable);
     },
   },
   {

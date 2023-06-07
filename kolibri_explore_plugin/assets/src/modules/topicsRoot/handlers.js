@@ -17,8 +17,6 @@ import {
   _collectionState,
 } from '../coreExplore/utils';
 
-const NO_AVAILABLE_FILTERING = plugin_data.navigateUnavailable;
-
 function _findNodes(channels, channelCollection) {
   // we want them to be in the same order as the channels list
   return channels
@@ -188,7 +186,7 @@ export function decideDownload(store) {
   );
 }
 
-export function showChannels(store) {
+export function showChannels(store, includeUnavailable) {
   store.commit('CORE_SET_PAGE_LOADING', true);
 
   ChannelResource.useContentCacheKey = false;
@@ -208,7 +206,7 @@ export function showChannels(store) {
           getParams: {
             ids: channelRootIds,
             user_kind: store.getters.getUserKind,
-            ...(NO_AVAILABLE_FILTERING && { no_available_filtering: true }),
+            ...(includeUnavailable && { no_available_filtering: true }),
           },
         })
           .then(collection => _findNodes(channels, collection))
