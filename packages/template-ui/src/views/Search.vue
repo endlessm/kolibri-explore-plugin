@@ -51,7 +51,6 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import plugin_data from 'plugin_data';
 
 // Escapes the RegExp special characters in string.
 function escapeRegExp(string) {
@@ -66,7 +65,7 @@ export default {
       resultNodes: [],
       page: null,
       searching: false,
-      showUnavailable: plugin_data.navigateUnavailable,
+      showUnavailable: true,
     };
   },
   computed: {
