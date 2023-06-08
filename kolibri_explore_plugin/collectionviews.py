@@ -69,6 +69,10 @@ class EndlessKeyContentManifest(ContentManifest):
         self.available = None
         super().__init__()
 
+    def get_extra_channel_ids(self):
+        all_channel_ids = _get_channel_ids_for_all_content_manifests()
+        return all_channel_ids.difference(self.get_channel_ids())
+
     def read_from_static_collection(self, grade, name, validate=False):
         self.grade = grade
         self.name = name
@@ -112,22 +116,20 @@ class EndlessKeyContentManifest(ContentManifest):
 
         For all the channels in this content manifest.
         """
-        tasks = []
+        return [
+            _build_remotechannelimport_task(channel_id)
+            for channel_id in self.get_channel_ids()
+        ]
 
-        for channel_id in self.get_channel_ids():
-            tasks.append(
-                {
-                    "task": "remotechannelimport",
-                    "params": {
-                        "channel_id": channel_id,
-                        # FIXME: The channel_name is needed
-                        # since commit b53d7baa
-                        "channel_name": "foo",
-                    },
-                }
-            )
+    def get_extra_channelimport_tasks(self):
+        """Return a serializable object to create extra channelimport tasks
 
-        return tasks
+        For all channels featured in Endless Key content manifests.
+        """
+        return [
+            _build_remotechannelimport_task(channel_id)
+            for channel_id in self.get_extra_channel_ids()
+        ]
 
     def get_contentimport_tasks(self):
         """Return a serializable object to create contentimport tasks
@@ -227,6 +229,7 @@ class DownloadStage(IntEnum):
     IMPORTING_CHANNELS = auto()
     IMPORTING_CONTENT = auto()
     APPLYING_EXTERNAL_TAGS = auto()
+    IMPORTING_EXTRA_CHANNELS = auto()
     COMPLETED = auto()
 
 
@@ -421,7 +424,10 @@ class CollectionDownloadManager:
                     + progress_per_channel * current_job_factor
                 )
 
-        elif self._stage == DownloadStage.COMPLETED:
+        elif self._stage in (
+            DownloadStage.IMPORTING_EXTRA_CHANNELS,
+            DownloadStage.COMPLETED,
+        ):
             progress = 1
 
         return {
@@ -476,6 +482,8 @@ class CollectionDownloadManager:
                 tasks = self._content_manifest.get_contentimport_tasks()
             elif self._stage == DownloadStage.APPLYING_EXTERNAL_TAGS:
                 tasks = self._content_manifest.get_applyexternaltags_tasks()
+            elif self._stage == DownloadStage.IMPORTING_EXTRA_CHANNELS:
+                tasks = self._content_manifest.get_extra_channelimport_tasks()
 
         self._tasks_pending = tasks
         self._tasks_previously_completed.extend(self._tasks_completed)
@@ -512,6 +520,18 @@ def _call_task(task, user, **params):
         job, queue=DEFAULT_QUEUE, priority=Priority.HIGH
     )
     return job_id
+
+
+def _build_remotechannelimport_task(channel_id):
+    return {
+        "task": "remotechannelimport",
+        "params": {
+            "channel_id": channel_id,
+            # FIXME: The channel_name is needed
+            # since commit b53d7baa
+            "channel_name": "foo",
+        },
+    }
 
 
 _content_manifests = []
@@ -571,6 +591,13 @@ def _get_collections_info_by_grade_name(grade, name):
         "available": manifest.available,
         "channelsCount": manifest.get_channels_count(),
     }
+
+
+def _get_channel_ids_for_all_content_manifests():
+    channel_ids = set()
+    for content_manifest in _content_manifests:
+        channel_ids.update(content_manifest.get_channel_ids())
+    return channel_ids
 
 
 @api_view(["GET"])
