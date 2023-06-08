@@ -14,7 +14,10 @@
 
     <!-- Title -->
     <div>
-      <h5 class="align-items-center mb-1 title">
+      <h5
+        class="align-items-center mb-1 title"
+        :class="{ 'text-muted': !node.available }"
+      >
         <VClamp
           autoresize
           :maxLines="titleLines"
