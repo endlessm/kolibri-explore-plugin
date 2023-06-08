@@ -21,7 +21,16 @@
 
       <template v-else>
         <b-container>
-          <EkKeywords :words="keywords" @click="removeKeyword" />
+          <b-row alignH="between">
+            <b-col>
+              <b-form-checkbox v-model="showUnavailable" name="check-show-unavailable" switch>
+                {{ $tr('showUnavailableLabel') }}
+              </b-form-checkbox>
+            </b-col>
+            <b-col class="text-right">
+              <EkKeywords :words="keywords" @click="removeKeyword" />
+            </b-col>
+          </b-row>
         </b-container>
 
         <template v-if="resultCards">
@@ -109,6 +118,7 @@
   import _ from 'lodash';
   import { mapMutations, mapState } from 'vuex';
   import { utils, constants, responsiveMixin } from 'ek-components';
+  import plugin_data from 'plugin_data';
 
   import { searchChannelsOnce } from '../modules/topicsRoot/handlers';
   import navigationMixin from '../mixins/navigationMixin';
@@ -139,6 +149,7 @@
         mediaQuality: constants.MediaQuality.REGULAR,
         progress: 100,
         resultKinds: [],
+        showUnavailable: plugin_data.navigateUnavailable,
       };
     },
     computed: {
@@ -228,6 +239,10 @@
       searchTerm() {
         this.query = this.searchTerm || '';
       },
+      showUnavailable() {
+        this.setSearchTerm(this.query);
+        this.search(this.cleanedQuery);
+      },
     },
     created() {
       this.query = this.searchTerm || '';
@@ -251,7 +266,7 @@
 
         this.progress = 0;
         kinds.forEach(k => {
-          searchChannelsOnce(this.$store, query, k).then(() => {
+          searchChannelsOnce(this.$store, query, k, this.showUnavailable).then(() => {
             this.resultKinds.push(k);
             this.progress += 100 / kinds.length;
           });
@@ -271,6 +286,7 @@
     },
     $trs: {
       documentTitle: 'Library',
+      showUnavailableLabel: 'Show unavailable content',
     },
   };
 
