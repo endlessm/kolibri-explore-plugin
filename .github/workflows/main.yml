@@ -45,6 +45,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/') || startsWith(inputs.tagname, 'v')
         with:
+          generate_release_notes: true
           files: |
             apps-bundle.zip
             packages/welcome-screen/welcome-screen.zip
