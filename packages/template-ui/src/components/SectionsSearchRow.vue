@@ -1,29 +1,60 @@
 <template>
   <b-container class="my-4">
-    <MainSections>
-      <b-button
-        class="font-weight-bold my-1 text-nowrap"
-        size="sm"
-        variant="link"
-        to="/search"
-      >
-        <MagnifyIcon :size="iconSize" class="mr-1" />
-        Search Keywords
-      </b-button>
-    </MainSections>
+    <b-row>
+
+      <!-- Section buttons -->
+      <b-col>
+        <MainSections>
+          <b-button
+            class="font-weight-bold my-1 text-nowrap"
+            size="sm"
+            variant="link"
+            to="/search"
+          >
+            <MagnifyIcon :size="iconSize" class="mr-1" />
+            Search Keywords
+          </b-button>
+        </MainSections>
+      </b-col>
+
+      <!-- Download button -->
+      <b-col v-if="showDownloadButton" md="auto">
+        <b-button
+          pill
+          class="font-weight-bold text-nowrap"
+          variant="outline-dark"
+          @click="downloadChannel()"
+        >
+          <CloudDownloadOutlineIcon :size="iconSize" class="mr-1" />
+          Download full channel
+        </b-button>
+      </b-col>
+
+    </b-row>
   </b-container>
 </template>
 
 <script>
+import CloudDownloadOutlineIcon from 'vue-material-design-icons/CloudDownloadOutline.vue';
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
 import { constants } from 'ek-components';
+import { mapState } from 'vuex';
 
 export default {
   name: 'SectionsSearchRow',
-  components: { MagnifyIcon },
+  components: { CloudDownloadOutlineIcon, MagnifyIcon },
   computed: {
+    ...mapState(['channel']),
     iconSize() {
       return constants.KeywordIconSize;
+    },
+    showDownloadButton() {
+      return !this.channel.available;
+    },
+  },
+  methods: {
+    downloadChannel() {
+      window.kolibri.downloadChannel();
     },
   },
 };

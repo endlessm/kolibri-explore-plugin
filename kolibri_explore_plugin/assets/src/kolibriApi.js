@@ -202,6 +202,16 @@ class KolibriApi {
       };
     });
   }
+
+  downloadChannel() {
+    // TODO: this is a temporary workaround to the lack of
+    // channel downloads. It merely redirects to the Devices
+    // page.
+    const deviceContentUrl = urls['kolibri:kolibri.plugins.device:device_management'];
+    if (deviceContentUrl) {
+      window.open(`${deviceContentUrl()}#/content`, '_self');
+    }
+  }
 }
 
 const kolibriApi = new KolibriApi();
