@@ -50,7 +50,6 @@
 <script>
 import { mapState } from 'vuex';
 import { constants, utils } from 'ek-components';
-import plugin_data from 'plugin_data';
 
 export default {
   name: 'Content',
@@ -59,7 +58,7 @@ export default {
       content: {},
       nextNodesInTopic: [],
       loading: true,
-      showUnavailable: plugin_data.navigateUnavailable,
+      showUnavailable: true,
     };
   },
   computed: {

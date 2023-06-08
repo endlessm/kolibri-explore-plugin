@@ -60,7 +60,6 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import { constants } from 'ek-components';
-import plugin_data from 'plugin_data';
 
 const sectionPageSize = 2 * constants.ItemsPerSlide.lg;
 
@@ -74,7 +73,7 @@ export default {
       loadingCarouselNodes: true,
       loadingContentNodes: true,
       loadingSectionNodes: true,
-      showUnavailable: plugin_data.navigateUnavailable,
+      showUnavailable: true,
     };
   },
   computed: {

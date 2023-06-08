@@ -13,7 +13,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import plugin_data from 'plugin_data';
 
 const CHECK_DELAY = 100;
 
@@ -23,7 +22,7 @@ export default {
     return {
       checkIntervalId: null,
       kolibriApiReady: false,
-      showUnavailable: plugin_data.navigateUnavailable,
+      showUnavailable: true,
     };
   },
   computed: {

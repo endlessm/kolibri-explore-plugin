@@ -21,7 +21,6 @@
 <script>
   import { mapState } from 'vuex';
   import { constants } from 'ek-components';
-  import plugin_data from 'plugin_data';
 
   export default {
     name: 'FilterResult',
@@ -36,7 +35,7 @@
         filteredNodes: [],
         loading: false,
         pagination: null,
-        showUnavailable: plugin_data.navigateUnavailable,
+        showUnavailable: true,
       };
     },
     computed: {
