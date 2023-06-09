@@ -433,6 +433,9 @@ class CollectionDownloadManager:
         return {
             "stage": self._stage.name,
             "progress": progress,
+            "blocking": DownloadStage.NOT_STARTED
+            < self._stage
+            < DownloadStage.IMPORTING_EXTRA_CHANNELS,
         }
 
     def to_state(self):

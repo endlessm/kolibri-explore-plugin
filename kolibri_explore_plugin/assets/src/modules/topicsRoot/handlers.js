@@ -124,8 +124,12 @@ function _fetchCarouselNodes(store) {
   );
 }
 
-function _isDownloadOngoing(status) {
-  return status.stage !== 'COMPLETED' && status.stage !== 'NOT_STARTED';
+function _isDownloadStarted(status) {
+  return status.stage !== 'NOT_STARTED';
+}
+
+function _isDownloadBlocking(status) {
+  return status.blocking;
 }
 
 function _goToDownloadPage(store, grade, name) {
@@ -153,10 +157,10 @@ export function decideDownload(store) {
 
   return Promise.all([getDownloadStatus(), getShouldResume()]).then(
     ([status, { shouldResume, grade: resumeGrade, name: resumeName }]) => {
-      if (_isDownloadOngoing(status)) {
+      if (_isDownloadBlocking(status)) {
         console.debug('A collections download is ongoing...');
         _goToDownloadPage(store, grade, name);
-      } else if (shouldResume) {
+      } else if (!_isDownloadStarted(status) && shouldResume) {
         console.debug('Resuming previous collections download...');
         return resumeDownload().then(() => {
           _goToDownloadPage(store, resumeGrade, resumeName);

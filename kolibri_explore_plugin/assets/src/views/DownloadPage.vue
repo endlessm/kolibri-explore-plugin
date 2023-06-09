@@ -82,7 +82,7 @@
         pageVisible: state => state.core.pageVisible,
       }),
       isCompleted() {
-        return this.status && this.status.stage === 'COMPLETED';
+        return this.status && !this.status.blocking;
       },
       isDownloading() {
         return !this.isCompleted;
@@ -147,6 +147,11 @@
         return this.setUpdateInterval();
       },
       updateLoop() {
+        // FIXME: This only runs if the download is blocking, which means
+        //        the download system stops updating at that point. We need to
+        //        move this stuff (in particular where updateDownload calls an
+        //        API that actually causes the download manager to update its
+        //        state) to the backend, or at least to a top-level component.
         return this.updateDownload()
           .then(status => {
             this.status = status;
