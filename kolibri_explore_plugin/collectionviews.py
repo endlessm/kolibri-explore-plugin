@@ -22,6 +22,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 
 from .tasks import applyexternaltags
+from .tasks import BACKGROUND_QUEUE
 from .tasks import QUEUE
 from .tasks import remotecontentimport
 
@@ -187,6 +188,31 @@ class EndlessKeyContentManifest(ContentManifest):
 
         return tasks
 
+    def get_contentthumbnail_tasks(self):
+        """Return a serializable object to create thumbnail contentimport tasks
+
+        For all the channels in this content manifest.
+        """
+        tasks = []
+
+        for channel_id in _get_channel_ids_for_all_content_manifests():
+            channel_metadata = self._get_channel_metadata(channel_id)
+            tasks.append(
+                {
+                    "task": "remotecontentimport",
+                    "params": {
+                        "channel_id": channel_id,
+                        "channel_name": channel_metadata.name,
+                        "node_ids": [],
+                        "exclude_node_ids": [],
+                        "all_thumbnails": True,
+                        "fail_on_error": True,
+                    },
+                }
+            )
+
+        return tasks
+
     def _get_node_ids_for_channel(self, channel_metadata, channel_id):
         """Get node IDs regardless of the version
 
@@ -222,6 +248,8 @@ class DownloadStage(IntEnum):
     IMPORTING_CONTENT = auto()
     APPLYING_EXTERNAL_TAGS = auto()
     IMPORTING_EXTRA_CHANNELS = auto()
+    FOREGROUND_COMPLETED = auto()
+    IMPORTING_ALL_THUMBNAILS = auto()
     COMPLETED = auto()
 
 
@@ -230,6 +258,12 @@ class DownloadError(Exception):
 
 
 class CollectionDownloadManager:
+    TASKS_MAPPING = {
+        "remotechannelimport": remotechannelimport,
+        "remotecontentimport": remotecontentimport,
+        "applyexternaltags": applyexternaltags,
+    }
+
     def __init__(self):
         self._set_empty_state()
 
@@ -244,13 +278,13 @@ class CollectionDownloadManager:
         self._enqueuing_timestamp = None
         self._enqueued_timestamp = None
 
-    def from_manifest(self, manifest):
+    def from_manifest(self, manifest, user):
         """Start downloading a collection manifest."""
         if self._stage != DownloadStage.NOT_STARTED:
             raise DownloadError("A download has already started. Can't start")
 
         self._content_manifest = manifest
-        self._set_next_stage()
+        self._set_next_stage(user)
 
     def from_state(self, state):
         """Resume download from a previous state."""
@@ -430,7 +464,7 @@ class CollectionDownloadManager:
             else:
                 progress = PROGRESS_STEPS["tagging"]
 
-        elif self._stage == DownloadStage.COMPLETED:
+        elif self._stage >= DownloadStage.FOREGROUND_COMPLETED:
             progress = PROGRESS_STEPS["completed"]
 
         return {
@@ -466,12 +500,12 @@ class CollectionDownloadManager:
     def _next_task_or_stage(self, user):
         if not self._tasks_pending:
             # No more tasks pending in this stage, move to the next one
-            self._set_next_stage()
+            self._set_next_stage(user)
         else:
             # Enqueue next pending task
             self._enqueue_current_task(user)
 
-    def _set_next_stage(self):
+    def _set_next_stage(self, user):
         if self._stage == DownloadStage.COMPLETED:
             logger.info("Download completed!")
             return
@@ -487,6 +521,12 @@ class CollectionDownloadManager:
                 tasks = self._content_manifest.get_applyexternaltags_tasks()
             elif self._stage == DownloadStage.IMPORTING_EXTRA_CHANNELS:
                 tasks = self._content_manifest.get_extra_channelimport_tasks()
+            elif self._stage == DownloadStage.IMPORTING_ALL_THUMBNAILS:
+                # Download the remaining content thumbnails in the background.
+                for (
+                    task
+                ) in self._content_manifest.get_contentthumbnail_tasks():
+                    self._enqueue_background_task(user, task)
 
         self._tasks_pending = tasks
         self._tasks_previously_completed.extend(self._tasks_completed)
@@ -503,23 +543,29 @@ class CollectionDownloadManager:
             f" at {self._enqueuing_timestamp}"
         )
 
-        tasks_mapping = {
-            "remotechannelimport": remotechannelimport,
-            "remotecontentimport": remotecontentimport,
-            "applyexternaltags": applyexternaltags,
-        }
-        task = tasks_mapping[self._current_task["task"]]
+        task = self.TASKS_MAPPING[self._current_task["task"]]
         params = self._current_task["params"]
         self._current_job_id = _call_task(task, user, **params)
         self._enqueuing_timestamp = None
         self._enqueued_timestamp = time.time()
         logger.info(f"Enqueued job id {self._current_job_id}")
 
+    def _enqueue_background_task(self, user, task):
+        task_func = self.TASKS_MAPPING[task["task"]]
+        job_id = _call_task(
+            task_func,
+            user,
+            queue=BACKGROUND_QUEUE,
+            priority=Priority.REGULAR,
+            **task["params"],
+        )
+        logger.info(f"Enqueued task {task} in job {job_id}")
 
-def _call_task(task, user, **params):
+
+def _call_task(task, user, queue=QUEUE, priority=Priority.HIGH, **params):
     """Create, validate and enqueue a job."""
     job, _enqueue_args = task.validate_job_data(user, params)
-    job_id = job_storage.enqueue_job(job, queue=QUEUE, priority=Priority.HIGH)
+    job_id = job_storage.enqueue_job(job, queue=queue, priority=priority)
     return job_id
 
 
@@ -682,7 +728,7 @@ def start_download(request):
 
     # Init the download manager and start downloading
     try:
-        _collection_download_manager.from_manifest(manifest)
+        _collection_download_manager.from_manifest(manifest, request.user)
         logger.info(f"Download started for grade={grade} name={name}")
     except DownloadError as err:
         raise APIException(err)
