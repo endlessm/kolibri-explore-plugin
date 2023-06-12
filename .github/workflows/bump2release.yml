@@ -91,5 +91,5 @@ jobs:
     if: startsWith(needs.bump_version.outputs.tagname, 'v')
     uses: ./.github/workflows/main.yml
     with:
-      tagname: ${{ needs.bump-version.outputs.tagname }}
+      tagname: ${{ needs.bump_version.outputs.tagname }}
     secrets: inherit
