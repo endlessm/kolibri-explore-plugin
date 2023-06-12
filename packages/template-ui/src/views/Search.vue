@@ -9,6 +9,16 @@
       @clear-input="onClearInput"
     />
 
+    <b-container>
+      <b-row alignH="between">
+        <b-col>
+          <b-form-checkbox v-model="showUnavailable" name="check-show-unavailable" switch>
+            Show unavailable content
+          </b-form-checkbox>
+        </b-col>
+      </b-row>
+    </b-container>
+
     <EmptyResultsMessage v-if="notFound" :showTopics="false">
       <h1 class="text-secondary">
         Sorry, we can’t find any content that matches your search.
@@ -65,6 +75,8 @@ export default {
       resultNodes: [],
       page: null,
       searching: false,
+      // TODO: this needs to come from 'plugin_data'
+      showUnavailable: true,
     };
   },
   computed: {
@@ -105,10 +117,16 @@ export default {
     searchQuery() {
       this.query = this.searchQuery;
     },
+    showUnavailable() {
+      this.search();
+    },
   },
   methods: {
     search() {
-      return window.kolibri.searchContent({ keyword: this.cleanedQuery })
+      return window.kolibri.searchContent({
+        keyword: this.cleanedQuery,
+        showUnavailable: this.showUnavailable,
+      })
         .then((page) => {
           this.page = page;
           this.resultNodes = page.results;
