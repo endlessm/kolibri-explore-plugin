@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from pathlib import Path
 from setuptools import setup
 
 import kolibri_explore_plugin
@@ -9,10 +10,15 @@ dist_name = "kolibri_explore_plugin"
 # Default description of the distributed package
 description = """Kolibri plugin for Endless custom presentation"""
 
+# Use README.md as the long description
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 setup(
     name=dist_name,
     description=description,
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     version=kolibri_explore_plugin.__version__,
     author="Endless OS Foundation",
     author_email="key@endless.org",
