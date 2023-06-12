@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from pathlib import Path
+
 from setuptools import setup
 
 import kolibri_explore_plugin
@@ -18,7 +19,7 @@ setup(
     name=dist_name,
     description=description,
     long_description=long_description,
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     version=kolibri_explore_plugin.__version__,
     author="Endless OS Foundation",
     author_email="key@endless.org",
