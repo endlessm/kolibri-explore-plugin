@@ -105,11 +105,12 @@
         <b-col
           v-for="node in topicNodes"
           :key="node.id"
+          class="mb-2"
           lg="3"
           md="6"
           xs="12"
         >
-          <EkCard :node="node" mediaQuality="regular" />
+          <EkCard :node="node" />
         </b-col>
       </b-row>
 
@@ -120,6 +121,7 @@
         <b-col
           v-for="node in contentNodes"
           :key="node.id"
+          class="mb-2"
           lg="3"
           md="6"
           xs="12"
@@ -135,11 +137,12 @@
         <b-col
           v-for="node in [...topicNodes.slice(0, 1), ...contentNodes.slice(0, 1)]"
           :key="node.id + 'hi'"
+          class="mb-2"
           lg="3"
           md="6"
           xs="12"
         >
-          <EkCard :node="node" mediaQuality="regular" />
+          <EkCard :node="node" />
         </b-col>
         <b-col
           v-for="node in [...topicNodes.slice(0, 1), ...contentNodes.slice(0, 1)]"
@@ -159,6 +162,7 @@
 </template>
 
 <script>
+import { testChannel } from "../mockKolibriApi";
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
@@ -173,7 +177,6 @@ export default {
           kind: 'topic',
           title: 'A topic',
           description: 'This is a topic.',
-          useDefaultThumbnail: true,
           isBundle: false,
         },
         // Topic node with long title:
@@ -182,7 +185,6 @@ export default {
           kind: 'topic',
           title: lorem,
           description: '',
-          useDefaultThumbnail: true,
           isBundle: false,
         },
         // Topic node with long description:
@@ -191,7 +193,6 @@ export default {
           kind: 'topic',
           title: 'A topic',
           description: lorem,
-          useDefaultThumbnail: true,
           isBundle: false,
         },
         // Topic node with long title and description:
@@ -200,7 +201,6 @@ export default {
           kind: 'topic',
           title: lorem,
           description: lorem,
-          useDefaultThumbnail: true,
           isBundle: false,
         },
       ],
@@ -210,28 +210,28 @@ export default {
           kind: 'video',
           title: 'A video',
           author: 'Endless',
-          useDefaultThumbnail: true,
+          available: true,
         },
         {
           id: 'c1',
           kind: 'html5',
-          title: 'An app',
+          title: 'An html5 app',
           author: 'Endless',
-          useDefaultThumbnail: true,
+          available: true,
         },
         {
           id: 'c2',
           kind: 'exercise',
           title: 'An exercise',
           author: 'Endless',
-          useDefaultThumbnail: true,
+          available: true,
         },
         {
           id: 'c3',
           kind: 'document',
           title: 'A document',
           author: 'Endless',
-          useDefaultThumbnail: true,
+          available: true,
         },
         {
           id: 'c4',
@@ -239,24 +239,15 @@ export default {
           title: 'A bundle',
           description: 'Wont appear',
           author: 'Endless',
-          useDefaultThumbnail: true,
           isBundle: true,
+          available: true,
         },
         {
           id: 'c5',
           kind: 'audio',
           title: 'An audio',
           author: 'Endless',
-          useDefaultThumbnail: true,
-        },
-        // Content node with some tags:
-        {
-          id: 'c10',
-          kind: 'video',
-          title: 'A video with duration and other tags',
-          author: 'Endless',
-          useDefaultThumbnail: true,
-          structuredTags: {'duration': ['160'], 'subject': ['games'], 'type': ['test'], 'level': ['beginner']},
+          available: true,
         },
         // Content node with long title:
         {
@@ -264,7 +255,7 @@ export default {
           kind: 'html5',
           title: lorem,
           author: 'Endless',
-          useDefaultThumbnail: true,
+          available: true,
         },
         // Content node with channel:
         {
@@ -272,8 +263,8 @@ export default {
           kind: 'exercise',
           title: 'Card with channel',
           author: 'Endless',
-          useDefaultThumbnail: true,
-          channel: {'title': 'My channel'},
+          channel: testChannel,
+          available: true,
         },
         // Content node with long title and many tags (worst case):
         {
@@ -281,7 +272,6 @@ export default {
           kind: 'document',
           title: lorem,
           author: 'Endless',
-          useDefaultThumbnail: true,
           structuredTags: {'subject': ['one', 'two', 'three', 'four', 'five', 'six']},
         },
       ],
@@ -289,12 +279,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import '@/styles.scss';
-
-.root {
-  margin-top: $navbar-height;
-}
-
-</style>
