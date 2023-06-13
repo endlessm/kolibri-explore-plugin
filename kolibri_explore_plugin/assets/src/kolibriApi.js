@@ -212,6 +212,10 @@ class KolibriApi {
       window.open(`${deviceContentUrl()}#/content`, '_self');
     }
   }
+
+  get showUnavailableContent() {
+    return NO_AVAILABLE_FILTERING;
+  }
 }
 
 const kolibriApi = new KolibriApi();
