@@ -48,13 +48,5 @@ option_spec = {
                 Whether to hide the Discovery tab and redirect to Search.
             """,
         },
-        "NAVIGATE_UNAVAILABLE": {
-            "type": "boolean",
-            "default": False,
-            "description": """
-                Whether to retrieve unavailable channels and content nodes
-                for navigation.
-            """,
-        },
     },
 }

@@ -118,7 +118,6 @@
   import _ from 'lodash';
   import { mapMutations, mapState } from 'vuex';
   import { utils, constants, responsiveMixin } from 'ek-components';
-  import plugin_data from 'plugin_data';
 
   import { searchChannelsOnce } from '../modules/topicsRoot/handlers';
   import navigationMixin from '../mixins/navigationMixin';
@@ -128,6 +127,7 @@
   import AboutFooter from '../components/AboutFooter';
 
   const kinds = Object.keys(constants.MediaTypeVerbs);
+  const NO_AVAILABLE_FILTERING = true;
 
   export default {
     name: 'SearchPage',
@@ -149,7 +149,7 @@
         mediaQuality: constants.MediaQuality.REGULAR,
         progress: 100,
         resultKinds: [],
-        showUnavailable: plugin_data.navigateUnavailable,
+        showUnavailable: NO_AVAILABLE_FILTERING,
       };
     },
     computed: {

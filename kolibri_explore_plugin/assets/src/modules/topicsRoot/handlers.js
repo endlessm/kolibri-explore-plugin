@@ -17,7 +17,7 @@ import {
   _collectionState,
 } from '../coreExplore/utils';
 
-const NO_AVAILABLE_FILTERING = plugin_data.navigateUnavailable;
+const NO_AVAILABLE_FILTERING = true;
 
 function _findNodes(channels, channelCollection) {
   // we want them to be in the same order as the channels list
