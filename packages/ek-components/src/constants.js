@@ -17,6 +17,14 @@ export const MediaQuality = {
   REGULAR: 'regular',
 };
 
+export const DownloadState = {
+  NOT_CHECKED: 'not-checked',
+  READY: 'ready',
+  DOWNLOADING: 'downloading',
+  COMPLETED: 'completed',
+  FAILED: 'failed',
+};
+
 export const DefaultKindLabel = 'resources';
 
 // See https://github.com/learningequality/le-utils/blob/master/le_utils/constants/content_kinds.py
@@ -94,6 +102,7 @@ export default {
   CarouselInterval,
   CollectionsSections,
   DefaultKindLabel,
+  DownloadState,
   FilterTagsBadList,
   ItemsPerPage,
   ItemsPerSlide,
