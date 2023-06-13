@@ -75,8 +75,7 @@ export default {
       resultNodes: [],
       page: null,
       searching: false,
-      // TODO: this needs to come from 'plugin_data'
-      showUnavailable: true,
+      showUnavailable: window.kolibri.showUnavailableContent,
     };
   },
   computed: {
