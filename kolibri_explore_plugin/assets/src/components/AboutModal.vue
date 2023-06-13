@@ -161,7 +161,7 @@
               unsplash.com.
             </p>
 
-            <h5>Arts & Crafts</h5>
+            <h5>Arts &amp; Crafts</h5>
             <p>
               Credits: logo – Scissor By Muhammad Auns from
               NounProject.com; thumbnail – Photo by Siora Photography
