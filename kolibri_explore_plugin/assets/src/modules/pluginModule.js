@@ -3,6 +3,7 @@ import * as getters from './coreExplore/getters';
 import * as actions from './coreExplore/actions';
 import topicsRoot from './topicsRoot';
 import topicsTree from './topicsTree';
+import manageContent from './manageContent';
 
 export default {
   state() {
@@ -18,5 +19,6 @@ export default {
   modules: {
     topicsRoot,
     topicsTree,
+    manageContent,
   },
 };
