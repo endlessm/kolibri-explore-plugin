@@ -10,13 +10,13 @@ jobs:
   node10:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python 3.7
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.7
     - name: Set up Node
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         # Should be same version as in scripts/bootstrap.sh
         node-version: '16.14.0'
