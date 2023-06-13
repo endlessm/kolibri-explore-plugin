@@ -16,7 +16,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout from none-workflow_call
+        uses: actions/checkout@v3
+        if: ${{ !startsWith(inputs.tagname, 'v') }}
+
+      - name: Checkout from workflow_call
+        uses: actions/checkout@v3
+        if: startsWith(inputs.tagname, 'v')
+        with:
+          ref: ${{ inputs.tagname }}
 
       - name: Set up Python 3.7
         uses: actions/setup-python@v2
@@ -41,10 +49,20 @@ jobs:
       - name: Deploy apps
         run: yarn deploy:apps
 
-      - name: Release
+      - name: Release when triggered from a tag push
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/') || startsWith(inputs.tagname, 'v')
+        if: startsWith(github.ref, 'refs/tags/')
         with:
+          generate_release_notes: true
+          files: |
+            apps-bundle.zip
+            packages/welcome-screen/welcome-screen.zip
+
+      - name: Release when triggered from workflow_call
+        uses: softprops/action-gh-release@v1
+        if: startsWith(inputs.tagname, 'v')
+        with:
+          tag_name: ${{ inputs.tagname }}
           generate_release_notes: true
           files: |
             apps-bundle.zip
@@ -55,7 +73,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout from none-workflow_call
+        uses: actions/checkout@v3
+        if: ${{ !startsWith(inputs.tagname, 'v') }}
+
+      - name: Checkout from workflow_call
+        uses: actions/checkout@v3
+        if: startsWith(inputs.tagname, 'v')
+        with:
+          ref: ${{ inputs.tagname }}
 
       - name: Set up Python 3.7
         uses: actions/setup-python@v2
