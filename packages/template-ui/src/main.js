@@ -11,6 +11,24 @@ Vue.use(IconsPlugin);
 
 Vue.config.productionTip = false;
 
+const ContentDownloadProxyPlugin = {
+  install(Vue) {
+    Vue.prototype.$download = {
+      check: (...args) => {
+        return window.kolibri.checkContentDownload(...args);
+      },
+      start: (...args) => {
+        return window.kolibri.startContentDownload(...args);
+      },
+      retry: (...args) => {
+        return window.kolibri.retryContentDownload(...args);
+      },
+    }
+  },
+}
+
+Vue.use(ContentDownloadProxyPlugin);
+
 // FIXME hook i18n. This is a workaround to allow EK components that
 // use internationalization in the template-ui.
 Vue.prototype.$tr = function $tr(messageId) {

@@ -5,6 +5,7 @@
     :isBundle="isBundle"
     :url="getNodeUrl(node)"
     :mediaQuality="mediaQuality"
+    @nodeUpdated="onNodeUpdated"
   />
 </template>
 
@@ -56,6 +57,9 @@ export default {
   },
   methods: {
     getNodeUrl,
+    onNodeUpdated(nodeId) {
+      this.$emit('nodeUpdated', nodeId);
+    },
   },
 };
 </script>

@@ -1,3 +1,5 @@
+import { constants } from 'ek-components';
+
 export const testChannel = {
   id: '6199dde695db4ee4ab392222d5af1e5c',
   title: 'My Channel',
@@ -7,6 +9,8 @@ export const testChannel = {
 
 export const downloadContentSuccessId = 'success';
 export const downloadContentFailureId = 'fail123';
+
+const downloadPollTimes = {};
 
 export default {
   themeRenderer: () => {},
@@ -29,6 +33,43 @@ export default {
       resolve({
         results: [],
       });
+    });
+  },
+
+  checkContentDownload: (channelId, contentId) => {
+    console.debug(['checkContentDownload', channelId, contentId]);
+    if (!(contentId in downloadPollTimes)) {
+      downloadPollTimes[contentId] = 0;
+    }
+    return new Promise(resolve => {
+      if (downloadPollTimes[contentId] === 0) {
+        resolve(constants.DownloadState.READY);
+      } else if (downloadPollTimes[contentId] >= 10) {
+        if (contentId === downloadContentSuccessId) {
+          resolve(constants.DownloadState.COMPLETED);
+        }
+        else if (contentId === downloadContentFailureId) {
+          downloadPollTimes[contentId] = 1;
+          resolve(constants.DownloadState.FAILED);
+        }
+      } else {
+        resolve(constants.DownloadState.DOWNLOADING);
+      }
+      downloadPollTimes[contentId] += 1;
+    })
+    },
+
+  startContentDownload: (channelId, contentId) => {
+    console.debug(['startContentDownload', channelId, contentId]);
+    return new Promise(resolve => {
+      resolve(constants.DownloadState.DOWNLOADING);
+    });
+  },
+
+  retryContentDownload: (channelId, contentId) => {
+    console.debug(['retryContentDownload', channelId, contentId]);
+    return new Promise(resolve => {
+      resolve(constants.DownloadState.DOWNLOADING);
     });
   },
 }
