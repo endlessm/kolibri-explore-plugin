@@ -1,5 +1,4 @@
 import urls from 'kolibri.urls';
-import plugin_data from 'plugin_data';
 import { ChannelResource, ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
 
 import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
@@ -11,7 +10,7 @@ import { showTopicsContentInLightbox } from './modules/topicsTree/handlers';
 import { PageNames } from './constants';
 import { getChannelIcon } from './customApps';
 
-const NO_AVAILABLE_FILTERING = plugin_data.navigateUnavailable;
+const NO_AVAILABLE_FILTERING = true;
 
 class KolibriApi {
   constructor(channelId) {

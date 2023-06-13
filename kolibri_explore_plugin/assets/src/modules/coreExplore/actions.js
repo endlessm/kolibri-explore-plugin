@@ -1,6 +1,7 @@
-import plugin_data from 'plugin_data';
 import { ChannelResource } from 'kolibri.resources';
 import { pageNameToModuleMap } from '../../constants';
+
+const NO_AVAILABLE_FILTERING = true;
 
 export function resetModuleState(store, lastPageName) {
   const moduleName = pageNameToModuleMap[lastPageName];
@@ -25,7 +26,7 @@ function _channelListState(data) {
 
 // Like upstream setChannelInfo but could also retrieve unavailable channels:
 export function setEkChannelInfo(store) {
-  const getParams = plugin_data.navigateUnavailable ? {} : { available: true };
+  const getParams = NO_AVAILABLE_FILTERING ? {} : { available: true };
   return ChannelResource.fetchCollection({ getParams }).then(
     channelsData => {
       store.commit('SET_CORE_CHANNEL_LIST', _channelListState(channelsData));
