@@ -14,6 +14,7 @@
       :mediaQuality="mediaQuality"
       :cardColumns="cardColumns"
       @loadMoreNodes="$emit('loadMoreNodes')"
+      @nodeUpdated="onNodeUpdated"
     />
   </b-container>
 </template>
@@ -70,6 +71,11 @@ export default {
         default:
           return 'EkSlidableCardGrid';
       }
+    },
+  },
+  methods: {
+    onNodeUpdated(nodeId) {
+      this.$emit('nodeUpdated', nodeId);
     },
   },
 };

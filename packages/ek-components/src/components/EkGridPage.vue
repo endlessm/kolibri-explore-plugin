@@ -7,7 +7,11 @@
       :md="cardColumns.md"
       :lg="cardColumns.lg"
     >
-      <EkCard :node="node" :mediaQuality="mediaQuality" />
+      <EkCard
+        :node="node"
+        :mediaQuality="mediaQuality"
+        @nodeUpdated="onNodeUpdated"
+      />
     </b-col>
   </transition-group>
 </template>
@@ -29,6 +33,11 @@ export default {
     mediaQuality: {
       type: String,
       default: MediaQuality.REGULAR,
+    },
+  },
+  methods: {
+    onNodeUpdated(nodeId) {
+      this.$emit('nodeUpdated', nodeId);
     },
   },
 };
