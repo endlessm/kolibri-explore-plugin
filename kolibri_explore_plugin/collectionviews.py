@@ -4,6 +4,7 @@ import time
 from enum import auto
 from enum import IntEnum
 
+import requests
 from django.utils.translation import gettext_lazy as _
 from kolibri.core.content.errors import InsufficientStorageSpaceError
 from kolibri.core.content.models import ChannelMetadata
@@ -27,6 +28,10 @@ from .tasks import QUEUE
 from .tasks import remotecontentimport
 
 logger = logging.getLogger(__name__)
+
+COLLECTIONS_HOST = conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_HOST"]
+
+COLLECTION_URL_TEMPLATE = COLLECTIONS_HOST + "/{grade}-{name}.json"
 
 COLLECTION_PATHS = os.path.join(
     os.path.dirname(__file__), "static", "collections"
@@ -76,6 +81,14 @@ class EndlessKeyContentManifest(ContentManifest):
     def get_extra_channel_ids(self):
         all_channel_ids = _get_channel_ids_for_all_content_manifests()
         return all_channel_ids.difference(self.get_channel_ids())
+
+    def read_from_remote_collection(self, grade, name, validate=False):
+        self.grade = grade
+        self.name = name
+        manifest_url = COLLECTION_URL_TEMPLATE.format(grade=grade, name=name)
+        response = requests.get(manifest_url)
+        response.raise_for_status()
+        self.read_dict(response.json(), validate)
 
     def read_from_static_collection(self, grade, name, validate=False):
         self.grade = grade
@@ -603,7 +616,7 @@ def _read_content_manifests():
         try:
             # TODO: Validate the manifest files or remove validation
             # https://phabricator.endlessm.com/T34355
-            manifest.read_from_static_collection(grade, name, validate=False)
+            manifest.read_from_remote_collection(grade, name, validate=False)
         except ContentManifestParseError as err:
             logger.error(err)
         else:
