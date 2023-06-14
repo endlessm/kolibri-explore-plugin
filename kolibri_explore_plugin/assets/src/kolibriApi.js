@@ -103,8 +103,18 @@ class KolibriApi {
     });
   }
 
-  getContentById(id) {
-    return ContentNodeResource.fetchModel({ id: id });
+  // FIXME force default false
+  getContentById(id, force = true) {
+    const params = {
+      id,
+      force,
+    };
+    console.log(['getContentById', params]);
+    if (force) {
+      ContentNodeResource.useContentCacheKey = false;
+      ContentNodeResource.clearCache();
+    }
+    return ContentNodeResource.fetchModel(params);
   }
 
   searchContent(options) {

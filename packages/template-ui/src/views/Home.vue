@@ -30,7 +30,8 @@
             :mediaQuality="mediaQuality"
             :cardColumns="cardColumns"
             :hasMoreNodes="contentNodes.hasMoreNodes"
-            @loadMoreNodes="onLoadMoreContentNodes()"
+            @loadMoreNodes="onLoadMoreContentNodes"
+            @nodeUpdated="onContentNodeUpdated"
           />
         </template>
         <div
@@ -43,6 +44,7 @@
             :hasMoreNodes="sectionNodes[section.id].hasMoreNodes"
             :mediaQuality="mediaQuality"
             @loadMoreNodes="onLoadMoreSectionNodes(section.id)"
+            @nodeUpdated="onSectionNodeUpdated"
           >
             <SectionTitle :section="section" />
           </EkCardGrid>
@@ -196,6 +198,22 @@ export default {
           hasMoreNodes: pageResult.more !== null,
           pagination: pageResult.more,
         };
+      });
+    },
+    onContentNodeUpdated(nodeId) {
+      console.log(['onContentNodeUpdated', nodeId]);
+      return window.kolibri.getContentById(nodeId, true).then((node) => {
+        console.log(['update!', node]);
+        // FIXME update the nodes, don't refresh
+        // this.fetchContentNodes();
+      });
+    },
+    onSectionNodeUpdated(nodeId) {
+      console.log(['onSectionNodeUpdated', nodeId]);
+      return window.kolibri.getContentById(nodeId, true).then((node) => {
+        console.log(['update!', node]);
+        // FIXME update the nodes, don't refresh
+        // this.fetchSectionNodes();
       });
     },
   },

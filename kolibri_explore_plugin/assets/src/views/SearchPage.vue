@@ -42,6 +42,7 @@
               :nodes="nodes"
               :mediaQuality="mediaQuality"
               :cardColumns="cardColumns"
+              @nodeUpdated="onNodeUpdated"
             >
               <div>
                 <h4 class="text-muted">
@@ -282,6 +283,11 @@
         const words = this.keywords.filter(k => k !== keyword);
         this.query = words.join(' ');
         this.$router.push({ params: { query: this.query } });
+      },
+      onNodeUpdated(nodeId) {
+        console.log(['UPDATE ITTT!!', nodeId]);
+        // this.setSearchTerm(this.query);
+        // this.search(this.cleanedQuery);
       },
     },
     $trs: {
