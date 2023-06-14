@@ -15,7 +15,7 @@ import {
   retryContentDownload,
 } from './modules/manageContent/handlers';
 
-const NO_AVAILABLE_FILTERING = true;
+const DEFAULT_HIDE_UNAVAILABLE = false;
 
 class KolibriApi {
   constructor(channelId) {
@@ -76,7 +76,7 @@ class KolibriApi {
         kind: kind,
         kind_in: kinds,
         descendant_of: options.descendantOf,
-        ...(NO_AVAILABLE_FILTERING && { no_available_filtering: true }),
+        no_available_filtering: true,
       },
     }).then(contentNodes => {
       const { more, results } = contentNodes;
@@ -109,7 +109,7 @@ class KolibriApi {
 
   searchContent(options) {
     let searchPromise;
-    const { keyword, showUnavailable } = options;
+    const { keyword, includeUnavailable } = options;
     if (!keyword) {
       searchPromise = Promise.resolve({
         page: 0,
@@ -121,7 +121,7 @@ class KolibriApi {
         getParams: {
           search: keyword,
           channel_id: this.channelId,
-          ...(showUnavailable && { no_available_filtering: true }),
+          ...(includeUnavailable && { no_available_filtering: true }),
         },
       });
     }
@@ -227,8 +227,8 @@ class KolibriApi {
     }
   }
 
-  get showUnavailableContent() {
-    return NO_AVAILABLE_FILTERING;
+  get defaultHideUnavailable() {
+    return DEFAULT_HIDE_UNAVAILABLE;
   }
 }
 
