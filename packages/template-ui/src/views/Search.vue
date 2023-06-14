@@ -13,7 +13,7 @@
       <b-row alignH="between">
         <b-col>
           <b-form-checkbox v-model="hideUnavailable" name="check-hide-unavailable" switch>
-            Show unavailable content
+            Only downloaded items
           </b-form-checkbox>
         </b-col>
       </b-row>
@@ -124,7 +124,7 @@ export default {
     search() {
       return window.kolibri.searchContent({
         keyword: this.cleanedQuery,
-        hideUnavailable: this.hideUnavailable,
+        includeUnavailable: !this.hideUnavailable,
       })
         .then((page) => {
           this.page = page;
