@@ -8,6 +8,7 @@ import routes from './routes';
 import { setFacilitiesAndConfig } from './modules/coreExplore/actions';
 import pluginModule from './modules/pluginModule';
 import kolibriApi from './kolibriApi';
+import ContentDownloadPlugin from './contentDownloadPlugin';
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
@@ -15,6 +16,8 @@ Vue.use(IconsPlugin);
 Vue.config.productionTip = false;
 
 Vue.use(EkComponents);
+
+Vue.use(ContentDownloadPlugin);
 
 /* eslint-disable class-methods-use-this */
 class ExploreModule extends KolibriApp {
