@@ -1,8 +1,6 @@
 import { ChannelResource } from 'kolibri.resources';
 import { pageNameToModuleMap } from '../../constants';
 
-const DEFAULT_HIDE_UNAVAILABLE = true;
-
 export function resetModuleState(store, lastPageName) {
   const moduleName = pageNameToModuleMap[lastPageName];
   if (moduleName) {
@@ -24,10 +22,9 @@ function _channelListState(data) {
   }));
 }
 
-// Like upstream setChannelInfo but could also retrieve unavailable channels:
+// Like upstream setChannelInfo but also retrieves unavailable channels:
 export function setEkChannelInfo(store) {
-  const getParams = DEFAULT_HIDE_UNAVAILABLE ? {} : { available: true };
-  return ChannelResource.fetchCollection({ getParams }).then(
+  return ChannelResource.fetchCollection().then(
     channelsData => {
       store.commit('SET_CORE_CHANNEL_LIST', _channelListState(channelsData));
       return channelsData;
