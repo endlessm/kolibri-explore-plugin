@@ -17,7 +17,7 @@ import {
   _collectionState,
 } from '../coreExplore/utils';
 
-const NO_AVAILABLE_FILTERING = true;
+const DEFAULT_HIDE_UNAVAILABLE = true;
 
 function _findNodes(channels, channelCollection) {
   // we want them to be in the same order as the channels list
@@ -208,7 +208,7 @@ export function showChannels(store) {
           getParams: {
             ids: channelRootIds,
             user_kind: store.getters.getUserKind,
-            ...(NO_AVAILABLE_FILTERING && { no_available_filtering: true }),
+            ...(DEFAULT_HIDE_UNAVAILABLE && { no_available_filtering: true }),
           },
         })
           .then(collection => _findNodes(channels, collection))

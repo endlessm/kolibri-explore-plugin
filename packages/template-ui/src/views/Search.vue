@@ -12,7 +12,7 @@
     <b-container>
       <b-row alignH="between">
         <b-col>
-          <b-form-checkbox v-model="showUnavailable" name="check-show-unavailable" switch>
+          <b-form-checkbox v-model="hideUnavailable" name="check-hide-unavailable" switch>
             Show unavailable content
           </b-form-checkbox>
         </b-col>
@@ -75,7 +75,7 @@ export default {
       resultNodes: [],
       page: null,
       searching: false,
-      showUnavailable: window.kolibri.showUnavailableContent,
+      hideUnavailable: window.kolibri.defaultHideUnavailable,
     };
   },
   computed: {
@@ -116,7 +116,7 @@ export default {
     searchQuery() {
       this.query = this.searchQuery;
     },
-    showUnavailable() {
+    hideUnavailable() {
       this.search();
     },
   },
@@ -124,7 +124,7 @@ export default {
     search() {
       return window.kolibri.searchContent({
         keyword: this.cleanedQuery,
-        showUnavailable: this.showUnavailable,
+        hideUnavailable: this.hideUnavailable,
       })
         .then((page) => {
           this.page = page;

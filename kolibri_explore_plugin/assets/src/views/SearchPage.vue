@@ -23,8 +23,8 @@
         <b-container>
           <b-row alignH="between">
             <b-col>
-              <b-form-checkbox v-model="showUnavailable" name="check-show-unavailable" switch>
-                {{ $tr('showUnavailableLabel') }}
+              <b-form-checkbox v-model="hideUnavailable" name="check-hide-unavailable" switch>
+                {{ $tr('hideUnavailableLabel') }}
               </b-form-checkbox>
             </b-col>
             <b-col class="text-right">
@@ -127,7 +127,7 @@
   import AboutFooter from '../components/AboutFooter';
 
   const kinds = Object.keys(constants.MediaTypeVerbs);
-  const NO_AVAILABLE_FILTERING = true;
+  const DEFAULT_HIDE_UNAVAILABLE = true;
 
   export default {
     name: 'SearchPage',
@@ -149,7 +149,7 @@
         mediaQuality: constants.MediaQuality.REGULAR,
         progress: 100,
         resultKinds: [],
-        showUnavailable: NO_AVAILABLE_FILTERING,
+        hideUnavailable: DEFAULT_HIDE_UNAVAILABLE,
       };
     },
     computed: {
@@ -239,7 +239,7 @@
       searchTerm() {
         this.query = this.searchTerm || '';
       },
-      showUnavailable() {
+      hideUnavailable() {
         this.setSearchTerm(this.query);
         this.search(this.cleanedQuery);
       },
@@ -266,7 +266,7 @@
 
         this.progress = 0;
         kinds.forEach(k => {
-          searchChannelsOnce(this.$store, query, k, this.showUnavailable).then(() => {
+          searchChannelsOnce(this.$store, query, k, this.hideUnavailable).then(() => {
             this.resultKinds.push(k);
             this.progress += 100 / kinds.length;
           });
@@ -286,7 +286,7 @@
     },
     $trs: {
       documentTitle: 'Library',
-      showUnavailableLabel: 'Show unavailable content',
+      hideUnavailableLabel: 'Show unavailable content',
     },
   };
 
