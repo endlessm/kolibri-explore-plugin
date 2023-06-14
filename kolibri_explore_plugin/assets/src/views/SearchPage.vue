@@ -127,7 +127,7 @@
   import AboutFooter from '../components/AboutFooter';
 
   const kinds = Object.keys(constants.MediaTypeVerbs);
-  const DEFAULT_HIDE_UNAVAILABLE = true;
+  const DEFAULT_HIDE_UNAVAILABLE = false;
 
   export default {
     name: 'SearchPage',
@@ -266,7 +266,7 @@
 
         this.progress = 0;
         kinds.forEach(k => {
-          searchChannelsOnce(this.$store, query, k, this.hideUnavailable).then(() => {
+          searchChannelsOnce(this.$store, query, k, !this.hideUnavailable).then(() => {
             this.resultKinds.push(k);
             this.progress += 100 / kinds.length;
           });
@@ -286,7 +286,7 @@
     },
     $trs: {
       documentTitle: 'Library',
-      hideUnavailableLabel: 'Show unavailable content',
+      hideUnavailableLabel: 'Only downloaded items',
     },
   };
 
