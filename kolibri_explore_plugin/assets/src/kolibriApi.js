@@ -9,6 +9,11 @@ import { utils } from 'ek-components';
 import { showTopicsContentInLightbox } from './modules/topicsTree/handlers';
 import { PageNames } from './constants';
 import { getChannelIcon } from './customApps';
+import {
+  checkContentDownload,
+  startContentDownload,
+  retryContentDownload,
+} from './modules/manageContent/handlers';
 
 const NO_AVAILABLE_FILTERING = true;
 
@@ -200,6 +205,16 @@ class KolibriApi {
         results: response.data,
       };
     });
+  }
+
+  checkContentDownload(...args) {
+    return checkContentDownload(...args);
+  }
+  startContentDownload(...args) {
+    return startContentDownload(...args);
+  }
+  retryContentDownload(...args) {
+    return retryContentDownload(...args);
   }
 
   downloadChannel() {
