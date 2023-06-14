@@ -76,7 +76,7 @@ class KolibriApi {
         kind: kind,
         kind_in: kinds,
         descendant_of: options.descendantOf,
-        ...(DEFAULT_HIDE_UNAVAILABLE && { no_available_filtering: true }),
+        no_available_filtering: true,
       },
     }).then(contentNodes => {
       const { more, results } = contentNodes;
