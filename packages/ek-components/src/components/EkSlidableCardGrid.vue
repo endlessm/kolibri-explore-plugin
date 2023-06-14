@@ -12,6 +12,7 @@
       :key="node.id"
       :node="node"
       :mediaQuality="mediaQuality"
+      @nodeUpdated="onNodeUpdated"
     />
   </EkSlidableGrid>
 </template>
@@ -39,6 +40,11 @@ export default {
       type: Object,
       default: () => ItemsPerSlide,
       validator: validateItemsPerSlide,
+    },
+  },
+  methods: {
+    onNodeUpdated(nodeId) {
+      this.$emit('nodeUpdated', nodeId);
     },
   },
 };

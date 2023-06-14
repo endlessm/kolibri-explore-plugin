@@ -4,6 +4,7 @@
       :nodes="visibleNodes"
       :cardColumns="cardColumns"
       :mediaQuality="mediaQuality"
+      @nodeUpdated="onNodeUpdated"
     />
 
     <b-row alignH="center">
@@ -126,6 +127,9 @@ export default {
         return;
       }
       this.rowsToShow = this.initialRows;
+    },
+    onNodeUpdated(nodeId) {
+      this.$emit('nodeUpdated', nodeId);
     },
   },
 };
