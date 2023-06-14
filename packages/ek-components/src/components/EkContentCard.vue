@@ -3,8 +3,8 @@
     noBody
     class="my-2 rounded-lg"
     :class="{
-      'shadow-sm': !isHovered && !isDisabled,
-      'shadow': isHovered && !isDisabled,
+      'shadow-sm': !isHovered && isEnabled,
+      'shadow': isHovered && isEnabled,
       'disabled': isDisabled,
     }"
     :disabled="isDisabled"
