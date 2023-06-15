@@ -23,6 +23,7 @@
     </b-button-group>
     <b-navbar-nav>
       <b-nav-item
+        v-if="showFeedbackButton"
         class="d-block pr-0"
         :href="feedbackUrl"
         target="_blank"
@@ -65,7 +66,10 @@
         return assets.EndlessLogo;
       },
       feedbackUrl() {
-        return 'https://endlessos.org/key-feedback';
+        return plugin_data.feedbackUrl;
+      },
+      showFeedbackButton() {
+        return plugin_data.feedbackUrl != '';
       },
       showDiscoveryTab() {
         return !plugin_data.hideDiscoveryTab;
