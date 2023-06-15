@@ -48,5 +48,13 @@ option_spec = {
                 Whether to hide the Discovery tab and redirect to Search.
             """,
         },
+        "FEEDBACK_URL": {
+            "type": "string",
+            "default": "https://endlessos.org/key-feedback",
+            "description": """
+                Form to link to from the Feedback button, or the empty string
+                to hide it
+            """,
+        },
     },
 }
