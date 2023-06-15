@@ -49,7 +49,8 @@ export default {
       return constants.KeywordIconSize;
     },
     showDownloadButton() {
-      return !this.channel.available;
+      // FIXME: re-enable later
+      return this.channel.available && false;
     },
   },
   methods: {
