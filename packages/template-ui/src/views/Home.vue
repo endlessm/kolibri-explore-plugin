@@ -51,6 +51,7 @@
           :key="section.id"
         >
           <EkCardGrid
+            v-if="sectionNodes[section.id].nodes.length"
             :id="section.id"
             :nodes="sectionNodes[section.id].nodes"
             :hasMoreNodes="sectionNodes[section.id].hasMoreNodes"
