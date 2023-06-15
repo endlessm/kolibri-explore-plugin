@@ -65,6 +65,9 @@ class KolibriApi {
     }
     const kind = onlyContent ? 'content' : onlyTopics ? ContentNodeKinds.TOPIC : undefined;
 
+    const includeUnavailable =
+      'includeUnavailable' in options ? options.includeUnavailable : !DEFAULT_HIDE_UNAVAILABLE;
+
     return ContentNodeResource.fetchCollection({
       getParams: {
         ids: options.ids,
@@ -76,7 +79,7 @@ class KolibriApi {
         kind: kind,
         kind_in: kinds,
         descendant_of: options.descendantOf,
-        no_available_filtering: true,
+        ...(includeUnavailable && { no_available_filtering: true }),
       },
     }).then(contentNodes => {
       const { more, results } = contentNodes;
