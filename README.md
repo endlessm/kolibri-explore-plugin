@@ -173,6 +173,18 @@ updated. You then need to commit the file.
 
 ### Releasing
 
+#### Release with GitHub action
+
+Triggering [Bump version to release](https://github.com/endlessm/kolibri-explore-plugin/actions/workflows/bump2release.yml)
+action from `bump2release.yml` will do all release steps mentioned in
+[Release with local environment](#release-with-local-environment)
+automatically, including:
+* Bump version and create a new tag
+* Publish kolibiri-explore-plugin wheel package to PyPI
+* Release apps-bundle.zip
+
+#### Release with local environment
+
 To release a new version first please bump the version number to
 either major or minor. Note that the major version also needs a version
 name for branding. Eg:
@@ -204,9 +216,6 @@ And finally upload the built `.whl` file to PyPi:
 ```
 yarn release
 ```
-
-**Note:** These release steps can be done by triggering
-`bump2release.yml` action.
 
 ### How to display the build information
 
