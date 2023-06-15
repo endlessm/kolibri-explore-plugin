@@ -20,7 +20,20 @@
       <EkCardGridPlaceholder />
     </template>
     <template v-else>
-      <FilterContent v-if="hasFilters" />
+
+      <b-container>
+        <b-row alignH="between">
+          <b-col>
+            <b-form-checkbox v-model="hideUnavailableItems" name="check-only-downloaded" switch>
+              Only downloaded items
+            </b-form-checkbox>
+          </b-col>
+
+          <b-col v-if="hasFilters">
+            <FilterContent />
+          </b-col>
+        </b-row>
+      </b-container>
 
       <template v-if="isFilterEmpty">
         <template v-if="contentNodes.nodes.length">
@@ -73,6 +86,7 @@ export default {
       loadingCarouselNodes: true,
       loadingContentNodes: true,
       loadingSectionNodes: true,
+      hideUnavailableItems: window.kolibri.defaultHideUnavailable,
     };
   },
   computed: {
@@ -100,6 +114,13 @@ export default {
     mainSections() {
       return this.fetchSectionNodes();
     },
+    hideUnavailableItems() {
+      return Promise.all([
+        this.fetchCarouselNodes(),
+        this.fetchContentNodes(),
+        this.fetchSectionNodes(),
+      ]);
+    },
   },
   mounted() {
     return Promise.all([
@@ -115,8 +136,10 @@ export default {
       }
       this.loadingCarouselNodes = true;
       if (this.carouselNodeIds.length) {
-        return window.kolibri.getContentByFilter({ ids: this.carouselNodeIds })
-          .then((page) => {
+        return window.kolibri.getContentByFilter({
+          ids: this.carouselNodeIds,
+          includeUnavailable: !this.hideUnavailableItems,
+        }).then((page) => {
             this.carouselNodes = page.results;
             this.loadingCarouselNodes = false;
           });
@@ -138,6 +161,7 @@ export default {
       return window.kolibri.getContentByFilter({
         ...options,
           maxResults: constants.ItemsPerPage,
+          includeUnavailable: !this.hideUnavailableItems,
       })
         .then((pageResult) => {
           this.contentNodes = {
@@ -160,6 +184,7 @@ export default {
         return window.kolibri.getContentByFilter({
             parent: section.id,
             maxResults: sectionPageSize,
+            includeUnavailable: !this.hideUnavailableItems,
           })
           .then((pageResult) => {
             this.$set(this.sectionNodes, section.id, {
@@ -177,7 +202,10 @@ export default {
       if (!hasMoreNodes) {
         return null;
       }
-      return window.kolibri.getContentPage(pagination).then((pageResult) => {
+      return window.kolibri.getContentPage({
+        ...pagination,
+        ...(!this.hideUnavailableItems && { no_available_filtering: true }),
+      }).then((pageResult) => {
         this.$set(this.sectionNodes, sectionId, {
           nodes: nodes.concat(pageResult.results),
           hasMoreNodes: pageResult.more !== null,
@@ -190,7 +218,10 @@ export default {
       if (!hasMoreNodes) {
         return null;
       }
-      return window.kolibri.getContentPage(pagination).then((pageResult) => {
+      return window.kolibri.getContentPage({
+        ...pagination,
+        ...(!this.hideUnavailableItems && { no_available_filtering: true }),
+      }).then((pageResult) => {
         this.contentNodes = {
           nodes: nodes.concat(pageResult.results),
           hasMoreNodes: pageResult.more !== null,
