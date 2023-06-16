@@ -51,10 +51,14 @@ export function startContentDownload(channelId, contentId) {
     type: TaskTypes.REMOTECONTENTIMPORT,
   };
 
-  return TaskResource.startTask(taskParams).then(task => {
-    store.commit('manageContent/SET_CONTENT_DOWNLOAD_TASK', { channelId, contentId, task });
-    return _mapTaskStatusToDownloadState(task);
-  });
+  return TaskResource.startTask(taskParams)
+    .then(task => {
+      store.commit('manageContent/SET_CONTENT_DOWNLOAD_TASK', { channelId, contentId, task });
+      return _mapTaskStatusToDownloadState(task);
+    })
+    .catch(() => {
+      return constants.DownloadState.FAILED;
+    });
 }
 
 export function retryContentDownload(channelId, contentId) {
