@@ -1,3 +1,5 @@
+import logging
+
 from django.core.management import call_command
 from kolibri.core.content.tasks import get_status as get_content_task_status
 from kolibri.core.content.tasks import RemoteChannelResourcesImportValidator
@@ -13,6 +15,8 @@ from kolibri.core.content.utils.resource_import import (
 )
 from kolibri.core.serializers import HexOnlyUUIDField
 from kolibri.core.tasks.decorators import register_task
+from kolibri.core.tasks.job import State
+from kolibri.core.tasks.main import job_storage
 from kolibri.core.tasks.permissions import CanManageContent
 from kolibri.core.tasks.validation import JobValidator
 from rest_framework.serializers import CharField
@@ -20,7 +24,10 @@ from rest_framework.serializers import ListField
 
 from .vendor.file_transfer import FileDownload
 
+logger = logging.getLogger(__name__)
+
 QUEUE = "content"
+BACKGROUND_QUEUE = "explore-bg"
 
 
 class ExternalTagsJobValidator(JobValidator):
@@ -111,3 +118,12 @@ def remotecontentimport(
         all_thumbnails=all_thumbnails,
     )
     manager.run()
+
+
+def restart_failed_background_jobs():
+    for job in job_storage.get_all_jobs(queue=BACKGROUND_QUEUE):
+        if job.state == State.FAILED:
+            logger.info(
+                f"Restarting failed background {job.func} job {job.job_id}"
+            )
+            job_storage.restart_job(job.job_id)
