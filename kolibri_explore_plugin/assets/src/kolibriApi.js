@@ -103,7 +103,10 @@ class KolibriApi {
     });
   }
 
-  getContentById(id) {
+  getContentById(id, ignoreCache = false) {
+    if (ignoreCache && id in ContentNodeResource.cache) {
+      delete ContentNodeResource.cache[id];
+    }
     return ContentNodeResource.fetchModel({ id: id });
   }
 
