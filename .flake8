@@ -3,4 +3,5 @@ extend-exclude =
   build/,
   static/,
   dist/,
-  node_modules/
+  node_modules/,
+  kolibri_explore_plugin/vendor/
