@@ -5,13 +5,15 @@ node_modules
 # vscode files
 .vscode/
 
+# Compiled python modules
+__pycache__/
+
 # Built and cached files
 kolibri_explore_plugin/apps/**/*.zip
 kolibri_explore_plugin/welcomeScreen/
 kolibri_explore_plugin/static/kolibri_explore_plugin*
 kolibri_explore_plugin/static/build-info.json
 kolibri_explore_plugin/build/
-kolibri_explore_plugin/__pycache__
 build/
 dist/
 kolibri_explore_plugin.egg-info/
