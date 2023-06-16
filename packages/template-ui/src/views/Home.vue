@@ -62,11 +62,13 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import { constants } from 'ek-components';
+import updateNodeMixin from '@/mixins/updateNodeMixin';
 
 const sectionPageSize = 2 * constants.ItemsPerSlide.lg;
 
 export default {
   name: 'Home',
+  mixins: [updateNodeMixin],
   data() {
     return {
       carouselNodes: [],
@@ -200,22 +202,11 @@ export default {
         };
       });
     },
-    _onNodeUpdated(nodeId, nodes) {
-      return window.kolibri.getContentById(nodeId, true).then((newNode) => {
-        const index = nodes.findIndex(
-          node => node.id === newNode.id
-        )
-        if (index === -1) {
-          return;
-        }
-        this.$set(nodes, index, newNode);
-      });
-    },
     onContentNodeUpdated(nodeId) {
-      return this._onNodeUpdated(nodeId, this.contentNodes.nodes);
+      return this.onNodeUpdated(nodeId, this.contentNodes.nodes);
     },
     onSectionNodeUpdated(sectionId, nodeId) {
-      return this._onNodeUpdated(nodeId, this.sectionNodes[sectionId].nodes);
+      return this.onNodeUpdated(nodeId, this.sectionNodes[sectionId].nodes);
     },
   },
 };

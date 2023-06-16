@@ -49,6 +49,7 @@
       :mediaQuality="mediaQuality"
       :cardColumns="cardColumns"
       variant="collapsible"
+      @nodeUpdated="onResultNodesUpdated"
     >
       <div class="font-weight-bold my-4 text-muted">
         {{ totalResults }} Results
@@ -61,6 +62,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import updateNodeMixin from '@/mixins/updateNodeMixin';
 
 // Escapes the RegExp special characters in string.
 function escapeRegExp(string) {
@@ -69,6 +71,7 @@ function escapeRegExp(string) {
 
 export default {
   name: 'Search',
+  mixins: [updateNodeMixin],
   data() {
     return {
       query: '',
@@ -138,6 +141,9 @@ export default {
     removeKeyword(keyword) {
       const words = this.keywords.filter((k) => k !== keyword);
       this.query = words.join(' ');
+    },
+    onResultNodesUpdated(nodeId) {
+      return this.onNodeUpdated(nodeId, this.resultNodes);
     },
   },
 };
