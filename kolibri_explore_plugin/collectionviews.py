@@ -13,7 +13,6 @@ from kolibri.core.content.utils.content_manifest import ContentManifest
 from kolibri.core.content.utils.content_manifest import (
     ContentManifestParseError,
 )
-from kolibri.core.tasks.constants import DEFAULT_QUEUE
 from kolibri.core.tasks.job import Priority
 from kolibri.core.tasks.job import State as JobState
 from kolibri.core.tasks.main import job_storage
@@ -24,6 +23,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 
 from .tasks import applyexternaltags
+from .tasks import QUEUE
 
 logger = logging.getLogger(__name__)
 
@@ -142,27 +142,20 @@ class EndlessKeyContentManifest(ContentManifest):
         tasks = []
 
         for channel_id in self.get_channel_ids():
-            channel_metadata = self._get_channel_metadata(channel_id)
+            channel_metadata = _get_channel_metadata(channel_id)
             tasks.append(
                 {
                     "task": "remotecontentimport",
                     "params": {
                         "channel_id": channel_id,
-                        # FIXME: The channel_name is needed
-                        # since commit b53d7baa
-                        "channel_name": "foo",
+                        "channel_name": channel_metadata.name,
                         "node_ids": list(
                             self._get_node_ids_for_channel(
                                 channel_metadata, channel_id
                             )
                         ),
                         "exclude_node_ids": [],
-                    },
-                    "extra_metadata": {
-                        "channel_name": channel_metadata.name,
-                        # FIXME enable thumbnail data if the UI needs it,
-                        # for now it only clutters the debug lines:
-                        # "channel_thumbnail": channel_metadata.thumbnail,
+                        "fail_on_error": True,
                     },
                 }
             )
@@ -221,10 +214,6 @@ class EndlessKeyContentManifest(ContentManifest):
             )
 
         return node_ids
-
-    def _get_channel_metadata(self, channel_id):
-        channel_metadata = ChannelMetadata.objects.get(id=channel_id)
-        return channel_metadata
 
 
 class DownloadStage(IntEnum):
@@ -530,20 +519,24 @@ class CollectionDownloadManager:
 def _call_task(task, user, **params):
     """Create, validate and enqueue a job."""
     job, _enqueue_args = task.validate_job_data(user, params)
-    job_id = job_storage.enqueue_job(
-        job, queue=DEFAULT_QUEUE, priority=Priority.HIGH
-    )
+    job_id = job_storage.enqueue_job(job, queue=QUEUE, priority=Priority.HIGH)
     return job_id
 
 
 def _build_remotechannelimport_task(channel_id):
+    # Try to get the channel name from an existing channel database, but
+    # this will fail on first import.
+    try:
+        channel_metadata = _get_channel_metadata(channel_id)
+    except ChannelMetadata.DoesNotExist:
+        channel_name = "unknown"
+    else:
+        channel_name = channel_metadata.name
     return {
         "task": "remotechannelimport",
         "params": {
             "channel_id": channel_id,
-            # FIXME: The channel_name is needed
-            # since commit b53d7baa
-            "channel_name": "foo",
+            "channel_name": channel_name,
         },
     }
 
@@ -612,6 +605,10 @@ def _get_channel_ids_for_all_content_manifests():
     for content_manifest in _content_manifests:
         channel_ids.update(content_manifest.get_channel_ids())
     return channel_ids
+
+
+def _get_channel_metadata(channel_id):
+    return ChannelMetadata.objects.get(id=channel_id)
 
 
 @api_view(["GET"])
