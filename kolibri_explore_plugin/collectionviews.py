@@ -13,7 +13,6 @@ from kolibri.core.content.utils.content_manifest import ContentManifest
 from kolibri.core.content.utils.content_manifest import (
     ContentManifestParseError,
 )
-from kolibri.core.tasks.constants import DEFAULT_QUEUE
 from kolibri.core.tasks.job import Priority
 from kolibri.core.tasks.job import State as JobState
 from kolibri.core.tasks.main import job_storage
@@ -24,6 +23,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 
 from .tasks import applyexternaltags
+from .tasks import QUEUE
 
 logger = logging.getLogger(__name__)
 
@@ -518,9 +518,7 @@ class CollectionDownloadManager:
 def _call_task(task, user, **params):
     """Create, validate and enqueue a job."""
     job, _enqueue_args = task.validate_job_data(user, params)
-    job_id = job_storage.enqueue_job(
-        job, queue=DEFAULT_QUEUE, priority=Priority.HIGH
-    )
+    job_id = job_storage.enqueue_job(job, queue=QUEUE, priority=Priority.HIGH)
     return job_id
 
 
