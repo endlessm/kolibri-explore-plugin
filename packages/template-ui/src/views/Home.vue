@@ -30,7 +30,8 @@
             :mediaQuality="mediaQuality"
             :cardColumns="cardColumns"
             :hasMoreNodes="contentNodes.hasMoreNodes"
-            @loadMoreNodes="onLoadMoreContentNodes()"
+            @loadMoreNodes="onLoadMoreContentNodes"
+            @nodeUpdated="onContentNodeUpdated"
           />
         </template>
         <div
@@ -43,6 +44,7 @@
             :hasMoreNodes="sectionNodes[section.id].hasMoreNodes"
             :mediaQuality="mediaQuality"
             @loadMoreNodes="onLoadMoreSectionNodes(section.id)"
+            @nodeUpdated="onSectionNodeUpdated(section.id, ...arguments)"
           >
             <SectionTitle :section="section" />
           </EkCardGrid>
@@ -197,6 +199,23 @@ export default {
           pagination: pageResult.more,
         };
       });
+    },
+    _onNodeUpdated(nodeId, nodes) {
+      return window.kolibri.getContentById(nodeId, true).then((newNode) => {
+        const index = nodes.findIndex(
+          node => node.id === newNode.id
+        )
+        if (index === -1) {
+          return;
+        }
+        this.$set(nodes, index, newNode);
+      });
+    },
+    onContentNodeUpdated(nodeId) {
+      return this._onNodeUpdated(nodeId, this.contentNodes.nodes);
+    },
+    onSectionNodeUpdated(sectionId, nodeId) {
+      return this._onNodeUpdated(nodeId, this.sectionNodes[sectionId].nodes);
     },
   },
 };
