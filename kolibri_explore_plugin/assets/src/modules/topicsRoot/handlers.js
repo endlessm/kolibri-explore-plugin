@@ -59,6 +59,11 @@ function _findNodes(channels, channelCollection) {
 }
 
 function _fetchCarouselNodes(store) {
+  if (!plugin_data.useEkIguanaPage) {
+    // These carousel nodes are only relevant to EK Iguana:
+    return Promise.resolve([]);
+  }
+
   const { rootNodes } = store.state.topicsRoot;
   const highlightedContentUrl = urls.static(`highlighted-content.json`);
 
