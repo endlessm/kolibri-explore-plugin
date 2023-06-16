@@ -13,6 +13,7 @@
         :mediaQuality="mediaQuality"
         :cardColumns="cardColumns"
         @loadMoreNodes="onLoadMoreNodes"
+        @nodeUpdated="onFilterNodeUpdated"
       />
     </div>
   </div>
@@ -21,9 +22,11 @@
 <script>
   import { mapState } from 'vuex';
   import { constants } from 'ek-components';
+  import updateNodeMixin from '@/mixins/updateNodeMixin';
 
   export default {
     name: 'FilterResult',
+    mixins: [updateNodeMixin],
     props: {
       node: {
         type: Object,
@@ -109,6 +112,9 @@
           this.filteredNodes = this.filteredNodes.concat(pageResult.results);
           this.pagination = pageResult.more;
         });
+      },
+      onFilterNodeUpdated(nodeId) {
+        return this.onNodeUpdated(nodeId, this.filteredNodes);
       },
     },
   };

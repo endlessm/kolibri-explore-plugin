@@ -36,6 +36,7 @@
         :nodes="nextNodesInTopic"
         :cardColumns="cardColumns"
         class="next-grid"
+        @nodeUpdated="onNextNodesUpdated"
       >
         <b-container>
           <h4 class="next-title text-dark text-truncate w-75">
@@ -50,9 +51,11 @@
 <script>
 import { mapState } from 'vuex';
 import { constants, utils } from 'ek-components';
+import updateNodeMixin from '@/mixins/updateNodeMixin';
 
 export default {
   name: 'Content',
+  mixins: [updateNodeMixin],
   data() {
     return {
       content: {},
@@ -113,6 +116,9 @@ export default {
           this.nextNodesInTopic = page.results.filter((node) => node.sort_order > currentOrder);
         });
     },
+    onNextNodesUpdated(nodeId) {
+      return this.onNodeUpdated(nodeId, this.nextNodesInTopic);
+    }
   },
 };
 </script>

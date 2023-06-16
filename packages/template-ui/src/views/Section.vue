@@ -6,7 +6,8 @@
       :section="section"
       :sectionNodes="sectionNodes"
       :loading="loading"
-      @loadMoreNodes="onLoadMoreSectionNodes()"
+      @loadMoreNodes="onLoadMoreSectionNodes"
+      @nodeUpdated="onSectionNodeUpdated"
     />
   </div>
 </template>
@@ -16,6 +17,7 @@ import { mapGetters } from 'vuex';
 import { constants } from 'ek-components';
 import ListSection from '@/views/ListSection';
 import BundleSection from '@/views/BundleSection';
+import updateNodeMixin from '@/mixins/updateNodeMixin';
 
 export default {
   name: 'Section',
@@ -23,6 +25,7 @@ export default {
     ListSection,
     BundleSection,
   },
+  mixins: [updateNodeMixin],
   data() {
     return {
       section: {},
@@ -96,6 +99,9 @@ export default {
           pagination: pageResult.more,
         };
       });
+    },
+    onSectionNodeUpdated(nodeId) {
+      return this.onNodeUpdated(nodeId, this.sectionNodes.nodes);
     },
   },
 };

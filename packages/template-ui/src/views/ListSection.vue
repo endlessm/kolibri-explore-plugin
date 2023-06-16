@@ -24,6 +24,7 @@
           :cardColumns="cardColumns"
           :hasMoreNodes="getSubsectionNodes(subsection.id).hasMoreNodes"
           @loadMoreNodes="onLoadMoreSubsectionNodes(subsection.id)"
+          @nodeUpdated="onSubsectionNodeUpdated(subsection.id, ...arguments)"
         >
           <SectionTitle :section="subsection" />
         </EkCardGrid>
@@ -39,6 +40,7 @@
         variant="collapsible"
         :hasMoreNodes="sectionNodes.hasMoreNodes"
         @loadMoreNodes="$emit('loadMoreNodes')"
+        @nodeUpdated="(nodeId) => $emit('nodeUpdated', nodeId)"
       />
     </div>
 
@@ -48,11 +50,13 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import { constants } from 'ek-components';
+import updateNodeMixin from '@/mixins/updateNodeMixin';
 
 const sectionPageSize = 2 * constants.ItemsPerSlide.lg;
 
 export default {
   name: 'ListSection',
+  mixins: [updateNodeMixin],
   props: {
     section: {
       type: Object,
@@ -147,6 +151,9 @@ export default {
       }
 
       return subsection;
+    },
+    onSubsectionNodeUpdated(sectionId, nodeId) {
+      return this.onNodeUpdated(nodeId, this.subsectionNodes[sectionId].nodes);
     },
   },
 };

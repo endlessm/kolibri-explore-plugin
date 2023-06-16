@@ -30,7 +30,8 @@
             :mediaQuality="mediaQuality"
             :cardColumns="cardColumns"
             :hasMoreNodes="contentNodes.hasMoreNodes"
-            @loadMoreNodes="onLoadMoreContentNodes()"
+            @loadMoreNodes="onLoadMoreContentNodes"
+            @nodeUpdated="onContentNodeUpdated"
           />
         </template>
         <div
@@ -43,6 +44,7 @@
             :hasMoreNodes="sectionNodes[section.id].hasMoreNodes"
             :mediaQuality="mediaQuality"
             @loadMoreNodes="onLoadMoreSectionNodes(section.id)"
+            @nodeUpdated="onSectionNodeUpdated(section.id, ...arguments)"
           >
             <SectionTitle :section="section" />
           </EkCardGrid>
@@ -60,11 +62,13 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import { constants } from 'ek-components';
+import updateNodeMixin from '@/mixins/updateNodeMixin';
 
 const sectionPageSize = 2 * constants.ItemsPerSlide.lg;
 
 export default {
   name: 'Home',
+  mixins: [updateNodeMixin],
   data() {
     return {
       carouselNodes: [],
@@ -197,6 +201,12 @@ export default {
           pagination: pageResult.more,
         };
       });
+    },
+    onContentNodeUpdated(nodeId) {
+      return this.onNodeUpdated(nodeId, this.contentNodes.nodes);
+    },
+    onSectionNodeUpdated(sectionId, nodeId) {
+      return this.onNodeUpdated(nodeId, this.sectionNodes[sectionId].nodes);
     },
   },
 };
