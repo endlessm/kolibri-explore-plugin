@@ -11,6 +11,8 @@ exclude = '''
   | _build
   | buck-out
   | build
+  | static
   | dist
+  | node_modules
 )/
 '''
