@@ -42,6 +42,7 @@
               :nodes="nodes"
               :mediaQuality="mediaQuality"
               :cardColumns="cardColumns"
+              @nodeUpdated="onNodeUpdated"
             >
               <div>
                 <h4 class="text-muted">
@@ -124,6 +125,7 @@
   import _ from 'lodash';
   import { mapMutations, mapState } from 'vuex';
   import { utils, constants, responsiveMixin } from 'ek-components';
+  import { ContentNodeResource } from 'kolibri.resources';
 
   import { searchChannelsOnce } from '../modules/topicsRoot/handlers';
   import navigationMixin from '../mixins/navigationMixin';
@@ -288,6 +290,23 @@
         const words = this.keywords.filter(k => k !== keyword);
         this.query = words.join(' ');
         this.$router.push({ params: { query: this.query } });
+      },
+      onNodeUpdated(nodeId) {
+        ContentNodeResource.fetchModel({ id: nodeId }).then(newNode => {
+          const index = this.searchResult[newNode.kind].results.findIndex(
+            node => node.id === newNode.id
+          );
+          if (index === -1) {
+            return;
+          }
+
+          // Add channel to new node, like the initial handler does:
+          const oldNode = this.searchResult[newNode.kind].results[index];
+          newNode.channel = oldNode.channel;
+
+          // Update the results reactively:
+          this.$set(this.searchResult[newNode.kind].results, index, newNode);
+        });
       },
     },
     $trs: {
