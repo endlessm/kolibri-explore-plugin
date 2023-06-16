@@ -154,6 +154,7 @@ class EndlessKeyContentManifest(ContentManifest):
                             )
                         ),
                         "exclude_node_ids": [],
+                        "fail_on_error": True,
                     },
                 }
             )
