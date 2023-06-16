@@ -46,9 +46,12 @@
               <div>
                 <h4 class="text-muted">
                   <span class="font-weight-normal">
-                    {{ nodes.length }} results for "{{ cleanedQuery }}"
+                    {{ $tr('countedResults', {
+                      count: nodes.length,
+                      term: cleanedQuery,
+                      action: groupVerb(kind)
+                    }) }}
                   </span>
-                  to {{ groupVerb(kind) }}
                 </h4>
               </div>
             </EkCardGrid>
@@ -74,7 +77,10 @@
 
         <b-container v-if="resultChannels.length" class="pb-5 pt-3">
           <h4 class="text-muted">
-            {{ resultChannels.length }} channels related to "{{ cleanedQuery }}"
+            {{ $tr('countedChannels', {
+              count: resultChannels.length,
+              term: cleanedQuery
+            }) }}
           </h4>
           <EkChannelCardGroup
             variant="smallCard"
@@ -287,6 +293,10 @@
     $trs: {
       documentTitle: 'Library',
       hideUnavailableLabel: 'Only downloaded items',
+      countedResults:
+        '{count} {count, plural, one {result} other {results}} for “{term}” to {action}',
+      countedChannels:
+        '{count} {count, plural, one {channel} other {channels}} related to “{term}”',
     },
   };
 
