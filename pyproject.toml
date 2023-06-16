@@ -14,5 +14,6 @@ exclude = '''
   | static
   | dist
   | node_modules
+  | kolibri_explore_plugin/vendor
 )/
 '''
