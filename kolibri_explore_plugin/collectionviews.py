@@ -8,7 +8,6 @@ from django.utils.translation import gettext_lazy as _
 from kolibri.core.content.errors import InsufficientStorageSpaceError
 from kolibri.core.content.models import ChannelMetadata
 from kolibri.core.content.tasks import remotechannelimport
-from kolibri.core.content.tasks import remotecontentimport
 from kolibri.core.content.utils.content_manifest import ContentManifest
 from kolibri.core.content.utils.content_manifest import (
     ContentManifestParseError,
@@ -24,6 +23,7 @@ from rest_framework.response import Response
 
 from .tasks import applyexternaltags
 from .tasks import QUEUE
+from .tasks import remotecontentimport
 
 logger = logging.getLogger(__name__)
 
