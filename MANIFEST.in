@@ -15,4 +15,5 @@ recursive-exclude kolibri_explore_plugin/static/collections *
 recursive-include kolibri_explore_plugin/build *.json
 recursive-include kolibri_explore_plugin/locale *.mo
 recursive-include kolibri_explore_plugin/locale *.json
+recursive-include kolibri_explore_plugin/vendor *.py
 recursive-include kolibri_explore_plugin/welcomeScreen *.*
