@@ -50,8 +50,7 @@ COLLECTION_NAMES = ["0001"]
 
 PROGRESS_STEPS = {
     "importing": 0.1,
-    "downloading": 0.8,
-    "tagging": 0.9,
+    "downloading": 0.9,
     "completed": 1,
 }
 
@@ -247,8 +246,8 @@ class DownloadStage(IntEnum):
     IMPORTING_CHANNELS = auto()
     IMPORTING_CONTENT = auto()
     APPLYING_EXTERNAL_TAGS = auto()
-    IMPORTING_EXTRA_CHANNELS = auto()
     FOREGROUND_COMPLETED = auto()
+    IMPORTING_EXTRA_CHANNELS = auto()
     IMPORTING_ALL_THUMBNAILS = auto()
     COMPLETED = auto()
 
@@ -444,7 +443,7 @@ class CollectionDownloadManager:
                 progress = (
                     PROGRESS_STEPS["downloading"]
                     + (
-                        PROGRESS_STEPS["tagging"]
+                        PROGRESS_STEPS["completed"]
                         - PROGRESS_STEPS["downloading"]
                     )
                     * current_task_number
@@ -452,17 +451,6 @@ class CollectionDownloadManager:
                 )
             else:
                 progress = PROGRESS_STEPS["downloading"]
-
-        elif self._stage == DownloadStage.IMPORTING_EXTRA_CHANNELS:
-            if total_tasks_number > 0:
-                progress = (
-                    PROGRESS_STEPS["tagging"]
-                    + (PROGRESS_STEPS["completed"] - PROGRESS_STEPS["tagging"])
-                    * current_task_number
-                    / total_tasks_number
-                )
-            else:
-                progress = PROGRESS_STEPS["tagging"]
 
         elif self._stage >= DownloadStage.FOREGROUND_COMPLETED:
             progress = PROGRESS_STEPS["completed"]
@@ -520,7 +508,11 @@ class CollectionDownloadManager:
             elif self._stage == DownloadStage.APPLYING_EXTERNAL_TAGS:
                 tasks = self._content_manifest.get_applyexternaltags_tasks()
             elif self._stage == DownloadStage.IMPORTING_EXTRA_CHANNELS:
-                tasks = self._content_manifest.get_extra_channelimport_tasks()
+                # Download the remaining channel metadata in the background.
+                for (
+                    task
+                ) in self._content_manifest.get_extra_channelimport_tasks():
+                    self._enqueue_background_task(user, task)
             elif self._stage == DownloadStage.IMPORTING_ALL_THUMBNAILS:
                 # Download the remaining content thumbnails in the background.
                 for (
