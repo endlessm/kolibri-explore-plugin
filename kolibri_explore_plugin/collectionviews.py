@@ -196,7 +196,7 @@ class EndlessKeyContentManifest(ContentManifest):
         tasks = []
 
         for channel_id in _get_channel_ids_for_all_content_manifests():
-            channel_metadata = self._get_channel_metadata(channel_id)
+            channel_metadata = _get_channel_metadata(channel_id)
             tasks.append(
                 {
                     "task": "remotecontentimport",
