@@ -36,7 +36,7 @@
               </b-button>
             </template>
             <template v-else-if="isCompleted">
-              <b-button pill variant="primary" :to="homePageLink">
+              <b-button pill variant="primary" @click="onConfirm">
                 {{ $tr('confirmLabel') }}
               </b-button>
             </template>
@@ -54,7 +54,6 @@
   import client from 'kolibri.client';
   import urls from 'kolibri.urls';
   import { mapState } from 'vuex';
-  import { PageNames } from '../constants';
   import { getCollectionInfo } from '../modules/coreExplore/utils';
 
   const UPDATE_DELAY = 1500;
@@ -89,11 +88,6 @@
       },
       gotDownloadError() {
         return this.errorMessage != null;
-      },
-      homePageLink() {
-        return {
-          name: PageNames.TOPICS_ROOT,
-        };
       },
       titleLabel() {
         if (this.isDownloading) {
@@ -145,6 +139,9 @@
         this.errorMessage = null;
         this.retry = true;
         return this.setUpdateInterval();
+      },
+      onConfirm() {
+        this.$router.go(0);
       },
       updateLoop() {
         return this.updateDownload()
