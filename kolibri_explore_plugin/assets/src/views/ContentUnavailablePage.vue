@@ -40,7 +40,7 @@
     computed: {
       homePageLink() {
         return {
-          name: PageNames.TOPICS_ROOT,
+          name: PageNames.ROOT,
         };
       },
     },
