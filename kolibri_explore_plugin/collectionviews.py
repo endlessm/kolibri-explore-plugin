@@ -1,5 +1,4 @@
 import logging
-import os
 import time
 from enum import auto
 from enum import IntEnum
@@ -32,12 +31,6 @@ logger = logging.getLogger(__name__)
 COLLECTIONS_HOST = conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_HOST"]
 
 COLLECTION_URL_TEMPLATE = COLLECTIONS_HOST + "/{grade}-{name}.json"
-
-COLLECTION_PATHS = os.path.join(
-    os.path.dirname(__file__), "static", "collections"
-)
-if conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]:
-    COLLECTION_PATHS = conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]
 
 # FIXME: Rename to PACK_IDS
 COLLECTION_GRADES = [
@@ -89,20 +82,6 @@ class EndlessKeyContentManifest(ContentManifest):
         response = requests.get(manifest_url)
         response.raise_for_status()
         self.read_dict(response.json(), validate)
-
-    def read_from_static_collection(self, grade, name, validate=False):
-        self.grade = grade
-        self.name = name
-        manifest_filename = os.path.join(
-            COLLECTION_PATHS, f"{grade}-{name}.json"
-        )
-
-        if not os.path.exists(manifest_filename):
-            raise ContentManifestParseError(
-                f"Collection manifest {manifest_filename} not found"
-            )
-
-        super().read(manifest_filename, validate)
 
     def read_dict(self, manifest_data, validate=False):
         self.metadata = manifest_data.get("metadata")

@@ -16,14 +16,6 @@ option_spec = {
                 Defaults to GitHub pages.
             """,
         },
-        "CONTENT_COLLECTIONS_PATH": {
-            "type": "string",
-            "default": "",
-            "description": """
-                Location where collections manifests are stored. Defaults
-                to the static/collections folder.
-            """,
-        },
         "SHOW_AS_STANDALONE_CHANNEL": {
             "type": "boolean",
             "default": False,

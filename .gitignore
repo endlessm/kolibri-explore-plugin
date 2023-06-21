@@ -28,6 +28,3 @@ packages/template-ui/src/overrides
 
 # Environment file with secrets
 /.env
-
-# Collection files. These are bundled in apps
-kolibri_explore_plugin/static/collections/
