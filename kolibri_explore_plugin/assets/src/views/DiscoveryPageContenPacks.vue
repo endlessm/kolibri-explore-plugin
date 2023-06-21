@@ -116,6 +116,11 @@
         }
       },
     },
+    mounted() {
+      if (!this.loading) {
+        return this.fetchHighlighted();
+      }
+    },
     methods: {
       fetchHighlighted() {
         this.loadingNodes = true;

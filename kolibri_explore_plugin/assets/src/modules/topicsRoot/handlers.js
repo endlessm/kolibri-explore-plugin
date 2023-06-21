@@ -185,7 +185,6 @@ export function decideDownload(store) {
             store.commit('CORE_SET_PAGE_LOADING', false);
             store.commit('CORE_SET_ERROR', null);
           }
-          location.reload();
         });
       }
     }
