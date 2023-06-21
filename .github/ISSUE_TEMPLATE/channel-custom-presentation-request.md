@@ -2,7 +2,7 @@
 name: Channel custom presentation request
 about: Request a custom presentation for a specific channel.
 title: 'Channel override: <channel name>'
-labels: ''
+labels: ['custom presentation']
 assignees: ''
 
 ---
