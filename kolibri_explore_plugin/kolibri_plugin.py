@@ -46,7 +46,7 @@ class ExploreAsset(webpack_hooks.WebpackBundleHook):
 
     @property
     def plugin_data(self):
-        return {
+        options = {
             "showAsStandaloneChannel": conf.OPTIONS["Explore"][
                 "SHOW_AS_STANDALONE_CHANNEL"
             ],
@@ -57,6 +57,19 @@ class ExploreAsset(webpack_hooks.WebpackBundleHook):
             "hideDiscoveryTab": conf.OPTIONS["Explore"]["HIDE_DISCOVERY_TAB"],
             "feedbackUrl": conf.OPTIONS["Explore"]["FEEDBACK_URL"],
         }
+        if "Pwa" in conf.OPTIONS:
+            pwa_options = {
+                # Use the app IDs from the PWA plugin, which advertises them as
+                # related applications.
+                "androidApplicationId": conf.OPTIONS["Pwa"][
+                    "ANDROID_APPLICATION_ID"
+                ],
+                "windowsApplicationId": conf.OPTIONS["Pwa"][
+                    "WINDOWS_APPLICATION_ID"
+                ],
+            }
+            options.update(pwa_options)
+        return options
 
 
 @register_hook

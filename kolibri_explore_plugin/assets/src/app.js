@@ -14,6 +14,7 @@ Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 
 Vue.config.productionTip = false;
+Vue.config.ignoredElements = ['ms-store-badge'];
 
 Vue.use(EkComponents);
 
