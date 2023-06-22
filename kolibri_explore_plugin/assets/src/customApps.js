@@ -9,7 +9,8 @@ export const CustomChannelApps = {
   '85b42a40745f4e2392ed62e72d4dad6e': 'oceanx',
   fc47aee82e0153e2a30197d3fdee1128: 'open-stax',
   '38eaaf9ec82a44f9ab6e7a44cb730f07': 'pbs-kids',
-  '197934f144305350b5820c7c4dd8e194': 'phet-interactive-simulations',
+  '197934f144305350b5820c7c4dd8e194': 'phet-interactive-simulations', // phet english
+  '8fa678af1dd05329bf3218c549b84996': 'phet-interactive-simulations', // phet spanish
   e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy',
   '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home',
   '2091ca47ff544c96b4ae02b3a92346e1': 'ted-ed-lessons',
@@ -96,7 +97,8 @@ export const EkIguanaSections = [
       'bf0260ed911f44cda27a263db93a8512', // 49ers-edu-digital-playbook
       '2f95235c3709511fa12d007f31ed6a7b', // steam
       '9c33eb395508447d96c96682cb18c57a', // techbridge-girls-home
-      '197934f144305350b5820c7c4dd8e194', // phet-interactive-simulations
+      '197934f144305350b5820c7c4dd8e194', // phet-interactive-simulations english
+      '8fa678af1dd05329bf3218c549b84996', // phet-interactive-simulations spanish
       '85b42a40745f4e2392ed62e72d4dad6e', // oceanx
     ],
     contentPicks: [],
@@ -192,7 +194,8 @@ export const ChannelCardThumbnails = {
   bbb4ea407a3c450cb18cbaa76f2d75cd: 'cspathshala-english.jpg',
   '3c77d9dd717341bb8fff8da6ab980df3': 'mother-goose-club.jpg',
   fc47aee82e0153e2a30197d3fdee1128: 'open-stax.jpg',
-  '197934f144305350b5820c7c4dd8e194': 'phet-interactive-simulations.jpg',
+  '197934f144305350b5820c7c4dd8e194': 'phet-interactive-simulations.jpg', // phet english
+  '8fa678af1dd05329bf3218c549b84996': 'phet-interactive-simulations.jpg', // phet spanish
   // Endless curated content (mostly Youtube content based)
   f061fce103ff5d4e9b8433e67802e666: 'arts.jpg',
   '4968191fba07548c9592fc174a70b5d6': 'beauty.jpg',
