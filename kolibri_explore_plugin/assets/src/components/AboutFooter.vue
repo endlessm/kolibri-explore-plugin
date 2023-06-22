@@ -113,7 +113,7 @@
     },
     methods: {
       beforeInstallPrompt(e) {
-        console.debug("beforeInstallPrompt called to provide deferred Play Store prompt");
+        console.debug('beforeInstallPrompt called to provide deferred Play Store prompt');
 
         // Prevent Chrome 67 and earlier from automatically showing the prompt
         e.preventDefault();
@@ -121,7 +121,7 @@
         this.deferredInstallPrompt = e;
       },
       installFromPlayStore(e) {
-        console.debug("Prompting to install app from Play Store");
+        console.debug('Prompting to install app from Play Store');
 
         if (!this.deferredInstallPrompt) return;
 
