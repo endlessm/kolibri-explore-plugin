@@ -11,7 +11,8 @@ export const CustomChannelApps = {
   '38eaaf9ec82a44f9ab6e7a44cb730f07': 'pbs-kids',
   '197934f144305350b5820c7c4dd8e194': 'phet-interactive-simulations', // phet english
   '8fa678af1dd05329bf3218c549b84996': 'phet-interactive-simulations', // phet spanish
-  e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy',
+  e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy', // sikana english
+  '30c71c99c42c57d181e8aeafd2e15e5f': 'sikana-diy', // sikana spanish
   '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home',
   '2091ca47ff544c96b4ae02b3a92346e1': 'ted-ed-lessons',
   '3160899a73564d8a8467284d9219b91c': 'terminal-two',
@@ -191,7 +192,8 @@ export const ChannelCardThumbnails = {
   c9d7f950ab6b5a1199e3d6c10d7f0103: 'khan-academy.jpg',
   '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home.jpg',
   e409b964366a59219c148f2aaa741f43: 'blockly-games.jpg',
-  e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy.jpg',
+  e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy.jpg', // sikana english
+  '30c71c99c42c57d181e8aeafd2e15e5f': 'sikana-diy.jpg', // sikana spanish
   bbb4ea407a3c450cb18cbaa76f2d75cd: 'cspathshala-english.jpg',
   '3c77d9dd717341bb8fff8da6ab980df3': 'mother-goose-club.jpg',
   fc47aee82e0153e2a30197d3fdee1128: 'open-stax.jpg',
@@ -254,7 +256,8 @@ export const ChannelCardIcons = {
   '000409f81dbe5d1ba67101cb9fed4530': 'touchable-earth.png',
   '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home.png',
   e409b964366a59219c148f2aaa741f43: 'blockly-games.png',
-  e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy.png',
+  e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy.png', // sikana english
+  '30c71c99c42c57d181e8aeafd2e15e5f': 'sikana-diy.png', // sikana spanish
   c8540424d77f44f8ae306e22d3b14eaf: 'coronavirus.png',
   '3c77d9dd717341bb8fff8da6ab980df3': 'mother-goose-club.png',
   // Endless curated content (mostly Youtube content based)
