@@ -9,8 +9,10 @@ export const CustomChannelApps = {
   '85b42a40745f4e2392ed62e72d4dad6e': 'oceanx',
   fc47aee82e0153e2a30197d3fdee1128: 'open-stax',
   '38eaaf9ec82a44f9ab6e7a44cb730f07': 'pbs-kids',
-  '197934f144305350b5820c7c4dd8e194': 'phet-interactive-simulations',
-  e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy',
+  '197934f144305350b5820c7c4dd8e194': 'phet-interactive-simulations', // phet english
+  '8fa678af1dd05329bf3218c549b84996': 'phet-interactive-simulations', // phet spanish
+  e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy', // sikana english
+  '30c71c99c42c57d181e8aeafd2e15e5f': 'sikana-diy', // sikana spanish
   '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home',
   '2091ca47ff544c96b4ae02b3a92346e1': 'ted-ed-lessons',
   '3160899a73564d8a8467284d9219b91c': 'terminal-two',
@@ -44,9 +46,12 @@ export const CustomChannelApps = {
   f1ada7abc4194ff48a958337a31972c7: 'eie-families', // eie english
   '359e048230974c8f80db1a95dc80d544': 'eie-families', // eie spanish
   '217c7164c2974a4da9877a20ae38b98e': 'cas', // California Academy of Sciences
+  '4b2f3f35debe4fbe96b77558a3364675': 'cas-es', // California Academy of Sciences (es)
   '08897e003ea9489eb3d86fc94ba08c21': 'support-ukraine',
   '608fd926be60462aba2feccba6c050c9': 'harper-collins',
   '6da97a60cbd44e918137827bd5425efb': 'code-org',
+  b6a8886278aa45a3a40c2e0ae5358115: 'pilas-engine',
+  b06dd546e8ba4b44bf921862c9948ffe: 'wiixii',
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment',
@@ -96,7 +101,8 @@ export const EkIguanaSections = [
       'bf0260ed911f44cda27a263db93a8512', // 49ers-edu-digital-playbook
       '2f95235c3709511fa12d007f31ed6a7b', // steam
       '9c33eb395508447d96c96682cb18c57a', // techbridge-girls-home
-      '197934f144305350b5820c7c4dd8e194', // phet-interactive-simulations
+      '197934f144305350b5820c7c4dd8e194', // phet-interactive-simulations english
+      '8fa678af1dd05329bf3218c549b84996', // phet-interactive-simulations spanish
       '85b42a40745f4e2392ed62e72d4dad6e', // oceanx
     ],
     contentPicks: [],
@@ -188,11 +194,13 @@ export const ChannelCardThumbnails = {
   c9d7f950ab6b5a1199e3d6c10d7f0103: 'khan-academy.jpg',
   '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home.jpg',
   e409b964366a59219c148f2aaa741f43: 'blockly-games.jpg',
-  e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy.jpg',
+  e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy.jpg', // sikana english
+  '30c71c99c42c57d181e8aeafd2e15e5f': 'sikana-diy.jpg', // sikana spanish
   bbb4ea407a3c450cb18cbaa76f2d75cd: 'cspathshala-english.jpg',
   '3c77d9dd717341bb8fff8da6ab980df3': 'mother-goose-club.jpg',
   fc47aee82e0153e2a30197d3fdee1128: 'open-stax.jpg',
-  '197934f144305350b5820c7c4dd8e194': 'phet-interactive-simulations.jpg',
+  '197934f144305350b5820c7c4dd8e194': 'phet-interactive-simulations.jpg', // phet english
+  '8fa678af1dd05329bf3218c549b84996': 'phet-interactive-simulations.jpg', // phet spanish
   // Endless curated content (mostly Youtube content based)
   f061fce103ff5d4e9b8433e67802e666: 'arts.jpg',
   '4968191fba07548c9592fc174a70b5d6': 'beauty.jpg',
@@ -220,9 +228,12 @@ export const ChannelCardThumbnails = {
   f1ada7abc4194ff48a958337a31972c7: 'eie-families.jpg', // eie english
   '359e048230974c8f80db1a95dc80d544': 'eie-families.jpg', // eie spanish
   '217c7164c2974a4da9877a20ae38b98e': 'cas.jpg', // California Academy of Sciences
+  '4b2f3f35debe4fbe96b77558a3364675': 'cas.jpg', // California Academy of Sciences (es)
   '08897e003ea9489eb3d86fc94ba08c21': 'support-ukraine.png',
   '608fd926be60462aba2feccba6c050c9': 'harper-collins.png',
   '6da97a60cbd44e918137827bd5425efb': 'code-org.png',
+  b6a8886278aa45a3a40c2e0ae5358115: 'pilas-engine.png',
+  b06dd546e8ba4b44bf921862c9948ffe: 'wiixii.jpg',
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.jpg',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment.jpg',
@@ -249,7 +260,8 @@ export const ChannelCardIcons = {
   '000409f81dbe5d1ba67101cb9fed4530': 'touchable-earth.png',
   '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home.png',
   e409b964366a59219c148f2aaa741f43: 'blockly-games.png',
-  e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy.png',
+  e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy.png', // sikana english
+  '30c71c99c42c57d181e8aeafd2e15e5f': 'sikana-diy.png', // sikana spanish
   c8540424d77f44f8ae306e22d3b14eaf: 'coronavirus.png',
   '3c77d9dd717341bb8fff8da6ab980df3': 'mother-goose-club.png',
   // Endless curated content (mostly Youtube content based)
@@ -279,9 +291,12 @@ export const ChannelCardIcons = {
   f1ada7abc4194ff48a958337a31972c7: 'eie-families.png', // eie english
   '359e048230974c8f80db1a95dc80d544': 'eie-families.png', // eie spanish
   '217c7164c2974a4da9877a20ae38b98e': 'cas.png', // California Academy of Sciences
+  '4b2f3f35debe4fbe96b77558a3364675': 'cas.png', // California Academy of Sciences (es)
   '08897e003ea9489eb3d86fc94ba08c21': 'support-ukraine.png',
   '608fd926be60462aba2feccba6c050c9': 'harper-collins.png',
   '6da97a60cbd44e918137827bd5425efb': 'code-org.png',
+  b6a8886278aa45a3a40c2e0ae5358115: 'pilas-engine.png',
+  b06dd546e8ba4b44bf921862c9948ffe: 'wiixii.png',
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.png',
 };
