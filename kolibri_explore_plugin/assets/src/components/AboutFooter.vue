@@ -92,7 +92,7 @@
         return plugin_data.windowsApplicationId;
       },
       showStoreButtons() {
-        return plugin_data.androidApplicationId != '' && plugin_data.windowsApplicationId != '';
+        return !!plugin_data.androidApplicationId && !!plugin_data.windowsApplicationId;
       },
     },
     $trs: {
