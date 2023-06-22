@@ -50,6 +50,7 @@ export const CustomChannelApps = {
   '608fd926be60462aba2feccba6c050c9': 'harper-collins',
   '6da97a60cbd44e918137827bd5425efb': 'code-org',
   b6a8886278aa45a3a40c2e0ae5358115: 'pilas-engine',
+  b06dd546e8ba4b44bf921862c9948ffe: 'wiixii',
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment',
@@ -230,6 +231,7 @@ export const ChannelCardThumbnails = {
   '608fd926be60462aba2feccba6c050c9': 'harper-collins.png',
   '6da97a60cbd44e918137827bd5425efb': 'code-org.png',
   b6a8886278aa45a3a40c2e0ae5358115: 'pilas-engine.png',
+  b06dd546e8ba4b44bf921862c9948ffe: 'wiixii.jpg',
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.jpg',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment.jpg',
@@ -291,6 +293,7 @@ export const ChannelCardIcons = {
   '608fd926be60462aba2feccba6c050c9': 'harper-collins.png',
   '6da97a60cbd44e918137827bd5425efb': 'code-org.png',
   b6a8886278aa45a3a40c2e0ae5358115: 'pilas-engine.png',
+  b06dd546e8ba4b44bf921862c9948ffe: 'wiixii.png',
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.png',
 };
