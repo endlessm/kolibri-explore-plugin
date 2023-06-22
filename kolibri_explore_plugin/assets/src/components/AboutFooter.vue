@@ -46,6 +46,7 @@
                 :href="googleStoreUrl"
                 target="_blank"
                 class="google-play-button"
+                @click="installFromPlayStore"
               >
                 <img :src="googlePlayImage" :alt="$tr('getOnGooglePlay')">
               </a>
@@ -77,6 +78,11 @@
 
   export default {
     name: 'AboutFooter',
+    data() {
+      return {
+        deferredInstallPrompt: null,
+      };
+    },
     computed: {
       googlePlayImage() {
         return `https://play.google.com/intl/en_us/badges/static/images/badges/${encodeURIComponent(
@@ -93,6 +99,45 @@
       },
       showStoreButtons() {
         return plugin_data.androidApplicationId != '' && plugin_data.windowsApplicationId != '';
+      },
+    },
+    created() {
+      // Add a listener for Chrome, to support an in-browser prompt to install
+      // the Android app.
+      // See https://developer.chrome.com/blog/app-install-banners-native/.
+      window.addEventListener('beforeinstallprompt', this.beforeInstallPrompt);
+    },
+    destroyed() {
+      window.removeEventListener('beforeinstallprompt', this.beforeInstallPrompt);
+      this.deferredInstallPrompt = null;
+    },
+    methods: {
+      beforeInstallPrompt(e) {
+        console.debug("beforeInstallPrompt called to provide deferred Play Store prompt");
+
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        this.deferredInstallPrompt = e;
+      },
+      installFromPlayStore(e) {
+        console.debug("Prompting to install app from Play Store");
+
+        if (!this.deferredInstallPrompt) return;
+
+        // Show the prompt and prevent the link being followed
+        e.preventDefault();
+        this.deferredInstallPrompt.prompt();
+
+        // Wait for the user to respond to the prompt
+        this.deferredInstallPrompt.userChoice.then(choiceResult => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the A2HS prompt');
+          } else {
+            console.log('User dismissed the A2HS prompt');
+          }
+          this.deferredInstallPrompt = null;
+        });
       },
     },
     $trs: {
