@@ -35,7 +35,6 @@
           </b-container>
           <EkCardGrid
             :nodes="sectionNodes['highlight']"
-            :itemsPerSlide="{ lg: 3, md: 2, sm: 1 }"
           />
         </template>
         <template v-if="hasNodesForSection('skill')">
@@ -56,7 +55,6 @@
           </b-container>
           <EkCardGrid
             :nodes="sectionNodes['career']"
-            :itemsPerSlide="{ lg: 3, md: 2, sm: 1 }"
           />
         </template>
         <template v-if="hasNodesForSection('curious')">
