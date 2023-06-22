@@ -46,6 +46,7 @@ export const CustomChannelApps = {
   f1ada7abc4194ff48a958337a31972c7: 'eie-families', // eie english
   '359e048230974c8f80db1a95dc80d544': 'eie-families', // eie spanish
   '217c7164c2974a4da9877a20ae38b98e': 'cas', // California Academy of Sciences
+  '4b2f3f35debe4fbe96b77558a3364675': 'cas-es', // California Academy of Sciences (es)
   '08897e003ea9489eb3d86fc94ba08c21': 'support-ukraine',
   '608fd926be60462aba2feccba6c050c9': 'harper-collins',
   '6da97a60cbd44e918137827bd5425efb': 'code-org',
@@ -227,6 +228,7 @@ export const ChannelCardThumbnails = {
   f1ada7abc4194ff48a958337a31972c7: 'eie-families.jpg', // eie english
   '359e048230974c8f80db1a95dc80d544': 'eie-families.jpg', // eie spanish
   '217c7164c2974a4da9877a20ae38b98e': 'cas.jpg', // California Academy of Sciences
+  '4b2f3f35debe4fbe96b77558a3364675': 'cas.jpg', // California Academy of Sciences (es)
   '08897e003ea9489eb3d86fc94ba08c21': 'support-ukraine.png',
   '608fd926be60462aba2feccba6c050c9': 'harper-collins.png',
   '6da97a60cbd44e918137827bd5425efb': 'code-org.png',
@@ -289,6 +291,7 @@ export const ChannelCardIcons = {
   f1ada7abc4194ff48a958337a31972c7: 'eie-families.png', // eie english
   '359e048230974c8f80db1a95dc80d544': 'eie-families.png', // eie spanish
   '217c7164c2974a4da9877a20ae38b98e': 'cas.png', // California Academy of Sciences
+  '4b2f3f35debe4fbe96b77558a3364675': 'cas.png', // California Academy of Sciences (es)
   '08897e003ea9489eb3d86fc94ba08c21': 'support-ukraine.png',
   '608fd926be60462aba2feccba6c050c9': 'harper-collins.png',
   '6da97a60cbd44e918137827bd5425efb': 'code-org.png',
