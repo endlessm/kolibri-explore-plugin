@@ -104,13 +104,13 @@
         return plugin_data.androidApplicationId != '' && plugin_data.windowsApplicationId != '';
       },
     },
-    created() {
+    mounted() {
       // Add a listener for Chrome, to support an in-browser prompt to install
       // the Android app.
       // See https://developer.chrome.com/blog/app-install-banners-native/.
       window.addEventListener('beforeinstallprompt', this.beforeInstallPrompt);
     },
-    destroyed() {
+    beforeDestroy() {
       window.removeEventListener('beforeinstallprompt', this.beforeInstallPrompt);
       this.deferredInstallPrompt = null;
     },
