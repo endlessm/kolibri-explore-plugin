@@ -1,3 +1,11 @@
+[build-system]
+# As per https://peps.python.org/pep-0518, list only the minimal dependencies
+# needed here to get the build started. All other dependencies and built
+# dependencies should be listed in [packages]/[dev-packages] in Pipfile.
+# If changing the requires list here, please also update it in [dev-packages]
+# in Pipfile.
+requires = ["build", "setuptools>=45", "setuptools_scm[toml]>=6.2"]
+
 [tool.black]
 line-length = 79
 include = '\.pyi?$'
