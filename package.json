@@ -9,7 +9,7 @@
     "build:libs": "lerna run build --ignore template-ui",
     "build:apps": "lerna run build --scope template-ui",
     "build:info": "./scripts/build_info.sh > kolibri_explore_plugin/static/build-info.json",
-    "build-dist": "./scripts/clean.sh && yarn clean && yarn build && python setup.py bdist_wheel --universal",
+    "build-dist": "./scripts/clean.sh && yarn clean && yarn build && python -m build",
     "deploy:apps": "./scripts/bundle_bundles.py",
     "clean": "kolibri-tools build clean --plugins kolibri_explore_plugin",
     "dev": "kolibri-tools build dev --plugins kolibri_explore_plugin --port 4000",
