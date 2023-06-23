@@ -74,7 +74,10 @@
 <script>
 
   import { currentLanguage } from 'kolibri.utils.i18n';
+  import logger from 'kolibri.lib.logging';
   import plugin_data from 'plugin_data';
+
+  const logging = logger.getLogger(__filename);
 
   export default {
     name: 'AboutFooter',
@@ -113,7 +116,7 @@
     },
     methods: {
       beforeInstallPrompt(e) {
-        console.debug('beforeInstallPrompt called to provide deferred Play Store prompt');
+        logging.debug('beforeInstallPrompt called to provide deferred Play Store prompt');
 
         // Prevent Chrome 67 and earlier from automatically showing the prompt
         e.preventDefault();
@@ -121,7 +124,7 @@
         this.deferredInstallPrompt = e;
       },
       installFromPlayStore(e) {
-        console.debug('Prompting to install app from Play Store');
+        logging.debug('Prompting to install app from Play Store');
 
         if (!this.deferredInstallPrompt) return;
 
@@ -132,9 +135,9 @@
         // Wait for the user to respond to the prompt
         this.deferredInstallPrompt.userChoice.then(choiceResult => {
           if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the A2HS prompt');
+            logging.log('User accepted the app install prompt');
           } else {
-            console.log('User dismissed the A2HS prompt');
+            logging.log('User dismissed the app install prompt');
           }
           this.deferredInstallPrompt = null;
         });
