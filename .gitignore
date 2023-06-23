@@ -31,4 +31,4 @@ packages/template-ui/src/overrides
 /.env
 
 # Collection files. These are bundled in apps
-kolibri_explore_plugin/static/collections/
+kolibri_explore_plugin/static/collections
