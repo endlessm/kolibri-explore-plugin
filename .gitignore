@@ -9,6 +9,7 @@ node_modules
 __pycache__/
 
 # Built and cached files
+kolibri_explore_plugin/_version.py
 kolibri_explore_plugin/apps/**/*.zip
 kolibri_explore_plugin/welcomeScreen/
 kolibri_explore_plugin/static/kolibri_explore_plugin*

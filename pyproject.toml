@@ -1,3 +1,6 @@
+[project]
+dynamic = ["version"]
+
 [build-system]
 # As per https://peps.python.org/pep-0518, list only the minimal dependencies
 # needed here to get the build started. All other dependencies and built
@@ -25,3 +28,6 @@ exclude = '''
   | kolibri_explore_plugin/vendor
 )/
 '''
+
+[tool.setuptools_scm]
+write_to = "kolibri_explore_plugin/_version.py"

@@ -20,7 +20,6 @@ setup(
     description=description,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version=kolibri_explore_plugin.__version__,
     author="Endless OS Foundation",
     author_email="key@endless.org",
     url="https://github.com/endlessm/kolibri-explore-plugin",
