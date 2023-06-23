@@ -21,7 +21,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Endless OS Foundation",
-    author_email="key@endless.org",
+    author_email="key@endlessos.org",
     url="https://github.com/endlessm/kolibri-explore-plugin",
     packages=["kolibri_explore_plugin"],
     entry_points={
