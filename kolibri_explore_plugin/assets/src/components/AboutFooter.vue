@@ -46,6 +46,7 @@
                 :href="googleStoreUrl"
                 target="_blank"
                 class="google-play-button"
+                @click="installFromPlayStore"
               >
                 <img :src="googlePlayImage" :alt="$tr('getOnGooglePlay')">
               </a>
@@ -73,10 +74,18 @@
 <script>
 
   import { currentLanguage } from 'kolibri.utils.i18n';
+  import logger from 'kolibri.lib.logging';
   import plugin_data from 'plugin_data';
+
+  const logging = logger.getLogger(__filename);
 
   export default {
     name: 'AboutFooter',
+    data() {
+      return {
+        deferredInstallPrompt: null,
+      };
+    },
     computed: {
       googlePlayImage() {
         return `https://play.google.com/intl/en_us/badges/static/images/badges/${encodeURIComponent(
@@ -93,6 +102,45 @@
       },
       showStoreButtons() {
         return !!plugin_data.androidApplicationId && !!plugin_data.windowsApplicationId;
+      },
+    },
+    mounted() {
+      // Add a listener for Chrome, to support an in-browser prompt to install
+      // the Android app.
+      // See https://developer.chrome.com/blog/app-install-banners-native/.
+      window.addEventListener('beforeinstallprompt', this.beforeInstallPrompt);
+    },
+    beforeDestroy() {
+      window.removeEventListener('beforeinstallprompt', this.beforeInstallPrompt);
+      this.deferredInstallPrompt = null;
+    },
+    methods: {
+      beforeInstallPrompt(e) {
+        logging.debug('beforeInstallPrompt called to provide deferred Play Store prompt');
+
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        this.deferredInstallPrompt = e;
+      },
+      installFromPlayStore(e) {
+        logging.debug('Prompting to install app from Play Store');
+
+        if (!this.deferredInstallPrompt) return;
+
+        // Show the prompt and prevent the link being followed
+        e.preventDefault();
+        this.deferredInstallPrompt.prompt();
+
+        // Wait for the user to respond to the prompt
+        this.deferredInstallPrompt.userChoice.then(choiceResult => {
+          if (choiceResult.outcome === 'accepted') {
+            logging.log('User accepted the app install prompt');
+          } else {
+            logging.log('User dismissed the app install prompt');
+          }
+          this.deferredInstallPrompt = null;
+        });
       },
     },
     $trs: {
