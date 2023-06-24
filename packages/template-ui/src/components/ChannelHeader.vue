@@ -25,7 +25,7 @@
           </h1>
           <div
             class="lead mb-2"
-            :class="{ 'text-light': hasDarkHeader, 'text-muted': !hasDarkHeader }"
+            :class="{ 'text-light': hasDarkHeader }"
           >
             <VClamp
               autoresize
