@@ -6,7 +6,7 @@
     :class="{ 'full-height': isDescriptionExpanded }"
   >
     <template #default>
-      <div class="align-items-start d-flex justify-content-between mt-3">
+      <div class="align-items-start d-flex justify-content-between mt-5">
       </div>
       <b-row>
         <b-col xs="12" sm="8" md="9" lg="9" xl="8">
@@ -131,6 +131,10 @@ $transparent-bg: rgba($gray-700, 0.1);
 
 img {
   box-shadow: $toast-box-shadow;
+}
+
+.back-button {
+  margin-top: 0.45em;
 }
 
 </style>
