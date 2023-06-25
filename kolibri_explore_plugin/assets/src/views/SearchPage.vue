@@ -5,7 +5,6 @@
 
     <div
       class="flex-fill"
-      :class="{ 'gray-background': !isEmpty, 'white-background': isEmpty }"
     >
 
       <EkSearchBar
@@ -325,14 +324,6 @@
 <style lang="scss" scoped>
 
   @import '../styles';
-
-  .white-background {
-    background-color: $white;
-  }
-
-  .gray-background {
-    background-color: $gray-300;
-  }
 
   .search-row {
     border-bottom: 1px solid $gray-400;
