@@ -132,7 +132,11 @@
     padding-top: $card-spacer-y * 2;
   }
 
-  .bigThumbnail, .rounded-logo {
+  .bigThumbnail {
+    border-radius: $border-radius-lg $border-radius-lg 0 0 !important;
+  }
+
+  .rounded-logo {
     border-radius: $border-radius-lg !important;
   }
 </style>
