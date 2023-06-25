@@ -1,7 +1,7 @@
 <template>
   <div>
     <component :is="tag">
-      <VClamp autoresize :maxLines="lines">
+      <VClamp autoresize :maxLines="lines" :title="node.title">
         {{ node.title }}
       </VClamp>
     </component>
@@ -9,7 +9,7 @@
       v-if="showDescription"
       class="align-self-center d-none d-sm-block mb-1 subtitle text-muted"
     >
-      <VClamp autoresize :maxLines="descriptionLines">
+      <VClamp autoresize :maxLines="descriptionLines" :title="subtitle">
         {{ subtitle }}
       </VClamp>
     </p>
