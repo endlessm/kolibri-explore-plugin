@@ -7,7 +7,6 @@
           v-slot="slotProps"
           class="mb-3"
           :nodes="PackMetadata"
-          :hasWhiteBackground="true"
           :itemsPerSlide="{ lg: 3, md: 2, sm: 1 }"
         >
           <template
