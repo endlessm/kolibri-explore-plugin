@@ -114,7 +114,7 @@ export default {
 }
 
 button:disabled {
-  opacity: 33%;
+  opacity: 0.5;
   background-color: $play-button-disabled-bg-color;
 }
 
