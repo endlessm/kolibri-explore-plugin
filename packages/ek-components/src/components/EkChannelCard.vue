@@ -2,7 +2,7 @@
   <b-card :class="{ white: hasWhiteBackground, [variant]: true }">
     <div
       v-if="hasBigThumbnail"
-      class="bigThumbnail shadow"
+      class="bigThumbnail"
       :style="bigThumbnailStyles"
     >
     </div>
