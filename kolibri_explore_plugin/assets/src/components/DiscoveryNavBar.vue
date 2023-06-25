@@ -10,6 +10,8 @@
         @click="goToChannels"
       >
         <ViewDashboardOutlineIcon />
+        <!-- We want the text below in a line by itself,
+         as it affects the spacing around it. -->
         {{ $tr('discoveryLabel') }}
       </b-nav-text>
       <b-nav-text
@@ -18,6 +20,8 @@
         @click="goToSearch"
       >
         <MagnifyIcon />
+        <!-- We want the text below in a line by itself,
+         as it affects the spacing around it. -->
         {{ $tr('libraryLabel') }}
       </b-nav-text>
     </b-button-group>
@@ -30,7 +34,11 @@
         :disabled="isOffline"
       >
         <span class="d-inline"><MessageReplyTextOutlineIcon /></span>
-        <span class="d-none d-sm-inline">{{ $tr('feedbackLabel') }}</span>
+        <span class="d-none d-sm-inline">
+          <!-- We want the text below in a line by itself,
+           as it affects the spacing around it. -->
+          {{ $tr('feedbackLabel') }}
+        </span>
       </b-nav-item>
     </b-navbar-nav>
   </EkNavBar>
