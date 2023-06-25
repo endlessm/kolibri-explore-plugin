@@ -86,6 +86,7 @@
     cursor: pointer;
     border-radius: $border-radius-lg !important;
     transition: all 0.3s ease;
+    box-shadow: $box-shadow-sm;
     &:not(.white) {
       background-color: $gray-300 !important;
     }
