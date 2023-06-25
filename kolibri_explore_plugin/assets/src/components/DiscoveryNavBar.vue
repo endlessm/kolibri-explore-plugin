@@ -141,6 +141,8 @@
   @import '../styles';
 
   .discovery-navbar {
+    font-family: $btn-font-family;
+    font-size: $btn-font-size;
     background: $gray-300;
     border-bottom: 1px solid $gray-400;
   }
