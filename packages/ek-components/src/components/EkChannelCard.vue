@@ -1,5 +1,5 @@
 <template>
-  <b-card :class="{ white: hasWhiteBackground, [variant]: true }">
+  <b-card :class="{ [variant]: true }">
     <div
       v-if="hasBigThumbnail"
       class="bigThumbnail"
@@ -38,10 +38,6 @@
       channel: {
         type: Object,
         required: true,
-      },
-      hasWhiteBackground: {
-        type: Boolean,
-        default: false,
       },
       variant: {
         type: String,
@@ -87,9 +83,6 @@
     border-radius: $border-radius-lg !important;
     transition: all 0.3s ease;
     box-shadow: $box-shadow-sm;
-    &:not(.white) {
-      background-color: $gray-300 !important;
-    }
   }
 
   .basicCard {

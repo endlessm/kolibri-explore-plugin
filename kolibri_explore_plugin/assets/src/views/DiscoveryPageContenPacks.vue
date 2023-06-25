@@ -22,7 +22,6 @@
               v-for="node in slotProps.slideNodes"
               :key="node.id"
               :channel="node"
-              :hasWhiteBackground="true"
               @click.native="goToChannel(node.id)"
             />
           </EkSlidableGrid>
