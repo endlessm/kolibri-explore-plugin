@@ -18,6 +18,7 @@
       <VClamp
         autoresize
         :maxLines="maxDescriptionLines"
+        :title="description"
       >
         {{ description }}
       </VClamp>

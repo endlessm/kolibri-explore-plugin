@@ -24,6 +24,7 @@
               <VClamp
                 autoresize
                 :maxLines="titleMaxLines"
+                :title="node.title"
               >
                 {{ node.title }}
               </VClamp>
@@ -32,6 +33,7 @@
               <VClamp
                 autoresize
                 :maxLines="descriptionMaxLines"
+                :title="node.description"
               >
                 {{ node.description }}
               </VClamp>
