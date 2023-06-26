@@ -14,17 +14,20 @@
               {{ $tr('channelLabel') }}
             </h5>
           </b-container>
-          <EkSlidableGrid
-            v-slot="slotProps"
-            :nodes="sectionNodes['featured-channel']"
-          >
-            <EkChannelCard
-              v-for="node in slotProps.slideNodes"
-              :key="node.id"
-              :channel="node"
-              @click.native="goToChannel(node.id)"
-            />
-          </EkSlidableGrid>
+          <!-- These classes must match EkCardGrid -->
+          <b-container class="mb-5 mt-3 no-container-padding section-container">
+            <EkSlidableGrid
+              v-slot="slotProps"
+              :nodes="sectionNodes['featured-channel']"
+            >
+              <EkChannelCard
+                v-for="node in slotProps.slideNodes"
+                :key="node.id"
+                :channel="node"
+                @click.native="goToChannel(node.id)"
+              />
+            </EkSlidableGrid>
+          </b-container>
         </template>
         <template v-if="hasNodesForSection('highlight')">
           <b-container>
