@@ -21,22 +21,16 @@
         <div class="body-wrapper">
           <div class="card-content">
             <b-card-title titleTag="h5" class="mb-1">
-              <VClamp
-                autoresize
+              <EkClamp
                 :maxLines="titleMaxLines"
-                :title="node.title"
-              >
-                {{ node.title }}
-              </VClamp>
+                :text="node.title"
+              />
             </b-card-title>
             <b-card-text>
-              <VClamp
-                autoresize
+              <EkClamp
                 :maxLines="descriptionMaxLines"
-                :title="node.description"
-              >
-                {{ node.description }}
-              </VClamp>
+                :text="node.description"
+              />
             </b-card-text>
           </div>
           <b-card-text class="my-1">
@@ -58,7 +52,6 @@
 </template>
 
 <script>
-import VClamp from 'vue-clamp';
 import BundleIcon from 'vue-material-design-icons/CubeOutline.vue';
 import { MediaQuality } from '../constants';
 import cardMixin from './mixins/cardMixin.js';
@@ -67,7 +60,6 @@ export default {
   name: 'EkTopicCard',
   components: {
     BundleIcon,
-    VClamp,
   },
   mixins: [cardMixin],
   props: {

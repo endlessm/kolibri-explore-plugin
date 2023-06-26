@@ -15,25 +15,18 @@
       </h6>
     </b-card-header>
     <b-card-text v-if="!isSmall" class="pt-2 text-muted">
-      <VClamp
-        autoresize
+      <EkClamp
         :maxLines="maxDescriptionLines"
-        :title="description"
-      >
-        {{ description }}
-      </VClamp>
+        :text="description"
+      />
     </b-card-text>
   </b-card>
 </template>
 
 <script>
-  import VClamp from 'vue-clamp';
 
   export default {
     name: 'EkChannelCard',
-    components: {
-      VClamp,
-    },
     props: {
       channel: {
         type: Object,

@@ -18,26 +18,20 @@
         class="align-items-center mb-1 title"
         :class="{ 'text-muted': !node.available }"
       >
-        <VClamp
-          autoresize
+        <EkClamp
           :maxLines="titleLines"
-          :title="node.title"
-        >
-          {{ node.title }}
-        </VClamp>
+          :text="node.title"
+        />
       </h5>
     </div>
 
     <!-- Description -->
     <div v-if="!showChannelIcon">
       <p class="mb-1 subtitle text-muted">
-        <VClamp
-          autoresize
+        <EkClamp
           :maxLines="3"
-          :title="subtitle"
-        >
-          {{ subtitle }}
-        </VClamp>
+          :text="subtitle"
+        />
       </p>
     </div>
 
@@ -45,13 +39,9 @@
 </template>
 
 <script>
-import VClamp from 'vue-clamp';
 
 export default {
   name: 'EkCardBody',
-  components: {
-    VClamp,
-  },
   props: {
     node: {
       type: Object,
