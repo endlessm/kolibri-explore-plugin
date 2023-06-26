@@ -140,6 +140,7 @@
 
         const featuredPromise = ContentNodeExtrasResource.fetchByExternalTag('featured-channel', {
           only_root_nodes: true,
+          no_available_filtering: true,
         }).then(({ data }) => {
           const nodes = data.map(n => {
             n.bigThumbnail = getBigThumbnail(n);
