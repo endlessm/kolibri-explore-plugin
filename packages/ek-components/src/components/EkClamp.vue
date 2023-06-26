@@ -8,6 +8,7 @@
     - Replace use of Kolibri's $computedClass with destructured assignment.
     - Replace Kolibri's color $themeTokens.surface with white.
     - Add title attribute for accessibility.
+    - Text defaults to empty string.
   -->
 
   <!--
@@ -24,7 +25,7 @@
     Some width information need to be provided to `<span>s` to allow `text-overflow`
     calculate properly when ellipsis should be added.
   -->
-  <span :style="{ display: 'inline-block', maxWidth: '100%' }">
+  <span v-if="text !== ''" :style="{ display: 'inline-block', maxWidth: '100%' }">
     <span
       v-bind="$attrs"
       :style="{ display: 'inline-block', maxWidth: '100%', ...truncate }"
@@ -53,7 +54,8 @@
     props: {
       text: {
         type: String,
-        required: true,
+        required: false,
+        default: '',
       },
       maxLines: {
         type: Number,
