@@ -77,6 +77,9 @@ export default {
           return 'ExerciseIcon';
         case 'html5':
         case 'zim':
+        case 'slideshow':
+        case 'h5p':
+        case 'quiz':
           return 'Html5Icon';
         case 'bundle':
           return 'BundleIcon';
