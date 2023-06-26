@@ -6,6 +6,9 @@ export const MediaTypeVerbs = {
   'exercise': 'Practice',
   'html5': 'Interact',
   'zim': 'Interact',
+  'slideshow': 'Interact',
+  'h5p': 'Interact',
+  'quiz': 'Interact',
 };
 
 export const MediaFilterName = 'Learning activity';
