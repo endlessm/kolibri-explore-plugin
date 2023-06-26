@@ -295,6 +295,7 @@ export const ChannelCardIcons = {
   '08897e003ea9489eb3d86fc94ba08c21': 'support-ukraine.png',
   '608fd926be60462aba2feccba6c050c9': 'harper-collins.png',
   '6da97a60cbd44e918137827bd5425efb': 'code-org.png',
+  '8fa678af1dd05329bf3218c549b84996': 'phet-interactive-simulations.png', // phet spanish
   b6a8886278aa45a3a40c2e0ae5358115: 'pilas-engine.png',
   b06dd546e8ba4b44bf921862c9948ffe: 'wiixii.png',
   // Zim file based channels

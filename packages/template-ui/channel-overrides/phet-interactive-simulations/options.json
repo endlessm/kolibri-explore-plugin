@@ -1,4 +1,6 @@
 {
   "hasCarousel": false,
+  "displayLogoInHeader": true,
+  "hasDarkHeader": true,
   "mediaQuality": "low"
 }
