@@ -25,6 +25,7 @@ import EkSlidableCardGrid from './components/EkSlidableCardGrid.vue';
 import EkSlidableGrid from './components/EkSlidableGrid.vue';
 import EkTopicCard from './components/EkTopicCard.vue';
 import EkPackCard from './components/EkPackCard.vue';
+import EkClamp from './components/EkClamp.vue';
 
 import cardMixin from './components/mixins/cardMixin.js';
 import responsiveMixin from './components/mixins/responsiveMixin.js';
@@ -62,6 +63,7 @@ const components = {
   EkSlidableCardGrid,
   EkSlidableGrid,
   EkTopicCard,
+  EkClamp,
 };
 
 const plugin = {

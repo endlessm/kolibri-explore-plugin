@@ -1,9 +1,8 @@
 <template>
   <b-jumbotron
     fluid
-    :style="{ backgroundImage: (isDescriptionExpanded ? 'none' : headerImageURL) }"
+    :style="{ backgroundImage: headerImageURL }"
     class="mb-0"
-    :class="{ 'full-height': isDescriptionExpanded }"
   >
     <template #default>
       <div class="align-items-start d-flex justify-content-between mt-5">
@@ -27,27 +26,10 @@
             class="lead mb-2"
             :class="{ 'text-light': hasDarkHeader }"
           >
-            <VClamp
-              autoresize
+            <EkClamp
               :maxLines="maxDescriptionLines"
-              :expanded.sync="isDescriptionExpanded"
-            >
-              {{ headerDescription }}
-              <template #after="{ toggle, expanded, clamped }">
-                <br>
-                <b-button
-                  v-if="expanded || clamped"
-                  href="#"
-                  pill
-                  :variant="hasDarkHeader ? 'dark' : 'light'"
-                  size="sm"
-                  class="my-1"
-                  @click.prevent="toggle"
-                >
-                  {{ expanded ? 'Show less' : 'Show more' }}
-                </b-button>
-              </template>
-            </VClamp>
+              :text="headerDescription"
+            />
           </div>
         </b-col>
         <b-col v-if="displayLogoInHeader" class="d-none d-sm-flex justify-content-end">
@@ -61,15 +43,11 @@
 
 <script>
 import { mapState } from 'vuex';
-import VClamp from 'vue-clamp';
 
 import headerMixin from '@/components/mixins/headerMixin';
 
 export default {
   name: 'ChannelHeader',
-  components: {
-    VClamp,
-  },
   mixins: [headerMixin],
   props: {
     section: {
@@ -79,8 +57,7 @@ export default {
   },
   data() {
     return {
-      maxDescriptionLines: 6,  // Actually 5. One more for the show more/less button.
-      isDescriptionExpanded: false,
+      maxDescriptionLines: 6,
     };
   },
   computed: {

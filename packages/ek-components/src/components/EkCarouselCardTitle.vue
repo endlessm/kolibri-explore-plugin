@@ -1,30 +1,22 @@
 <template>
   <div>
     <component :is="tag">
-      <VClamp autoresize :maxLines="lines" :title="node.title">
-        {{ node.title }}
-      </VClamp>
+      <EkClamp :maxLines="lines" :text="node.title" />
     </component>
     <p
       v-if="showDescription"
       class="align-self-center d-none d-sm-block mb-1 subtitle text-muted"
     >
-      <VClamp autoresize :maxLines="descriptionLines" :title="subtitle">
-        {{ subtitle }}
-      </VClamp>
+      <EkClamp :maxLines="descriptionLines" :text="subtitle" />
     </p>
   </div>
 </template>
 
 <script>
-import VClamp from 'vue-clamp';
 import { getCardSubtitle } from '../utils';
 
 export default {
   name: 'EkCarouselCardTitle',
-  components: {
-    VClamp,
-  },
   props: {
     node: {
       type: Object,

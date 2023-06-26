@@ -14545,11 +14545,6 @@ requires-port@^1.0.0:
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
 
-resize-detector@^0.1.10:
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/resize-detector/-/resize-detector-0.1.10.tgz#1da3f961aa5f914ccbcfd3752d52fd45beeb692c"
-  integrity sha512-iLcXC8A6Fb0DfA+TRiywrK/0A22bFqkhntjMJMEzXDA4XkcEkfwpNbv7W8iewUiD0xYIaeiXOfiEehTqGKsUFw==
-
 resolve-cwd@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/resolve-cwd/-/resolve-cwd-2.0.0.tgz#00a9f7387556e27038eae232caa372a6a59b665a"
@@ -16801,14 +16796,6 @@ vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
-
-vue-clamp@^0.3.1:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/vue-clamp/-/vue-clamp-0.3.2.tgz#10740966b90db77f31917650357fb07c784af3c2"
-  integrity sha512-V5tF1CimFr3kpr2o9Pmi4B4cnDlLh9WeOZ5EnJlZGvhgz6JKXepNPi/HPyrfrlfZXavgrsJ4Nbz1MFxJieGAeQ==
-  dependencies:
-    core-js "^3.6.5"
-    resize-detector "^0.1.10"
 
 vue-demi@*:
   version "0.10.1"

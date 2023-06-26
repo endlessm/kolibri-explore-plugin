@@ -179,6 +179,26 @@
       <hr>
 
     </b-container>
+    <b-container class="no-container-padding">
+      <b-container>
+        <h3>Slidable cards loading:</h3>
+      </b-container>
+      <EkCardGridPlaceholder />
+      <b-container>
+        <h3>Slidable cards:</h3>
+      </b-container>
+      <EkCardGrid :nodes="contentNodes" />
+      <b-container>
+        <hr>
+        <h3>Carousel cards loading:</h3>
+      </b-container>
+      <EkCarouselPlaceholder />
+      <b-container>
+        <hr>
+        <h3>Carousel cards:</h3>
+      </b-container>
+      <EkCarousel :nodes="contentNodes" />
+    </b-container>
   </div>
 </template>
 
