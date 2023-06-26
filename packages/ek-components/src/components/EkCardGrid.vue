@@ -1,6 +1,6 @@
 <template>
   <b-container
-    class="mb-5 mt-4 section-container"
+    class="mb-5 mt-3 section-container"
     :class="{ 'no-container-padding': variant === 'slidable' }"
   >
     <slot></slot>

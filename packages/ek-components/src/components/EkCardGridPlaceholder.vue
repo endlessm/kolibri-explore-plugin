@@ -1,5 +1,5 @@
 <template>
-  <b-container class="mb-5 mt-4 no-container-padding section-container">
+  <b-container class="mb-5 mt-3 no-container-padding section-container">
     <slot></slot>
     <b-container>
       <b-card-group :deck="true">
