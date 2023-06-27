@@ -138,7 +138,7 @@ channel in question.
 1. Run the custom channel presentation development server. For
    instance to run the template:
 
-```
+```bash
 $ cd packages/template-ui
 $ yarn serve
 ```
@@ -146,7 +146,7 @@ $ yarn serve
 2. Run Kolibri with the `PROXY_CUSTOM_CHANNEL` environment variable
    enabled:
 
-```
+```bash
 $ cd /PATH/TO/kolibri
 $ PROXY_CUSTOM_CHANNEL=1 yarn run devserver-hot
 ```
@@ -158,7 +158,7 @@ devserver. The hot reloading should work here too!
 
 Make sure to have a `.env` file with the spreadsheet key as content:
 
-```
+```bash
 CONTENT_SPREADSHEET_KEY=123456
 ```
 
@@ -187,9 +187,9 @@ automatically, including:
 
 To release a new version first please bump the version number to
 either major or minor. Note that the major version also needs a version
-name for branding. Eg:
+name for branding. For example:
 
-```
+```bash
 # For a minor release:
 yarn bump-version minor
 
@@ -200,20 +200,20 @@ yarn bump-version major "Komodo Dragon"
 That creates a new commit and a git tag. Please push them to the
 remote:
 
-```
+```bash
 git push
 git push origin NEW_TAG
 ```
 
 Then build:
 
-```
+```bash
 yarn build-dist
 ```
 
 And finally upload the built `.whl` file to PyPi:
 
-```
+```bash
 yarn release
 ```
 
