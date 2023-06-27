@@ -1,8 +1,11 @@
 <template>
   <b-container
     class="mb-5 mt-3 section-container"
-    :fluid="variant === 'slidable-new'"
-    :class="{ 'no-container-padding': variant === 'slidable' || variant === 'slidable-new' }"
+    :fluid="displayVariant === 'EkSlidableCardGridNew'"
+    :class="{ 'no-container-padding': (
+      displayVariant === 'EkSlidableCardGrid' ||
+      displayVariant === 'EkSlidableCardGridNew'
+    ) }"
   >
     <slot></slot>
 
@@ -42,7 +45,7 @@ export default {
     cardColumns: {
       type: Object,
       default() {
-        return { cols: 6, md: 4, lg: 3 };
+        return { cols: 6, sm: 12, md: 6, lg: 3 };
       },
     },
     variant: {
@@ -65,6 +68,10 @@ export default {
   },
   computed: {
     displayVariant() {
+      if (this.variant === 'slidable-new' && this.itemsPerSlide.lg >= this.nodes.length) {
+        // There is no need to display a more complex component if there is no pagination:
+        return 'EkGridPage';
+      }
       switch (this.variant) {
         case 'collapsible':
           return 'EkCollapsibleCardGrid';
