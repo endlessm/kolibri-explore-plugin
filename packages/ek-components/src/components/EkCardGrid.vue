@@ -1,7 +1,8 @@
 <template>
   <b-container
     class="mb-5 mt-3 section-container"
-    :class="{ 'no-container-padding': variant === 'slidable' }"
+    :fluid="variant === 'slidable-new'"
+    :class="{ 'no-container-padding': variant === 'slidable' || variant === 'slidable-new' }"
   >
     <slot></slot>
 
@@ -49,7 +50,7 @@ export default {
       default: 'slidable',
       validator(value) {
         // The value must match one of these strings
-        return ['collapsible', 'slidable'].includes(value);
+        return ['collapsible', 'slidable', 'slidable-new'].includes(value);
       },
     },
     itemsPerPage: {
@@ -67,6 +68,8 @@ export default {
       switch (this.variant) {
         case 'collapsible':
           return 'EkCollapsibleCardGrid';
+        case 'slidable-new':
+          return 'EkSlidableCardGridNew';
         case 'slidable':
         default:
           return 'EkSlidableCardGrid';
