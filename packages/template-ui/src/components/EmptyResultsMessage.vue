@@ -18,6 +18,7 @@
     <EkCardGrid
       v-if="showTopics"
       :nodes="mainSections"
+      variant="slidable-new"
       :mediaQuality="mediaQuality"
       :cardColumns="cardColumns"
     >

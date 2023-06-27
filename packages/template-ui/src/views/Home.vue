@@ -26,7 +26,7 @@
         <template v-if="contentNodes.nodes.length">
           <EkCardGrid
             :nodes="contentNodes.nodes"
-            :variant="hasFlatGrid ? 'collapsible' : 'slidable'"
+            :variant="hasFlatGrid ? 'collapsible' : 'slidable-new'"
             :mediaQuality="mediaQuality"
             :cardColumns="cardColumns"
             :hasMoreNodes="contentNodes.hasMoreNodes"
@@ -41,6 +41,7 @@
           <EkCardGrid
             :id="section.id"
             :nodes="sectionNodes[section.id].nodes"
+            variant="slidable-new"
             :hasMoreNodes="sectionNodes[section.id].hasMoreNodes"
             :mediaQuality="mediaQuality"
             @loadMoreNodes="onLoadMoreSectionNodes(section.id)"
