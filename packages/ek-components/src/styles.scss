@@ -108,6 +108,7 @@ $background-alpha: -8%;
 $card-image-ar: calc(9 / 16);
 
 :export {
+  gridGutterWidth: $grid-gutter-width;
   headerLogoWidth: $header-logo-width;
   cardImageAspectRatio: $card-image-ar;
   xs: map-get($grid-breakpoints, "xs");
