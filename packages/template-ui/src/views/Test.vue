@@ -179,25 +179,29 @@
       <hr>
 
     </b-container>
-    <b-container class="no-container-padding">
-      <b-container>
-        <h3>Slidable cards loading:</h3>
-      </b-container>
-      <EkCardGridPlaceholder />
+    <b-container class="mt-4">
+      <h3>Slidable cards (new!):</h3>
+    </b-container>
+    <EkCardGrid variant="slidable-new" :nodes="contentNodes" />
+    <b-container class="mt-4 no-container-padding">
       <b-container>
         <h3>Slidable cards:</h3>
       </b-container>
       <EkCardGrid :nodes="contentNodes" />
       <b-container>
-        <hr>
-        <h3>Carousel cards loading:</h3>
+        <h3>Slidable cards loading:</h3>
       </b-container>
-      <EkCarouselPlaceholder />
+      <EkCardGridPlaceholder />
       <b-container>
         <hr>
         <h3>Carousel cards:</h3>
       </b-container>
       <EkCarousel :nodes="contentNodes" />
+      <b-container>
+        <hr>
+        <h3>Carousel cards loading:</h3>
+      </b-container>
+      <EkCarouselPlaceholder />
     </b-container>
   </div>
 </template>
