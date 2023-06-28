@@ -2,6 +2,7 @@ import EkBackToTop from './components/EkBackToTop.vue';
 import EkButtonsBar from './components/EkButtonsBar.vue';
 import EkCard from './components/EkCard.vue';
 import EkCardBody from './components/EkCardBody.vue';
+import EkCardButtons from './components/EkCardButtons.vue';
 import EkCardGrid from './components/EkCardGrid.vue';
 import EkCardGridPlaceholder from './components/EkCardGridPlaceholder.vue';
 import EkCarousel from './components/EkCarousel.vue';
@@ -40,6 +41,7 @@ const components = {
   EkButtonsBar,
   EkCard,
   EkCardBody,
+  EkCardButtons,
   EkCardGrid,
   EkCardGridPlaceholder,
   EkCarousel,
