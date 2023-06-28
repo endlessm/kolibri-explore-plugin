@@ -24,46 +24,14 @@
         </div>
         <div class="body-wrapper">
           <EkCardBody :node="node" :subtitle="subtitle" />
-          <EkPlayButton
+          <EkCardButtons
+            :node="node"
             :kind="kind"
-            :enabled="isEnabled"
-            @click="onPlayButtonClick"
+            :isEnabled="isEnabled"
+            :downloadState="downloadState"
+            @downloadButtonClicked="onDownloadButtonClick"
+            @playButtonClicked="onPlayButtonClick"
           />
-          <template v-if="showDownloadFeature">
-            <b-button
-              pill
-              size="sm"
-              :variant="`${kind}-primary`"
-              class="download-button float-right"
-              @click="onDownloadButtonClick"
-            >
-              <DownloadIcon
-                v-if="downloadState === DownloadState.READY"
-                :title="$tr('downloadLabel')"
-              />
-              <DownloadingIcon
-                v-else-if="downloadState === DownloadState.DOWNLOADING"
-                class="downloading"
-                :title="$tr('downloadingLabel')"
-              />
-              <DownloadCompletedIcon
-                v-else-if="downloadState === DownloadState.COMPLETED"
-                class="completed"
-                :title="$tr('downloadCompletedLabel')"
-              />
-              <span
-                v-else-if="downloadState === DownloadState.FAILED"
-              >
-                <DownloadWarningIcon
-                  class="failed"
-                  :title="$tr('downloadRestartLabel')"
-                />
-                <DownloadRestartIcon
-                  :title="$tr('downloadRestartLabel')"
-                />
-              </span>
-            </b-button>
-          </template>
         </div>
       </b-card-body>
     </EkContentLink>
@@ -71,11 +39,6 @@
 </template>
 
 <script>
-import DownloadIcon from 'vue-material-design-icons/CloudDownloadOutline.vue';
-import DownloadingIcon from 'vue-material-design-icons/Autorenew.vue';
-import DownloadCompletedIcon from 'vue-material-design-icons/CheckCircle.vue';
-import DownloadWarningIcon from 'vue-material-design-icons/AlertOutline.vue';
-import DownloadRestartIcon from 'vue-material-design-icons/Reload.vue';
 import { DownloadState, MediaQuality } from '../constants';
 import { getCardSubtitle } from '../utils';
 import cardMixin from './mixins/cardMixin.js';
@@ -85,13 +48,6 @@ const DOWNLOAD_CHECK_DELAY = 300;
 export default {
   name: 'EkContentCard',
   emits: ['nodeUpdated'],
-  components: {
-    DownloadIcon,
-    DownloadingIcon,
-    DownloadCompletedIcon,
-    DownloadWarningIcon,
-    DownloadRestartIcon,
-  },
   mixins: [cardMixin],
   props: {
     node: {
@@ -116,7 +72,6 @@ export default {
       isHovered: false,
       downloadState: null,
       downloadCheckIntervalId: null,
-      DownloadState,
     };
   },
   computed: {
@@ -146,16 +101,6 @@ export default {
     },
     isDisabled() {
       return !this.isEnabled;
-    },
-    showDownloadFeature() {
-      return (
-        // The node must be a resource, not a topic:
-        this.node.kind !== 'topic'
-        // Either the node is unavailable or the download state is completed:
-        && (!this.node.available || this.downloadState === DownloadState.COMPLETED)
-        // The download state has been set:
-        && this.downloadState !== DownloadState.NOT_CHECKED
-      );
     },
   },
   mounted() {
@@ -222,12 +167,6 @@ export default {
       }
     },
   },
-  $trs: {
-    downloadLabel: 'Download',
-    downloadingLabel: 'Downloading…',
-    downloadCompletedLabel: 'Download completed',
-    downloadRestartLabel: 'Restart download',
-  },
 };
 </script>
 
@@ -254,6 +193,7 @@ export default {
 .card-body {
   padding: 0;
 }
+
 .body-wrapper {
   padding: $card-spacer-x;
 }
@@ -275,28 +215,6 @@ export default {
       background-size: calc(100% - 2 * #{$card-spacer-x}) auto;
     };
   };
-}
-
-.download-button {
-  background-color: transparent;
-}
-
-@keyframes spinner-animation {
-  to { transform: rotate(360deg); }
-}
-
-.downloading {
-  color: $blue;
-  display: inline-block;
-  animation: 2s linear infinite spinner-animation;
-}
-
-.completed {
-  color: $teal;
-}
-
-.failed {
-  color: $yellow;
 }
 
 </style>
