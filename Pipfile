@@ -4,6 +4,8 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+build = "*"
+setuptools = ">=45"
 flake8 = "==3.8.3"
 pre-commit = "==2.15.0"
 twine = "*"
