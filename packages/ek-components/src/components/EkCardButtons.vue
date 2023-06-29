@@ -15,6 +15,9 @@
       :class="downloadButtonClasses"
       @click="$emit('downloadButtonClicked')"
     >
+      <span v-if="downloadText" class="download-button-text">
+        {{ downloadText }}
+      </span>
       <DownloadIcon
         v-if="isDownloadReady"
         :title="$tr('downloadLabel')"
@@ -113,6 +116,15 @@ export default {
         result.push('download-button--completed');
       }
       return result;
+    },
+    downloadText() {
+      if (this.downloadState === DownloadState.READY) {
+        return this.$tr('downloadLabel');
+      } else if (this.downloadState === DownloadState.DOWNLOADING) {
+        return this.$tr('downloadingLabel');
+      } else {
+        return null;
+      }
     },
   },
   $trs: {
