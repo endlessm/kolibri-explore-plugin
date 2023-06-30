@@ -11,11 +11,19 @@ from .collectionviews import resume_download
 from .collectionviews import start_download
 from .collectionviews import update_download
 from .viewsets import ContentNodeExtrasViewset
+from .viewsets import ExploreChannelMetadataViewSet
+from .viewsets import ExploreContentNodeViewset
 from .viewsets import ExternalContentTagViewset
 
 
 router = routers.SimpleRouter()
 
+router.register(r"channel", ExploreChannelMetadataViewSet, basename="channel")
+router.register(
+    r"contentnode",
+    ExploreContentNodeViewset,
+    basename="contentnode",
+)
 router.register(
     r"externalcontenttag",
     ExternalContentTagViewset,
