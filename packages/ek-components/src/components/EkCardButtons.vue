@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="card-buttons">
     <EkPlayButton
       v-if="!showDownloadFeature"
       :kind="kind"
@@ -138,6 +138,14 @@ export default {
 
 <style lang="scss" scoped>
 @import '../styles.scss';
+
+.card-buttons {
+  &::after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
 
 .download-button {
   background-color: transparent;
