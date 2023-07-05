@@ -10,7 +10,7 @@
 <script>
 
   import { mapState } from 'vuex';
-  import { ContentNodeResource } from 'kolibri.resources';
+  import { ContentNodeResource } from '../apiResources';
   import ContentItem from './ContentItem';
 
   export default {

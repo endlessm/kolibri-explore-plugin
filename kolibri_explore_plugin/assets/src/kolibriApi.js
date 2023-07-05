@@ -1,11 +1,12 @@
 import urls from 'kolibri.urls';
-import { ChannelResource, ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
+import { ContentNodeSearchResource } from 'kolibri.resources';
 
 import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
 
 import router from 'kolibri.coreVue.router';
 import store from 'kolibri.coreVue.vuex.store';
 import { utils } from 'ek-components';
+import { ChannelResource, ContentNodeResource } from './apiResources';
 import { showTopicsContentInLightbox } from './modules/topicsTree/handlers';
 import { PageNames } from './constants';
 import { getChannelIcon } from './customApps';

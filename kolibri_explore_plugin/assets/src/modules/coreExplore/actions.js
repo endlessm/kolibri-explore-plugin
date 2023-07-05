@@ -1,4 +1,4 @@
-import { ChannelResource } from 'kolibri.resources';
+import { ChannelResource } from '../../apiResources';
 import { pageNameToModuleMap } from '../../constants';
 
 export function resetModuleState(store, lastPageName) {
