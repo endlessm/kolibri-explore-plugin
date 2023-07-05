@@ -3,9 +3,10 @@ import urls from 'kolibri.urls';
 import { utils } from 'ek-components';
 import router from 'kolibri.coreVue.router';
 import plugin_data from 'plugin_data';
-import { ChannelResource, ContentNodeResource, ContentNodeSearchResource } from 'kolibri.resources';
+import { ContentNodeSearchResource } from 'kolibri.resources';
 import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
 
+import { ChannelResource, ContentNodeResource } from '../../apiResources';
 import { CarouselItemsLength, SEARCH_MAX_RESULTS, PageNames } from '../../constants';
 import { CustomChannelApps, getBigThumbnail, getChannelIcon } from '../../customApps';
 import {

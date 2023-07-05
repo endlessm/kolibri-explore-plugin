@@ -124,8 +124,8 @@
   import _ from 'lodash';
   import { mapMutations, mapState } from 'vuex';
   import { utils, constants, responsiveMixin } from 'ek-components';
-  import { ContentNodeResource } from 'kolibri.resources';
 
+  import { ContentNodeResource } from '../apiResources';
   import { searchChannelsOnce } from '../modules/topicsRoot/handlers';
   import navigationMixin from '../mixins/navigationMixin';
 
