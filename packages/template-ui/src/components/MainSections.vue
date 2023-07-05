@@ -39,4 +39,14 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/styles.scss';
+
+/*
+ * This ensures the text of the pills are vertically centered. This
+ * is not generalizable to other pill-like buttons.
+ */
+a.btn.rounded-pill {
+  display: flex;
+  align-self: baseline;
+}
+
 </style>
