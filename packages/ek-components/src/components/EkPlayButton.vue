@@ -100,7 +100,7 @@ export default {
       if (this.label) {
         return this.label;
       }
-      return MediaTypeVerbs[this.kind] ?? MediaTypeVerbs['video'];
+      return (MediaTypeVerbs[this.kind] !== null && MediaTypeVerbs[this.kind] !== undefined) ? MediaTypeVerbs[this.kind] : MediaTypeVerbs['video'];
     },
   },
 };
