@@ -1,9 +1,9 @@
 import logging
-import os
 import time
 from enum import auto
 from enum import IntEnum
 
+import requests
 from django.utils.translation import gettext_lazy as _
 from kolibri.core.content.errors import InsufficientStorageSpaceError
 from kolibri.core.content.models import ChannelMetadata
@@ -28,11 +28,9 @@ from .tasks import remotecontentimport
 
 logger = logging.getLogger(__name__)
 
-COLLECTION_PATHS = os.path.join(
-    os.path.dirname(__file__), "static", "collections"
-)
-if conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]:
-    COLLECTION_PATHS = conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]
+COLLECTIONS_HOST = conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_HOST"]
+
+COLLECTION_URL_TEMPLATE = COLLECTIONS_HOST + "/{grade}-{name}.json"
 
 # FIXME: Rename to PACK_IDS
 COLLECTION_GRADES = [
@@ -77,19 +75,13 @@ class EndlessKeyContentManifest(ContentManifest):
         all_channel_ids = _get_channel_ids_for_all_content_manifests()
         return all_channel_ids.difference(self.get_channel_ids())
 
-    def read_from_static_collection(self, grade, name, validate=False):
+    def read_from_remote_collection(self, grade, name, validate=False):
         self.grade = grade
         self.name = name
-        manifest_filename = os.path.join(
-            COLLECTION_PATHS, f"{grade}-{name}.json"
-        )
-
-        if not os.path.exists(manifest_filename):
-            raise ContentManifestParseError(
-                f"Collection manifest {manifest_filename} not found"
-            )
-
-        super().read(manifest_filename, validate)
+        manifest_url = COLLECTION_URL_TEMPLATE.format(grade=grade, name=name)
+        response = requests.get(manifest_url)
+        response.raise_for_status()
+        self.read_dict(response.json(), validate)
 
     def read_dict(self, manifest_data, validate=False):
         self.metadata = manifest_data.get("metadata")
@@ -589,12 +581,15 @@ def _build_remotechannelimport_task(channel_id):
 
 _content_manifests = []
 _content_manifests_by_grade_name = {}
-_collection_download_manager = CollectionDownloadManager()
+_collection_download_manager = None
 
 
-def _read_content_manifests():
+def _initiate():
     global _content_manifests
     global _content_manifests_by_grade_name
+    global _collection_download_manager
+
+    _collection_download_manager = CollectionDownloadManager()
 
     free_space_gb = get_free_space() / 1024**3
 
@@ -603,7 +598,7 @@ def _read_content_manifests():
         try:
             # TODO: Validate the manifest files or remove validation
             # https://phabricator.endlessm.com/T34355
-            manifest.read_from_static_collection(grade, name, validate=False)
+            manifest.read_from_remote_collection(grade, name, validate=False)
         except ContentManifestParseError as err:
             logger.error(err)
         else:
@@ -618,7 +613,15 @@ def _read_content_manifests():
             _create_manifest(grade, name)
 
 
-_read_content_manifests()
+def ensure_initiated(api_function):
+    """Decorator to initiate only once in the first API call."""
+
+    def wrapper(*args, **kwargs):
+        if _collection_download_manager is None:
+            _initiate()
+        return api_function(*args, **kwargs)
+
+    return wrapper
 
 
 def _save_state_in_request_session(request):
@@ -657,6 +660,7 @@ def _get_channel_metadata(channel_id):
     return ChannelMetadata.objects.get(id=channel_id)
 
 
+@ensure_initiated
 @api_view(["GET"])
 def get_collection_info(request):
     """Return the collection metadata and availability."""
@@ -666,6 +670,7 @@ def get_collection_info(request):
     return Response({"collectionInfo": collection_info})
 
 
+@ensure_initiated
 @api_view(["GET"])
 def get_all_collections_info(request):
     """Return all the collections metadata and their availability."""
@@ -684,6 +689,7 @@ def get_all_collections_info(request):
     return Response({"allCollectionsInfo": info})
 
 
+@ensure_initiated
 @api_view(["GET"])
 def get_should_resume(request):
     """Return if there is a saved state that should be resumed."""
@@ -702,6 +708,7 @@ def get_should_resume(request):
     )
 
 
+@ensure_initiated
 @api_view(["POST"])
 def start_download(request):
     """Start downloading a collection.
@@ -743,6 +750,7 @@ def start_download(request):
     return Response({"status": status})
 
 
+@ensure_initiated
 @api_view(["POST"])
 def resume_download(request):
     """Resume download from a previous session.
@@ -771,6 +779,7 @@ def resume_download(request):
     return Response({"status": status})
 
 
+@ensure_initiated
 @api_view(["POST"])
 def update_download(request):
     """Continue downloading current collection.
@@ -793,6 +802,7 @@ def update_download(request):
     return Response({"status": status})
 
 
+@ensure_initiated
 @api_view(["DELETE"])
 def cancel_download(request):
     """Cancel current download and clear the saved state.
@@ -812,6 +822,7 @@ def cancel_download(request):
     return Response({"status": status})
 
 
+@ensure_initiated
 @api_view(["GET"])
 def get_download_status(request):
     """Return the download status."""

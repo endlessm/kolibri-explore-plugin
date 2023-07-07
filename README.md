@@ -33,10 +33,6 @@ extract them to the `kolibri_explore_plugin/apps` folder.  Note that
 this is not ideal, because you should know where has `pip` installed
 the plugin.
 
-Download the JSON files from the
-[endless-key-collections](https://github.com/endlessm/endless-key-collections/tree/main/json)
-repo and place them in `kolibri_explore_plugin/static/collections/`.
-
 Now start Kolibri. You should be able to navigate to `/explore` if `/`
 doesn't redirect you already.
 

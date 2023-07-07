@@ -8,12 +8,12 @@ option_spec = {
                 to the package install directory.
             """,
         },
-        "CONTENT_COLLECTIONS_PATH": {
+        "CONTENT_COLLECTIONS_HOST": {
             "type": "string",
-            "default": "",
+            "default": "https://endlessm.github.io/endless-key-collections",
             "description": """
-                Location where collections manifests are stored. Defaults
-                to the static/collections folder.
+                Remote location where collections manifests are stored.
+                Defaults to GitHub pages.
             """,
         },
         "SHOW_AS_STANDALONE_CHANNEL": {
