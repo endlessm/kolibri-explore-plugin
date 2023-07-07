@@ -1,3 +1,41 @@
+[project]
+name = "kolibri_explore_plugin"
+authors = [
+  { name="Endless OS Foundation", email="key@endlessos.org" },
+]
+description = "Kolibri plugin for Endless custom presentation"
+readme = "README.md"
+requires-python = ">=3.3"
+dynamic = ["version"]
+license={file = "LICENSE"}
+keywords=["kolibri"]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.3",
+  "Programming Language :: Python :: 3.4",
+  "Programming Language :: Python :: 3.5",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+
+[project.entry-points."kolibri.plugins"]
+kolibri_explore_plugin = "kolibri_explore_plugin"
+
+[project.urls]
+"Homepage" = "https://github.com/endlessm/kolibri-explore-plugin"
+"Bug Tracker" = "https://github.com/endlessm/kolibri-explore-plugin/issues/"
+
+[build-system]
+# As per https://peps.python.org/pep-0518, list only the minimal dependencies
+# needed here to get the build started. All other dependencies and built
+# dependencies should be listed in [packages]/[dev-packages] in Pipfile.
+# If changing the requires list here, please also update it in [dev-packages]
+# in Pipfile.
+requires = ["build", "setuptools>=45", "setuptools_scm[toml]>=6.2"]
+
 [tool.black]
 line-length = 79
 include = '\.pyi?$'
@@ -17,3 +55,11 @@ exclude = '''
   | kolibri_explore_plugin/vendor
 )/
 '''
+
+[tool.setuptools_scm]
+write_to = "kolibri_explore_plugin/_version.py"
+
+[tool.setuptools]
+include-package-data = true
+packages = ["kolibri_explore_plugin"]
+zip-safe = false

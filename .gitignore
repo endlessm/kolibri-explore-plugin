@@ -9,6 +9,7 @@ node_modules
 __pycache__/
 
 # Built and cached files
+kolibri_explore_plugin/_version.py
 kolibri_explore_plugin/apps/**/*.zip
 kolibri_explore_plugin/welcomeScreen/
 kolibri_explore_plugin/static/kolibri_explore_plugin*
@@ -30,4 +31,4 @@ packages/template-ui/src/overrides
 /.env
 
 # Collection files. These are bundled in apps
-kolibri_explore_plugin/static/collections/
+kolibri_explore_plugin/static/collections

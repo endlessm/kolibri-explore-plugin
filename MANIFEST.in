@@ -1,19 +1,10 @@
-include AUTHORS.rst
-include CONTRIBUTING.rst
-include CHANGELOG.rst
-include LICENSE
-include README.rst
-include kolibri_explore_plugin/VERSION
-include kolibri_explore_plugin/content_types.json
-recursive-exclude kolibri_explore_plugin/* *pyc
-recursive-exclude kolibri_explore_plugin/assets *
-recursive-include kolibri_explore_plugin/migrations *
-recursive-include kolibri_explore_plugin/management *
-recursive-include kolibri_explore_plugin/templates *.*
-recursive-include kolibri_explore_plugin/static *.*
-recursive-exclude kolibri_explore_plugin/static/collections *
-recursive-include kolibri_explore_plugin/build *.json
-recursive-include kolibri_explore_plugin/locale *.mo
-recursive-include kolibri_explore_plugin/locale *.json
-recursive-include kolibri_explore_plugin/vendor *.py
+# webpack build-info is needed at runtime, but it’s only built at build time
+# by yarn, so setuptools doesn’t know about it.
+include kolibri_explore_plugin/static/build-info.json
+
+# This is the dist form of welcomeScreen, which is not committed to git (but its
+# source in packages/welcome-screen, is). It needs to be in the dist tarball
+# because it’s consumed by kolibri-installer-android to show a welcome screen,
+# and kolibri-installer-android consumes the kolibri-explore-plugin wheel
+# directly.
 recursive-include kolibri_explore_plugin/welcomeScreen *.*

@@ -180,7 +180,7 @@ action from `bump2release.yml` will do all release steps mentioned in
 [Release with local environment](#release-with-local-environment)
 automatically, including:
 * Bump version and create a new tag
-* Publish kolibiri-explore-plugin wheel package to PyPI
+* Publish kolibri-explore-plugin wheel package to PyPI
 * Release apps-bundle.zip
 
 #### Release with local environment
