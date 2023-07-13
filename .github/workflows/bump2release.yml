@@ -52,7 +52,7 @@ jobs:
 
       - name: Install dependencies in pipenv
         run: |
-          sh ./scripts/bootstrap.sh
+          sh ./scripts/bootstrap.sh --ci
 
       - name: Bump minor version
         if: ${{ inputs.MAJOR_OR_MINOR != 'major' }}
