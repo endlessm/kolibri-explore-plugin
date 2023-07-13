@@ -2,7 +2,7 @@
 #
 # Setup Project
 
-pipenv install --dev
+pipenv install --dev --deploy
 pipenv run nodeenv -p --node=16.14.0
 pipenv run npm install -g yarn@1.22.19
 pipenv run yarn global add @vue/cli@v4.5.15
