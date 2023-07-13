@@ -102,7 +102,7 @@ jobs:
 
       - name: Install dependencies in pipenv
         run: |
-          sh ./scripts/bootstrap.sh --ci
+          bash ./scripts/bootstrap.sh --ci
 
       - name: Build
         run: |
