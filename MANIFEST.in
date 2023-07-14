@@ -2,6 +2,10 @@
 # by yarn, so setuptools doesn’t know about it.
 include kolibri_explore_plugin/static/build-info.json
 
+# build/kolibri_explore_plugin.app_stats.json is needed by Kolibri at runtime,
+# but it is created at build time.
+include kolibri_explore_plugin/build/kolibri_explore_plugin.app_stats.json
+
 # This is the dist form of welcomeScreen, which is not committed to git (but its
 # source in packages/welcome-screen, is). It needs to be in the dist tarball
 # because it’s consumed by kolibri-installer-android to show a welcome screen,
