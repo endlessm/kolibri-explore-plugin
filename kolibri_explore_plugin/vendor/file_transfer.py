@@ -262,10 +262,6 @@ class FileDownload(Transfer):
 
         super(FileDownload, self).__init__(*args, **kwargs)
 
-    @property
-    def transfer_size(self):
-        return self.total_size
-
     def start(self):
         super(FileDownload, self).start()
         # initiate the download, check for status errors, and calculate download size
