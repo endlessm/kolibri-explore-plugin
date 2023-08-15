@@ -3,7 +3,7 @@ import urls from 'kolibri.urls';
 // List of channel ids and the app name with the corresponding
 // custom-channel-presentation zip bundle
 export const CustomChannelApps = {
-  e409b964366a59219c148f2aaa741f43: 'blockly-games',
+  ed519e3b798147569b46cb550dbfc373: 'blockly-games',
   bbb4ea407a3c450cb18cbaa76f2d75cd: 'cspathshala-english',
   c9d7f950ab6b5a1199e3d6c10d7f0103: 'khan-academy',
   '85b42a40745f4e2392ed62e72d4dad6e': 'oceanx',
@@ -113,7 +113,7 @@ export const EkIguanaSections = [
       '3160899a73564d8a8467284d9219b91c', // terminal-two
       '38eaaf9ec82a44f9ab6e7a44cb730f07', // pbs-kids
       '57e23812e0dc562581958e39acedd717', // gaming
-      'e409b964366a59219c148f2aaa741f43', // blockly-games
+      'ed519e3b798147569b46cb550dbfc373', // blockly-games
     ],
     contentPicks: [],
   },
@@ -193,7 +193,7 @@ export const ChannelCardThumbnails = {
   '000409f81dbe5d1ba67101cb9fed4530': 'touchable-earth.jpg',
   c9d7f950ab6b5a1199e3d6c10d7f0103: 'khan-academy.jpg',
   '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home.jpg',
-  e409b964366a59219c148f2aaa741f43: 'blockly-games.jpg',
+  ed519e3b798147569b46cb550dbfc373: 'blockly-games.jpg',
   e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy.jpg', // sikana english
   '30c71c99c42c57d181e8aeafd2e15e5f': 'sikana-diy.jpg', // sikana spanish
   bbb4ea407a3c450cb18cbaa76f2d75cd: 'cspathshala-english.jpg',
@@ -259,7 +259,7 @@ export const ChannelCardIcons = {
   '38eaaf9ec82a44f9ab6e7a44cb730f07': 'pbs-kids.png',
   '000409f81dbe5d1ba67101cb9fed4530': 'touchable-earth.png',
   '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home.png',
-  e409b964366a59219c148f2aaa741f43: 'blockly-games.png',
+  ed519e3b798147569b46cb550dbfc373: 'blockly-games.png',
   e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy.png', // sikana english
   '30c71c99c42c57d181e8aeafd2e15e5f': 'sikana-diy.png', // sikana spanish
   c8540424d77f44f8ae306e22d3b14eaf: 'coronavirus.png',
