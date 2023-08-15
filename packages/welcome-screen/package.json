@@ -26,5 +26,8 @@
     "sass": "^1.26.10",
     "sass-loader": "^9.0.3",
     "vue-template-compiler": "^2.6.11"
-  }
+  },
+  "browserslist": [
+    "extends browserslist-config-kolibri"
+  ]
 }
