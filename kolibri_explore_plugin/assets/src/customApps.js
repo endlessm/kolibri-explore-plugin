@@ -40,6 +40,7 @@ export const CustomChannelApps = {
   '92e96efc082e5c62b0aac3847bdcdb33': 'staff-playlist',
   '2f95235c3709511fa12d007f31ed6a7b': 'steam',
   '1520f018610256549c98ca0140cceebe': 'virtual-field-trips',
+  eb4373b5da054c07879d0c969dc1976a: 'virtual-science-teachers',
   '59b8deeb90f544da923187e77c8d3820': 'wikihow',
   '1b1fc9bd453a4c52bb5628d9ae804ede': 'scigirls', // scigirls english
   ee52db4a62a94e9683599af8782f2d03: 'scigirls', // scigirls spanish
@@ -223,6 +224,7 @@ export const ChannelCardThumbnails = {
   '92e96efc082e5c62b0aac3847bdcdb33': 'staff-playlist.jpg',
   '2f95235c3709511fa12d007f31ed6a7b': 'steam.jpg',
   '1520f018610256549c98ca0140cceebe': 'virtual-field-trips.jpg',
+  eb4373b5da054c07879d0c969dc1976a: 'virtual-science-teachers.jpg',
   '59b8deeb90f544da923187e77c8d3820': 'wikihow.jpg',
   '1b1fc9bd453a4c52bb5628d9ae804ede': 'scigirls.jpg', // scigirls english
   ee52db4a62a94e9683599af8782f2d03: 'scigirls.jpg', // scigirls spanish
@@ -287,6 +289,7 @@ export const ChannelCardIcons = {
   '92e96efc082e5c62b0aac3847bdcdb33': 'staff-playlist.png',
   '2f95235c3709511fa12d007f31ed6a7b': 'steam.png',
   '1520f018610256549c98ca0140cceebe': 'virtual-field-trips.png',
+  eb4373b5da054c07879d0c969dc1976a: 'virtual-science-teachers.png',
   '59b8deeb90f544da923187e77c8d3820': 'wikihow.png',
   '1b1fc9bd453a4c52bb5628d9ae804ede': 'scigirls.png', // scigirls english
   ee52db4a62a94e9683599af8782f2d03: 'scigirls.png', // scigirls spanish
