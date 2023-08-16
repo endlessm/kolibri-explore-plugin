@@ -33,15 +33,6 @@ const routes = [
   { path: '/welcome', component: Welcome },
   { path: '/select-pack', component: PackSelection },
   { path: '/pack-ready', component: PackReady },
-  { path: '/endless-key', component: UsbDriveConnection },
-  {
-    path: '/endless-key-required',
-    component: UsbDriveConnection,
-    props: { required: true },
-  },
-  { path: '/grant-permissions', component: PermissionsExplanation },
-  { path: '/permissions-cancelled', component: PermissionsCancelled },
-  { path: '/permissions-wrong-folder', component: PermissionsWrongFolder },
 ];
 
 const router = new VueRouter({
