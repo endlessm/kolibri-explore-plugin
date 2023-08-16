@@ -1,8 +1,10 @@
 import logging
 
 from django.core.management import call_command
+from kolibri.core.content import tasks as content_tasks
 from kolibri.core.serializers import HexOnlyUUIDField
 from kolibri.core.tasks.decorators import register_task
+from kolibri.core.tasks.job import Priority
 from kolibri.core.tasks.job import State
 from kolibri.core.tasks.main import job_storage
 from kolibri.core.tasks.permissions import CanManageContent
@@ -42,6 +44,22 @@ class ExternalTagsJobValidator(JobValidator):
 )
 def applyexternaltags(node_id, tags=None):
     call_command("applyexternaltags", node_id, tags=tags)
+
+
+# This is a duplicate of the upstream remotecontentimport task with the
+# priority raised to HIGH.
+@register_task(
+    validator=content_tasks.RemoteChannelResourcesImportValidator,
+    track_progress=True,
+    cancellable=True,
+    permission_classes=[CanManageContent],
+    priority=Priority.HIGH,
+    queue=QUEUE,
+    long_running=True,
+    status_fn=content_tasks.get_status,
+)
+def remotecontentimport(*args, **kwargs):
+    return content_tasks.remotecontentimport.func(*args, **kwargs)
 
 
 def restart_failed_background_jobs():

@@ -1,4 +1,4 @@
-import { TaskStatuses, TaskTypes } from 'kolibri.utils.syncTaskUtils';
+import { TaskStatuses } from 'kolibri.utils.syncTaskUtils';
 import { constants } from 'ek-components';
 import { TaskResource } from 'kolibri.resources';
 import store from 'kolibri.coreVue.vuex.store';
@@ -48,7 +48,7 @@ export function startContentDownload(channelId, contentId) {
     channel_id: channelId,
     channel_name: 'foo',
     node_ids: [contentId],
-    type: TaskTypes.REMOTECONTENTIMPORT,
+    type: 'kolibri_explore_plugin.tasks.remotecontentimport',
   };
 
   return TaskResource.startTask(taskParams)
