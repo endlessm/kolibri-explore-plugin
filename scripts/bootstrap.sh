@@ -3,14 +3,14 @@
 # Setup Project
 
 # Argument parsing
-pipenv_install_args=
+pipenv_install_args=()
 
 while :; do
   case $1 in
     --ci)
       # Prevent the Pipfile.lock from being updated automatically. Just use
       # the pinned dependencies.
-      pipenv_install_args=( "--ignore-pipfile" )
+      pipenv_install_args+=( "--ignore-pipfile" )
       ;;
     -h|-\?|--help|-?*)
       echo "Usage: bootstrap.sh [--ci]" >&2
