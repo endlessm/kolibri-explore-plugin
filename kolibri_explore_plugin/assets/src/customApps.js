@@ -36,6 +36,7 @@ export const CustomChannelApps = {
   '057f871caa405ec29d62ba0523c193d7': 'music',
   '914fee213ee146de869016c287116b23': 'novels',
   '59bb2e5a3d2e5e3b85b87d9ab4daa2f3': 'reading',
+  a8e6591f1afa426d859318a0a29d1237: 'samhsa',
   '3fcffebc58d15175b948b140434ef6e6': 'sports',
   '92e96efc082e5c62b0aac3847bdcdb33': 'staff-playlist',
   '2f95235c3709511fa12d007f31ed6a7b': 'steam',
