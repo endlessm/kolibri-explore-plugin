@@ -10,6 +10,8 @@ from kolibri.core.tasks.job import State
 from kolibri.core.tasks.main import job_storage
 from kolibri.core.tasks.utils import import_path_to_callable
 
+from .models import BackgroundTask
+
 logger = logging.getLogger(__name__)
 
 QUEUE = "content"
@@ -94,13 +96,20 @@ def storage_update_hook(job, orm_job, state=None, **kwargs):
         # We only care about state transitions here.
         return
 
+    try:
+        bg_task = BackgroundTask.objects.get(job_id=job.job_id)
+    except BackgroundTask.DoesNotExist:
+        # Not one of our tasks.
+        return
+
+    # Synchronize the state if needed.
+    if bg_task.job_state != state:
+        bg_task.job_state = state
+        bg_task.save()
+
     # Restart incomplete background jobs. Assume that a job is only
     # canceled by a worker stopping and it should be restarted.
-    if orm_job.queue == BACKGROUND_QUEUE and state in (
-        State.FAILED,
-        State.CANCELED,
-    ):
-        logger.info(
-            f"Restarting incomplete background {job.func} job {job.job_id}"
-        )
-        job_storage.restart_job(job.job_id)
+    if state in (State.FAILED, State.CANCELED):
+        logger.info(f"Restarting incomplete BackgroundTask {bg_task}")
+        new_job_id = job_storage.restart_job(bg_task.job_id)
+        bg_task.update_job_id(new_job_id)
