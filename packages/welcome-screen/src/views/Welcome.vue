@@ -61,12 +61,12 @@ import EkPrivacyPolicyText from 'ek-components/src/components/EkPrivacyPolicyTex
   }
 
   .welcome-background-top {
-    background-image: url('../assets/welcome-bg-top-right.jpg');
+    background-image: url('../assets/welcome-bg-top-right.png');
     background-position: top right;
   }
 
   .welcome-background-bottom {
-    background-image: url('../assets/welcome-bg-bottom-left.jpg');
+    background-image: url('../assets/welcome-bg-bottom-left.png');
     background-position: bottom left;
   }
 
