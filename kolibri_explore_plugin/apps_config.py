@@ -8,6 +8,6 @@ class ExploreConfig(AppConfig):
     label = "explore"
 
     def ready(self):
-        from .tasks import restart_failed_background_jobs
+        from .jobs import restart_failed_background_jobs
 
         restart_failed_background_jobs()
