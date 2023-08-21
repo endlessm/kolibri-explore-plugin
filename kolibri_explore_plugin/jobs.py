@@ -88,10 +88,19 @@ def enqueue_task(task, user, queue=QUEUE, priority=Priority.HIGH, **params):
     return job_storage.enqueue_job(job_data, queue=queue, priority=priority)
 
 
-def restart_failed_background_jobs():
-    for job in job_storage.get_all_jobs(queue=BACKGROUND_QUEUE):
-        if job.state == State.FAILED:
-            logger.info(
-                f"Restarting failed background {job.func} job {job.job_id}"
-            )
-            job_storage.restart_job(job.job_id)
+def storage_update_hook(job, orm_job, state=None, **kwargs):
+    """StorageHook update hook"""
+    if state is None:
+        # We only care about state transitions here.
+        return
+
+    # Restart incomplete background jobs. Assume that a job is only
+    # canceled by a worker stopping and it should be restarted.
+    if orm_job.queue == BACKGROUND_QUEUE and state in (
+        State.FAILED,
+        State.CANCELED,
+    ):
+        logger.info(
+            f"Restarting incomplete background {job.func} job {job.job_id}"
+        )
+        job_storage.restart_job(job.job_id)
