@@ -181,7 +181,17 @@ class EndlessKeyContentManifest(ContentManifest):
         """
         return [
             get_remotecontentimport_task(channel_id, all_thumbnails=True)
-            for channel_id in _get_channel_ids_for_all_content_manifests()
+            for channel_id in self.get_channel_ids()
+        ]
+
+    def get_extra_contentthumbnail_tasks(self):
+        """Return a serializable object to create thumbnail contentimport tasks
+
+        For all channels featured in other Endless Key content manifests.
+        """
+        return [
+            get_remotecontentimport_task(channel_id, all_thumbnails=True)
+            for channel_id in self.get_extra_channel_ids()
         ]
 
     def _get_node_ids_for_channel(self, channel_metadata, channel_id):
@@ -488,7 +498,12 @@ class CollectionDownloadManager:
             logger.info("Download completed!")
 
             # Download the remaining content thumbnails in the background.
-            for task in self._content_manifest.get_contentthumbnail_tasks():
+            # Prioritize the channels from the content manifest.
+            thumbnail_tasks = (
+                self._content_manifest.get_contentthumbnail_tasks()
+                + self._content_manifest.get_extra_contentthumbnail_tasks()
+            )
+            for task in thumbnail_tasks:
                 BackgroundTask.create_from_task_data(task)
             logger.info("Starting background download tasks")
             enqueue_next_background_task()
