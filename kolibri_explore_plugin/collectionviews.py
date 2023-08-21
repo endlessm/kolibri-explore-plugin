@@ -52,8 +52,7 @@ COLLECTION_NAMES = ["0001"]
 
 PROGRESS_STEPS = {
     "importing": 0.1,
-    "downloading": 0.8,
-    "tagging": 0.9,
+    "downloading": 0.9,
     "completed": 1,
 }
 
@@ -184,16 +183,6 @@ class EndlessKeyContentManifest(ContentManifest):
             for channel_id in self.get_channel_ids()
         ]
 
-    def get_extra_contentthumbnail_tasks(self):
-        """Return a serializable object to create thumbnail contentimport tasks
-
-        For all channels featured in other Endless Key content manifests.
-        """
-        return [
-            get_remotecontentimport_task(channel_id, all_thumbnails=True)
-            for channel_id in self.get_extra_channel_ids()
-        ]
-
     def _get_node_ids_for_channel(self, channel_metadata, channel_id):
         """Get node IDs regardless of the version
 
@@ -228,7 +217,6 @@ class DownloadStage(IntEnum):
     IMPORTING_CHANNELS = auto()
     IMPORTING_CONTENT = auto()
     APPLYING_EXTERNAL_TAGS = auto()
-    IMPORTING_EXTRA_CHANNELS = auto()
     COMPLETED = auto()
 
 
@@ -417,7 +405,7 @@ class CollectionDownloadManager:
                 progress = (
                     PROGRESS_STEPS["downloading"]
                     + (
-                        PROGRESS_STEPS["tagging"]
+                        PROGRESS_STEPS["completed"]
                         - PROGRESS_STEPS["downloading"]
                     )
                     * current_task_number
@@ -425,17 +413,6 @@ class CollectionDownloadManager:
                 )
             else:
                 progress = PROGRESS_STEPS["downloading"]
-
-        elif self._stage == DownloadStage.IMPORTING_EXTRA_CHANNELS:
-            if total_tasks_number > 0:
-                progress = (
-                    PROGRESS_STEPS["tagging"]
-                    + (PROGRESS_STEPS["completed"] - PROGRESS_STEPS["tagging"])
-                    * current_task_number
-                    / total_tasks_number
-                )
-            else:
-                progress = PROGRESS_STEPS["tagging"]
 
         elif self._stage >= DownloadStage.COMPLETED:
             progress = PROGRESS_STEPS["completed"]
@@ -491,19 +468,19 @@ class CollectionDownloadManager:
                 tasks = self._content_manifest.get_contentimport_tasks()
             elif self._stage == DownloadStage.APPLYING_EXTERNAL_TAGS:
                 tasks = self._content_manifest.get_applyexternaltags_tasks()
-            elif self._stage == DownloadStage.IMPORTING_EXTRA_CHANNELS:
-                tasks = self._content_manifest.get_extra_channelimport_tasks()
 
         if self._stage == DownloadStage.COMPLETED:
             logger.info("Download completed!")
 
-            # Download the remaining content thumbnails in the background.
-            # Prioritize the channels from the content manifest.
+            # Download the manifest content thumbnails and the extra channels
+            # in the background.
             thumbnail_tasks = (
                 self._content_manifest.get_contentthumbnail_tasks()
-                + self._content_manifest.get_extra_contentthumbnail_tasks()
             )
-            for task in thumbnail_tasks:
+            extra_channel_tasks = (
+                self._content_manifest.get_extra_channelimport_tasks()
+            )
+            for task in thumbnail_tasks + extra_channel_tasks:
                 BackgroundTask.create_from_task_data(task)
             logger.info("Starting background download tasks")
             enqueue_next_background_task()

@@ -159,5 +159,15 @@ def storage_update_hook(job, orm_job, state=None, **kwargs):
         new_job_id = job_storage.restart_job(bg_task.job_id)
         bg_task.update_job_id(new_job_id)
     elif state == State.COMPLETED:
+        # If the completed task is a channel import, create the
+        # associated thumbnail download task to be run later.
+        if bg_task.func == TaskType.REMOTECHANNELIMPORT:
+            bg_task_params = json.loads(bg_task.params)
+            channel_id = bg_task_params["channel_id"]
+            thumbnail_task_data = get_remotecontentimport_task(
+                channel_id, all_thumbnails=True
+            )
+            BackgroundTask.create_from_task_data(thumbnail_task_data)
+
         # Start the next background task, if any.
         enqueue_next_background_task()
