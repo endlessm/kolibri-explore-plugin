@@ -12,7 +12,6 @@ from kolibri.core.content.utils.content_manifest import ContentManifest
 from kolibri.core.content.utils.content_manifest import (
     ContentManifestParseError,
 )
-from kolibri.core.tasks.job import Priority
 from kolibri.core.tasks.job import State as JobState
 from kolibri.core.tasks.main import job_storage
 from kolibri.utils import conf
@@ -21,12 +20,13 @@ from rest_framework.decorators import api_view
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 
-from .jobs import BACKGROUND_QUEUE
+from .jobs import enqueue_next_background_task
 from .jobs import enqueue_task
 from .jobs import get_applyexternaltags_task
 from .jobs import get_channel_metadata
 from .jobs import get_remotechannelimport_task
 from .jobs import get_remotecontentimport_task
+from .models import BackgroundTask
 
 logger = logging.getLogger(__name__)
 
@@ -219,8 +219,6 @@ class DownloadStage(IntEnum):
     IMPORTING_CONTENT = auto()
     APPLYING_EXTERNAL_TAGS = auto()
     IMPORTING_EXTRA_CHANNELS = auto()
-    FOREGROUND_COMPLETED = auto()
-    IMPORTING_ALL_THUMBNAILS = auto()
     COMPLETED = auto()
 
 
@@ -429,7 +427,7 @@ class CollectionDownloadManager:
             else:
                 progress = PROGRESS_STEPS["tagging"]
 
-        elif self._stage >= DownloadStage.FOREGROUND_COMPLETED:
+        elif self._stage >= DownloadStage.COMPLETED:
             progress = PROGRESS_STEPS["completed"]
 
         return {
@@ -472,7 +470,6 @@ class CollectionDownloadManager:
 
     def _set_next_stage(self, user):
         if self._stage == DownloadStage.COMPLETED:
-            logger.info("Download completed!")
             return
 
         tasks = []
@@ -486,12 +483,15 @@ class CollectionDownloadManager:
                 tasks = self._content_manifest.get_applyexternaltags_tasks()
             elif self._stage == DownloadStage.IMPORTING_EXTRA_CHANNELS:
                 tasks = self._content_manifest.get_extra_channelimport_tasks()
-            elif self._stage == DownloadStage.IMPORTING_ALL_THUMBNAILS:
-                # Download the remaining content thumbnails in the background.
-                for (
-                    task
-                ) in self._content_manifest.get_contentthumbnail_tasks():
-                    self._enqueue_background_task(user, task)
+
+        if self._stage == DownloadStage.COMPLETED:
+            logger.info("Download completed!")
+
+            # Download the remaining content thumbnails in the background.
+            for task in self._content_manifest.get_contentthumbnail_tasks():
+                BackgroundTask.create_from_task_data(task)
+            logger.info("Starting background download tasks")
+            enqueue_next_background_task()
 
         self._tasks_pending = tasks
         self._tasks_previously_completed.extend(self._tasks_completed)
@@ -514,16 +514,6 @@ class CollectionDownloadManager:
         self._enqueuing_timestamp = None
         self._enqueued_timestamp = time.time()
         logger.info(f"Enqueued job id {self._current_job_id}")
-
-    def _enqueue_background_task(self, user, task):
-        job_id = enqueue_task(
-            task,
-            user,
-            queue=BACKGROUND_QUEUE,
-            priority=Priority.REGULAR,
-            **task["params"],
-        )
-        logger.info(f"Enqueued task {task} in job {job_id}")
 
 
 _content_manifests = []
