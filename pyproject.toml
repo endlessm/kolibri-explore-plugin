@@ -62,3 +62,18 @@ write_to = "kolibri_explore_plugin/_version.py"
 include-package-data = true
 packages = ["kolibri_explore_plugin"]
 zip-safe = false
+
+# Pytest options
+[tool.pytest.ini_options]
+# Run in verbose mode by default and always enable our pytest plugin.
+addopts = '-v -p kolibri_explore_plugin.test.plugin'
+# Tell our plugin to use our test settings module.
+DJANGO_SETTINGS_MODULE = 'kolibri_explore_plugin.test.settings'
+django_find_project = false
+testpaths = 'kolibri_explore_plugin/test'
+# Kolibri triggers many Django deprecation warnings since it uses a very
+# old version.
+#
+# FIXME: Try to narrow the deprecation warnings to only those caused by
+# Kolibri.
+filterwarnings = 'ignore::DeprecationWarning'

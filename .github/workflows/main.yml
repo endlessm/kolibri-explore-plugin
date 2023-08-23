@@ -104,6 +104,10 @@ jobs:
         run: |
           bash ./scripts/bootstrap.sh --ci
 
+      - name: Python tests
+        run: |
+          pipenv run python -m pytest
+
       - name: Build
         run: |
           pipenv run yarn build-dist
