@@ -70,6 +70,14 @@ can then install it:
 pip install dist/kolibri_explore_plugin-*.whl
 ```
 
+## Testing
+### Backend tests
+
+Tests for the Python backend can be run by executing `python -m pytest`
+or `yarn run test:python`. See the plugin
+[`test`](kolibri_explore_plugin/test) directory for more details about
+the Python testing infrastructure.
+
 ## Development
 ### Getting started with development
 
