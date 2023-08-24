@@ -1,3 +1,5 @@
+# Copyright 2022-2023 Endless OS Foundation LLC
+# SPDX-License-Identifier: GPL-2.0-or-later
 import logging
 import os
 import time
@@ -6,13 +8,10 @@ from enum import IntEnum
 
 from django.utils.translation import gettext_lazy as _
 from kolibri.core.content.errors import InsufficientStorageSpaceError
-from kolibri.core.content.models import ChannelMetadata
-from kolibri.core.content.tasks import remotechannelimport
 from kolibri.core.content.utils.content_manifest import ContentManifest
 from kolibri.core.content.utils.content_manifest import (
     ContentManifestParseError,
 )
-from kolibri.core.tasks.job import Priority
 from kolibri.core.tasks.job import State as JobState
 from kolibri.core.tasks.main import job_storage
 from kolibri.utils import conf
@@ -21,10 +20,13 @@ from rest_framework.decorators import api_view
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 
-from .tasks import applyexternaltags
-from .tasks import BACKGROUND_QUEUE
-from .tasks import QUEUE
-from .tasks import remotecontentimport
+from .jobs import enqueue_next_background_task
+from .jobs import enqueue_task
+from .jobs import get_applyexternaltags_task
+from .jobs import get_channel_metadata
+from .jobs import get_remotechannelimport_task
+from .jobs import get_remotecontentimport_task
+from .models import BackgroundTask
 
 logger = logging.getLogger(__name__)
 
@@ -50,8 +52,7 @@ COLLECTION_NAMES = ["0001"]
 
 PROGRESS_STEPS = {
     "importing": 0.1,
-    "downloading": 0.8,
-    "tagging": 0.9,
+    "downloading": 0.9,
     "completed": 1,
 }
 
@@ -121,7 +122,7 @@ class EndlessKeyContentManifest(ContentManifest):
         For all the channels in this content manifest.
         """
         return [
-            _build_remotechannelimport_task(channel_id)
+            get_remotechannelimport_task(channel_id)
             for channel_id in self.get_channel_ids()
         ]
 
@@ -131,7 +132,7 @@ class EndlessKeyContentManifest(ContentManifest):
         For all channels featured in Endless Key content manifests.
         """
         return [
-            _build_remotechannelimport_task(channel_id)
+            get_remotechannelimport_task(channel_id)
             for channel_id in self.get_extra_channel_ids()
         ]
 
@@ -143,22 +144,14 @@ class EndlessKeyContentManifest(ContentManifest):
         tasks = []
 
         for channel_id in self.get_channel_ids():
-            channel_metadata = _get_channel_metadata(channel_id)
+            channel_metadata = get_channel_metadata(channel_id)
+            node_ids = list(
+                self._get_node_ids_for_channel(channel_metadata, channel_id)
+            )
             tasks.append(
-                {
-                    "task": "remotecontentimport",
-                    "params": {
-                        "channel_id": channel_id,
-                        "channel_name": channel_metadata.name,
-                        "node_ids": list(
-                            self._get_node_ids_for_channel(
-                                channel_metadata, channel_id
-                            )
-                        ),
-                        "exclude_node_ids": [],
-                        "fail_on_error": True,
-                    },
-                }
+                get_remotecontentimport_task(
+                    channel_id, channel_metadata.name, node_ids
+                )
             )
 
         return tasks
@@ -176,15 +169,7 @@ class EndlessKeyContentManifest(ContentManifest):
         for tagged in self.metadata["tagged_node_ids"]:
             node_id = tagged["node_id"]
             tags = tagged["tags"]
-            tasks.append(
-                {
-                    "task": "applyexternaltags",
-                    "params": {
-                        "node_id": node_id,
-                        "tags": tags,
-                    },
-                }
-            )
+            tasks.append(get_applyexternaltags_task(node_id, tags))
 
         return tasks
 
@@ -193,25 +178,10 @@ class EndlessKeyContentManifest(ContentManifest):
 
         For all the channels in this content manifest.
         """
-        tasks = []
-
-        for channel_id in _get_channel_ids_for_all_content_manifests():
-            channel_metadata = _get_channel_metadata(channel_id)
-            tasks.append(
-                {
-                    "task": "remotecontentimport",
-                    "params": {
-                        "channel_id": channel_id,
-                        "channel_name": channel_metadata.name,
-                        "node_ids": [],
-                        "exclude_node_ids": [],
-                        "all_thumbnails": True,
-                        "fail_on_error": True,
-                    },
-                }
-            )
-
-        return tasks
+        return [
+            get_remotecontentimport_task(channel_id, all_thumbnails=True)
+            for channel_id in self.get_channel_ids()
+        ]
 
     def _get_node_ids_for_channel(self, channel_metadata, channel_id):
         """Get node IDs regardless of the version
@@ -247,9 +217,6 @@ class DownloadStage(IntEnum):
     IMPORTING_CHANNELS = auto()
     IMPORTING_CONTENT = auto()
     APPLYING_EXTERNAL_TAGS = auto()
-    IMPORTING_EXTRA_CHANNELS = auto()
-    FOREGROUND_COMPLETED = auto()
-    IMPORTING_ALL_THUMBNAILS = auto()
     COMPLETED = auto()
 
 
@@ -258,12 +225,6 @@ class DownloadError(Exception):
 
 
 class CollectionDownloadManager:
-    TASKS_MAPPING = {
-        "remotechannelimport": remotechannelimport,
-        "remotecontentimport": remotecontentimport,
-        "applyexternaltags": applyexternaltags,
-    }
-
     def __init__(self):
         self._set_empty_state()
 
@@ -444,7 +405,7 @@ class CollectionDownloadManager:
                 progress = (
                     PROGRESS_STEPS["downloading"]
                     + (
-                        PROGRESS_STEPS["tagging"]
+                        PROGRESS_STEPS["completed"]
                         - PROGRESS_STEPS["downloading"]
                     )
                     * current_task_number
@@ -453,18 +414,7 @@ class CollectionDownloadManager:
             else:
                 progress = PROGRESS_STEPS["downloading"]
 
-        elif self._stage == DownloadStage.IMPORTING_EXTRA_CHANNELS:
-            if total_tasks_number > 0:
-                progress = (
-                    PROGRESS_STEPS["tagging"]
-                    + (PROGRESS_STEPS["completed"] - PROGRESS_STEPS["tagging"])
-                    * current_task_number
-                    / total_tasks_number
-                )
-            else:
-                progress = PROGRESS_STEPS["tagging"]
-
-        elif self._stage >= DownloadStage.FOREGROUND_COMPLETED:
+        elif self._stage >= DownloadStage.COMPLETED:
             progress = PROGRESS_STEPS["completed"]
 
         return {
@@ -507,7 +457,6 @@ class CollectionDownloadManager:
 
     def _set_next_stage(self, user):
         if self._stage == DownloadStage.COMPLETED:
-            logger.info("Download completed!")
             return
 
         tasks = []
@@ -519,14 +468,22 @@ class CollectionDownloadManager:
                 tasks = self._content_manifest.get_contentimport_tasks()
             elif self._stage == DownloadStage.APPLYING_EXTERNAL_TAGS:
                 tasks = self._content_manifest.get_applyexternaltags_tasks()
-            elif self._stage == DownloadStage.IMPORTING_EXTRA_CHANNELS:
-                tasks = self._content_manifest.get_extra_channelimport_tasks()
-            elif self._stage == DownloadStage.IMPORTING_ALL_THUMBNAILS:
-                # Download the remaining content thumbnails in the background.
-                for (
-                    task
-                ) in self._content_manifest.get_contentthumbnail_tasks():
-                    self._enqueue_background_task(user, task)
+
+        if self._stage == DownloadStage.COMPLETED:
+            logger.info("Download completed!")
+
+            # Download the manifest content thumbnails and the extra channels
+            # in the background.
+            thumbnail_tasks = (
+                self._content_manifest.get_contentthumbnail_tasks()
+            )
+            extra_channel_tasks = (
+                self._content_manifest.get_extra_channelimport_tasks()
+            )
+            for task in thumbnail_tasks + extra_channel_tasks:
+                BackgroundTask.create_from_task_data(task)
+            logger.info("Starting background download tasks")
+            enqueue_next_background_task()
 
         self._tasks_pending = tasks
         self._tasks_previously_completed.extend(self._tasks_completed)
@@ -543,48 +500,12 @@ class CollectionDownloadManager:
             f" at {self._enqueuing_timestamp}"
         )
 
-        task = self.TASKS_MAPPING[self._current_task["task"]]
+        task = self._current_task["task"]
         params = self._current_task["params"]
-        self._current_job_id = _call_task(task, user, **params)
+        self._current_job_id = enqueue_task(task, user, **params)
         self._enqueuing_timestamp = None
         self._enqueued_timestamp = time.time()
         logger.info(f"Enqueued job id {self._current_job_id}")
-
-    def _enqueue_background_task(self, user, task):
-        task_func = self.TASKS_MAPPING[task["task"]]
-        job_id = _call_task(
-            task_func,
-            user,
-            queue=BACKGROUND_QUEUE,
-            priority=Priority.REGULAR,
-            **task["params"],
-        )
-        logger.info(f"Enqueued task {task} in job {job_id}")
-
-
-def _call_task(task, user, queue=QUEUE, priority=Priority.HIGH, **params):
-    """Create, validate and enqueue a job."""
-    job, _enqueue_args = task.validate_job_data(user, params)
-    job_id = job_storage.enqueue_job(job, queue=queue, priority=priority)
-    return job_id
-
-
-def _build_remotechannelimport_task(channel_id):
-    # Try to get the channel name from an existing channel database, but
-    # this will fail on first import.
-    try:
-        channel_metadata = _get_channel_metadata(channel_id)
-    except ChannelMetadata.DoesNotExist:
-        channel_name = "unknown"
-    else:
-        channel_name = channel_metadata.name
-    return {
-        "task": "remotechannelimport",
-        "params": {
-            "channel_id": channel_id,
-            "channel_name": channel_name,
-        },
-    }
 
 
 _content_manifests = []
@@ -651,10 +572,6 @@ def _get_channel_ids_for_all_content_manifests():
     for content_manifest in _content_manifests:
         channel_ids.update(content_manifest.get_channel_ids())
     return channel_ids
-
-
-def _get_channel_metadata(channel_id):
-    return ChannelMetadata.objects.get(id=channel_id)
 
 
 @api_view(["GET"])

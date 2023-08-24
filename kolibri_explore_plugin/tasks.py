@@ -1,3 +1,5 @@
+# Copyright 2023 Endless OS Foundation LLC
+# SPDX-License-Identifier: GPL-2.0-or-later
 import logging
 
 from django.core.management import call_command
@@ -5,17 +7,14 @@ from kolibri.core.content import tasks as content_tasks
 from kolibri.core.serializers import HexOnlyUUIDField
 from kolibri.core.tasks.decorators import register_task
 from kolibri.core.tasks.job import Priority
-from kolibri.core.tasks.job import State
-from kolibri.core.tasks.main import job_storage
 from kolibri.core.tasks.permissions import CanManageContent
 from kolibri.core.tasks.validation import JobValidator
 from rest_framework.serializers import CharField
 from rest_framework.serializers import ListField
 
-logger = logging.getLogger(__name__)
+from .jobs import QUEUE
 
-QUEUE = "content"
-BACKGROUND_QUEUE = "explore-bg"
+logger = logging.getLogger(__name__)
 
 
 class ExternalTagsJobValidator(JobValidator):
@@ -60,12 +59,3 @@ def applyexternaltags(node_id, tags=None):
 )
 def remotecontentimport(*args, **kwargs):
     return content_tasks.remotecontentimport.func(*args, **kwargs)
-
-
-def restart_failed_background_jobs():
-    for job in job_storage.get_all_jobs(queue=BACKGROUND_QUEUE):
-        if job.state == State.FAILED:
-            logger.info(
-                f"Restarting failed background {job.func} job {job.job_id}"
-            )
-            job_storage.restart_job(job.job_id)

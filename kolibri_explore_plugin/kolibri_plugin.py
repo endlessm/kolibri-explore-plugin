@@ -1,3 +1,5 @@
+# Copyright 2021-2023 Endless OS Foundation LLC
+# SPDX-License-Identifier: GPL-2.0-or-later
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
@@ -9,6 +11,7 @@ from kolibri.core.content.hooks import ContentNodeDisplayHook
 from kolibri.core.device.utils import is_landing_page
 from kolibri.core.device.utils import LANDING_PAGE_LEARN
 from kolibri.core.hooks import RoleBasedRedirectHook
+from kolibri.core.tasks.hooks import StorageHook
 from kolibri.core.webpack import hooks as webpack_hooks
 from kolibri.plugins import KolibriPluginBase
 from kolibri.plugins.hooks import register_hook
@@ -89,3 +92,19 @@ class ExploreContentNodeHook(ContentNodeDisplayHook):
                 + kind_slug
                 + node.id
             )
+
+
+@register_hook
+class ExploreStorageHook(StorageHook):
+    """Job storage hooks"""
+
+    def schedule(self, job, orm_job):
+        pass
+
+    def update(self, *args, **kwargs):
+        from .jobs import storage_update_hook
+
+        storage_update_hook(*args, **kwargs)
+
+    def clear(self, job, orm_job):
+        pass
