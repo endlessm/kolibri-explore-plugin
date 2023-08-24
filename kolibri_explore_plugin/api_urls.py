@@ -1,3 +1,5 @@
+# Copyright 2021-2023 Endless OS Foundation LLC
+# SPDX-License-Identifier: GPL-2.0-or-later
 from django.conf.urls import include
 from django.conf.urls import url
 from rest_framework import routers

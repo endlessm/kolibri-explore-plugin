@@ -1,3 +1,5 @@
+# Copyright 2022 Endless OS Foundation LLC
+# SPDX-License-Identifier: GPL-2.0-or-later
 from django.db import models
 from kolibri.core.content.models import ContentNode
 from morango.models import UUIDField

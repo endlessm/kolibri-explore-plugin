@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# Copyright 2021 Endless OS Foundation LLC
+# SPDX-License-Identifier: GPL-2.0-or-later
 import argparse
 
 from _common import get_available_overrides

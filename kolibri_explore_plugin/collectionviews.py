@@ -1,3 +1,5 @@
+# Copyright 2022-2023 Endless OS Foundation LLC
+# SPDX-License-Identifier: GPL-2.0-or-later
 import logging
 import os
 import time

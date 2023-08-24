@@ -1,3 +1,5 @@
+# Copyright 2021-2023 Endless OS Foundation LLC
+# SPDX-License-Identifier: GPL-2.0-or-later
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_control
 from django.views.decorators.http import etag

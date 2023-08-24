@@ -1,3 +1,5 @@
+# Copyright 2023 Endless OS Foundation LLC
+# SPDX-License-Identifier: GPL-2.0-or-later
 import logging
 
 from django.core.management import call_command
