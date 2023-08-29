@@ -1,5 +1,5 @@
 <template>
-  <b-button-toolbar keyNav aria-label="Sections">
+  <b-button-toolbar keyNav :aria-label="$tr('sectionsLabel')">
     <b-button-group
       v-for="section in mainSections"
       :key="'menu-' + section.id"
@@ -32,6 +32,12 @@ export default {
   methods: {
     getNodeUrl(node) {
       return utils.getNodeUrl(node, this.channel.id);
+    },
+  },
+  $trs: {
+    sectionsLabel: {
+      message: 'Sections',
+      context: 'Accessibility label for the list of main sections',
     },
   },
 };
