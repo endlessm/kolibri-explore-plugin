@@ -26,6 +26,23 @@
       </b-nav-text>
     </b-button-group>
     <b-navbar-nav>
+      <b-button
+        v-if="showStoreButtons"
+        size="sm"
+        pill
+        @click="toBottom"
+      >
+        <!-- We want the text below in a line by itself,
+         as it affects the spacing around it. -->
+        <!-- TODO: Truncate on smaller resolutions -->
+        <span class="d-none d-sm-inline">
+          {{ $tr('downloadLabel') }}
+        </span>
+        <span class="d-inline d-sm-none">
+          {{ $tr('downloadLabelShort') }}
+        </span>
+        <ArrowDownIcon />
+      </b-button>
       <b-nav-item
         v-if="showFeedbackButton"
         class="d-block pr-0"
@@ -51,6 +68,8 @@
   import ViewDashboardOutlineIcon from 'vue-material-design-icons/ViewDashboardOutline.vue';
   import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
   import MessageReplyTextOutlineIcon from 'vue-material-design-icons/MessageReplyTextOutline.vue';
+  import ArrowDownIcon from 'vue-material-design-icons/ArrowDown.vue';
+
   import plugin_data from 'plugin_data';
 
   import { mapMutations } from 'vuex';
@@ -63,6 +82,7 @@
       ViewDashboardOutlineIcon,
       MagnifyIcon,
       MessageReplyTextOutlineIcon,
+      ArrowDownIcon,
     },
     data() {
       return {
@@ -81,6 +101,9 @@
       },
       showDiscoveryTab() {
         return !plugin_data.hideDiscoveryTab;
+      },
+      showStoreButtons() {
+        return !!plugin_data.androidApplicationId && !!plugin_data.windowsApplicationId;
       },
     },
     created() {
@@ -113,6 +136,12 @@
           name: PageNames.SEARCH,
         });
       },
+      toBottom() {
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth',
+        });
+      },
       currentIsChannels() {
         return this.$route.name === PageNames.TOPICS_ROOT;
       },
@@ -130,6 +159,8 @@
       discoveryLabel: 'Discovery',
       libraryLabel: 'Library',
       feedbackLabel: 'Feedback',
+      downloadLabel: 'Get Endless Key',
+      downloadLabelShort: 'Get',
     },
   };
 
