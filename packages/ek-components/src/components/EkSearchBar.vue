@@ -20,7 +20,7 @@
         <input
           ref="searchInput"
           class="form-control"
-          placeholder="Type keywords to search"
+          :placeholder="$tr('searchPlaceholder')"
           :disabled="loading"
           :value="value"
           @keyup.enter="inputUpdated($event.target.value)"
@@ -99,6 +99,12 @@
         this.$emit('clear-input');
         this.focusSearchInput();
       }
+    },
+    $trs: {
+      searchPlaceholder: {
+        message: 'Type keywords to search',
+        context: 'Placeholder text in the search bar',
+      },
     },
   };
 </script>

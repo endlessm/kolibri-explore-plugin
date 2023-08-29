@@ -8,7 +8,7 @@
       aria-controls="carousel"
       @click="previous()"
     >
-      <ChevronLeftIcon title="Previous slide" />
+      <ChevronLeftIcon :title="$tr('previousSlide')" />
     </b-button>
     <div id="backgroud-block-left" :class="{ white: hasWhiteBackground }"></div>
     <div id="backgroud-block-right" :class="{ white: hasWhiteBackground }"></div>
@@ -21,7 +21,7 @@
       aria-controls="carousel"
       @click="next()"
     >
-      <ChevronRightIcon title="Next slide" />
+      <ChevronRightIcon :title="$tr('nextSlide')" />
     </b-button>
     <b-carousel
       ref="carousel"
@@ -136,6 +136,16 @@ export default {
         this.loading = true;
         this.$emit('loadMoreNodes');
       }
+    },
+  },
+  $trs: {
+    previousSlide: {
+      message: 'Previous slide',
+      context: 'Button to go to the previous slide in a slidable grid',
+    },
+    nextSlide: {
+      message: 'Next slide',
+      context: 'Button to go to the next slide in a slidable grid',
     },
   },
 };
