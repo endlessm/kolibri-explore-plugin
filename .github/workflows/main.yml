@@ -33,6 +33,10 @@ jobs:
         with:
           python-version: 3.7
 
+      - name: Install gettext for i18n
+        run: |
+          sudo apt install -y gettext
+
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
@@ -89,6 +93,10 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.7
+
+      - name: Install gettext for i18n
+        run: |
+          sudo apt install -y gettext
 
       - name: Set up Node
         uses: actions/setup-node@v3

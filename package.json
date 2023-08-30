@@ -2,14 +2,18 @@
   "name": "kolibri-explore-plugin",
   "description": "Monorepo with kolibri's Discovery page and custom channel presentations.",
   "private": true,
+  "config": {
+    "kolibri_tools_i18n_modules": "--plugins kolibri_explore_plugin --namespace ek-components --searchPath ./packages/ek-components --namespace template-ui --searchPath ./packages/template-ui --namespace welcome-screen --searchPath ./packages/welcome-screen"
+  },
   "scripts": {
-    "build": "yarn build:version && yarn build:packages && yarn deploy:welcome && yarn build:plugin && yarn build:info",
+    "build": "yarn build:version && yarn build:packages && yarn deploy:welcome && yarn build:plugin && yarn build:info && yarn build:i18n",
     "build:plugin": "./scripts/set_override.py default && kolibri-tools build prod --plugins kolibri_explore_plugin --transpile",
     "build:packages": "yarn build:libs",
     "build:libs": "lerna run build --ignore template-ui",
     "build:apps": "lerna run build --scope template-ui",
     "build:info": "./scripts/build_info.sh > kolibri_explore_plugin/static/build-info.json",
     "build:version": "python -m setuptools_scm",
+    "build:i18n": "yarn run i18n-extract && yarn run i18n-django-compilemessages",
     "build-dist": "./scripts/clean.sh && yarn clean && yarn build && python -m build",
     "deploy:apps": "./scripts/bundle_bundles.py",
     "clean": "kolibri-tools build clean --plugins kolibri_explore_plugin",
@@ -20,7 +24,13 @@
     "bump-version": "./scripts/bump_version.py",
     "deploy:welcome": "cp -rf packages/welcome-screen/dist kolibri_explore_plugin/welcomeScreen && rm -f kolibri_explore_plugin/welcomeScreen/js/*map",
     "release": "./scripts/check_can_relese.sh && twine upload -s dist/*",
-    "test:python": "python -m pytest"
+    "test:python": "python -m pytest",
+    "makemessages": "kolibri-tools i18n-extract-messages $npm_package_config_kolibri_tools_i18n_modules",
+    "i18n-extract-backend": "cd kolibri_explore_plugin && python -m kolibri manage makemessages --skip-update -l en --ignore 'node_modules/*' --ignore 'kolibri_explore_plugin/dist/*'",
+    "i18n-extract-frontend": "yarn run makemessages",
+    "i18n-extract": "yarn run i18n-extract-frontend && yarn run i18n-extract-backend",
+    "i18n-django-compilemessages": "cd kolibri_explore_plugin && PYTHONPATH=\"..:$$PYTHONPATH\" python -m kolibri manage compilemessages --skip-update",
+    "i18n-download-translations": "kolibri-tools i18n-code-gen --output-dir ./kolibri_explore_plugin/assets/src --lang-info ./kolibri_explore_plugin/locale/language_info.json && yarn run i18n-django-compilemessages && yarn exec kolibri-tools i18n-create-message-files -- $npm_package_config_kolibri_tools_i18n_modules"
   },
   "workspaces": [
     "kolibri_explore_plugin/assets",
@@ -44,8 +54,10 @@
   },
   "dependencies": {
     "@babel/preset-env": "^7.22.10",
+    "intl": "^1.2.4",
     "kolibri-design-system": "https://github.com/learningequality/kolibri-design-system#269b294bf562dd7d0e3a616aaace97bf0d3433c3",
-    "node-sass": "file:dependency-stub"
+    "node-sass": "file:dependency-stub",
+    "vue-intl": "3.1.0"
   },
   "browserslist": [
     "extends browserslist-config-kolibri"

@@ -36,3 +36,7 @@ kolibri_explore_plugin/static/collections
 # pytest files
 .pytest_cache/
 pytestdebug.log
+
+# Translations
+kolibri_explore_plugin/locale/**/LC_MESSAGES/*.csv
+kolibri_explore_plugin/locale/en/LC_MESSAGES/profiles/*

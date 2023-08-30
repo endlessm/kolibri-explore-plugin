@@ -1,0 +1,16 @@
+[
+  {
+    "crowdin_code": "en",
+    "intl_code": "en",
+    "language_name": "English",
+    "english_name": "English",
+    "default_font": "NotoSans"
+  },
+  {
+    "crowdin_code": "es-ES",
+    "intl_code": "es-es",
+    "language_name": "Español (España)",
+    "english_name": "Spanish (Spain)",
+    "default_font": "NotoSans"
+  }
+]
