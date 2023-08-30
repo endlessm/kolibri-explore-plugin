@@ -27,7 +27,7 @@ const ContentNodeKinds = [
 ];
 
 function contentKindToVerb(value) {
-  return constants.MediaTypeVerbs[value] || value;
+  return constants.mediaTypeVerb(value) || value;
 }
 
 const {

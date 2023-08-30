@@ -25,7 +25,7 @@ import ExerciseIcon from 'vue-material-design-icons/CheckboxMarkedCircleOutline.
 import Html5Icon from 'vue-material-design-icons/MotionOutline.vue';
 import BundleIcon from 'vue-material-design-icons/CubeOutline.vue';
 import VideoIcon from 'vue-material-design-icons/PlayCircleOutline.vue';
-import { MediaTypeVerbs } from '../constants';
+import { MediaTypeVerbs, mediaTypeVerb } from '../constants';
 
 export default {
   name: 'EkPlayButton',
@@ -100,7 +100,10 @@ export default {
       if (this.label) {
         return this.label;
       }
-      return (MediaTypeVerbs[this.kind] !== null && MediaTypeVerbs[this.kind] !== undefined) ? MediaTypeVerbs[this.kind] : MediaTypeVerbs['video'];
+      if (this.kind in MediaTypeVerbs) {
+        return mediaTypeVerb(this.kind);
+      }
+      return mediaTypeVerb('video');
     },
   },
 };

@@ -283,7 +283,7 @@
         this.query = '';
       },
       groupVerb(kind) {
-        return constants.MediaTypeVerbs[kind === 'topic' ? 'bundle' : kind];
+        return constants.mediaTypeVerb[kind === 'topic' ? 'bundle' : kind];
       },
       removeKeyword(keyword) {
         const words = this.keywords.filter(k => k !== keyword);

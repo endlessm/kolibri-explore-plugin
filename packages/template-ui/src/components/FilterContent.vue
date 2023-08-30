@@ -133,7 +133,7 @@ export default {
       }
     },
     contentKindToVerb(value) {
-      return constants.MediaTypeVerbs[value] || value;
+      return constants.mediaTypeVerb(value) || value;
     },
     sortOptionsByWeight(weightedOptions) {
       return Object.keys(weightedOptions).sort((a, b) => weightedOptions[b] - weightedOptions[a]);

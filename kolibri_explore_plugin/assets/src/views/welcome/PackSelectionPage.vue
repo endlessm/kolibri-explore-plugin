@@ -17,8 +17,8 @@
             <EkPackCard
               :key="pack.id"
               :packId="pack.id"
-              :title="pack.title"
-              :subTitle="pack.subtitle"
+              :title="packMetadataTitle(pack)"
+              :subTitle="packMetadataSubtitle(pack)"
               @click="choosePack(pack.id)"
             />
           </template>
@@ -32,7 +32,11 @@
 
 <script>
 
-  import { PackMetadata } from 'ek-components/src/constants';
+  import {
+    PackMetadata,
+    packMetadataTitle,
+    packMetadataSubtitle,
+  } from 'ek-components/src/constants';
   import { PageNames } from '../../constants';
   import WelcomeBase from './WelcomeBase';
 
@@ -47,6 +51,8 @@
       };
     },
     methods: {
+      packMetadataTitle,
+      packMetadataSubtitle,
       choosePack(grade) {
         // FIXME: This is hardcoded to the (currently) only option.
         const name = '0001';
