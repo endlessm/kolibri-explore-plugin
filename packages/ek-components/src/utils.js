@@ -35,6 +35,10 @@ export const ekComponentsUtilsStrings = createTranslator('EkComponentsUtils', {
     message: '{count, number} {count, plural, one {resource} other {resources}}',
     context: 'Subtitle for a topic card containing a generic resource',
   },
+  cardSubtitleByline: {
+    message: 'by {by_line}',
+    context: 'Subtitle for a non-topic card when a byline needs to be shown',
+  },
 });
 
 /** Structured tags **/
@@ -150,7 +154,11 @@ export function getCardSubtitle(node, fallback) {
     return getTopicCardSubtitle(node);
   }
   const byLine = node.author || node.license_owner || fallback;
-  return byLine ? `by ${byLine}` : '';
+
+  if (byLine)
+    return ekComponentsUtilsStrings.$tr('cardSubtitleByline', { by_line: byLine });
+  else
+    return '';
 };
 
 export function getSlug(title) {
