@@ -118,17 +118,6 @@ export const DownloadState = {
   FAILED: 'failed',
 };
 
-export const DefaultKindLabel = 'resources';
-
-// See https://github.com/learningequality/le-utils/blob/master/le_utils/constants/content_kinds.py
-export const LabelPerKind = {
-  video: 'videos',
-  audio: 'audios',
-  document: 'documents',
-  html5: 'applications',
-  zim: 'articles',
-};
-
 export const StructuredTags = {
   TOPIC: 'topic',
   SUBJECT: 'subject',
@@ -202,13 +191,11 @@ export default {
   AuthorFilterName,
   CarouselInterval,
   CollectionsSections,
-  DefaultKindLabel,
   DownloadState,
   FilterTagsBadList,
   ItemsPerPage,
   ItemsPerSlide,
   KeywordIconSize,
-  LabelPerKind,
   MediaFilterName,
   MediaQuality,
   MediaTypeVerbs,
