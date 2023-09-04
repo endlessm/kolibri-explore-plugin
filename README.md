@@ -92,6 +92,10 @@ pip install --editable .
 **Note:** you still need to enable the plugin and run migrations as in
 Usage above!
 
+**Note:** since the version number is now generated at build time, for
+the project to work in editable mode you need to workaround this by placing
+something like `__version__ = 'dev'` in `kolibri_explore_plugin/_version.py`.
+
 Then serve the plugin in watch mode:
 
 ```
