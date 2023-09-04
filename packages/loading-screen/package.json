@@ -4,9 +4,11 @@
   "license": "AGPL-3.0",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --no-module && yarn zip",
+    "build": "yarn run compile-messages && vue-cli-service build --no-module && yarn zip",
     "lint": "vue-cli-service lint",
-    "zip": "../../scripts/bundle_zip.py loading-screen.zip"
+    "zip": "../../scripts/bundle_zip.py loading-screen.zip",
+    "extract-messages": "formatjs extract 'src/**/*.{js,vue}' --format transifex --out-file lang/en-US.json",
+    "compile-messages": "formatjs compile-folder --format transifex lang compiled-lang"
   },
   "dependencies": {
     "bootstrap": "^4.6.1",

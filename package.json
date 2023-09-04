@@ -22,18 +22,19 @@
     "deploy:loading": "cp -rf packages/loading-screen/dist kolibri_explore_plugin/loadingScreen && rm -f kolibri_explore_plugin/loadingScreen/js/*map",
     "release": "./scripts/check_can_relese.sh && twine upload -s dist/*",
     "test:python": "python -m pytest",
-    "makemessages": "kolibri-tools i18n-extract-messages --plugins kolibri_explore_plugin && kolibri-tools i18n-extract-messages --namespace ek-components --searchPath ./packages/ek-components && kolibri-tools i18n-extract-messages --namespace template-ui --searchPath ./packages/template-ui && kolibri-tools i18n-extract-messages --namespace loading-screen --searchPath ./packages/loading-screen",
+    "makemessages": "kolibri-tools i18n-extract-messages --plugins kolibri_explore_plugin && kolibri-tools i18n-extract-messages --namespace ek-components --searchPath ./packages/ek-components && kolibri-tools i18n-extract-messages --namespace template-ui --searchPath ./packages/template-ui && yarn run lerna run extract-messages --scope loading-screen",
     "i18n-extract-backend": "cd kolibri_explore_plugin && python -m kolibri manage makemessages --skip-update --all --ignore 'node_modules/*' --ignore 'kolibri_explore_plugin/dist/*'",
     "i18n-extract-frontend": "yarn run makemessages",
     "i18n-extract": "yarn run i18n-extract-frontend && yarn run i18n-extract-backend",
     "i18n-django-compilemessages": "cd kolibri_explore_plugin && PYTHONPATH=\"..:$$PYTHONPATH\" python -m kolibri manage compilemessages --skip-update",
-    "i18n-download-translations": "kolibri-tools i18n-code-gen --output-dir ./kolibri_explore_plugin/assets/src --lang-info ./kolibri_explore_plugin/locale/language_info.json && yarn run i18n-django-compilemessages && yarn exec kolibri-tools i18n-create-message-files -- --plugins kolibri_explore_plugin && yarn exec kolibri-tools i18n-create-message-files -- --namespace ek-components --searchPath ./packages/ek-components && yarn exec kolibri-tools i18n-create-message-files -- --namespace template-ui --searchPath ./packages/template-ui && yarn exec kolibri-tools i18n-create-message-files -- --namespace loading-screen --searchPath ./packages/loading-screen"
+    "i18n-download-translations": "kolibri-tools i18n-code-gen --output-dir ./kolibri_explore_plugin/assets/src --lang-info ./kolibri_explore_plugin/locale/language_info.json && yarn run i18n-django-compilemessages && yarn exec kolibri-tools i18n-create-message-files -- --plugins kolibri_explore_plugin && yarn exec kolibri-tools i18n-create-message-files -- --namespace ek-components --searchPath ./packages/ek-components && yarn exec kolibri-tools i18n-create-message-files -- --namespace template-ui --searchPath ./packages/template-ui && lerna run compile-messages --stream --scope loading-screen"
   },
   "workspaces": [
     "kolibri_explore_plugin/assets",
     "packages/*"
   ],
   "devDependencies": {
+    "@formatjs/cli": "^4.5.0",
     "lerna": "^4.0.0",
     "sass": "^1.49.9",
     "webpack": "^5.86.0",
