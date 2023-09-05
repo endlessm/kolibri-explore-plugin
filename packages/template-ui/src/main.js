@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
+import { i18nSetup } from 'kolibri.utils.i18n';
 import App from '@/App.vue';
 
 import router from '@/router';
@@ -29,16 +30,12 @@ const ContentDownloadProxyPlugin = {
 
 Vue.use(ContentDownloadProxyPlugin);
 
-// FIXME hook i18n. This is a workaround to allow EK components that
-// use internationalization in the template-ui.
-Vue.prototype.$tr = function $tr(messageId) {
-  return this.$options.$trs[messageId];
-};
+i18nSetup().then(() => {
+  dynamicLoadComponents();
 
-dynamicLoadComponents();
-
-window.app = new Vue({
-  router,
-  store,
-  render: (h) => h(App),
-}).$mount('#app');
+  window.app = new Vue({
+    router,
+    store,
+    render: (h) => h(App),
+  }).$mount('#app');
+});
