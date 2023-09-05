@@ -23,7 +23,7 @@
       </b-badge>
 
       <div v-if="content.license_description" id="license" class="my-3 text-muted">
-        <strong>License — {{ content.license_name }}</strong>
+        <strong>{{ $tr('licenseHeading', { license_name: content.license_name }) }}</strong>
         <p> {{ content.license_description }} </p>
       </div>
     </component>
@@ -40,7 +40,7 @@
       >
         <b-container>
           <h4 class="next-title text-dark text-truncate w-75">
-            Next in {{ sectionTitle }}
+            {{ $tr('nextIn', { name: sectionTitle }) }}
           </h4>
         </b-container>
       </EkCardGrid>
@@ -119,6 +119,16 @@ export default {
     onNextNodesUpdated(nodeId) {
       return this.onNodeUpdated(nodeId, this.nextNodesInTopic);
     }
+  },
+  $trs: {
+    licenseHeading: {
+      message: 'License — {license_name}',
+      context: 'Heading for the license of a bundle',
+    },
+    nextIn: {
+      message: 'Next in {name}',
+      context: 'Heading for the next part of a grid of content; {name} is a section name',
+    },
   },
 };
 </script>

@@ -95,7 +95,7 @@ export default {
     },
     currentItem() {
       if (this.isSearchPageCurrent) {
-        return { "title": "Search Keywords" };
+        return { "title": this.$tr('searchKeywords') };
       }
       return this.node;
     },
@@ -107,6 +107,12 @@ export default {
         path,
         query: { clearFilters: path === '/' },
       };
+    },
+  },
+  $trs: {
+    searchKeywords: {
+      message: 'Search Keywords',
+      context: 'Breadcrumb used when the user has performed a search',
     },
   },
 };
