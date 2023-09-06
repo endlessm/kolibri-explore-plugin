@@ -1,4 +1,7 @@
 <template>
+  <!-- This is deliberately not translated for the moment, as the canonical
+       legal text will always be English.
+       See https://github.com/endlessm/kolibri-explore-plugin/issues/771#issuecomment-1697951996 -->
   <div>
     <p><em>Last Revised: October 5th, 2022</em></p>
     <p>

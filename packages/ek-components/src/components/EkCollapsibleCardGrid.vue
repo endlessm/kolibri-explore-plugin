@@ -16,9 +16,9 @@
         variant="outline-dark"
         @click="showMore"
       >
-        <b-spinner v-if="loading" label="Spinning" small />
+        <b-spinner v-if="loading" :label="$tr('spinnerLabel')" small />
         <span v-else>
-          Show more
+          {{ $tr('showMoreButton') }}
         </span>
       </b-button>
       <b-button
@@ -28,7 +28,7 @@
         variant="outline-dark"
         @click="showLess"
       >
-        <span>Show less</span>
+        <span>{{ $tr('showLessButton') }}</span>
       </b-button>
     </b-row>
   </span>
@@ -130,6 +130,20 @@ export default {
     },
     onNodeUpdated(nodeId) {
       this.$emit('nodeUpdated', nodeId);
+    },
+  },
+  $trs: {
+    showMoreButton: {
+      message: 'Show more',
+      context: 'Button to expand a collapsible card grid',
+    },
+    showLessButton: {
+      message: 'Show less',
+      context: 'Button to collapse a collapsible card grid',
+    },
+    spinnerLabel: {
+      message: 'Spinning',
+      context: 'Label for a loading spinner',
     },
   },
 };
