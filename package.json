@@ -6,7 +6,7 @@
     "kolibri_tools_i18n_modules": "--plugins kolibri_explore_plugin --namespace ek-components --searchPath ./packages/ek-components --namespace template-ui --searchPath ./packages/template-ui --namespace welcome-screen --searchPath ./packages/welcome-screen"
   },
   "scripts": {
-    "build": "yarn build:version && yarn build:packages && yarn deploy:welcome && yarn build:plugin && yarn build:info && yarn build:i18n",
+    "build": "yarn build:version && yarn build:packages && yarn deploy:welcome && yarn build:plugin && yarn build:info",
     "build:plugin": "./scripts/set_override.py default && kolibri-tools build prod --plugins kolibri_explore_plugin --transpile",
     "build:packages": "yarn build:libs",
     "build:libs": "lerna run build --ignore template-ui",
