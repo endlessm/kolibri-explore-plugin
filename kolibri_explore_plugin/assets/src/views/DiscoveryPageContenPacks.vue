@@ -91,6 +91,7 @@
   import AboutFooter from '../components/AboutFooter';
   import { ContentNodeExtrasResource } from '../apiResources';
   import navigationMixin from '../mixins/navigationMixin';
+  import { getBigThumbnail, getChannelIcon } from '../customApps';
 
   export default {
     name: 'DiscoveryPageContenPacks',
@@ -142,7 +143,9 @@
           no_available_filtering: true,
         }).then(({ data }) => {
           const nodes = data.map(n => {
-            return this.rootNodes.find(c => c.id === n.channel_id);
+            n.bigThumbnail = getBigThumbnail(n);
+            n.thumbnail = getChannelIcon(n);
+            return n;
           });
           this.sectionNodes['featured-channel'] = nodes;
         });
