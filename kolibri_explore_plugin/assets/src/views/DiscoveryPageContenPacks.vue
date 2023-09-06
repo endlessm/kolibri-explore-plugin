@@ -89,7 +89,7 @@
   import { utils, constants } from 'ek-components';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
   import AboutFooter from '../components/AboutFooter';
-  import { ContentNodeExtrasResource } from '../apiResources';
+  import { ChannelResource, ContentNodeExtrasResource } from '../apiResources';
   import navigationMixin from '../mixins/navigationMixin';
   import { getBigThumbnail, getChannelIcon } from '../customApps';
 
@@ -141,14 +141,21 @@
         const featuredPromise = ContentNodeExtrasResource.fetchByExternalTag('featured-channel', {
           only_root_nodes: true,
           no_available_filtering: true,
-        }).then(({ data }) => {
-          const nodes = data.map(n => {
-            n.bigThumbnail = getBigThumbnail(n);
-            n.thumbnail = getChannelIcon(n);
-            return n;
+        })
+          .then(({ data }) => {
+            return Promise.all(
+              data.map(n => {
+                return ChannelResource.fetchModel({ id: n.channel_id }).then(c => {
+                  n.bigThumbnail = getBigThumbnail(c);
+                  n.thumbnail = getChannelIcon(c);
+                  return n;
+                });
+              })
+            );
+          })
+          .then(nodes => {
+            this.sectionNodes['featured-channel'] = nodes;
           });
-          this.sectionNodes['featured-channel'] = nodes;
-        });
 
         return Promise.all([featuredPromise, ...promises]).then(() => {
           this.loadingNodes = false;
