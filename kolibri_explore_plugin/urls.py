@@ -4,7 +4,7 @@ import os
 
 from django.conf.urls import url
 
-from ._version import __version__ as VERSION
+from . import __version__ as VERSION
 from .views import AppFileView
 from .views import AppMetadataView
 from .views import ExploreView
