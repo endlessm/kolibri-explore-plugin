@@ -6,10 +6,6 @@ import App from '@/App.vue';
 
 import PackSelection from '@/views/PackSelection.vue';
 import PackReady from '@/views/PackReady.vue';
-import UsbDriveConnection from '@/views/UsbDriveConnection.vue';
-import PermissionsExplanation from '@/views/PermissionsExplanation.vue';
-import PermissionsCancelled from '@/views/PermissionsCancelled.vue';
-import PermissionsWrongFolder from '@/views/PermissionsWrongFolder.vue';
 import Loading from '@/views/Loading.vue';
 import LoadingInitial from '@/views/LoadingInitial.vue';
 import LoadingError from '@/views/LoadingError.vue';
@@ -38,15 +34,6 @@ const routes = [
   { path: '/welcome', component: Welcome },
   { path: '/select-pack', component: PackSelection },
   { path: '/pack-ready', component: PackReady },
-  { path: '/endless-key', component: UsbDriveConnection },
-  {
-    path: '/endless-key-required',
-    component: UsbDriveConnection,
-    props: { required: true },
-  },
-  { path: '/grant-permissions', component: PermissionsExplanation },
-  { path: '/permissions-cancelled', component: PermissionsCancelled },
-  { path: '/permissions-wrong-folder', component: PermissionsWrongFolder },
 ];
 
 const router = new VueRouter({

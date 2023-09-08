@@ -25,24 +25,6 @@ export default {
       showWelcome: () => {
         this.navigateTo('/welcome');
       },
-      showConnectKey: () => {
-        this.navigateTo('/endless-key');
-      },
-      showConnectKeyRequired: () => {
-        this.navigateTo('/endless-key-required');
-      },
-      showPermissionsCancelled: () => {
-        this.navigateTo('/permissions-cancelled');
-      },
-      showPermissionsWrongFolder: () => {
-        this.navigateTo('/permissions-wrong-folder');
-      },
-      setHasUSB: (isUsbConnected) => {
-        this.$store.commit('setUsbConnected', isUsbConnected);
-      },
-      setNeedsPermission: (needsPermission) => {
-        this.$store.commit('setNeedsPermission', needsPermission);
-      },
     };
   },
   methods: {
