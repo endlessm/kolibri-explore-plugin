@@ -24,6 +24,11 @@ Vue.use(EkComponents);
 
 Vue.config.productionTip = false;
 
+// FIXME temporary workaround while migrating views using ek-components to the plugin
+Vue.prototype.$tr = function $tr(messageId) {
+  return this.$options.$trs[messageId];
+};
+
 const routes = [
   { path: '/', redirect: '/loading/initial' },
   { path: '/loading/default', component: Loading },
