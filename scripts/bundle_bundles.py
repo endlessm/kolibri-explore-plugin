@@ -73,6 +73,9 @@ with tempfile.TemporaryDirectory() as dest_path:
         zip_name = f"{override}.zip"
         copy_bundle_zip(TEMPLATE_WORKSPACE, dest_path, override, zip_name)
 
+    # Note that this is using the zipfile default of no compression.
+    # That's fine as the inner bundles are compressed and it would take
+    # a long time to compress the outer zip with no appreciable savings.
     with zipfile.ZipFile("apps-bundle.zip", "w") as bundle:
         for dirname, dirs, files in os.walk(dest_path):
             for f in files:

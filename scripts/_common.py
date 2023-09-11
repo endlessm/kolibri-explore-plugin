@@ -37,7 +37,7 @@ HIGHLIGHTED_CONTENT_PATH = os.path.join(
 BUNDLE_EXCLUDE_GLOBS = ["*.map"]
 
 
-def bundle_zip(zip_name, compression=zipfile.ZIP_LZMA):
+def bundle_zip(zip_name, compression=zipfile.ZIP_DEFLATED):
     root_path = Path("dist")
 
     if not zip_name.endswith(".zip"):
