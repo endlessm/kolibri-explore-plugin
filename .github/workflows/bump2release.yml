@@ -36,10 +36,10 @@ jobs:
           git config --global user.name $GIT_USERNAME
           git config --global user.email $GIT_USEREMAIL
 
-      - name: Set up Python 3.7
+      - name: Set up Python 3.9
         uses: actions/setup-python@v4
         with:
-          python-version: 3.7
+          python-version: 3.9
 
       - name: Set up Node
         uses: actions/setup-node@v3
