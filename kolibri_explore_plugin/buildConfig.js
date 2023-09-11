@@ -5,4 +5,10 @@ module.exports = [
       entry: './assets/src/app.js',
     },
   },
+  {
+    bundle_id: 'side_nav',
+    webpack_config: {
+      entry: './assets/src/views/ExploreSideNavEntry.js',
+    },
+  },
 ];

@@ -12,7 +12,7 @@
         <ViewDashboardOutlineIcon />
         <!-- We want the text below in a line by itself,
          as it affects the spacing around it. -->
-        {{ $tr('discoveryLabel') }}
+        {{ exploreString('discoveryLabel') }}
       </b-nav-text>
       <b-nav-text
         class="btn discovery-tab py-3 rounded-0 text-primary"
@@ -22,7 +22,7 @@
         <MagnifyIcon />
         <!-- We want the text below in a line by itself,
          as it affects the spacing around it. -->
-        {{ $tr('libraryLabel') }}
+        {{ exploreString('libraryLabel') }}
       </b-nav-text>
     </b-button-group>
     <b-navbar-nav>
@@ -74,6 +74,7 @@
 
   import { mapMutations } from 'vuex';
   import { assets } from 'ek-components';
+  import commonExploreStrings from '../views/commonExploreStrings';
   import { PageNames } from '../constants';
 
   export default {
@@ -84,6 +85,7 @@
       MessageReplyTextOutlineIcon,
       ArrowDownIcon,
     },
+    mixins: [commonExploreStrings],
     data() {
       return {
         isOffline: false,
@@ -156,8 +158,6 @@
       },
     },
     $trs: {
-      discoveryLabel: 'Discovery',
-      libraryLabel: 'Library',
       feedbackLabel: 'Feedback',
       downloadLabel: 'Get Endless Key',
       downloadLabelShort: 'Get',
