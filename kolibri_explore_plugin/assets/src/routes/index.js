@@ -15,6 +15,27 @@ export default [
     },
   },
   {
+    name: PageNames.WELCOME_ROOT,
+    path: '/welcome',
+    handler: () => {
+      store.commit('SET_PAGE_NAME', PageNames.WELCOME_ROOT);
+    },
+  },
+  {
+    name: PageNames.WELCOME_PACK_SELECTION,
+    path: '/welcome/select-pack',
+    handler: () => {
+      store.commit('SET_PAGE_NAME', PageNames.WELCOME_PACK_SELECTION);
+    },
+  },
+  {
+    name: PageNames.WELCOME_PACK_READY,
+    path: '/welcome/pack-ready/:grade/:name',
+    handler: () => {
+      store.commit('SET_PAGE_NAME', PageNames.WELCOME_PACK_READY);
+    },
+  },
+  {
     name: PageNames.DOWNLOAD,
     path: '/download/:grade/:name',
     handler: (_toRoute, fromRoute) => {
