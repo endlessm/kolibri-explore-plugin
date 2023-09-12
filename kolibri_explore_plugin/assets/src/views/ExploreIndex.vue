@@ -39,6 +39,9 @@
   import ContentUnavailablePage from './ContentUnavailablePage';
   import SearchPage from './SearchPage';
   import ContentPage from './ContentPage';
+  import WelcomePage from './welcome/WelcomePage';
+  import PackSelectionPage from './welcome/PackSelectionPage';
+  import PackReadyPage from './welcome/PackReadyPage';
   import DownloadPage from './DownloadPage';
   import DevTag from './DevTag';
   import ContentModal from './ContentModal';
@@ -50,6 +53,9 @@
     [PageNames.CONTENT_UNAVAILABLE]: ContentUnavailablePage,
     [PageNames.SEARCH]: SearchPage,
     [PageNames.CONTENT]: ContentPage,
+    [PageNames.WELCOME_ROOT]: WelcomePage,
+    [PageNames.WELCOME_PACK_SELECTION]: PackSelectionPage,
+    [PageNames.WELCOME_PACK_READY]: PackReadyPage,
     [PageNames.DOWNLOAD]: DownloadPage,
   };
 
