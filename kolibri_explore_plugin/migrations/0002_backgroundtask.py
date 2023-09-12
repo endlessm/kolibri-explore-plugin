@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 def populate_existing_jobs(apps, schema_editor):
     """Populate BackgroundTask entries from existing background jobs"""
-    from kolibri.core.tasks.registry import job_storage
+    from kolibri.core.tasks.main import job_storage
     from kolibri_explore_plugin.jobs import BACKGROUND_QUEUE
     from kolibri_explore_plugin.jobs import TaskType
 
@@ -30,16 +30,16 @@ def populate_existing_jobs(apps, schema_editor):
         if job.func == TaskType.APPLYEXTERNALTAGS:
             if "node_id" not in params and len(job.args) > 0:
                 params["node_id"] = job.args[0]
-        elif job.fun == TaskType.REMOTECHANNELIMPORT:
+        elif job.func == TaskType.REMOTECHANNELIMPORT:
             if "channel_id" not in params and len(job.args) > 0:
                 params["channel_id"] = job.args[0]
-        elif job.fun == TaskType.REMOTECONTENTIMPORT:
+        elif job.func == TaskType.REMOTECONTENTIMPORT:
             if "channel_id" not in params and len(job.args) > 0:
                 params["channel_id"] = job.args[0]
 
         task = BackgroundTask.objects.create(
             func=job.func,
-            params=json.dumps(params),
+            params=json.dumps(params, sort_keys=True),
             job_id=job.job_id,
             job_state=job.state,
         )
@@ -111,6 +111,9 @@ class Migration(migrations.Migration):
                 ),
             ],
         ),
-        # Populate from existing jobs after the table is created.
-        migrations.RunPython(populate_existing_jobs),
+        # Populate from existing jobs after the table is created. Do
+        # nothing when reversing the migration.
+        migrations.RunPython(
+            populate_existing_jobs, migrations.RunPython.noop
+        ),
     ]
