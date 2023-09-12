@@ -1,5 +1,5 @@
 <template>
-  <WelcomeBase title="Could not start Endless Key" titleVariant="text-danger">
+  <LoadingBase title="Could not start Endless Key" titleVariant="text-danger">
     <template #header-top>
       <b-icon-exclamation-circle variant="dark" fontScale="4" class="mb-3 w-100" />
     </template>
@@ -9,16 +9,16 @@
         double clicking the launcher again.
       </h4>
     </template>
-  </WelcomeBase>
+  </LoadingBase>
 </template>
 
 <script>
-  import WelcomeBase from './WelcomeBase.vue';
+  import LoadingBase from './LoadingBase.vue';
 
   export default {
     name: 'LoadingError',
     components: {
-      WelcomeBase,
+      LoadingBase,
     },
   };
 </script>

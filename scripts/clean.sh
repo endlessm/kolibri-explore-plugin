@@ -15,4 +15,4 @@ rm -fr kolibri_explore_plugin/static/kolibri_explore_plugin*
 rm -fr kolibri_explore_plugin/static/build-info.json
 rm -fr kolibri_explore_plugin/build
 rm -fr kolibri_explore_plugin/__pycache__
-rm -fr kolibri_explore_plugin/welcomeScreen
+rm -fr kolibri_explore_plugin/loadingScreen
