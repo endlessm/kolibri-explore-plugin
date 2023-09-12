@@ -5,10 +5,11 @@
         <b-col cols="7">
           <slot>
             <h1 class="text-secondary">
-              {{ $tr('noResults') }}
+              There are no results containing all of your filter options.
             </h1>
             <h5 class="text-muted">
-              {{ $tr('noResultsGuidance') }}
+              You can try fewer filter options, different filter options, or explore
+              the topics below.
             </h5>
           </slot>
         </b-col>
@@ -23,7 +24,7 @@
       <b-row>
         <b-container>
           <h4 class="explore-title text-dark text-truncate w-75">
-            {{ $tr('exploreTopics') }}
+            Explore topics
           </h4>
         </b-container>
       </b-row>
@@ -44,20 +45,6 @@
     },
     computed: {
       ...mapState(['mainSections', 'cardColumns', 'mediaQuality']),
-    },
-    $trs: {
-      noResults: {
-        message: 'There are no results containing all of your filter options.',
-        context: 'Page content shown when there are no filter results',
-      },
-      noResultsGuidance: {
-        message: 'You can try fewer filter options, different filter options, or explore the topics below.',
-        context: 'Guidance shown to help the user work out what to do next when no filter results are found',
-      },
-      exploreTopics: {
-        message: 'Explore topics',
-        context: 'Heading shown when there are no filter results',
-      },
     },
   };
 </script>

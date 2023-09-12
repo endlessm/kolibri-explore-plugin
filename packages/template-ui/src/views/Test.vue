@@ -1,5 +1,4 @@
 <template>
-  <!-- Deliberately not localised because it’s only test content -->
   <div class="root">
     <b-container class="bg-white pt-5">
       <h3 class="">
