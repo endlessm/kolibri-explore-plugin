@@ -4,13 +4,10 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import EkComponents from 'ek-components';
 import App from '@/App.vue';
 
-import PackSelection from '@/views/PackSelection.vue';
-import PackReady from '@/views/PackReady.vue';
 import Loading from '@/views/Loading.vue';
 import LoadingInitial from '@/views/LoadingInitial.vue';
 import LoadingError from '@/views/LoadingError.vue';
 import LoadingRetry from '@/views/LoadingRetry.vue';
-import Welcome from '@/views/Welcome.vue';
 import store from "@/store";
 
 Vue.use(BootstrapVue);
@@ -31,9 +28,6 @@ const routes = [
   { path: '/loading/initial', component: LoadingInitial },
   { path: '/loading/error', component: LoadingError },
   { path: '/loading/retry', component: LoadingRetry },
-  { path: '/welcome', component: Welcome },
-  { path: '/select-pack', component: PackSelection },
-  { path: '/pack-ready', component: PackReady },
 ];
 
 const router = new VueRouter({

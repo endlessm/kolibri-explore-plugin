@@ -22,9 +22,6 @@ export default {
       showLoadingError: () => {
         this.navigateTo('/loading/error');
       },
-      showWelcome: () => {
-        this.navigateTo('/welcome');
-      },
     };
   },
   methods: {

@@ -1,5 +1,58 @@
 <template>
 
-  <h1>Select Pack</h1>
+  <WelcomeBase title="Which option sounds most like you?">
+    <template #body>
+
+      <b-container class="no-container-padding text-left">
+        <EkSlidableGrid
+          v-slot="slotProps"
+          class="mb-3"
+          :nodes="PackMetadata"
+          :hasWhiteBackground="true"
+          :itemsPerSlide="{ lg: 3, md: 2, sm: 1 }"
+        >
+          <template
+            v-for="pack in slotProps.slideNodes"
+          >
+            <EkPackCard
+              :key="pack.id"
+              :packId="pack.id"
+              :title="pack.title"
+              :subTitle="pack.subtitle"
+              @click="choosePack(pack.id)"
+            />
+          </template>
+        </EkSlidableGrid>
+      </b-container>
+    </template>
+  </WelcomeBase>
 
 </template>
+
+
+<script>
+
+  import { PackMetadata } from 'ek-components/src/constants';
+  import { PageNames } from '../../constants';
+  import WelcomeBase from './WelcomeBase';
+
+  export default {
+    name: 'PackSelectionPage',
+    components: {
+      WelcomeBase,
+    },
+    data() {
+      return {
+        PackMetadata,
+      };
+    },
+    methods: {
+      choosePack(grade) {
+        // FIXME: This is hardcoded to the (currently) only option.
+        const name = '0001';
+        this.$router.push({ name: PageNames.WELCOME_PACK_READY, params: { grade, name } });
+      },
+    },
+  };
+
+</script>
