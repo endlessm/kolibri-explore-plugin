@@ -141,7 +141,10 @@
         return this.setUpdateInterval();
       },
       onConfirm() {
-        this.$router.go(0);
+        // Reload the page so the app fetches new data from the backend. Upon
+        // reloading, it will redirect to the landing page.
+        // <https://github.com/endlessm/kolibri-explore-plugin/issues/687>
+        window.location.reload();
       },
       updateLoop() {
         return this.updateDownload()
