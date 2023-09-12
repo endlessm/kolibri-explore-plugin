@@ -1,6 +1,6 @@
 <template>
   <b-container
-    class="d-flex flex-column flex-grow-1 no-container-padding welcome-container"
+    class="d-flex flex-column flex-grow-1 loading-container no-container-padding"
   >
     <b-container
       class="d-flex flex-column flex-grow-1 justify-content-center no-container-padding"
@@ -30,7 +30,7 @@
 
 <script>
   export default {
-    name: 'WelcomeBase',
+    name: 'LoadingBase',
     props: {
       title: {
         type: String,
@@ -56,7 +56,7 @@
 <style lang="scss" scoped>
   @import '../styles';
 
-  .welcome-container {
+  .loading-container {
     padding-top: $spacer;
     padding-bottom: $spacer;
 

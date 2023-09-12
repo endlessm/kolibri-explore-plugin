@@ -12,10 +12,10 @@
 export default {
   name: 'App',
   created () {
-    document.title = "Welcome";
+    document.title = "Loading";
   },
   mounted() {
-    window.WelcomeApp = {
+    window.LoadingApp = {
       showLoadingRetry: () => {
         this.navigateTo('/loading/retry');
       },

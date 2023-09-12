@@ -1,5 +1,5 @@
 <template>
-  <WelcomeBase title="Welcome to Endless Key!">
+  <LoadingBase title="Welcome to Endless Key!">
     <template #header-top>
       <div class="w-100">
         <img :src="loadingImage" class="mb-1" width="128">
@@ -11,18 +11,18 @@
       </h5>
       <img :src="kolibriImage" width="64">
     </template>
-  </WelcomeBase>
+  </LoadingBase>
 </template>
 
 <script>
   import LoadingImage from 'ek-components/src/assets/loading-animation.gif';
   import kolibriImage from '../assets/kolibri-logo.svg';
-  import WelcomeBase from './WelcomeBase.vue';
+  import LoadingBase from './LoadingBase.vue';
 
   export default {
     name: 'LoadingInitial',
     components: {
-      WelcomeBase,
+      LoadingBase,
     },
     data() {
       return {
