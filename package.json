@@ -2,9 +2,6 @@
   "name": "kolibri-explore-plugin",
   "description": "Monorepo with kolibri's Discovery page and custom channel presentations.",
   "private": true,
-  "config": {
-    "kolibri_tools_i18n_modules": "--plugins kolibri_explore_plugin --namespace ek-components --searchPath ./packages/ek-components --namespace template-ui --searchPath ./packages/template-ui --namespace welcome-screen --searchPath ./packages/welcome-screen"
-  },
   "scripts": {
     "build": "yarn build:version && yarn build:packages && yarn deploy:welcome && yarn build:plugin && yarn build:info",
     "build:plugin": "./scripts/set_override.py default && kolibri-tools build prod --plugins kolibri_explore_plugin --transpile",
@@ -25,12 +22,12 @@
     "deploy:welcome": "cp -rf packages/welcome-screen/dist kolibri_explore_plugin/welcomeScreen && rm -f kolibri_explore_plugin/welcomeScreen/js/*map",
     "release": "./scripts/check_can_relese.sh && twine upload -s dist/*",
     "test:python": "python -m pytest",
-    "makemessages": "kolibri-tools i18n-extract-messages $npm_package_config_kolibri_tools_i18n_modules",
+    "makemessages": "kolibri-tools i18n-extract-messages --plugins kolibri_explore_plugin && kolibri-tools i18n-extract-messages --namespace ek-components --searchPath ./packages/ek-components && kolibri-tools i18n-extract-messages --namespace template-ui --searchPath ./packages/template-ui && kolibri-tools i18n-extract-messages --namespace welcome-screen --searchPath ./packages/welcome-screen",
     "i18n-extract-backend": "cd kolibri_explore_plugin && python -m kolibri manage makemessages --skip-update -l en --ignore 'node_modules/*' --ignore 'kolibri_explore_plugin/dist/*'",
     "i18n-extract-frontend": "yarn run makemessages",
     "i18n-extract": "yarn run i18n-extract-frontend && yarn run i18n-extract-backend",
     "i18n-django-compilemessages": "cd kolibri_explore_plugin && PYTHONPATH=\"..:$$PYTHONPATH\" python -m kolibri manage compilemessages --skip-update",
-    "i18n-download-translations": "kolibri-tools i18n-code-gen --output-dir ./kolibri_explore_plugin/assets/src --lang-info ./kolibri_explore_plugin/locale/language_info.json && yarn run i18n-django-compilemessages && yarn exec kolibri-tools i18n-create-message-files -- $npm_package_config_kolibri_tools_i18n_modules"
+    "i18n-download-translations": "kolibri-tools i18n-code-gen --output-dir ./kolibri_explore_plugin/assets/src --lang-info ./kolibri_explore_plugin/locale/language_info.json && yarn run i18n-django-compilemessages && yarn exec kolibri-tools i18n-create-message-files -- --plugins kolibri_explore_plugin && yarn exec kolibri-tools i18n-create-message-files -- --namespace ek-components --searchPath ./packages/ek-components && yarn exec kolibri-tools i18n-create-message-files -- --namespace template-ui --searchPath ./packages/template-ui && yarn exec kolibri-tools i18n-create-message-files -- --namespace welcome-screen --searchPath ./packages/welcome-screen"
   },
   "workspaces": [
     "kolibri_explore_plugin/assets",
