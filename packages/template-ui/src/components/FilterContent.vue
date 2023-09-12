@@ -12,7 +12,7 @@
       variant="link"
       @click="clearFilter({})"
     >
-      {{ $tr('clearFiltersButton') }}
+      clear filters
     </b-button>
   </b-container>
 </template>
@@ -138,12 +138,6 @@ export default {
     sortOptionsByWeight(weightedOptions) {
       return Object.keys(weightedOptions).sort((a, b) => weightedOptions[b] - weightedOptions[a]);
     }
-  },
-  $trs: {
-    clearFiltersButton: {
-      message: 'clear filters',
-      context: 'Label for a button to clear media filters',
-    },
   },
 };
 </script>

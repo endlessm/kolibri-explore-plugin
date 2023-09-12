@@ -23,7 +23,7 @@
       <div class="description mb-2 w-50" v-html="section.description"></div>
 
       <div v-if="section.license_description" id="license" class="my-3 text-muted">
-        <strong>{{ $tr('licenseHeading', { license_name: section.license_name }) }}</strong>
+        <strong>License — {{ section.license_name }}</strong>
         <p> {{ section.license_description }} </p>
       </div>
 
@@ -76,12 +76,6 @@ export default {
       if (this.sectionNodes.hasMoreNodes) {
         this.$emit('loadMoreNodes');
       }
-    },
-  },
-  $trs: {
-    licenseHeading: {
-      message: 'License — {license_name}',
-      context: 'Heading for the license of a bundle',
     },
   },
 };

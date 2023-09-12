@@ -40,7 +40,7 @@
           @click="clearFilter({ filter })"
         >
           <CloseIcon class="mr-1" />
-          {{ $tr('clearAllButton') }}
+          clear all
         </b-button>
       </b-dropdown-form>
     </div>
@@ -95,12 +95,6 @@
 
         const selected = this.isSelected(filter, option);
         this.onOptionClick({ filter, option, checked: !selected });
-      },
-    },
-    $trs: {
-      clearAllButton: {
-        message: 'clear all',
-        context: 'Label for a button to clear all media filters',
       },
     },
   };

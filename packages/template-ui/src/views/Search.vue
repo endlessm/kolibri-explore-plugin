@@ -13,7 +13,7 @@
       <b-row alignH="between">
         <b-col>
           <b-form-checkbox v-model="hideUnavailable" name="check-hide-unavailable" switch>
-            {{ $tr('onlyDownloadedItems') }}
+            Only downloaded items
           </b-form-checkbox>
         </b-col>
       </b-row>
@@ -21,10 +21,11 @@
 
     <EmptyResultsMessage v-if="notFound" :showTopics="false">
       <h1 class="text-secondary">
-        {{ $tr('noContentFound') }}
+        Sorry, we can’t find any content that matches your search.
       </h1>
       <h5 class="text-muted">
-        {{ $tr('noContentFoundGuidance') }}
+        You can try a different search, maybe use fewer words, or try one
+        of the topic suggestions below.
       </h5>
     </EmptyResultsMessage>
 
@@ -37,7 +38,7 @@
       <b-row>
         <b-container>
           <h4 class="explore-title text-dark text-truncate w-75">
-            {{ $tr('exploreTopics') }}
+            Explore topics
           </h4>
         </b-container>
       </b-row>
@@ -51,7 +52,7 @@
       @nodeUpdated="onResultNodesUpdated"
     >
       <div class="font-weight-bold my-4 text-muted">
-        {{ $tr('resultsCount', { num_results: totalResults }) }}
+        {{ totalResults }} Results
         <EkKeywords :words="keywords" @click="removeKeyword" />
       </div>
     </EkCardGrid>
@@ -143,28 +144,6 @@ export default {
     },
     onResultNodesUpdated(nodeId) {
       return this.onNodeUpdated(nodeId, this.resultNodes);
-    },
-  },
-  $trs: {
-    onlyDownloadedItems: {
-      message: 'Only downloaded items',
-      context: 'Label for a search filter checkbox',
-    },
-    noContentFound: {
-      message: 'Sorry, we can’t find any content that matches your search.',
-      context: 'Text shown to the user when a search returns no results',
-    },
-    noContentFoundGuidance: {
-      message: 'You can try a different search, maybe use fewer words, or try one of the topic suggestions below.',
-      context: 'Guidance given to the user when no search results are found',
-    },
-    exploreTopics: {
-      message: 'Explore topics',
-      context: 'Heading for a section of content grid in the search results',
-    },
-    resultsCount: {
-      message: '{num_results, number, integer} {num_results, plural, one {Result} other {Results}}',
-      context: 'Number of results for a search',
     },
   },
 };

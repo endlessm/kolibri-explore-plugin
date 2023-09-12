@@ -12,7 +12,7 @@
             to="/search"
           >
             <MagnifyIcon :size="iconSize" class="mr-1" />
-            {{ $tr('searchKeywordsButton') }}
+            Search Keywords
           </b-button>
         </MainSections>
       </b-col>
@@ -26,7 +26,7 @@
           @click="downloadChannel()"
         >
           <CloudDownloadOutlineIcon :size="iconSize" class="mr-1" />
-          {{ $tr('downloadFullChannelButton') }}
+          Download full channel
         </b-button>
       </b-col>
 
@@ -56,16 +56,6 @@ export default {
   methods: {
     downloadChannel() {
       window.kolibri.downloadChannel();
-    },
-  },
-  $trs: {
-    searchKeywordsButton: {
-      message: 'Search Keywords',
-      context: 'Label for a button to search by keyword',
-    },
-    downloadFullChannelButton: {
-      message: 'Download full channel',
-      context: 'Label for a button to download a full channel',
     },
   },
 };

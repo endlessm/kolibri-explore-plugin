@@ -13,7 +13,7 @@
       <template #right>
         <div v-if="isEndlessApp" class="endless-seal text-right">
           <div class="mb-1">
-            {{ $tr('bestOfTheWeb') }}
+            <span class="font-weight-bold">Best of the Web</span> curated by
           </div>
           <img :src="logo" aria-hidden="true">
         </div>
@@ -32,14 +32,6 @@ export default {
     ...mapState(['channel', 'isEndlessApp']),
     logo() {
       return EndlessLogo;
-    },
-  },
-  $trs: {
-    bestOfTheWeb: {
-      // FIXME: This isn’t translatable to languages where the logo can’t be a suffix,
-      // or RTL languages.
-      message: '<strong>Best of the Web</strong> curated by ',
-      context: 'Footer curation message. The Endless Key logo is displayed just after the end of the sentence',
     },
   },
 };

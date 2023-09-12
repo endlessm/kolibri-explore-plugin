@@ -41,7 +41,7 @@
             <div v-else>
               <b-badge pill variant="primary">
                 <BundleIcon :size="20" />
-                {{ $tr('exploreBadge') }}
+                Explore
               </b-badge>
             </div>
           </b-card-text>
@@ -101,12 +101,6 @@ export default {
       return this.node.channel;
     },
   },
-  $trs: {
-    exploreBadge: {
-      message: 'Explore',
-      context: 'Label for a badge on a topic card',
-    },
-  }
 };
 </script>
 
