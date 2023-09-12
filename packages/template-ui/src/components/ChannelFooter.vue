@@ -38,7 +38,7 @@ export default {
     bestOfTheWeb: {
       // FIXME: This isn’t translatable to languages where the logo can’t be a suffix,
       // or RTL languages.
-      message: '<strong>Best of the Web</strong> curated by ',
+      message: '<span class="font-weight-bold">Best of the Web</span> curated by ',
       context: 'Footer curation message. The Endless Key logo is displayed just after the end of the sentence',
     },
   },
