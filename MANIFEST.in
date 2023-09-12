@@ -2,10 +2,12 @@
 # by yarn, so setuptools doesn’t know about it. Similarly for the compiled app.
 include kolibri_explore_plugin/static/build-info.json
 recursive-include kolibri_explore_plugin/static/kolibri_explore_plugin.app *
+recursive-include kolibri_explore_plugin/static/kolibri_explore_plugin.side_nav *
 
 # build/kolibri_explore_plugin.app_stats.json is needed by Kolibri at runtime,
 # but it is created at build time.
 include kolibri_explore_plugin/build/kolibri_explore_plugin.app_stats.json
+include kolibri_explore_plugin/build/kolibri_explore_plugin.side_nav_stats.json
 
 # This is the dist form of welcomeScreen, which is not committed to git (but its
 # source in packages/welcome-screen, is). It needs to be in the dist tarball
