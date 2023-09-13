@@ -10,7 +10,6 @@ import { ChannelResource, ContentNodeResource } from '../../apiResources';
 import { CarouselItemsLength, SEARCH_MAX_RESULTS, PageNames } from '../../constants';
 import { CustomChannelApps, getBigThumbnail, getChannelIcon } from '../../customApps';
 import {
-  cancelDownload,
   getDownloadStatus,
   getShouldResume,
   resumeDownload,
@@ -153,8 +152,6 @@ export function decideDownload(store) {
     return Promise.resolve();
   }
 
-  const forceStartDownload = false; // This flag is for debugging purposes only.
-
   return Promise.all([getDownloadStatus(), getShouldResume()]).then(
     ([status, { shouldResume, grade: resumeGrade, name: resumeName }]) => {
       if (_isDownloadOngoing(status)) {
@@ -167,19 +164,12 @@ export function decideDownload(store) {
         });
       } else {
         return store.dispatch('setAndCheckChannels').then(channels => {
-          if (!channels.length || forceStartDownload) {
+          if (!channels.length) {
             const afterStart = () => {
               _goToDownloadPage(store, grade, name);
             };
-            if (forceStartDownload) {
-              console.debug('Downloading starter pack (forcing)...');
-              return cancelDownload()
-                .then(() => startDownload(grade, name))
-                .then(afterStart);
-            } else {
-              console.debug('Downloading starter pack...');
-              return startDownload(grade, name).then(afterStart);
-            }
+            console.debug('Downloading starter pack...');
+            return startDownload(grade, name).then(afterStart);
           } else {
             console.debug('Conditions not met to download, assuming as completed.');
             router.replace({ name: PageNames.TOPICS_ROOT });
