@@ -27,6 +27,7 @@ def get_packages_info():
     result = subprocess.run(
         ["yarn", "-s", "lerna", "list", "--json", "--loglevel", "error"],
         stdout=subprocess.PIPE,
+        check=True,
     )
     output = result.stdout.decode("utf-8")
     return json.loads(output)
