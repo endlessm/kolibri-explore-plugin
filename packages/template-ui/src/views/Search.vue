@@ -31,6 +31,7 @@
     <EkCardGrid
       v-if="!resultNodes.length"
       :nodes="mainSections"
+      variant="slidable-new"
       :mediaQuality="mediaQuality"
       :cardColumns="cardColumns"
     >

@@ -7,7 +7,7 @@
       <EkCardGridPlaceholder />
     </template>
     <template v-else>
-      <b-container class="mb-2 mt-4 no-container-padding">
+      <b-container fluid class="mb-2 mt-4 no-container-padding">
         <template v-if="hasNodesForSection('featured-channel')">
           <b-container>
             <h5 class="mt-2 text-muted">
@@ -15,18 +15,23 @@
             </h5>
           </b-container>
           <!-- These classes must match EkCardGrid -->
-          <b-container class="mb-5 mt-3 no-container-padding section-container">
-            <EkSlidableGrid
+          <b-container fluid class="mb-5 mt-3 no-container-padding section-container">
+            <EkSlidableGridNew
               v-slot="slotProps"
               :nodes="sectionNodes['featured-channel']"
             >
-              <EkChannelCard
-                v-for="node in slotProps.slideNodes"
+              <div
+                v-for="(node, index) in slotProps.nodes"
                 :key="node.id"
-                :channel="node"
-                @click.native="goToChannel(node.id)"
-              />
-            </EkSlidableGrid>
+                class="slide"
+                :index="index"
+              >
+                <EkChannelCard
+                  :channel="node"
+                  @click.native="goToChannel(node.id)"
+                />
+              </div>
+            </EkSlidableGridNew>
           </b-container>
         </template>
         <template v-if="hasNodesForSection('highlight')">
@@ -37,6 +42,7 @@
           </b-container>
           <EkCardGrid
             :nodes="sectionNodes['highlight']"
+            variant="slidable-new"
           />
         </template>
         <template v-if="hasNodesForSection('skill')">
@@ -47,6 +53,7 @@
           </b-container>
           <EkCardGrid
             :nodes="sectionNodes['skill']"
+            variant="slidable-new"
           />
         </template>
         <template v-if="hasNodesForSection('career')">
@@ -57,6 +64,7 @@
           </b-container>
           <EkCardGrid
             :nodes="sectionNodes['career']"
+            variant="slidable-new"
           />
         </template>
         <template v-if="hasNodesForSection('curious')">
@@ -67,6 +75,7 @@
           </b-container>
           <EkCardGrid
             :nodes="sectionNodes['curious']"
+            variant="slidable-new"
           />
         </template>
 

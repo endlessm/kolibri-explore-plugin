@@ -19,6 +19,7 @@
           v-for="subsection in sectionNodes.nodes"
           :id="subsection.id"
           :key="subsection.id"
+          variant="slidable-new"
           :nodes="getSubsectionNodes(subsection.id).nodes"
           :mediaQuality="mediaQuality"
           :cardColumns="cardColumns"

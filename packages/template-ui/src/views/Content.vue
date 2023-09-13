@@ -34,6 +34,7 @@
       <EkCardGrid
         v-if="nextNodesInTopic.length && showNextContent"
         :nodes="nextNodesInTopic"
+        variant="slidable-new"
         :cardColumns="cardColumns"
         class="next-grid"
         @nodeUpdated="onNextNodesUpdated"

@@ -5,6 +5,7 @@
 
 @import "~@fontsource/lato/index.css";
 @import "~@fontsource/poppins/index.css";
+@import "~vue-ssr-carousel/index.css";
 
 // Override containers mixin:
 @mixin make-container($gutter: $grid-gutter-width) {

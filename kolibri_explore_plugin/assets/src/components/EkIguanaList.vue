@@ -11,15 +11,18 @@
           {{ name }}
         </h5>
       </b-container>
-      <b-container class="no-container-padding">
-        <EkSlidableGrid
+      <b-container fluid class="no-container-padding">
+        <EkSlidableGridNew
           v-slot="slotProps"
           :nodes="getSlidableGridNodes(channels, contentPicks)"
           :hasWhiteBackground="true"
           :itemsPerSlide="{ lg: 3, md: 2, sm: 1 }"
         >
-          <template
-            v-for="node in slotProps.slideNodes"
+          <div
+            v-for="(node, index) in slotProps.nodes"
+            :key="node.id"
+            class="slide"
+            :index="index"
           >
             <EkChannelCard
               v-if="node !== undefined && node.kind === 'channel'"
@@ -32,8 +35,8 @@
               :key="node.id"
               :node="node"
             />
-          </template>
-        </EkSlidableGrid>
+          </div>
+        </EkSlidableGridNew>
       </b-container>
     </div>
   </div>

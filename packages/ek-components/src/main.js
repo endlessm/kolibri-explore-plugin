@@ -24,6 +24,8 @@ import EkPrivacyPolicyText from './components/EkPrivacyPolicyText.vue';
 import EkSearchBar from './components/EkSearchBar.vue';
 import EkSlidableCardGrid from './components/EkSlidableCardGrid.vue';
 import EkSlidableGrid from './components/EkSlidableGrid.vue';
+import EkSlidableGridNew from './components/EkSlidableGridNew.vue';
+import EkSlidableCardGridNew from './components/EkSlidableCardGridNew.vue';
 import EkTopicCard from './components/EkTopicCard.vue';
 import EkPackCard from './components/EkPackCard.vue';
 import EkClamp from './components/EkClamp.vue';
@@ -64,6 +66,8 @@ const components = {
   EkSearchBar,
   EkSlidableCardGrid,
   EkSlidableGrid,
+  EkSlidableGridNew,
+  EkSlidableCardGridNew,
   EkTopicCard,
   EkClamp,
 };
