@@ -131,21 +131,11 @@ function _isDownloadOngoing(status) {
   return status.stage !== 'COMPLETED' && status.stage !== 'NOT_STARTED';
 }
 
-function _goToDownloadPage(store, grade, name) {
-  // The catch here is needed for ignoring redundant navigation errors.
-  router.replace({ name: PageNames.DOWNLOAD, params: { grade, name } }).catch(() => {});
-  store.commit('SET_PAGE_NAME', PageNames.DOWNLOAD);
-  store.commit('CORE_SET_PAGE_LOADING', false);
-  store.commit('CORE_SET_ERROR', null);
-}
-
-export function decideDownload(store) {
+export function decideWelcome(store) {
   store.commit('CORE_SET_PAGE_LOADING', true);
 
-  const grade = plugin_data.initialContentPack;
-  const name = '0001';
-
   if (plugin_data.useEkIguanaPage) {
+    console.debug('Welcome: Redirecting to Explore page...');
     router.replace({ name: PageNames.TOPICS_ROOT });
     store.commit('CORE_SET_PAGE_LOADING', false);
     store.commit('CORE_SET_ERROR', null);
@@ -153,23 +143,61 @@ export function decideDownload(store) {
   }
 
   return Promise.all([getDownloadStatus(), getShouldResume()]).then(
-    ([status, { shouldResume, grade: resumeGrade, name: resumeName }]) => {
+    ([status, { shouldResume, grade, name }]) => {
+      if (_isDownloadOngoing(status) || shouldResume) {
+        console.debug('Welcome: Redirecting to Download page...');
+        // The catch here is needed for ignoring redundant navigation errors.
+        router.replace({ name: PageNames.DOWNLOAD, params: { grade, name } }).catch(() => {});
+        store.commit('SET_PAGE_NAME', PageNames.DOWNLOAD);
+        store.commit('CORE_SET_PAGE_LOADING', false);
+        store.commit('CORE_SET_ERROR', null);
+      } else {
+        return store.dispatch('setAndCheckChannels').then(channels => {
+          if (!channels.length) {
+            console.debug('Welcome: Redirecting to Welcome page...');
+            // The catch here is needed for ignoring redundant navigation errors.
+            router.replace({ name: PageNames.WELCOME_ROOT }).catch(() => {});
+            store.commit('SET_PAGE_NAME', PageNames.WELCOME_ROOT);
+            store.commit('CORE_SET_PAGE_LOADING', false);
+            store.commit('CORE_SET_ERROR', null);
+          } else {
+            console.debug('Welcome: Redirecting to Explore page...');
+            router.replace({ name: PageNames.TOPICS_ROOT });
+            store.commit('CORE_SET_PAGE_LOADING', false);
+            store.commit('CORE_SET_ERROR', null);
+          }
+        });
+      }
+    }
+  );
+}
+
+export function decideDownload(store, grade, name) {
+  store.commit('CORE_SET_PAGE_LOADING', true);
+
+  return Promise.all([getDownloadStatus(), getShouldResume()]).then(
+    ([status, { shouldResume }]) => {
       if (_isDownloadOngoing(status)) {
         console.debug('A collections download is ongoing...');
-        _goToDownloadPage(store, grade, name);
+        store.commit('SET_PAGE_NAME', PageNames.DOWNLOAD);
+        store.commit('CORE_SET_PAGE_LOADING', false);
+        store.commit('CORE_SET_ERROR', null);
       } else if (shouldResume) {
         console.debug('Resuming previous collections download...');
         return resumeDownload().then(() => {
-          _goToDownloadPage(store, resumeGrade, resumeName);
+          store.commit('SET_PAGE_NAME', PageNames.DOWNLOAD);
+          store.commit('CORE_SET_PAGE_LOADING', false);
+          store.commit('CORE_SET_ERROR', null);
         });
       } else {
         return store.dispatch('setAndCheckChannels').then(channels => {
           if (!channels.length) {
-            const afterStart = () => {
-              _goToDownloadPage(store, grade, name);
-            };
             console.debug('Downloading starter pack...');
-            return startDownload(grade, name).then(afterStart);
+            return startDownload(grade, name).then(() => {
+              store.commit('SET_PAGE_NAME', PageNames.DOWNLOAD);
+              store.commit('CORE_SET_PAGE_LOADING', false);
+              store.commit('CORE_SET_ERROR', null);
+            });
           } else {
             console.debug('Conditions not met to download, assuming as completed.');
             router.replace({ name: PageNames.TOPICS_ROOT });

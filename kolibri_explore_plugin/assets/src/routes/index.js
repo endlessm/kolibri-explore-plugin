@@ -1,7 +1,7 @@
 import store from 'kolibri.coreVue.vuex.store';
 import plugin_data from 'plugin_data';
 import { showTopicsChannel } from '../modules/topicsTree/handlers';
-import { decideDownload, showChannels } from '../modules/topicsRoot/handlers';
+import { decideWelcome, decideDownload, showChannels } from '../modules/topicsRoot/handlers';
 import { PageNames } from '../constants';
 
 export default [
@@ -11,14 +11,17 @@ export default [
     // Redirect to Search page if Discovery is hidden.
     redirect: plugin_data.hideDiscoveryTab ? { name: PageNames.SEARCH } : undefined,
     handler: () => {
-      decideDownload(store);
+      decideWelcome(store);
     },
   },
   {
     name: PageNames.WELCOME_ROOT,
     path: '/welcome',
-    handler: () => {
-      store.commit('SET_PAGE_NAME', PageNames.WELCOME_ROOT);
+    handler: (_toRoute, fromRoute) => {
+      if (fromRoute.name !== PageNames.ROOT) {
+        // If not coming from the / redirect, do it here:
+        decideWelcome(store);
+      }
     },
   },
   {
@@ -38,11 +41,8 @@ export default [
   {
     name: PageNames.DOWNLOAD,
     path: '/download/:grade/:name',
-    handler: (_toRoute, fromRoute) => {
-      if (fromRoute.name !== PageNames.ROOT) {
-        // If not coming from the / redirect, do it here:
-        decideDownload(store);
-      }
+    handler: toRoute => {
+      decideDownload(store, toRoute.params.grade, toRoute.params.name);
     },
   },
   {
