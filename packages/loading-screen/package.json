@@ -4,7 +4,7 @@
   "license": "AGPL-3.0",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build && yarn zip",
+    "build": "vue-cli-service build --no-module && yarn zip",
     "lint": "vue-cli-service lint",
     "zip": "../../scripts/bundle_zip.py loading-screen.zip"
   },
