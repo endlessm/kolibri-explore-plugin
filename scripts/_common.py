@@ -52,7 +52,7 @@ def bundle_zip(zip_name, compression=zipfile.ZIP_DEFLATED):
 
 
 def get_available_overrides():
-    return os.listdir(CHANNEL_OVERRIDES_DIR)
+    return sorted(os.listdir(CHANNEL_OVERRIDES_DIR))
 
 
 def get_override_path(override):
