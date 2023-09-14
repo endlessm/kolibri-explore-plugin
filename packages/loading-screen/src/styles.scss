@@ -1,1 +1,202 @@
-@import 'ek-components/src/styles';
+// Bootstrap theme variables:
+$secondary: #F15A22;
+$gray-300: #F8F7F3;
+$gray-400: #ECE8E3;
+$gray-500: #A1A8A9;
+$gray-600: #6C757D;
+$gray-700: #12272A;
+$gray-800: #091415;
+$primary: $gray-800;
+
+$light: $gray-300;
+$dark: $gray-600;
+
+$orange: #FF9741;
+$yellow: #F5BD2C;
+$teal: #14BF96;
+$cyan: #35E9EF;
+$lavender: #CEA2EC;
+$pink: #F97DA1;
+$blue: #4737FF;
+
+// This is not a $gray-* by design:
+$lightbox-background: #0F0F0F;
+$lightbox-toolbar: #222222;
+$lightbox-toolbar-primary: #141b1b;
+
+$modal-content-color: $light;
+$modal-content-bg: $lightbox-background;
+$modal-content-border-width: 0;
+$modal-backdrop-opacity: 0.8;
+
+/* Always show the vertical scrollbar */
+$app-body-overflow: scroll;
+
+$theme-colors: (
+  "bundle": $gray-400,
+  "audio": $gray-400,
+  "document": $gray-400,
+  "exercise": $gray-400,
+  "html5": $gray-400,
+  "zim": $gray-400,
+  "video": $gray-400,
+);
+
+$card-border-width: 0;
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+);
+
+// Same as default, added here because is needed to calculate the container width:
+$grid-gutter-width: 30px;
+
+// Size of circled buttons like in the row of cards.
+// This is not a Bootstrap variable, but is needed to calculate the container width:
+$circled-button-size: 46px;
+
+$container-extra-width: $grid-gutter-width * 2 + $circled-button-size * 2;
+
+$container-max-widths: (
+  sm: 540px + $container-extra-width,
+  md: 720px + $container-extra-width,
+  lg: 960px + $container-extra-width,
+  xl: 1140px + $container-extra-width
+  );
+
+$btn-font-weight: 600;
+$btn-box-shadow: none;
+$btn-focus-box-shadow: none;
+$headings-font-weight: 600;
+$display1-weight: 700;
+$display2-weight: 700;
+$display3-weight: 700;
+$display4-weight: 700;
+
+$border-radius-lg: 1rem;
+$body-bg: $light;
+$font-family-sans-serif: "Lato", sans-serif;
+$headings-font-family: "Poppins", sans-serif;
+
+$link-decoration: underline;
+
+$btn-font-family: $headings-font-family;
+$btn-font-size: 0.875rem;
+$btn-padding-x: 1rem;
+$btn-padding-y: 0.5rem;
+$btn-font-size-sm: 0.75rem;
+$btn-padding-x-sm: 0.75rem;
+$btn-padding-y-sm: 0.375rem;
+$breadcrumb-font-size: 0.75rem;
+$breadcrumb-divider: quote(">");
+$breadcrumb-divider-color: $gray-500;
+$breadcrumb-active-color: $light;
+$breadcrumb-bg: $secondary !default;
+
+$play-button-disabled-bg-color: $gray-400;
+
+// Template variables:
+$header-logo-width: 128;
+$header-height: 349px; // Forms an area with the LG breakpoint of aspect ratio: 2.8444
+$hover-lightness: 7.5%;
+$hover-primary-lightness: 25%;
+$background-alpha: -8%;
+$card-image-ar: calc(9 / 16);
+
+:export {
+  headerLogoWidth: $header-logo-width;
+  cardImageAspectRatio: $card-image-ar;
+  xs: map-get($grid-breakpoints, "xs");
+  sm: map-get($grid-breakpoints, "sm");
+  md: map-get($grid-breakpoints, "md");
+  lg: map-get($grid-breakpoints, "lg");
+  xl: map-get($grid-breakpoints, "xl");
+}
+
+@function card-body-height($title-lines) {
+  $type-line-height: $font-size-base * $line-height-base;
+  $title-line-height: $title-lines * ($h5-font-size * $headings-line-height);
+  $subtitle-line-height: $font-size-base * $line-height-base;
+  $tags-line-height: $font-size-base * $line-height-base;
+
+  $margins: map-get($spacers, 1) * 6;
+
+  @return ($type-line-height + $title-line-height +
+           $subtitle-line-height + $tags-line-height +
+           $margins);
+}
+
+$carousel-indicator-width:           24px !default;
+$carousel-indicator-height:          8px !default;
+$carousel-indicator-hit-area-height: 10px !default;
+$carousel-indicator-spacer:          3px !default;
+$carousel-indicator-transition:      all .6s ease !default;
+
+$carousel-image-width:    50%;
+$carousel-image-lg-width: 400px;
+
+// Copy of the Bootstrap mixin. Allows to pass a border color different than the text color.
+@mixin ek-button-outline-variant($color, $border-color: $color, $color-hover: color-yiq($color), $active-background: $color, $active-border: $color) {
+  color: $color;
+  border-color: $border-color;
+
+  @include hover() {
+    color: $color-hover;
+    background-color: $active-background;
+    border-color: $active-border;
+  }
+
+  &:focus,
+  &.focus {
+    box-shadow: 0 0 0 $btn-focus-width rgba($active-border, .5);
+  }
+
+  &.disabled,
+  &:disabled {
+    color: $color;
+    background-color: transparent;
+  }
+
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active,
+  .show > &.dropdown-toggle {
+    color: $color;
+    background-color: $active-background;
+    border-color: $active-border;
+
+    &:focus {
+      @if $enable-shadows and $btn-active-box-shadow != none {
+        @include box-shadow($btn-active-box-shadow, 0 0 0 $btn-focus-width rgba($active-border, .5));
+      } @else {
+        // Avoid using mixin so we can pass custom focus shadow properly
+        box-shadow: 0 0 0 $btn-focus-width rgba($active-border, .5);
+      }
+    }
+  }
+}
+
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/variables';
+
+// Style the list groups after the override colors are applied:
+$list-group-active-color: $primary;
+$list-group-active-bg: $white;
+$list-group-active-border-color: $list-group-border-color;
+
+// Calculate header color:
+$header-color: $gray-400 !default;
+
+// Calculate navbar height:
+$navbar-height: $navbar-brand-height +
+                $navbar-brand-padding-y * 2 +
+                $navbar-padding-y * 2;
+
+// Bigger than 3 spacer:
+$big-spacer: $spacer * 3.5;
+
+$disabled-card-opacity: 0.7;

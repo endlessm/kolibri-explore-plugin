@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
-import EkComponents from 'ek-components';
 import App from '@/App.vue';
 
 import Loading from '@/views/Loading.vue';
@@ -13,7 +12,6 @@ import store from "@/store";
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(VueRouter);
-Vue.use(EkComponents);
 
 Vue.config.productionTip = false;
 

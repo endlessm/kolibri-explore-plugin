@@ -15,7 +15,7 @@
 </template>
 
 <script>
-  import LoadingImage from 'ek-components/src/assets/loading-animation.gif';
+  import LoadingImage from '../assets/loading-animation.gif';
   import kolibriImage from '../assets/kolibri-logo.svg';
   import LoadingBase from './LoadingBase.vue';
 
