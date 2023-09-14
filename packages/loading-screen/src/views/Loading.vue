@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import LoadingImage from 'ek-components/src/assets/loading-animation.gif';
+  import LoadingImage from '../assets/loading-animation.gif';
   import LoadingBase from './LoadingBase.vue';
 
   export default {
