@@ -41,14 +41,9 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Set up Node
-        uses: actions/setup-node@v3
-        with:
-          # Should be same version as in scripts/bootstrap.sh
-          node-version: '16.14.0'
       - name: Install latest pipenv
         run: |
-          python3 -m pip install --upgrade pipenv
+          python -m pip install --upgrade pipenv wheel
 
       - name: Install dependencies in pipenv
         run: |

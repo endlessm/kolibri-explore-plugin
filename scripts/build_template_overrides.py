@@ -11,6 +11,8 @@ from _common import set_channel_override
 for override in get_available_overrides():
     set_channel_override(override)
     print(f"Building {override} channel override", flush=True)
-    subprocess.run(["vue-cli-service", "build"], check=True)
+    subprocess.run(
+        ["yarn", "run", "vue-cli-service", "build", "--no-module"], check=True
+    )
     print(f"Creating {override} zip file", flush=True)
     bundle_zip(override, compression=zipfile.ZIP_LZMA)

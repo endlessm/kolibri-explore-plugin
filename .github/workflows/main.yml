@@ -37,26 +37,22 @@ jobs:
         run: |
           sudo apt install -y gettext
 
-      - name: Set up Node
-        uses: actions/setup-node@v3
-        with:
-          # Should be same version as in scripts/bootstrap.sh
-          node-version: '16.14.0'
-
-      - name: Install dependencies
+      - name: Install latest pipenv
         run: |
-          # Should be same version as in scripts/bootstrap.sh
-          yarn global add @vue/cli@v4.5.15
-          yarn install --ignore-engines
+          python -m pip install --upgrade pipenv wheel
+
+      - name: Install dependencies in pipenv
+        run: |
+          bash ./scripts/bootstrap.sh --ci
 
       - name: Build libs
-        run: yarn build:libs
+        run: pipenv run yarn build:libs
 
       - name: Build apps
-        run: yarn build:apps
+        run: pipenv run yarn build:apps
 
       - name: Deploy apps
-        run: yarn deploy:apps
+        run: pipenv run yarn deploy:apps
 
       - name: Release when triggered from a tag push
         uses: softprops/action-gh-release@v1
@@ -103,15 +99,9 @@ jobs:
         run: |
           sudo apt install -y gettext
 
-      - name: Set up Node
-        uses: actions/setup-node@v3
-        with:
-          # Should be same version as in scripts/bootstrap.sh
-          node-version: '16.14.0'
-
       - name: Install latest pipenv
         run: |
-          python3 -m pip install --upgrade pipenv
+          python -m pip install --upgrade pipenv wheel
 
       - name: Install dependencies in pipenv
         run: |
