@@ -5,7 +5,7 @@ import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
 
 import router from 'kolibri.coreVue.router';
 import store from 'kolibri.coreVue.vuex.store';
-import { createTranslator } from 'kolibri.utils.i18n';
+import { createTranslator as kolibriCreateTranslator } from 'kolibri.utils.i18n';
 import { utils } from 'ek-components';
 import { ChannelResource, ContentNodeResource } from './apiResources';
 import { showTopicsContentInLightbox } from './modules/topicsTree/handlers';
@@ -249,10 +249,20 @@ class KolibriApi {
     if (nameSpace in this.translators) {
       translator = this.translators[nameSpace];
     } else {
-      translator = createTranslator(nameSpace, defaultMessages);
+      translator = kolibriCreateTranslator(nameSpace, defaultMessages);
       this.translators[nameSpace] = translator;
     }
     return translator.$tr(messageId, args);
+  }
+
+  // This has to be called createTranslator() and have exactly the same arguments
+  // and types as the createTranslator() function in kolibri.utils.i18n, otherwise
+  // `kolibri-tools i18n-extract-messages` won’t detect it and extract the
+  // original strings for translation.
+  createTranslator(nameSpace, defaultMessages) {
+    const translator = kolibriCreateTranslator(nameSpace, defaultMessages);
+    this.translators[nameSpace] = translator;
+    return translator;
   }
 }
 
