@@ -5,6 +5,7 @@ import { ContentNodeKinds } from 'kolibri.coreVue.vuex.constants';
 
 import router from 'kolibri.coreVue.router';
 import store from 'kolibri.coreVue.vuex.store';
+import { createTranslator } from 'kolibri.utils.i18n';
 import { utils } from 'ek-components';
 import { ChannelResource, ContentNodeResource } from './apiResources';
 import { showTopicsContentInLightbox } from './modules/topicsTree/handlers';
@@ -21,6 +22,9 @@ const DEFAULT_HIDE_UNAVAILABLE = false;
 class KolibriApi {
   constructor(channelId) {
     this.channelId = channelId;
+
+    // Cache of template-ui translators:
+    this.translators = {};
   }
 
   themeRenderer() {
@@ -233,6 +237,22 @@ class KolibriApi {
 
   get defaultHideUnavailable() {
     return DEFAULT_HIDE_UNAVAILABLE;
+  }
+
+  translate(nameSpace, defaultMessages, messageId, args) {
+    // Create the translator and add it to the cache only if needed:
+    let translator;
+    // FIXME this would be more readable by using the nullish coalescing
+    // assignment (??=) operator, but current linter is not happy:
+    // this.translators[nameSpace] ??= createTranslator(nameSpace, defaultMessages);
+    // const translator = this.translators[nameSpace];
+    if (nameSpace in this.translators) {
+      translator = this.translators[nameSpace];
+    } else {
+      translator = createTranslator(nameSpace, defaultMessages);
+      this.translators[nameSpace] = translator;
+    }
+    return translator.$tr(messageId, args);
   }
 }
 

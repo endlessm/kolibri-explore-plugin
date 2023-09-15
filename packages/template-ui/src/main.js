@@ -29,10 +29,9 @@ const ContentDownloadProxyPlugin = {
 
 Vue.use(ContentDownloadProxyPlugin);
 
-// FIXME hook i18n. This is a workaround to allow EK components that
-// use internationalization in the template-ui.
-Vue.prototype.$tr = function $tr(messageId) {
-  return this.$options.$trs[messageId];
+Vue.prototype.$tr = function $tr(messageId, args) {
+  const nameSpace = this.$options.name || this.$options.$trNameSpace;
+  return window.kolibri.translate(nameSpace, this.$options.$trs, messageId, args);
 };
 
 dynamicLoadComponents();
