@@ -5,6 +5,7 @@ import router from 'kolibri.coreVue.router';
 import plugin_data from 'plugin_data';
 import { ContentNodeSearchResource } from 'kolibri.resources';
 import { getContentNodeThumbnail } from 'kolibri.utils.contentNode';
+import { currentLanguage, languageIdToCode } from 'kolibri.utils.i18n';
 
 import { ChannelResource, ContentNodeResource } from '../../apiResources';
 import { CarouselItemsLength, SEARCH_MAX_RESULTS, PageNames } from '../../constants';
@@ -170,6 +171,21 @@ export function decideWelcome(store) {
       }
     }
   );
+}
+
+export function decidePackSelection(store) {
+  store.commit('CORE_SET_PAGE_LOADING', true);
+
+  if (languageIdToCode(currentLanguage) === 'es') {
+    console.debug('Welcome: Downloading Spanish pack directly...');
+    router.replace({ name: PageNames.DOWNLOAD, params: { grade: 'spanish', name: '0001' } });
+    store.commit('SET_PAGE_NAME', PageNames.DOWNLOAD);
+  } else {
+    store.commit('SET_PAGE_NAME', PageNames.WELCOME_PACK_SELECTION);
+  }
+
+  store.commit('CORE_SET_PAGE_LOADING', false);
+  store.commit('CORE_SET_ERROR', null);
 }
 
 export function decideDownload(store, grade, name) {

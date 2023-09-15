@@ -1,7 +1,12 @@
 import store from 'kolibri.coreVue.vuex.store';
 import plugin_data from 'plugin_data';
 import { showTopicsChannel } from '../modules/topicsTree/handlers';
-import { decideWelcome, decideDownload, showChannels } from '../modules/topicsRoot/handlers';
+import {
+  decideWelcome,
+  decidePackSelection,
+  decideDownload,
+  showChannels,
+} from '../modules/topicsRoot/handlers';
 import { PageNames } from '../constants';
 
 export default [
@@ -28,7 +33,7 @@ export default [
     name: PageNames.WELCOME_PACK_SELECTION,
     path: '/welcome/select-pack',
     handler: () => {
-      store.commit('SET_PAGE_NAME', PageNames.WELCOME_PACK_SELECTION);
+      decidePackSelection(store);
     },
   },
   {
