@@ -23,7 +23,7 @@
     "release": "./scripts/check_can_relese.sh && twine upload -s dist/*",
     "test:python": "python -m pytest",
     "makemessages": "kolibri-tools i18n-extract-messages --plugins kolibri_explore_plugin && kolibri-tools i18n-extract-messages --namespace ek-components --searchPath ./packages/ek-components && kolibri-tools i18n-extract-messages --namespace template-ui --searchPath ./packages/template-ui && kolibri-tools i18n-extract-messages --namespace loading-screen --searchPath ./packages/loading-screen",
-    "i18n-extract-backend": "cd kolibri_explore_plugin && python -m kolibri manage makemessages --skip-update -l en --ignore 'node_modules/*' --ignore 'kolibri_explore_plugin/dist/*'",
+    "i18n-extract-backend": "cd kolibri_explore_plugin && python -m kolibri manage makemessages --skip-update --all --ignore 'node_modules/*' --ignore 'kolibri_explore_plugin/dist/*'",
     "i18n-extract-frontend": "yarn run makemessages",
     "i18n-extract": "yarn run i18n-extract-frontend && yarn run i18n-extract-backend",
     "i18n-django-compilemessages": "cd kolibri_explore_plugin && PYTHONPATH=\"..:$$PYTHONPATH\" python -m kolibri manage compilemessages --skip-update",
