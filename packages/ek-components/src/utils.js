@@ -3,9 +3,43 @@ import get from 'lodash/get';
 import {
   StructuredTagsRegExp,
   StructuredTags,
-  DefaultKindLabel,
-  LabelPerKind,
 } from './constants';
+
+const createTranslator = window.kolibri.createTranslator;
+
+// We have to call something called exactly ‘createTranslator’ for
+// i18n-extract-messages to work. See the documentation in kolibriApi.js.
+export const ekComponentsUtilsStrings = createTranslator('EkComponentsUtils', {
+  // For getTopicCardSubtitle and getCardSubtitle
+  videoCardSubtitle: {
+    message: '{count, number} {count, plural, one {video} other {videos}}',
+    context: 'Subtitle for a topic card containing a video',
+  },
+  audioCardSubtitle: {
+    message: '{count, number} {count, plural, one {audio} other {audios}}',
+    context: 'Subtitle for a topic card containing an audio',
+  },
+  documentCardSubtitle: {
+    message: '{count, number} {count, plural, one {document} other {documents}}',
+    context: 'Subtitle for a topic card containing a document',
+  },
+  htmlCardSubtitle: {
+    message: '{count, number} {count, plural, one {application} other {applications}}',
+    context: 'Subtitle for a topic card containing an HTML application',
+  },
+  zimCardSubtitle: {
+    message: '{count, number} {count, plural, one {article} other {articles}}',
+    context: 'Subtitle for a topic card containing a zim article',
+  },
+  resourceCardSubtitle: {
+    message: '{count, number} {count, plural, one {resource} other {resources}}',
+    context: 'Subtitle for a topic card containing a generic resource',
+  },
+  cardSubtitleByline: {
+    message: 'by {by_line}',
+    context: 'Subtitle for a non-topic card when a byline needs to be shown',
+  },
+});
 
 /** Structured tags **/
 
@@ -90,16 +124,29 @@ export function getTopicCardSubtitle(node) {
   const leaves = getLeaves(node);
   const leavesKinds = leaves.map((leaf) => leaf.kind);
   const uniqueLeavesKinds = new Set(leavesKinds);
-  let kindsLabel;
+  const count = node.children_count || leaves.length;
+
+  // See https://github.com/learningequality/le-utils/blob/master/le_utils/constants/content_kinds.py
   if (uniqueLeavesKinds.size > 1) {
-    kindsLabel = DefaultKindLabel;
+    return ekComponentsUtilsStrings.$tr('resourceCardSubtitle', { count: count });
   } else {
     const kind = uniqueLeavesKinds.values().next().value;
-    kindsLabel = LabelPerKind[kind] || DefaultKindLabel;
-  }
 
-  const count = node.children_count || leaves.length;
-  return `${count} ${kindsLabel}`;
+    switch (kind) {
+      case 'video':
+        return ekComponentsUtilsStrings.$tr('videoCardSubtitle', { count: count });
+      case 'audio':
+        return ekComponentsUtilsStrings.$tr('audioCardSubtitle', { count: count });
+      case 'document':
+        return ekComponentsUtilsStrings.$tr('documentCardSubtitle', { count: count });
+      case 'html':
+        return ekComponentsUtilsStrings.$tr('htmlCardSubtitle', { count: count });
+      case 'zim':
+        return ekComponentsUtilsStrings.$tr('zimCardSubtitle', { count: count });
+      default:
+        return ekComponentsUtilsStrings.$tr('resourceCardSubtitle', { count: count });
+    }
+  }
 };
 
 export function getCardSubtitle(node, fallback) {
@@ -107,7 +154,11 @@ export function getCardSubtitle(node, fallback) {
     return getTopicCardSubtitle(node);
   }
   const byLine = node.author || node.license_owner || fallback;
-  return byLine ? `by ${byLine}` : '';
+
+  if (byLine)
+    return ekComponentsUtilsStrings.$tr('cardSubtitleByline', { by_line: byLine });
+  else
+    return '';
 };
 
 export function getSlug(title) {
