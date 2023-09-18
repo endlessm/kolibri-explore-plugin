@@ -13,6 +13,11 @@ VERSION_FILENAME = os.path.join("kolibri_explore_plugin", "VERSION")
 
 
 def _update_version_name(version_name):
+    with open(VERSION_FILENAME, "r") as fd:
+        current_name = fd.read().strip()
+    if current_name == version_name.strip():
+        return
+
     print(f"Committing new version name: {version_name}")
     with open(VERSION_FILENAME, "w") as fd:
         fd.write(version_name.strip() + "\n")
