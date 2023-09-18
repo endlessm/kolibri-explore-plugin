@@ -213,6 +213,11 @@ git push
 git push origin NEW_TAG
 ```
 
+The `bump-version` script can also be run with options such as
+`--dry-run --list` or `--no-commit` to see what will happen. You can
+also specify `--current-version` to see the effect without actually
+changing the current version. See `bumpversion --help` for all options.
+
 ### How to display the build information
 
 To show the build information in the front page, as a tag in top right corner,

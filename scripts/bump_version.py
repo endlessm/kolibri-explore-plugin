@@ -2,23 +2,14 @@
 # Copyright 2022-2023 Endless OS Foundation LLC
 # SPDX-License-Identifier: GPL-2.0-or-later
 import os.path
-import re
 import subprocess
 import sys
+from argparse import ArgumentParser
 
 from bumpversion.cli import main
 from bumpversion.vcs import Git
 
 VERSION_FILENAME = os.path.join("kolibri_explore_plugin", "VERSION")
-
-usage_message = """
-
-Usage: bump_version [minor|major] [VERSION_NAME]
-
-Please provide VERSION_NAME when bumping to 'major'. Otherwise you can
-bump to 'minor'.
-
-"""
 
 
 def _update_version_name(version_name):
@@ -30,20 +21,30 @@ def _update_version_name(version_name):
 
 
 if __name__ == "__main__":
+    ap = ArgumentParser(
+        description="Bump plugin version number",
+        epilog="All other options will be passed to bumpversion.",
+    )
+    ap.add_argument(
+        "part",
+        metavar="PART",
+        choices=("major", "minor"),
+        help="Part of the version number to be bumped",
+    )
+    ap.add_argument(
+        "version_name",
+        metavar="VERSION_NAME",
+        nargs="?",
+        help="Version name required for major version bumps",
+    )
+    args, remaining = ap.parse_known_args()
+
     Git.assert_nondirty()
 
-    if len(sys.argv) == 3:
-        assert sys.argv[1] == "major", usage_message
-        _update_version_name(sys.argv[2])
-        # Remove version name to let bump2version work:
-        del sys.argv[2]
+    if args.part == "major":
+        if not args.version_name:
+            ap.error("VERSION_NAME is required for a major release")
+        _update_version_name(args.version_name)
 
-    elif len(sys.argv) == 2:
-        assert sys.argv[1] == "minor", usage_message
-    else:
-        raise AssertionError(usage_message)
-
-    # Copied from bump2version script:
-    sys.argv[0] = re.sub(r"(-script\.pyw|\.exe)?$", "", sys.argv[0])
-
-    sys.exit(main())
+    bumpversion_args = [args.part] + remaining
+    sys.exit(main(bumpversion_args))
