@@ -33,7 +33,7 @@ if __name__ == "__main__":
     ap.add_argument(
         "part",
         metavar="PART",
-        choices=("major", "minor"),
+        choices=("major", "minor", "rc"),
         help="Part of the version number to be bumped",
     )
     ap.add_argument(
