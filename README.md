@@ -213,18 +213,6 @@ git push
 git push origin NEW_TAG
 ```
 
-Then build:
-
-```bash
-yarn build-dist
-```
-
-And finally upload the built `.whl` file to PyPi:
-
-```bash
-yarn release
-```
-
 ### How to display the build information
 
 To show the build information in the front page, as a tag in top right corner,
