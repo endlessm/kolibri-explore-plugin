@@ -1,6 +1,8 @@
-#!/bin/bash -e
+#!/bin/bash
 #
 # Setup Project
+
+set -e
 
 # Argument parsing
 pipenv_install_args=()
