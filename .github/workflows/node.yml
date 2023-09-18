@@ -20,6 +20,12 @@ jobs:
       run: |
         sudo apt install -y gettext
 
+    - name: Set up Node
+      uses: actions/setup-node@v3
+      with:
+        # Should be same version as in scripts/bootstrap.sh
+        node-version: '16.14.0'
+
     - id: cache-pipenv
       uses: actions/cache@v1
       with:
