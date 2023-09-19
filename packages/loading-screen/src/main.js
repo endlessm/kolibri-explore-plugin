@@ -11,7 +11,7 @@ import LoadingRetry from '@/views/LoadingRetry.vue';
 import store from "@/store";
 
 // Language codes are RFC 5646 (https://datatracker.ietf.org/doc/html/rfc5646)
-const supportedLocales = ['en-US'];
+const supportedLocales = ['en-US', 'es-419'];
 const defaultLocale = 'en-US';
 const requestedLocales = navigator.languages;
 
