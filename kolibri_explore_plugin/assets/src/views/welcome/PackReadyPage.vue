@@ -1,6 +1,6 @@
 <template>
 
-  <WelcomeBase title="Awesome! Your Starter Pack is ready">
+  <WelcomeBase :title="$tr('packReadyTitle')">
     <template #body>
       <div class="pack-background"></div>
       <b-button
@@ -10,13 +10,13 @@
         variant="primary"
         @click="downloadContent"
       >
-        Download My Starter Pack
+        {{ $tr('downloadContentButton') }}
       </b-button>
       <p>
         <b-link
           :to="{ name: PageNames.WELCOME_PACK_SELECTION }"
         >
-          Not sure? Let's go back to all the options.
+          {{ $tr('downloadContentBackButton') }}
         </b-link>
       </p>
     </template>
@@ -61,6 +61,21 @@
       },
       onOnline() {
         this.isOffline = false;
+      },
+    },
+    $trs: {
+      packReadyTitle: {
+        message: 'Awesome! Your Starter Pack is ready',
+        context:
+          'Title heading for when the user has chosen a starter content pack and is about to download it',
+      },
+      downloadContentButton: {
+        message: 'Download My Starter Pack',
+        context: 'Button label for downloading a content pack',
+      },
+      downloadContentBackButton: {
+        message: 'Not sure? Let’s go back to all the options.',
+        context: 'Button label for going back and choosing a different starter content pack',
       },
     },
   };

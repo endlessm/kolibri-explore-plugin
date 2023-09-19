@@ -1,6 +1,6 @@
 <template>
 
-  <WelcomeBase title="Which option sounds most like you?">
+  <WelcomeBase :title="$tr('packSelectionTitle')">
     <template #body>
 
       <b-container class="no-container-padding text-left">
@@ -57,6 +57,13 @@
         // FIXME: This is hardcoded to the (currently) only option.
         const name = '0001';
         this.$router.push({ name: PageNames.WELCOME_PACK_READY, params: { grade, name } });
+      },
+    },
+    $trs: {
+      packSelectionTitle: {
+        message: 'Which option sounds most like you?',
+        context:
+          'Title heading for when the user is asked to choose an initial content pack to download',
       },
     },
   };
