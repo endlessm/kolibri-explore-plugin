@@ -20,11 +20,11 @@ import {
 const DEFAULT_HIDE_UNAVAILABLE = false;
 
 class KolibriApi {
+  // Cache of template-ui translators:
+  static translators = {};
+
   constructor(channelId) {
     this.channelId = channelId;
-
-    // Cache of template-ui translators:
-    this.translators = {};
   }
 
   themeRenderer() {
@@ -244,13 +244,13 @@ class KolibriApi {
     let translator;
     // FIXME this would be more readable by using the nullish coalescing
     // assignment (??=) operator, but current linter is not happy:
-    // this.translators[nameSpace] ??= createTranslator(nameSpace, defaultMessages);
-    // const translator = this.translators[nameSpace];
-    if (nameSpace in this.translators) {
-      translator = this.translators[nameSpace];
+    // KolibriApi.translators[nameSpace] ??= createTranslator(nameSpace, defaultMessages);
+    // const translator = KolibriApi.translators[nameSpace];
+    if (nameSpace in KolibriApi.translators) {
+      translator = KolibriApi.translators[nameSpace];
     } else {
       translator = kolibriCreateTranslator(nameSpace, defaultMessages);
-      this.translators[nameSpace] = translator;
+      KolibriApi.translators[nameSpace] = translator;
     }
     return translator.$tr(messageId, args);
   }
@@ -261,7 +261,7 @@ class KolibriApi {
   // original strings for translation.
   createTranslator(nameSpace, defaultMessages) {
     const translator = kolibriCreateTranslator(nameSpace, defaultMessages);
-    this.translators[nameSpace] = translator;
+    KolibriApi.translators[nameSpace] = translator;
     return translator;
   }
 }
