@@ -213,17 +213,40 @@ git push
 git push origin NEW_TAG
 ```
 
-Then build:
+The `bump-version` script can also be run with options such as
+`--dry-run --list` or `--no-commit` to see what will happen. You can
+also specify `--current-version` to see the effect without actually
+changing the current version. See `bumpversion --help` for all options.
+
+#### Release candidates
+
+PyPI and `pip` support release candidates with the `rc<N>` suffix. Prior
+to major releases it may be helpful to build and publish release
+candidates so they can be tested prior to general availability. Our
+`bumpversion` configuration has limited support for release candidates,
+so care should be taken to ensure the new version comes out correctly.
+
+To begin a release candidate series, the version must be fully specified:
 
 ```bash
-yarn build-dist
+yarn bump-version major "Komodo Dragon" --new-version 7.0.0rc1
 ```
 
-And finally upload the built `.whl` file to PyPi:
+To make the next release candidate, run:
 
-```bash
-yarn release
+``` bash
+yarn bump-version rc
 ```
+
+Finally, to end a release candidate series, the version must be fully
+specified again:
+
+``` bash
+yarn bump-version major "Komodo Dragon" --new-version 7.0.0
+```
+
+In all cases, the commit and tag must be pushed to the remote as
+explained above.
 
 ### How to display the build information
 
