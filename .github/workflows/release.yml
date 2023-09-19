@@ -23,6 +23,11 @@ jobs:
       tag: ${{ steps.set-tag.outputs.tag }}
       ref: "refs/tags/${{ steps.set-tag.outputs.tag }}"
 
+      # Don't trigger app builds for major or rc releases since they're
+      # likely to fail or be broken.
+      trigger-apps: >-
+        ${{ (endsWith(steps.set-tag.outputs.tag, '.0.0') || contains(steps.set-tag.outputs.tag, 'rc')) && 'false' || 'true' }}
+
     steps:
       - name: Validate tagname input
         if: ${{ inputs.tagname && !startsWith(inputs.tagname, 'v') }}
@@ -107,6 +112,7 @@ jobs:
     name: Trigger endless-key-app release
     runs-on: ubuntu-latest
     needs: [validate, release]
+    if: ${{ fromJSON(needs.validate.outputs.trigger-apps) }}
 
     steps:
       - name: Trigger building endless-key-app
@@ -127,6 +133,7 @@ jobs:
     name: Trigger kolibri-installer-android release
     runs-on: ubuntu-latest
     needs: [validate, release]
+    if: ${{ fromJSON(needs.validate.outputs.trigger-apps) }}
 
     steps:
       - name: Checkout
