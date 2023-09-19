@@ -18,6 +18,7 @@ on:
 
 jobs:
   bump_version:
+    name: Bump version and tag for release
     runs-on: ubuntu-latest
     env:
       GIT_USERNAME: ${{ github.actor }}
