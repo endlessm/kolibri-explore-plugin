@@ -189,6 +189,12 @@ jobs:
             apps-bundle.zip
             loading-screen.zip
 
+      - name: Move PyPI artifacts to dist directory
+        run: |
+          mkdir -p dist
+          mv "${{ needs.wheel.outputs.whl-filename }}" dist
+          mv "${{ needs.wheel.outputs.tar-filename }}" dist
+
       - name: Release to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
