@@ -1,11 +1,22 @@
 <template>
-  <LoadingBase title="Could not start Endless Key" titleVariant="text-dark">
+  <LoadingBase
+    :title="$formatMessage({
+      id: 'loadingRetryTitle',
+      defaultMessage: 'Could not start Endless Key',
+      description: 'Title heading for when Endless Key could not be started due to an error',
+    })"
+    titleVariant="text-dark"
+  >
     <template #header-top>
       <b-icon-exclamation-circle variant="dark" fontScale="4" class="mb-3 w-100" />
     </template>
     <template #body>
       <h4 class="font-weight-normal text-secondary">
-        Trying again...
+        {{ $formatMessage({
+          id: 'loadingTryingAgain',
+          defaultMessage: 'Trying again…',
+          description: 'Page content shown when trying to load Endless Key again after an error',
+        }) }}
       </h4>
     </template>
   </LoadingBase>
