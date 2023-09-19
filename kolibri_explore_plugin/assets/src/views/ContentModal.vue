@@ -67,9 +67,11 @@
 
     mounted() {
       window.addEventListener('message', this.onMessage);
+      window.addEventListener('contextmenu', this.onRightClick);
     },
     beforeDestroy() {
       window.removeEventListener('message', this.onMessage);
+      window.removeEventListener('contextmenu', this.onRightClick);
     },
     methods: {
       onMessage(event) {
@@ -84,7 +86,10 @@
           this.goToContent(event.data.data);
         }
       },
-
+      onRightClick(event) {
+        // Prevent user right-click in this modal:
+        event.preventDefault();
+      },
       goToContent(id) {
         showTopicsContentInLightbox(this.$store, id);
       },
