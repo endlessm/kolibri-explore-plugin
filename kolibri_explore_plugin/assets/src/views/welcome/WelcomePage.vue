@@ -6,21 +6,19 @@
     <div class="d-flex flex-column flex-grow-1 w-100">
       <div class="flex-grow-1 welcome-background-top"></div>
       <div class="content p-3 pb-5 position-relative">
-        <h1>
-          Welcome to Endless Key!
-        </h1>
+        <h1>{{ $tr('welcomeTitle') }}</h1>
         <div class="mb-4 mt-4">
           <b-button
             pill
             variant="primary"
             :to="{ name: PageNames.WELCOME_PACK_SELECTION }"
           >
-            Get Started
+            {{ $tr('getStartedButton') }}
           </b-button>
         </div>
         <p>
           <b-link v-b-modal.privacy-policy-modal>
-            Privacy Policy
+            {{ $tr('privacyPolicy') }}
           </b-link>
         </p>
       </div>
@@ -33,7 +31,7 @@
       >
         <div class="bg-white modal-wrapper text-dark">
           <h3 class="pt-3 text-primary">
-            Privacy Policy
+            {{ $tr('privacyPolicy') }}
           </h3>
           <EkPrivacyPolicyText class="pb-3" />
         </div>
@@ -56,6 +54,20 @@
       return {
         PageNames,
       };
+    },
+    $trs: {
+      welcomeTitle: {
+        message: 'Welcome to Endless Key!',
+        context: 'Title heading for the welcome page',
+      },
+      getStartedButton: {
+        message: 'Get Started',
+        context: 'Button label on the welcome page',
+      },
+      privacyPolicy: {
+        message: 'Privacy Policy',
+        context: 'Footer link',
+      },
     },
   };
 
