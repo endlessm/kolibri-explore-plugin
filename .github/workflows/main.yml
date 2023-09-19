@@ -6,11 +6,18 @@ on:
   pull_request:
   workflow_call:
     inputs:
-      tagname:
-        description: 'The git tag name for release'
+      ref:
+        description: 'The git ref to build'
         default: ''
         required: true
         type: string
+    outputs:
+      whl-filename:
+        description: Wheel filename
+        value: ${{ jobs.wheel.outputs.whl-filename }}
+      tar-filename:
+        description: Tarball filename
+        value: ${{ jobs.wheel.outputs.tar-filename }}
   workflow_dispatch:
 
 jobs:
@@ -22,8 +29,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          # If the tagname is empty, checkout falls back to github.ref.
-          ref: ${{ inputs.tagname }}
+          # If the ref input is empty, checkout falls back to github.ref.
+          ref: ${{ inputs.ref }}
 
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
@@ -84,8 +91,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          # If the tagname is empty, checkout falls back to github.ref.
-          ref: ${{ inputs.tagname }}
+          # If the ref input is empty, checkout falls back to github.ref.
+          ref: ${{ inputs.ref }}
           # The full git history is needed so that setuptools_scm can derive
           # the version number correctly.
           fetch-depth: 0
@@ -143,125 +150,3 @@ jobs:
           name: ${{ steps.tar-filename.outputs.tar-filename }}
           path: dist/${{ steps.tar-filename.outputs.tar-filename }}
           if-no-files-found: error
-
-
-  release:
-    name: Release
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/') || startsWith(inputs.tagname, 'v')
-    needs: [bundles, wheel]
-
-    steps:
-      # If you download all artifacts or a single artifact while
-      # specifying path, download-artifact creates an extra directory
-      # with the artifact name. We just want the single artifacts, so
-      # download them individually into the current directory.
-      - name: Download wheel
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ needs.wheel.outputs.whl-filename }}
-
-      - name: Download tarball
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ needs.wheel.outputs.tar-filename }}
-
-      - name: Download apps-bundle.zip
-        uses: actions/download-artifact@v3
-        with:
-          name: apps-bundle.zip
-
-      - name: Download loading-screen.zip
-        uses: actions/download-artifact@v3
-        with:
-          name: loading-screen.zip
-
-      - name: Create GitHub release
-        uses: softprops/action-gh-release@v1
-        with:
-          # If tag_name is empty, action-gh-release falls back to github.ref.
-          tag_name: ${{ inputs.tagname }}
-          generate_release_notes: true
-          fail_on_unmatched_files: true
-          files: |
-            ${{ needs.wheel.outputs.whl-filename }}
-            ${{ needs.wheel.outputs.tar-filename }}
-            apps-bundle.zip
-            loading-screen.zip
-
-      - name: Move PyPI artifacts to dist directory
-        run: |
-          mkdir -p dist
-          mv "${{ needs.wheel.outputs.whl-filename }}" dist
-          mv "${{ needs.wheel.outputs.tar-filename }}" dist
-
-      - name: Release to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
-
-
-  trigger_endless-key-app:
-    name: Trigger endless-key-app release
-    runs-on: ubuntu-latest
-    needs: [release]
-
-    steps:
-      - name: Get tag name as the release version when at a tag
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          echo "VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
-
-      - name: Get tag name as the release version from input
-        if: ${{ !startsWith(github.ref, 'refs/tags/') && startsWith(inputs.tagname, 'v') }}
-        run: |
-          echo "VERSION=${{ inputs.tagname }}" >> $GITHUB_ENV
-
-      - name: Trigger building endless-key-app
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.REPOSITORY_DISPATCH_TOKEN }}
-          script: |
-            await github.rest.repos.createDispatchEvent({
-              owner: "endlessm",
-              repo: "endless-key-app",
-              event_type: "kolibri-explore-plugin-release",
-              client_payload: {
-                VERSION: "${{ env.VERSION }}",
-              }
-            })
-
-
-  trigger_kolibri-installer-android:
-    name: Trigger kolibri-installer-android release
-    runs-on: ubuntu-latest
-    needs: [release]
-    env:
-      branch: ${{ github.ref }}
-
-    steps:
-      - name: Set branch if this is triggered by bump2release.yml
-        if: startsWith(inputs.tagname, 'v')
-        run: |
-          # The kolibri-explore-plugin release flow from bump2release.yml will
-          # append a new commit to master branch. Therefore, the github.ref is
-          # not at the latest commit. Checkout master instead.
-          echo "branch=${{ inputs.tagname }}" >> $GITHUB_ENV
-
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ env.branch }}
-
-      - name: Install trigger_jenkins dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-pip
-          python3 -m pip install requests python-jenkins
-
-      - name: Trigger building kolibri-installer-android
-        run: |
-          ./scripts/trigger_jenkins.py kolibri-installer-android UPLOAD=true
-        env:
-          JENKINS_USER: ${{ secrets.JENKINS_USERNAME }}
-          JENKINS_PASSWORD: ${{ secrets.JENKINS_PASSWORD }}
