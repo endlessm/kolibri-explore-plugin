@@ -152,10 +152,29 @@ jobs:
     needs: [bundles, wheel]
 
     steps:
-      - name: Download artifacts
+      # If you download all artifacts or a single artifact while
+      # specifying path, download-artifact creates an extra directory
+      # with the artifact name. We just want the single artifacts, so
+      # download them individually into the current directory.
+      - name: Download wheel
         uses: actions/download-artifact@v3
         with:
-          path: dist
+          name: ${{ needs.wheel.outputs.whl-filename }}
+
+      - name: Download tarball
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ needs.wheel.outputs.tar-filename }}
+
+      - name: Download apps-bundle.zip
+        uses: actions/download-artifact@v3
+        with:
+          name: apps-bundle.zip
+
+      - name: Download loading-screen.zip
+        uses: actions/download-artifact@v3
+        with:
+          name: loading-screen.zip
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
@@ -165,10 +184,10 @@ jobs:
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: |
-            dist/${{ needs.wheel.outputs.whl-filename }}
-            dist/${{ needs.wheel.outputs.tar-filename }}
-            dist/apps-bundle.zip
-            dist/loading-screen.zip
+            ${{ needs.wheel.outputs.whl-filename }}
+            ${{ needs.wheel.outputs.tar-filename }}
+            apps-bundle.zip
+            loading-screen.zip
 
       - name: Release to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
