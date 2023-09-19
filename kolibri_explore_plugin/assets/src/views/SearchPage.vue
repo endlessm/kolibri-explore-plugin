@@ -66,10 +66,9 @@
         <b-container class="pb-5">
           <template v-if="!isLoading">
             <div v-if="isNoResults" class="empty mb-4 mt-5 w-50">
-              <h1>Sorry, we can’t find any content that matches your search.</h1>
+              <h1>{{ $tr('noResultsHeading') }}</h1>
               <h5>
-                You can try a different search, maybe use fewer words, or try one
-                of the topic suggestions below.
+                {{ $tr('noResultsBody') }}
               </h5>
             </div>
           </template>
@@ -93,11 +92,11 @@
         <div v-if="recommended && isNoResults" class="flex-shrink-0 pt-5 recommended">
           <b-container v-if="recommended" class="pb-5 pt-3">
             <h3 class="text-muted">
-              Explore
+              {{ $tr('noResultsExplore') }}
             </h3>
             <h5>
               <b-link @click="clearInput">
-                See all channels <b-icon-arrow-right />
+                {{ $tr('noResultsSeeAllChannels') }} <b-icon-arrow-right />
               </b-link>
             </h5>
             <EkChannelCardGroup
@@ -315,6 +314,23 @@
         '{count} {count, plural, one {result} other {results}} for “{term}” to {action}',
       countedChannels:
         '{count} {count, plural, one {channel} other {channels}} related to “{term}”',
+      noResultsHeading: {
+        message: 'Sorry, we can’t find any content that matches your search.',
+        context: 'Heading shown when a search produces no results',
+      },
+      noResultsBody: {
+        message:
+          'You can try a different search, maybe use fewer words, or try one of the topic suggestions below.',
+        context: 'Suggestion shown when a search produces no results',
+      },
+      noResultsExplore: {
+        message: 'Explore',
+        context: 'Heading shown with content suggestions when a search produces no results',
+      },
+      noResultsSeeAllChannels: {
+        message: 'See all channels',
+        context: 'Link to more content shown when a search produces no results',
+      },
     },
   };
 

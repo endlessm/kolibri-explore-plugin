@@ -7,17 +7,17 @@
       v-if="info"
       id="buildinfo"
       ref="dev-modal"
-      title="About this build"
+      :title="$tr('aboutThisBuild')"
       okOnly
       headerCloseVariant="light"
     >
       <h6 class="my-3">
-        Release information
+        {{ $tr('releaseInformation') }}
       </h6>
       <b-list-group class="text-dark">
-        <b-list-group-item>Commit: {{ info.commit }}</b-list-group-item>
-        <b-list-group-item>Date: {{ info.date }}</b-list-group-item>
-        <b-list-group-item>Last Release: {{ info.last_release }}</b-list-group-item>
+        <b-list-group-item>{{ $tr('commitKey') }} {{ info.commit }}</b-list-group-item>
+        <b-list-group-item>{{ $tr('dateKey') }} {{ info.date }}</b-list-group-item>
+        <b-list-group-item>{{ $tr('lastReleaseKey') }} {{ info.last_release }}</b-list-group-item>
       </b-list-group>
       <h6 class="my-3">
         Log of changes
@@ -28,7 +28,7 @@
         </b-list-group-item>
       </b-list-group>
       <h6 class="my-3">
-        Theme debugging
+        {{ $tr('themeDebugging') }}
       </h6>
       <b-list-group class="text-dark">
         <b-list-group-item
@@ -66,7 +66,7 @@
           return this.info.commit;
         }
 
-        return 'loading...';
+        return this.$tr('loadingPlaceholder');
       },
       isIframe() {
         return window.parent.location !== window.location;
@@ -93,6 +93,36 @@
           name: PageNames.TOPICS_TEST,
           params: { channel_id: channelId },
         });
+      },
+    },
+    $trs: {
+      aboutThisBuild: {
+        message: 'About this build',
+        context: 'Title for the developer information page',
+      },
+      releaseInformation: {
+        message: 'Release information',
+        context: 'Header on the developer information page',
+      },
+      commitKey: {
+        message: 'Commit:',
+        context: 'Table key for release information',
+      },
+      dateKey: {
+        message: 'Date:',
+        context: 'Table key for release information',
+      },
+      lastReleaseKey: {
+        message: 'Last Release:',
+        context: 'Table key for release information',
+      },
+      themeDebugging: {
+        message: 'Theme debugging',
+        context: 'Header on the developer information page',
+      },
+      loadingPlaceholder: {
+        message: 'loading…',
+        context: 'Placeholder while loading the developer information page',
       },
     },
   };

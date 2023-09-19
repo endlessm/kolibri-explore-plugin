@@ -5,7 +5,7 @@
 
     <b-container class="mb-2 mt-4">
       <h5 class="mt-2 text-muted">
-        Content Suggestions
+        {{ $tr('contentSuggestionsHeading') }}
       </h5>
     </b-container>
 
@@ -17,8 +17,8 @@
       <b-container class="mb-2 mt-2">
         <EkButtonsBar
           class="mr-3 mt-1"
-          title="More Topics"
-          :buttons="Array.from(searchTerms.keys())"
+          :title="$tr('moreTopics')"
+          :buttons="Array.from(getSearchTerms().keys())"
           @click="goToTerm"
         />
       </b-container>
@@ -47,7 +47,7 @@
 
   import { mapState } from 'vuex';
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
-  import { PageNames, searchTerms } from '../constants';
+  import { PageNames, getSearchTerms } from '../constants';
 
   import EkIguanaList from '../components/EkIguanaList';
   import DiscoveryNavBar from '../components/DiscoveryNavBar';
@@ -63,17 +63,24 @@
       ...mapState({
         loading: state => state.core.loading,
       }),
-      searchTerms() {
-        return searchTerms;
-      },
     },
     methods: {
       goToTerm(term) {
-        const query = searchTerms.get(term) || term;
+        const query = getSearchTerms().get(term) || term;
         this.$router.push({
           name: PageNames.SEARCH,
           params: { query },
         });
+      },
+    },
+    $trs: {
+      contentSuggestionsHeading: {
+        message: 'Content Suggestions',
+        context: 'Heading for a set of suggestions for content',
+      },
+      moreTopics: {
+        message: 'More Topics',
+        context: 'Heading for a section listing more topics',
       },
     },
   };
