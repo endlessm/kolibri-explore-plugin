@@ -14,17 +14,46 @@ on:
   workflow_dispatch:
 
 jobs:
+  validate:
+    name: Validate release tag
+    runs-on: ubuntu-latest
+
+    outputs:
+      # Normalize the tag and ref names here so they can be used below.
+      tag: ${{ steps.set-tag.outputs.tag }}
+      ref: "refs/tags/${{ steps.set-tag.outputs.tag }}"
+
+    steps:
+      - name: Validate tagname input
+        if: ${{ inputs.tagname && !startsWith(inputs.tagname, 'v') }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Input tagname must begin with v')
+
+      - name: Validate triggered ref
+        if: ${{ !inputs.tagname && !startsWith(github.ref, 'refs/tags/v') }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Release must run from a v* tag')
+
+      - name: Normalize tag name
+        id: set-tag
+        run: |
+          echo "tag=${{ inputs.tagname && inputs.tagname || github.ref_name }}" >> "$GITHUB_OUTPUT"
+
   build:
     name: Build
+    needs: validate
     uses: ./.github/workflows/main.yml
     with:
-      # If tagname is empty, the build will fallback to github.ref.
-      ref: ${{ inputs.tagname }}
+      ref: ${{ needs.validate.outputs.ref }}
 
   release:
     name: Release
     runs-on: ubuntu-latest
-    needs: build
+    needs: [validate, build]
 
     steps:
       # If you download all artifacts or a single artifact while
@@ -54,8 +83,7 @@ jobs:
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
         with:
-          # If tag_name is empty, action-gh-release falls back to github.ref.
-          tag_name: ${{ inputs.tagname }}
+          tag_name: ${{ needs.validate.outputs.tag }}
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: |
@@ -78,19 +106,9 @@ jobs:
   trigger_endless-key-app:
     name: Trigger endless-key-app release
     runs-on: ubuntu-latest
-    needs: [release]
+    needs: [validate, release]
 
     steps:
-      - name: Get tag name as the release version when at a tag
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          echo "VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
-
-      - name: Get tag name as the release version from input
-        if: ${{ !startsWith(github.ref, 'refs/tags/') && startsWith(inputs.tagname, 'v') }}
-        run: |
-          echo "VERSION=${{ inputs.tagname }}" >> $GITHUB_ENV
-
       - name: Trigger building endless-key-app
         uses: actions/github-script@v6
         with:
@@ -101,30 +119,20 @@ jobs:
               repo: "endless-key-app",
               event_type: "kolibri-explore-plugin-release",
               client_payload: {
-                VERSION: "${{ env.VERSION }}",
+                VERSION: "${{ needs.validate.output.tag }}",
               }
             })
 
   trigger_kolibri-installer-android:
     name: Trigger kolibri-installer-android release
     runs-on: ubuntu-latest
-    needs: [release]
-    env:
-      branch: ${{ github.ref }}
+    needs: [validate, release]
 
     steps:
-      - name: Set branch if this is triggered by bump2release.yml
-        if: startsWith(inputs.tagname, 'v')
-        run: |
-          # The kolibri-explore-plugin release flow from bump2release.yml will
-          # append a new commit to master branch. Therefore, the github.ref is
-          # not at the latest commit. Checkout master instead.
-          echo "branch=${{ inputs.tagname }}" >> $GITHUB_ENV
-
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ${{ env.branch }}
+          ref: ${{ needs.validate.outputs.ref }}
 
       - name: Install trigger_jenkins dependencies
         run: |
