@@ -1,0 +1,30 @@
+{
+  "loadingErrorGuidance": {
+    "developer_comment": "Guidance for what to do if loading Endless Key failed",
+    "string": "Please try restarting Endless Key by closing this window and double clicking the launcher again."
+  },
+  "loadingErrorTitle": {
+    "developer_comment": "Title heading for when Endless Key could not load due to an error",
+    "string": "Could not start Endless Key"
+  },
+  "loadingRetryTitle": {
+    "developer_comment": "Title heading for when Endless Key could not be started due to an error",
+    "string": "Could not start Endless Key"
+  },
+  "loadingTryingAgain": {
+    "developer_comment": "Page content shown when trying to load Endless Key again after an error",
+    "string": "Trying again…"
+  },
+  "poweredByKolibri": {
+    "developer_comment": "Footer text to acknowledge that Endless Key is based on Kolibri",
+    "string": "Powered by Kolibri"
+  },
+  "welcomeDocumentTitle": {
+    "developer_comment": "Document title for the welcome page",
+    "string": "Welcome"
+  },
+  "welcomeTitle": {
+    "developer_comment": "Title heading for the welcome page",
+    "string": "Welcome to Endless Key!"
+  }
+}
