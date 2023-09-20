@@ -9,6 +9,10 @@ recursive-include kolibri_explore_plugin/static/kolibri_explore_plugin.side_nav 
 include kolibri_explore_plugin/build/kolibri_explore_plugin.app_stats.json
 include kolibri_explore_plugin/build/kolibri_explore_plugin.side_nav_stats.json
 
+# The compiled backend message catalogs are needed at runtime but created at
+# build time.
+include kolibri_explore_plugin/locale/*/LC_MESSAGES/django.mo
+
 # This is the dist form of loadingScreen, which is not committed to git (but its
 # source in packages/loading-screen, is). It needs to be in the dist tarball
 # because it’s consumed by the wrapper apps to show a loading or error screen,
