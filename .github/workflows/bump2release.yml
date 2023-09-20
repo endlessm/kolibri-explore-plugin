@@ -83,15 +83,15 @@ jobs:
           echo "tagname=$tagname" >> $GITHUB_OUTPUT
 
 
-  build_for_tag:
+  release:
     # Using the GITHUB_TOKEN in a workflow will not create a new workflow run to
     # prevent from accidentally creating recursive workflow runs. So, call the
     # following workflow here and inherit the secrets by design.
     # https://docs.github.com/en/actions/security-guides/automatic-token-authentication#using-the-github_token-in-a-workflow
-    name: Build for release
+    name: Release
     needs: bump_version
     if: startsWith(needs.bump_version.outputs.tagname, 'v')
-    uses: ./.github/workflows/main.yml
+    uses: ./.github/workflows/release.yml
     with:
       tagname: ${{ needs.bump_version.outputs.tagname }}
     secrets: inherit

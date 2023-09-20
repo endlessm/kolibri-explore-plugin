@@ -1,0 +1,155 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v*
+  workflow_call:
+    inputs:
+      tagname:
+        description: 'The git tag name for release'
+        default: ''
+        required: true
+        type: string
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate release tag
+    runs-on: ubuntu-latest
+
+    outputs:
+      # Normalize the tag and ref names here so they can be used below.
+      tag: ${{ steps.set-tag.outputs.tag }}
+      ref: "refs/tags/${{ steps.set-tag.outputs.tag }}"
+
+      # Don't trigger app builds for major or rc releases since they're
+      # likely to fail or be broken.
+      trigger-apps: >-
+        ${{ (endsWith(steps.set-tag.outputs.tag, '.0.0') || contains(steps.set-tag.outputs.tag, 'rc')) && 'false' || 'true' }}
+
+    steps:
+      - name: Validate tagname input
+        if: ${{ inputs.tagname && !startsWith(inputs.tagname, 'v') }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Input tagname must begin with v')
+
+      - name: Validate triggered ref
+        if: ${{ !inputs.tagname && !startsWith(github.ref, 'refs/tags/v') }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Release must run from a v* tag')
+
+      - name: Normalize tag name
+        id: set-tag
+        run: |
+          echo "tag=${{ inputs.tagname && inputs.tagname || github.ref_name }}" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: Build
+    needs: validate
+    uses: ./.github/workflows/main.yml
+    with:
+      ref: ${{ needs.validate.outputs.ref }}
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: [validate, build]
+
+    steps:
+      # If you download all artifacts or a single artifact while
+      # specifying path, download-artifact creates an extra directory
+      # with the artifact name. We just want the single artifacts, so
+      # download them individually into the current directory.
+      - name: Download wheel
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ needs.build.outputs.whl-filename }}
+
+      - name: Download tarball
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ needs.build.outputs.tar-filename }}
+
+      - name: Download apps-bundle.zip
+        uses: actions/download-artifact@v3
+        with:
+          name: apps-bundle.zip
+
+      - name: Download loading-screen.zip
+        uses: actions/download-artifact@v3
+        with:
+          name: loading-screen.zip
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.validate.outputs.tag }}
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: |
+            ${{ needs.build.outputs.whl-filename }}
+            ${{ needs.build.outputs.tar-filename }}
+            apps-bundle.zip
+            loading-screen.zip
+
+      - name: Move PyPI artifacts to dist directory
+        run: |
+          mkdir -p dist
+          mv "${{ needs.build.outputs.whl-filename }}" dist
+          mv "${{ needs.build.outputs.tar-filename }}" dist
+
+      - name: Release to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+  trigger_endless-key-app:
+    name: Trigger endless-key-app release
+    runs-on: ubuntu-latest
+    needs: [validate, release]
+    if: ${{ fromJSON(needs.validate.outputs.trigger-apps) }}
+
+    steps:
+      - name: Trigger building endless-key-app
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.REPOSITORY_DISPATCH_TOKEN }}
+          script: |
+            await github.rest.repos.createDispatchEvent({
+              owner: "endlessm",
+              repo: "endless-key-app",
+              event_type: "kolibri-explore-plugin-release",
+              client_payload: {
+                VERSION: "${{ needs.validate.output.tag }}",
+              }
+            })
+
+  trigger_kolibri-installer-android:
+    name: Trigger kolibri-installer-android release
+    runs-on: ubuntu-latest
+    needs: [validate, release]
+    if: ${{ fromJSON(needs.validate.outputs.trigger-apps) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ needs.validate.outputs.ref }}
+
+      - name: Install trigger_jenkins dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          python3 -m pip install requests python-jenkins
+
+      - name: Trigger building kolibri-installer-android
+        run: |
+          ./scripts/trigger_jenkins.py kolibri-installer-android UPLOAD=true
+        env:
+          JENKINS_USER: ${{ secrets.JENKINS_USERNAME }}
+          JENKINS_PASSWORD: ${{ secrets.JENKINS_PASSWORD }}
