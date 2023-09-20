@@ -2,7 +2,7 @@
 
   <b-container class="channels pb-5">
     <h5 class="text-muted">
-      Channels from A-Z
+      {{ $tr('channelsAlphabeticalTitle') }}
     </h5>
     <EkChannelCardGroup
       class="pb-4"
@@ -49,6 +49,13 @@
     methods: {
       chunk(channels) {
         return _.chunk(channels, this.columns);
+      },
+    },
+
+    $trs: {
+      channelsAlphabeticalTitle: {
+        message: 'Channels from A-Z',
+        context: 'Title of section with channels in alphabetical order',
       },
     },
   };
