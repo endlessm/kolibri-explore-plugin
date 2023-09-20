@@ -12,7 +12,11 @@
 export default {
   name: 'App',
   created () {
-    document.title = "Loading";
+    document.title = this.$formatMessage({
+      id: 'welcomeDocumentTitle',
+      defaultMessage: 'Welcome',
+      description: 'Document title for the welcome page',
+    });
   },
   mounted() {
     window.LoadingApp = {
