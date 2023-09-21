@@ -16,12 +16,6 @@ module.exports = function(locale) {
           resolve(() => require('intl/locale-data/jsonp/en.js'));
         });
       });
-    case 'es-es':
-      return new Promise(function(resolve) {
-        require.ensure(['intl/locale-data/jsonp/es-ES.js'], function(require) {
-          resolve(() => require('intl/locale-data/jsonp/es-ES.js'));
-        });
-      });
     case 'es-419':
       return new Promise(function(resolve) {
         require.ensure(['intl/locale-data/jsonp/es-419.js'], function(require) {
