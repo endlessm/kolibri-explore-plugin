@@ -25,7 +25,10 @@
     Some width information need to be provided to `<span>s` to allow `text-overflow`
     calculate properly when ellipsis should be added.
   -->
-  <span v-if="text !== ''" :style="{ display: 'inline-block', maxWidth: '100%' }">
+  <span
+    v-if="text !== ''"
+    :style="{ display: 'inline-block', maxWidth: '100%', overflow: 'hidden' }"
+  >
     <span
       v-bind="$attrs"
       :style="{ display: 'inline-block', maxWidth: '100%', ...truncate }"

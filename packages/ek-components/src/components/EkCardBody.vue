@@ -6,7 +6,7 @@
 
     <!-- Channel -->
     <div v-if="showChannelIcon">
-      <div class="align-items-center d-flex mb-3">
+      <div class="d-flex mb-3">
         <EkChannelLogo class="mr-2" :channel="node.channel" size="sm" />
         <span class="channel-title text-muted text-truncate">{{ node.channel.title }}</span>
       </div>
@@ -15,7 +15,7 @@
     <!-- Title -->
     <div>
       <h5
-        class="align-items-center mb-1 title"
+        class="mb-1 title"
         :class="{ 'text-muted': !node.available }"
       >
         <EkClamp
