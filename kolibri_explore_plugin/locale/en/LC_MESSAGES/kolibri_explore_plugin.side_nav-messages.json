@@ -1,0 +1,23 @@
+{
+  "CommonExploreStrings.discoveryLabel": "Discovery",
+  "CommonExploreStrings.exploreLabel": "Explore",
+  "CommonExploreStrings.libraryLabel": "Library",
+  "SearchTerms.artsAndCrafts": "Arts & Crafts",
+  "SearchTerms.artsAndCraftsTerms": "artist painting drawing arts crafts",
+  "SearchTerms.careers": "Careers",
+  "SearchTerms.careersTerms": "careers",
+  "SearchTerms.cooking": "Cooking",
+  "SearchTerms.cookingTerms": "cooking recipes desserts vegetables culinary",
+  "SearchTerms.fitness": "Fitness",
+  "SearchTerms.fitnessTerms": "fitness workouts stretches",
+  "SearchTerms.games": "Games",
+  "SearchTerms.gamesTerms": "games gaming maze gamers minecraft",
+  "SearchTerms.math": "Math",
+  "SearchTerms.mathTerms": "math",
+  "SearchTerms.music": "Music",
+  "SearchTerms.musicTerms": "music blues rhythm ukulele guitar",
+  "SearchTerms.science": "Science",
+  "SearchTerms.scienceTerms": "cool science physics biology gravity",
+  "SearchTerms.sports": "Sports",
+  "SearchTerms.sportsTerms": "sports soccer volleyball basketball football"
+}

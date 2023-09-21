@@ -1,0 +1,20 @@
+{
+  "Breadcrumb.searchKeywords": "Search Keywords",
+  "BundleSection.licenseHeading": "License — {license_name}",
+  "ChannelFooter.bestOfTheWeb": "<strong>Best of the Web</strong> curated by ",
+  "Content.licenseHeading": "License — {license_name}",
+  "Content.nextIn": "Next in {name}",
+  "EmptyResultsMessage.exploreTopics": "Explore topics",
+  "EmptyResultsMessage.noResults": "There are no results containing all of your filter options.",
+  "EmptyResultsMessage.noResultsGuidance": "You can try fewer filter options, different filter options, or explore the topics below.",
+  "FilterContent.clearFiltersButton": "clear filters",
+  "FilterDropDown.clearAllButton": "clear all",
+  "MainSections.sectionsLabel": "Sections",
+  "Search.exploreTopics": "Explore topics",
+  "Search.noContentFound": "Sorry, we can’t find any content that matches your search.",
+  "Search.noContentFoundGuidance": "You can try a different search, maybe use fewer words, or try one of the topic suggestions below.",
+  "Search.onlyDownloadedItems": "Only downloaded items",
+  "Search.resultsCount": "{num_results, number, integer} {num_results, plural, one {Result} other {Results}}",
+  "SectionsSearchRow.downloadFullChannelButton": "Download full channel",
+  "SectionsSearchRow.searchKeywordsButton": "Search Keywords"
+}
