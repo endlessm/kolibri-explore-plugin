@@ -12,9 +12,8 @@
       </template>
       <template #right>
         <div v-if="isEndlessApp" class="endless-seal text-right">
-          <div class="mb-1">
-            {{ $tr('bestOfTheWeb') }}
-          </div>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div class="mb-1" v-html="$tr('bestOfTheWeb')"></div>
           <img :src="logo" aria-hidden="true">
         </div>
       </template>
