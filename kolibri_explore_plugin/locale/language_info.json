@@ -7,13 +7,6 @@
     "default_font": "NotoSans"
   },
   {
-    "crowdin_code": "es-ES",
-    "intl_code": "es-es",
-    "language_name": "Español (España)",
-    "english_name": "Spanish (Spain)",
-    "default_font": "NotoSans"
-  },
-  {
     "crowdin_code": "la",
     "intl_code": "es-419",
     "language_name": "Español",
