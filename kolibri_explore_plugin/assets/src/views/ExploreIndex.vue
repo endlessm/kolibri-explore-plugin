@@ -21,6 +21,7 @@
     </b-overlay>
     <router-view />
     <SideNav
+      v-if="enableSideNav"
       ref="sideNav"
       class="side-nav"
       :navShown="showSideNav"
@@ -39,6 +40,7 @@
   import LoadingImage from 'ek-components/src/assets/loading-animation.gif';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
   import SideNav from 'kolibri.coreVue.components.SideNav';
+  import plugin_data from 'plugin_data';
   import { PageNames } from '../constants';
   import AboutModal from '../components/AboutModal';
   import commonExploreStrings from './commonExploreStrings';
@@ -96,6 +98,9 @@
       },
       loadingImg() {
         return LoadingImage;
+      },
+      enableSideNav() {
+        return plugin_data.enableSideNav;
       },
     },
     watch: {

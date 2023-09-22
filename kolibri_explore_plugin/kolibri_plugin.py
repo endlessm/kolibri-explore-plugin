@@ -60,6 +60,7 @@ class ExploreAsset(webpack_hooks.WebpackBundleHook):
                 "SHOW_AS_STANDALONE_CHANNEL"
             ],
             "useEkIguanaPage": conf.OPTIONS["Explore"]["USE_EK_IGUANA_PAGE"],
+            "enableSideNav": conf.OPTIONS["Explore"]["ENABLE_SIDE_NAV"],
             "hideDiscoveryTab": conf.OPTIONS["Explore"]["HIDE_DISCOVERY_TAB"],
             "feedbackUrl": conf.OPTIONS["Explore"]["FEEDBACK_URL"],
         }

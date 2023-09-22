@@ -36,6 +36,14 @@ option_spec = {
               tagged accordingly to fill the sections of the landing page.
             """,
         },
+        "ENABLE_SIDE_NAV": {
+            "type": "boolean",
+            "default": False,
+            "description": """
+                Whether to show the Kolibri navigation bar in the Explore
+                page.
+            """,
+        },
         "HIDE_DISCOVERY_TAB": {
             "type": "boolean",
             "default": False,
