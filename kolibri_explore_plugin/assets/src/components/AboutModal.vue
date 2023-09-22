@@ -42,7 +42,7 @@
                   {{ $tr('releaseKey') }} {{ buildInfo.version_name }} {{ buildInfo.last_release }}
                 </b-list-group-item>
                 <b-list-group-item class="bg-light rounded-0">
-                  {{ $tr('dateKey') }} {{ buildInfo.date }}
+                  {{ $tr('dateKey') }} {{ translatedBuildDate }}
                 </b-list-group-item>
                 <b-list-group-item class="bg-light rounded-0">
                   {{ $tr('commitKey') }} {{ buildInfo.commit }}
@@ -326,6 +326,7 @@
 <script>
 
   import urls from 'kolibri.urls';
+  import { currentLanguage } from 'kolibri.utils.i18n';
   import EkPrivacyPolicyText from 'ek-components/src/components/EkPrivacyPolicyText.vue';
 
   const DEVICE_CHEATCODE = 'showmedevice';
@@ -379,6 +380,16 @@
           return `${deviceContentUrl()}#/content`;
         }
         return '';
+      },
+      translatedBuildDate() {
+        if (!this.buildInfo) {
+          return '';
+        }
+        const timestamp = Date.parse(this.buildInfo.date);
+        return Intl.DateTimeFormat(currentLanguage, {
+          dateStyle: 'full',
+          timeStyle: 'long',
+        }).format(new Date(timestamp));
       },
     },
     mounted() {
