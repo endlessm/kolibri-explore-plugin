@@ -80,6 +80,20 @@ function getEkComponentsConstantsTranslator() {
       message: 'I like to experiment with a bit of everything.',
       context: 'Subtitle of a content pack',
     },
+
+    // For filters:
+    mediaFilterLabel: {
+      message: 'Learning activity',
+      context: 'Label for filtering by activity type',
+    },
+    authorFilterLabel: {
+      message: 'Author',
+      context: 'Label for filtering by author',
+    },
+    tagFilterLabel: {
+      message: 'Common keywords',
+      context: 'Label for filtering by tag',
+    },
   });
 }
 
@@ -104,9 +118,23 @@ export function mediaTypeVerb(id) {
     return null;
 }
 
-export const MediaFilterName = 'Learning activity';
-export const AuthorFilterName = 'author';
-export const TagFilterName = 'common keywords';
+export const MediaFilterName = 'by-media-type';
+export const AuthorFilterName = 'by-author';
+export const TagFilterName = 'by-tag';
+
+// This maps to a translation ID. Use filterLabel() to translate it.
+export const filterLabels = {
+  'by-media-type': 'mediaFilterLabel',
+  'by-author': 'authorFilterLabel',
+  'by-tag': 'tagFilterLabel',
+};
+
+export function filterLabel(id) {
+  if (id in filterLabels)
+    return getEkComponentsConstantsTranslator().$tr(filterLabels[id]);
+  else
+    return null;
+}
 
 export const MediaQuality = {
   LOW: 'low',
@@ -196,6 +224,8 @@ export default {
   CollectionsSections,
   DownloadState,
   FilterTagsBadList,
+  filterLabels,
+  filterLabel,
   ItemsPerPage,
   ItemsPerSlide,
   KeywordIconSize,
