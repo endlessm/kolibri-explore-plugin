@@ -57,7 +57,7 @@
     position: fixed;
     bottom: $spacer;
     right: $spacer;
-    z-index: $zindex-fixed;
+    z-index: 7;
     // Remove 2px border from the actual size to match the slidable cards row:
     width: $circled-button-size + 4px;
     height: $circled-button-size + 4px;

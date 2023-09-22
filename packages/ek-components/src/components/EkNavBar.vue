@@ -55,6 +55,12 @@
   .navbar {
     height: $navbar-height;
     @include transition($btn-transition);
+
+    &.fixed-top {
+      /* Override excessively high z-index from .fixed-top. A value of 8 is
+       * used for Kolibri's AppBar component. */
+      z-index: 8;
+    }
   }
 
 </style>

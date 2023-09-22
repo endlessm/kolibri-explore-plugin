@@ -329,3 +329,7 @@ function setSearchResults(store, searchResults, kind) {
     store.commit('CORE_SET_PAGE_LOADING', false);
   });
 }
+
+export function setShowSideNav(store, showSideNav) {
+  store.commit('topicsRoot/SET_SHOW_SIDE_NAV', showSideNav);
+}

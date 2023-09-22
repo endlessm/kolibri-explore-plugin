@@ -1,7 +1,7 @@
 <template>
 
   <EkNavBar class="discovery-navbar">
-    <img class="logo ml-3 mr-5" :src="logo">
+    <img class="logo ml-3 mr-5" :src="logo" @click="onLogoClick">
     <b-button-group class="mx-auto">
       <b-nav-text
         v-if="showDiscoveryTab"
@@ -155,6 +155,11 @@
       },
       onOnline() {
         this.isOffline = false;
+      },
+      onLogoClick(event) {
+        if (event.ctrlKey) {
+          this.$store.commit('topicsRoot/SET_SHOW_SIDE_NAV', true);
+        }
       },
     },
     $trs: {
