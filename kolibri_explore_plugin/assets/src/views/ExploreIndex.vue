@@ -20,6 +20,13 @@
       </template>
     </b-overlay>
     <router-view />
+    <SideNav
+      ref="sideNav"
+      class="side-nav"
+      :navShown="showSideNav"
+      @toggleSideNav="toggleSideNav()"
+      @shouldFocusFirstEl="findFirstEl()"
+    />
   </div>
 
 </template>
@@ -31,6 +38,7 @@
   import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
   import LoadingImage from 'ek-components/src/assets/loading-animation.gif';
   import responsiveWindowMixin from 'kolibri.coreVue.mixins.responsiveWindowMixin';
+  import SideNav from 'kolibri.coreVue.components.SideNav';
   import { PageNames } from '../constants';
   import AboutModal from '../components/AboutModal';
   import commonExploreStrings from './commonExploreStrings';
@@ -65,6 +73,7 @@
       AboutModal,
       ContentModal,
       DevTag,
+      SideNav,
     },
     mixins: [commonCoreStrings, commonExploreStrings, responsiveWindowMixin],
     data() {
@@ -75,6 +84,7 @@
     },
     computed: {
       ...mapState(['pageName']),
+      ...mapState('topicsRoot', { showSideNav: 'showSideNav' }),
       currentPage() {
         return pageNameToComponentMap[this.pageName] || null;
       },
@@ -112,6 +122,14 @@
       },
       onCustomPresentationLoadCompleted() {
         this.isCustomPresentationLoading = false;
+      },
+      toggleSideNav() {
+        this.$store.commit('topicsRoot/SET_SHOW_SIDE_NAV', !this.showSideNav);
+      },
+      findFirstEl() {
+        this.$nextTick(() => {
+          this.$refs.sideNav.focusFirstEl();
+        });
       },
     },
   };
@@ -154,6 +172,19 @@
   // https://stackoverflow.com/questions/32862394/bootstrap-modals-keep-adding-padding-right-to-body-after-closed
   body.modal-open {
     padding-right: 0 !important;
+  }
+
+</style>
+
+
+<style lang="scss" scoped>
+
+  ::v-deep .side-nav .bottom-bar {
+    display: none !important;
+  }
+
+  ::v-deep .side-nav .modal {
+    display: initial;
   }
 
 </style>

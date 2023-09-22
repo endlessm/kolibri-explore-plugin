@@ -5,6 +5,7 @@ export default {
     searchResult: {},
     carouselNodes: [],
     lastSearchPromises: {},
+    showSideNav: false,
   },
   mutations: {
     SET_STATE(state, payload) {
@@ -24,6 +25,9 @@ export default {
     },
     RESET_LAST_SEARCH_PROMISES(state) {
       state.lastSearchPromises = {};
+    },
+    SET_SHOW_SIDE_NAV(state, showSideNav) {
+      state.showSideNav = showSideNav;
     },
   },
 };
