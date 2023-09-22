@@ -1,0 +1,20 @@
+{
+  "Breadcrumb.searchKeywords": "Buscar palabras clave",
+  "BundleSection.licenseHeading": "Licencia — {license_name}",
+  "ChannelFooter.bestOfTheWeb": "<strong>Lo mejor de Internet</strong> seleccionado por",
+  "Content.licenseHeading": "Licencia: {license_name}",
+  "Content.nextIn": "Siguiente en {name}",
+  "EmptyResultsMessage.exploreTopics": "Explora contenido",
+  "EmptyResultsMessage.noResults": "No hay resultados que contengan todas las opciones de filtro.",
+  "EmptyResultsMessage.noResultsGuidance": "Puedes probar menos opciones de filtro, diferentes opciones de filtro o explorar los temas a continuación.",
+  "FilterContent.clearFiltersButton": "limpiar filtros",
+  "FilterDropDown.clearAllButton": "limpiar todo",
+  "MainSections.sectionsLabel": "Secciones",
+  "Search.exploreTopics": "Explorar contenido",
+  "Search.noContentFound": "Lo sentimos, no podemos encontrar ningún contenido que coincida con tu búsqueda.",
+  "Search.noContentFoundGuidance": "Puedes intentar una búsqueda diferente, tal vez usar menos palabras o probar una de las sugerencias de temas a continuación.",
+  "Search.onlyDownloadedItems": "Sólo elementos descargados",
+  "Search.resultsCount": "{num_results, number, integer} {num_results, plural, one {Resultado} other {Resultados}}",
+  "SectionsSearchRow.downloadFullChannelButton": "Descargar todo el canal",
+  "SectionsSearchRow.searchKeywordsButton": "Buscar palabras clave"
+}
