@@ -1,10 +1,27 @@
+@use "@fontsource/lato/scss/mixins" as Lato;
+@use "@fontsource/poppins/scss/mixins" as Poppins;
+
 @import 'styles';
 
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-vue/src/index';
 
-@import "~@fontsource/lato/index.css";
-@import "~@fontsource/poppins/index.css";
+@include Lato.faces(
+  $weights: (
+    400,
+    700,
+  ),
+  $formats: woff2
+);
+
+@include Poppins.faces(
+  $weights: (
+    400,
+    600,
+    700,
+  ),
+  $formats: woff2
+);
 
 // Override containers mixin:
 @mixin make-container($gutter: $grid-gutter-width) {

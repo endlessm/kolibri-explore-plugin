@@ -11,6 +11,8 @@
     "compile-messages": "formatjs compile-folder --format transifex lang compiled-lang"
   },
   "dependencies": {
+    "@fontsource/lato": "^5.0.0",
+    "@fontsource/poppins": "^5.0.0",
     "bootstrap": "^4.6.1",
     "bootstrap-vue": "^2.22.0",
     "vue": "^2.6.11"
