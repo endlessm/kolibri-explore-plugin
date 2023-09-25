@@ -1984,15 +1984,15 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@fontsource/lato@^4.4.5":
-  version "4.5.5"
-  resolved "https://registry.yarnpkg.com/@fontsource/lato/-/lato-4.5.5.tgz#d7371e29600528a44f5076a1604cf223168d1579"
-  integrity sha512-0KVmVCq3wZnriKVdbY+n/ZLf7Vy+dQcqpcm8kaVX4QGd6uBTgH6YWLnM1L051TtjKlal2FiE6xc/BLw116a0gQ==
+"@fontsource/lato@^5.0.0":
+  version "5.0.12"
+  resolved "https://registry.yarnpkg.com/@fontsource/lato/-/lato-5.0.12.tgz#2290a23aaf3a25dd9aba4022aa131a689cfbd3fa"
+  integrity sha512-49kN7Ty0mDicmxNdaaDuOFtY5hvAwFN1pXkxaJJVlozh4v/houKwvodM3L7QVJEUC4KfNVEwn5Y409Us+EyFWw==
 
-"@fontsource/poppins@^4.4.5":
-  version "4.5.5"
-  resolved "https://registry.yarnpkg.com/@fontsource/poppins/-/poppins-4.5.5.tgz#db08da1c37db30eb06d75c2abdd9c62118dbab8b"
-  integrity sha512-fqRWOQDhfoJoxP98qwMQLvLcgOu13yib6rZjL5UqpurobIaWTweqzo95uOLOGBjEE0bMMAbfDMoFUTL8Byrdeg==
+"@fontsource/poppins@^5.0.0":
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/@fontsource/poppins/-/poppins-5.0.8.tgz#a1c5540aedb3719a36eba5c7c5dfaa3aed3c9f80"
+  integrity sha512-P8owfYWluoUY5Nyzk4gT/L6LmLmseP6ezFWhj6VBUa5pRIdnCvNJpoQ6i/vhekjtJOfqX6nKlB+LCttoUl2GQQ==
 
 "@formatjs/cli@^4.5.0":
   version "4.8.4"

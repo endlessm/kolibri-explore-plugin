@@ -9,8 +9,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@fontsource/lato": "^4.4.5",
-    "@fontsource/poppins": "^4.4.5",
+    "@fontsource/lato": "^5.0.0",
+    "@fontsource/poppins": "^5.0.0",
     "bootstrap": "^4.6.1",
     "bootstrap-vue": "^2.22.0",
     "core-js": "^3.6.5",
