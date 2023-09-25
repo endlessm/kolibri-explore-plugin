@@ -3,13 +3,13 @@
     ref="dropdown"
     size="sm"
     class="mr-2"
-    :text="filter.prettyName"
+    :text="filterNameToLabel(filter.prettyName, true)"
     :variant="filter.variant"
     :boundary="boundary"
   >
     <div class="d-flex filter-dropdown flex-column">
       <b-dropdown-header class="header">
-        {{ filter.name }}
+        {{ filterNameToLabel(filter.name) }}
         <b-button-close @click="closeFilter()" />
       </b-dropdown-header>
       <b-dropdown-divider class="my-1" />
@@ -49,6 +49,7 @@
 
 <script>
   import { mapGetters, mapMutations } from 'vuex';
+  import { constants } from 'ek-components';
   import CloseIcon from 'vue-material-design-icons/CloseCircleOutline.vue';
 
   export default {
@@ -95,6 +96,13 @@
 
         const selected = this.isSelected(filter, option);
         this.onOptionClick({ filter, option, checked: !selected });
+      },
+      filterNameToLabel(value, lowercase=false) {
+        if (lowercase) {
+          return constants.filterLabel(value).toLowerCase() || value;
+        } else {
+          return constants.filterLabel(value) || value;
+        }
       },
     },
     $trs: {
