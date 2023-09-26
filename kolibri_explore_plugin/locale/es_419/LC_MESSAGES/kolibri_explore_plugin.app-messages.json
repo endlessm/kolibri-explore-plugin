@@ -92,7 +92,7 @@
   "DownloadPage.documentTitle": "Descargando",
   "DownloadPage.retryLabel": "Reintentar",
   "DownloadPage.titleCompleted": "¡El paquete de inicio {packTitle} ha sido descargado! ",
-  "DownloadPage.titleDownloading": "¡Descargado el paquete de inicio {packTitle}!",
+  "DownloadPage.titleDownloading": "¡Descargando el paquete de inicio {packTitle}!",
   "EkCardButtons.downloadCompletedLabel": "Descarga completa",
   "EkCardButtons.downloadLabel": "Descargar",
   "EkCardButtons.downloadRestartLabel": "Reiniciar descarga",
