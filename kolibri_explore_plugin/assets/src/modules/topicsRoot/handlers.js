@@ -162,10 +162,10 @@ export function decideWelcome(store) {
             store.commit('CORE_SET_PAGE_LOADING', false);
             store.commit('CORE_SET_ERROR', null);
           } else {
-            console.debug('Welcome: Redirecting to Explore page...');
-            router.replace({ name: PageNames.TOPICS_ROOT });
             store.commit('CORE_SET_PAGE_LOADING', false);
             store.commit('CORE_SET_ERROR', null);
+            console.debug('Welcome: Redirecting to Explore page...');
+            router.replace({ name: PageNames.TOPICS_ROOT });
           }
         });
       }
