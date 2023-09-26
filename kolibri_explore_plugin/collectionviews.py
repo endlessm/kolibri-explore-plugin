@@ -45,6 +45,7 @@ COLLECTION_GRADES = [
     "athlete",
     "curious",
     "extras",
+    "spanish",
 ]
 
 # FIXME: Rename to PACK_VERSIONS
