@@ -179,7 +179,6 @@ export function decidePackSelection(store) {
   if (languageIdToCode(currentLanguage) === 'es') {
     console.debug('Welcome: Downloading Spanish pack directly...');
     router.replace({ name: PageNames.DOWNLOAD, params: { grade: 'spanish', name: '0001' } });
-    store.commit('SET_PAGE_NAME', PageNames.DOWNLOAD);
   } else {
     store.commit('SET_PAGE_NAME', PageNames.WELCOME_PACK_SELECTION);
   }
