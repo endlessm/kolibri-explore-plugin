@@ -125,7 +125,7 @@ jobs:
               repo: "endless-key-app",
               event_type: "kolibri-explore-plugin-release",
               client_payload: {
-                VERSION: "${{ needs.validate.output.tag }}",
+                VERSION: "${{ needs.validate.outputs.tag }}",
               }
             })
 
