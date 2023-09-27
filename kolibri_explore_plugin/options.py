@@ -59,5 +59,12 @@ option_spec = {
                 to hide it
             """,
         },
+        "FEEDBACK_URL_ES": {
+            "type": "string",
+            "default": "https://endlessos.org/key-feedback-es",
+            "description": """
+                Form to link to from the Feedback button for Spanish.
+            """,
+        },
     },
 }

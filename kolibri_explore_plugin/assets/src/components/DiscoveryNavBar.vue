@@ -65,6 +65,7 @@
 
 <script>
 
+  import { currentLanguage, languageIdToCode } from 'kolibri.utils.i18n';
   import ViewDashboardOutlineIcon from 'vue-material-design-icons/ViewDashboardOutline.vue';
   import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
   import MessageReplyTextOutlineIcon from 'vue-material-design-icons/MessageReplyTextOutline.vue';
@@ -96,7 +97,12 @@
         return assets.EndlessLogo;
       },
       feedbackUrl() {
-        return plugin_data.feedbackUrl;
+        switch (languageIdToCode(currentLanguage)) {
+          case 'es':
+            return plugin_data.feedbackUrlEs;
+          default:
+            return plugin_data.feedbackUrl;
+        }
       },
       showFeedbackButton() {
         return plugin_data.feedbackUrl != '';
