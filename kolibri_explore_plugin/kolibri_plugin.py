@@ -63,6 +63,7 @@ class ExploreAsset(webpack_hooks.WebpackBundleHook):
             "enableSideNav": conf.OPTIONS["Explore"]["ENABLE_SIDE_NAV"],
             "hideDiscoveryTab": conf.OPTIONS["Explore"]["HIDE_DISCOVERY_TAB"],
             "feedbackUrl": conf.OPTIONS["Explore"]["FEEDBACK_URL"],
+            "feedbackUrlEs": conf.OPTIONS["Explore"]["FEEDBACK_URL_ES"],
         }
         if "Pwa" in conf.OPTIONS:
             pwa_options = {
