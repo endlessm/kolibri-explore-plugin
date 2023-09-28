@@ -215,9 +215,9 @@ export function decideDownload(store, grade, name) {
             });
           } else {
             console.debug('Conditions not met to download, assuming as completed.');
-            router.replace({ name: PageNames.TOPICS_ROOT });
             store.commit('CORE_SET_PAGE_LOADING', false);
             store.commit('CORE_SET_ERROR', null);
+            router.replace({ name: PageNames.TOPICS_ROOT });
           }
         });
       }
