@@ -191,7 +191,7 @@
 
   .discovery-tab {
     &.active {
-      border-bottom: 2px solid $secondary;
+      border-bottom: 2px solid $endless-orange;
     }
   }
 
