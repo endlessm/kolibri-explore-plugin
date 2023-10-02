@@ -8,7 +8,7 @@
     }"
   >
     <EkContentLink :url="url" @isHovered="(hovered) => isHovered = hovered">
-      <b-card-body class="bg-primary">
+      <b-card-body class="bg-secondary">
         <div
           class="card-img"
           :class="{ 'low-quality': isLowQuality, 'is-thumbnail-wide': isThumbnailWide }"
@@ -39,7 +39,7 @@
               <span class="channel-title subtitle text-truncate">{{ node.channel.title }}</span>
             </div>
             <div v-else>
-              <b-badge pill variant="primary">
+              <b-badge pill variant="secondary">
                 <BundleIcon :size="20" />
                 {{ $tr('exploreBadge') }}
               </b-badge>
