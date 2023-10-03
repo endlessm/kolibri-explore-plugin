@@ -28,6 +28,7 @@
     <b-navbar-nav>
       <b-button
         v-if="showStoreButtons"
+        class="align-self-center"
         variant="endless-orange"
         size="sm"
         pill
