@@ -28,6 +28,7 @@
     <b-navbar-nav>
       <b-button
         v-if="showStoreButtons"
+        variant="endless-orange"
         size="sm"
         pill
         @click="toBottom"
