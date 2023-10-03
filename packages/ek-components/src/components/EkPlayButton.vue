@@ -3,7 +3,7 @@
     pill
     :size="size"
     :block="block"
-    :variant="`${kind}-${variant}`"
+    variant="gray-primary"
     :disabled="buttonDisabled"
     class="pb-1 pl-1 pt-1 text-nowrap"
     @click.stop.prevent="$emit('click')"
@@ -49,10 +49,6 @@ export default {
     label: {
       type: String,
       default: '',
-    },
-    variant: {
-      type: String,
-      default: 'primary',
     },
     size: {
       type: String,
