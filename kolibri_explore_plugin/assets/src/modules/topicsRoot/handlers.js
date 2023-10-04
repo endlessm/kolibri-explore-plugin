@@ -128,6 +128,10 @@ function _fetchCarouselNodes(store) {
   );
 }
 
+function _isDownloadComplete(status) {
+  return status.stage === 'COMPLETED';
+}
+
 function _isDownloadOngoing(status) {
   return status.stage !== 'COMPLETED' && status.stage !== 'NOT_STARTED';
 }
@@ -145,7 +149,12 @@ export function decideWelcome(store) {
 
   return Promise.all([getDownloadStatus(), getShouldResume()]).then(
     ([status, { shouldResume, grade, name }]) => {
-      if (_isDownloadOngoing(status) || shouldResume) {
+      if (_isDownloadComplete(status)) {
+        store.commit('CORE_SET_PAGE_LOADING', false);
+        store.commit('CORE_SET_ERROR', null);
+        console.debug('Welcome: Download complete, redirecting to Explore page...');
+        router.replace({ name: PageNames.TOPICS_ROOT });
+      } else if (_isDownloadOngoing(status) || shouldResume) {
         console.debug('Welcome: Redirecting to Download page...');
         // The catch here is needed for ignoring redundant navigation errors.
         router.replace({ name: PageNames.DOWNLOAD, params: { grade, name } }).catch(() => {});
@@ -153,21 +162,12 @@ export function decideWelcome(store) {
         store.commit('CORE_SET_PAGE_LOADING', false);
         store.commit('CORE_SET_ERROR', null);
       } else {
-        return store.dispatch('setAndCheckChannels').then(channels => {
-          if (!channels.length) {
-            console.debug('Welcome: Redirecting to Welcome page...');
-            // The catch here is needed for ignoring redundant navigation errors.
-            router.replace({ name: PageNames.WELCOME_ROOT }).catch(() => {});
-            store.commit('SET_PAGE_NAME', PageNames.WELCOME_ROOT);
-            store.commit('CORE_SET_PAGE_LOADING', false);
-            store.commit('CORE_SET_ERROR', null);
-          } else {
-            store.commit('CORE_SET_PAGE_LOADING', false);
-            store.commit('CORE_SET_ERROR', null);
-            console.debug('Welcome: Redirecting to Explore page...');
-            router.replace({ name: PageNames.TOPICS_ROOT });
-          }
-        });
+        console.debug('Welcome: Redirecting to Welcome page...');
+        // The catch here is needed for ignoring redundant navigation errors.
+        router.replace({ name: PageNames.WELCOME_ROOT }).catch(() => {});
+        store.commit('SET_PAGE_NAME', PageNames.WELCOME_ROOT);
+        store.commit('CORE_SET_PAGE_LOADING', false);
+        store.commit('CORE_SET_ERROR', null);
       }
     }
   );
@@ -192,7 +192,12 @@ export function decideDownload(store, grade, name) {
 
   return Promise.all([getDownloadStatus(), getShouldResume()]).then(
     ([status, { shouldResume }]) => {
-      if (_isDownloadOngoing(status)) {
+      if (_isDownloadComplete(status)) {
+        console.debug('Already downloaded, redirecting to Explore page...');
+        store.commit('CORE_SET_PAGE_LOADING', false);
+        store.commit('CORE_SET_ERROR', null);
+        router.replace({ name: PageNames.TOPICS_ROOT });
+      } else if (_isDownloadOngoing(status)) {
         console.debug('A collections download is ongoing...');
         store.commit('SET_PAGE_NAME', PageNames.DOWNLOAD);
         store.commit('CORE_SET_PAGE_LOADING', false);
@@ -205,20 +210,11 @@ export function decideDownload(store, grade, name) {
           store.commit('CORE_SET_ERROR', null);
         });
       } else {
-        return store.dispatch('setAndCheckChannels').then(channels => {
-          if (!channels.length) {
-            console.debug('Downloading starter pack...');
-            return startDownload(grade, name).then(() => {
-              store.commit('SET_PAGE_NAME', PageNames.DOWNLOAD);
-              store.commit('CORE_SET_PAGE_LOADING', false);
-              store.commit('CORE_SET_ERROR', null);
-            });
-          } else {
-            console.debug('Conditions not met to download, assuming as completed.');
-            store.commit('CORE_SET_PAGE_LOADING', false);
-            store.commit('CORE_SET_ERROR', null);
-            router.replace({ name: PageNames.TOPICS_ROOT });
-          }
+        console.debug('Downloading starter pack...');
+        return startDownload(grade, name).then(() => {
+          store.commit('SET_PAGE_NAME', PageNames.DOWNLOAD);
+          store.commit('CORE_SET_PAGE_LOADING', false);
+          store.commit('CORE_SET_ERROR', null);
         });
       }
     }
