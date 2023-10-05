@@ -11,11 +11,11 @@ from django.http import FileResponse
 from django.http import Http404
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_control
 from django.views.decorators.cache import never_cache
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic.base import TemplateView
 from django.views.generic.base import View
-from kolibri.core.content.api import metadata_cache
 from kolibri.core.content.zip_wsgi import add_security_headers
 from kolibri.core.content.zip_wsgi import get_embedded_file
 from kolibri.core.decorators import cache_no_user_data
@@ -61,7 +61,7 @@ class AppBase(View):
 
 
 class AppView(AppBase):
-    @method_decorator(metadata_cache, name="dispatch")
+    @method_decorator(cache_control(max_age=604800), name="dispatch")
     @xframe_options_exempt
     def get(self, request, app, path=""):
         filename = self._get_file(app, "custom-channel-ui.zip")
