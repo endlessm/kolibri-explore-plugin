@@ -240,6 +240,12 @@ class CollectionDownloadManager:
         self._enqueuing_timestamp = None
         self._enqueued_timestamp = None
 
+    def is_state_unset(self):
+        return (
+            self._stage == DownloadStage.NOT_STARTED
+            and self._content_manifest is None
+        )
+
     def start(self, manifest, user):
         """Start downloading a collection manifest."""
         if self._stage != DownloadStage.NOT_STARTED:
@@ -264,6 +270,12 @@ class CollectionDownloadManager:
         self._tasks_pending = state["tasks_pending"]
         self._tasks_completed = state["tasks_completed"]
         self._tasks_previously_completed = state["tasks_previously_completed"]
+
+        logger.info(
+            f"Download state loaded for grade={grade} name={name}, "
+            + f"stage={stage_name}"
+        )
+        logger.debug(f"Loaded download state: {state}")
 
     def cancel(self):
         if self._current_job_id is not None:
@@ -733,5 +745,13 @@ def cancel_download(request):
 @api_view(["GET"])
 def get_download_status(request):
     """Return the download status."""
+
+    saved_state = request.session.get("COLLECTIONS_STATE")
+    if (
+        _collection_download_manager.is_state_unset()
+        and saved_state is not None
+    ):
+        _collection_download_manager.from_state(saved_state)
+
     status = _collection_download_manager.get_status()
     return Response({"status": status})
