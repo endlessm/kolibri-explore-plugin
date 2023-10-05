@@ -23,7 +23,7 @@
             <b-progress
               :max="1"
               :value="displayProgress"
-              variant="secondary"
+              variant="endless-orange"
               animated
             />
             <p class="mt-1">
