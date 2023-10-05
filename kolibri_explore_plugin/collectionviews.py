@@ -240,7 +240,7 @@ class CollectionDownloadManager:
         self._enqueuing_timestamp = None
         self._enqueued_timestamp = None
 
-    def from_manifest(self, manifest, user):
+    def start(self, manifest, user):
         """Start downloading a collection manifest."""
         if self._stage != DownloadStage.NOT_STARTED:
             raise DownloadError("A download has already started. Can't start")
@@ -646,7 +646,7 @@ def start_download(request):
 
     # Init the download manager and start downloading
     try:
-        _collection_download_manager.from_manifest(manifest, request.user)
+        _collection_download_manager.start(manifest, request.user)
         logger.info(f"Download started for grade={grade} name={name}")
     except DownloadError as err:
         raise APIException(err)
