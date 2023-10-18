@@ -136,20 +136,16 @@ jobs:
     if: ${{ fromJSON(needs.validate.outputs.trigger-apps) }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ needs.validate.outputs.ref }}
-
-      - name: Install trigger_jenkins dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-pip
-          python3 -m pip install requests python-jenkins
-
       - name: Trigger building kolibri-installer-android
-        run: |
-          ./scripts/trigger_jenkins.py kolibri-installer-android UPLOAD=true
-        env:
-          JENKINS_USER: ${{ secrets.JENKINS_USERNAME }}
-          JENKINS_PASSWORD: ${{ secrets.JENKINS_PASSWORD }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.REPOSITORY_DISPATCH_TOKEN }}
+          script: |
+            await github.rest.repos.createDispatchEvent({
+              owner: "endlessm",
+              repo: "kolibri-installer-android",
+              event_type: "kolibri-explore-plugin-release",
+              client_payload: {
+                VERSION: "${{ needs.validate.outputs.tag }}",
+              }
+            })
