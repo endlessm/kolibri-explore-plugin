@@ -59,6 +59,7 @@ export const CustomChannelApps = {
   '1c98e92b8c2f536796960bed8d137a25': 'ceibal', // Ceibal
   '07cd1633691b4473b6fda08caf826253': 'ciensacion', // Ciensación
   c4ad70f67dff57738591086e466f9afc: 'proyecto-descartes', // Proyecto Descartes
+  f446655247a95c0aa94ca9fa4d66783b: 'proyecto-biosfera', // Proyecto Biosfera
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment',
@@ -249,6 +250,7 @@ export const ChannelCardThumbnails = {
   da53f90b1be25752a04682bbc353659f: 'ciencia-nasa.png', // Ciencia NASA
   '07cd1633691b4473b6fda08caf826253': 'ciensacion.png', // Ciensación
   c4ad70f67dff57738591086e466f9afc: 'proyecto-descartes.png', // Proyecto Descartes
+  f446655247a95c0aa94ca9fa4d66783b: 'proyecto-biosfera.png', // Proyecto Biosfera
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.jpg',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment.jpg',
@@ -321,6 +323,7 @@ export const ChannelCardIcons = {
   da53f90b1be25752a04682bbc353659f: 'ciencia-nasa.png', // Ciencia NASA
   '07cd1633691b4473b6fda08caf826253': 'ciensacion.png', // Ciensación
   c4ad70f67dff57738591086e466f9afc: 'proyecto-descartes.png', // Proyecto Descartes
+  f446655247a95c0aa94ca9fa4d66783b: 'proyecto-biosfera.png', // Proyecto Biosfera
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.png',
 };
