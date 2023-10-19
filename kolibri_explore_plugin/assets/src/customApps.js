@@ -54,6 +54,7 @@ export const CustomChannelApps = {
   '6da97a60cbd44e918137827bd5425efb': 'code-org',
   b6a8886278aa45a3a40c2e0ae5358115: 'pilas-engine',
   b06dd546e8ba4b44bf921862c9948ffe: 'wiixii',
+  fed29d60e4d84a1e8dcfc781d920b40e: 'biblioteca-elejandria', // Biblioteca Elejandria
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment',
@@ -238,6 +239,7 @@ export const ChannelCardThumbnails = {
   '6da97a60cbd44e918137827bd5425efb': 'code-org.png',
   b6a8886278aa45a3a40c2e0ae5358115: 'pilas-engine.png',
   b06dd546e8ba4b44bf921862c9948ffe: 'wiixii.jpg',
+  fed29d60e4d84a1e8dcfc781d920b40e: 'biblioteca-elejandria.png', // Biblioteca Elejandria
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.jpg',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment.jpg',
@@ -304,6 +306,7 @@ export const ChannelCardIcons = {
   '8fa678af1dd05329bf3218c549b84996': 'phet-interactive-simulations.png', // phet spanish
   b6a8886278aa45a3a40c2e0ae5358115: 'pilas-engine.png',
   b06dd546e8ba4b44bf921862c9948ffe: 'wiixii.png',
+  fed29d60e4d84a1e8dcfc781d920b40e: 'biblioteca-elejandria.png', // Biblioteca Elejandria
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.png',
 };
