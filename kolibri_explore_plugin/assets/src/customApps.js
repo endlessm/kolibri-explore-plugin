@@ -56,6 +56,7 @@ export const CustomChannelApps = {
   b06dd546e8ba4b44bf921862c9948ffe: 'wiixii',
   fed29d60e4d84a1e8dcfc781d920b40e: 'biblioteca-elejandria', // Biblioteca Elejandria
   c984c3f6cec55ecc997769213e5a855d: 'ck-12-spanish', // CK-12 Spanish
+  '1c98e92b8c2f536796960bed8d137a25': 'ceibal', // Ceibal
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment',
@@ -242,6 +243,7 @@ export const ChannelCardThumbnails = {
   b06dd546e8ba4b44bf921862c9948ffe: 'wiixii.jpg',
   fed29d60e4d84a1e8dcfc781d920b40e: 'biblioteca-elejandria.png', // Biblioteca Elejandria
   c984c3f6cec55ecc997769213e5a855d: 'ck-12-spanish.png', // CK-12 Spanish
+  '1c98e92b8c2f536796960bed8d137a25': 'ceibal.png', // Ceibal
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.jpg',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment.jpg',
@@ -310,6 +312,7 @@ export const ChannelCardIcons = {
   b06dd546e8ba4b44bf921862c9948ffe: 'wiixii.png',
   fed29d60e4d84a1e8dcfc781d920b40e: 'biblioteca-elejandria.png', // Biblioteca Elejandria
   c984c3f6cec55ecc997769213e5a855d: 'ck-12-spanish.png', // CK-12 Spanish
+  '1c98e92b8c2f536796960bed8d137a25': 'ceibal.png', // Ceibal
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.png',
 };
