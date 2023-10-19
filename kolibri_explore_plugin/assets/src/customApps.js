@@ -57,6 +57,7 @@ export const CustomChannelApps = {
   fed29d60e4d84a1e8dcfc781d920b40e: 'biblioteca-elejandria', // Biblioteca Elejandria
   c984c3f6cec55ecc997769213e5a855d: 'ck-12-spanish', // CK-12 Spanish
   '1c98e92b8c2f536796960bed8d137a25': 'ceibal', // Ceibal
+  '07cd1633691b4473b6fda08caf826253': 'ciensacion', // Ciensación
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment',
@@ -245,6 +246,7 @@ export const ChannelCardThumbnails = {
   c984c3f6cec55ecc997769213e5a855d: 'ck-12-spanish.png', // CK-12 Spanish
   '1c98e92b8c2f536796960bed8d137a25': 'ceibal.png', // Ceibal
   da53f90b1be25752a04682bbc353659f: 'ciencia-nasa.png', // Ciencia NASA
+  '07cd1633691b4473b6fda08caf826253': 'ciensacion.png', // Ciensación
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.jpg',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment.jpg',
@@ -315,6 +317,7 @@ export const ChannelCardIcons = {
   c984c3f6cec55ecc997769213e5a855d: 'ck-12-spanish.png', // CK-12 Spanish
   '1c98e92b8c2f536796960bed8d137a25': 'ceibal.png', // Ceibal
   da53f90b1be25752a04682bbc353659f: 'ciencia-nasa.png', // Ciencia NASA
+  '07cd1633691b4473b6fda08caf826253': 'ciensacion.png', // Ciensación
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.png',
 };
