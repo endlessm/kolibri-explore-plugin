@@ -5,10 +5,10 @@ import urls from 'kolibri.urls';
 export const CustomChannelApps = {
   ed519e3b798147569b46cb550dbfc373: 'blockly-games',
   bbb4ea407a3c450cb18cbaa76f2d75cd: 'cspathshala-english',
-  c9d7f950ab6b5a1199e3d6c10d7f0103: 'khan-academy',
+  c9d7f950ab6b5a1199e3d6c10d7f0103: 'khan-academy', // Khan English
+  c1f2b7e6ac9f56a2bb44fa7a48b66dce: 'khan-academy', // Khan Spanish
   '85b42a40745f4e2392ed62e72d4dad6e': 'oceanx',
   fc47aee82e0153e2a30197d3fdee1128: 'open-stax',
-  '38eaaf9ec82a44f9ab6e7a44cb730f07': 'pbs-kids',
   '197934f144305350b5820c7c4dd8e194': 'phet-interactive-simulations', // phet english
   '8fa678af1dd05329bf3218c549b84996': 'phet-interactive-simulations', // phet spanish
   e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy', // sikana english
@@ -18,7 +18,6 @@ export const CustomChannelApps = {
   '3160899a73564d8a8467284d9219b91c': 'terminal-two',
   '74f36493bb475b62935fa8705ed59fed': 'thoughtful-learning',
   bf0260ed911f44cda27a263db93a8512: '49ers-edu-digital-playbook',
-  c8540424d77f44f8ae306e22d3b14eaf: 'coronavirus',
   // Endless curated content (mostly Youtube content based)
   f061fce103ff5d4e9b8433e67802e666: 'arts',
   '4968191fba07548c9592fc174a70b5d6': 'beauty',
@@ -32,10 +31,8 @@ export const CustomChannelApps = {
   f5f6729f95b55753badeaa066fa6e986: 'healthy-body',
   '4e413158eac55422a5343af9fcfa8d59': 'healthy-mind',
   b40491d1ef8b5506b8c6ae861372e9de: 'jewelry-making',
-  '9eeebbc5140d5b98ac4a4d2ce9432135': 'lgbtq',
   '057f871caa405ec29d62ba0523c193d7': 'music',
   '914fee213ee146de869016c287116b23': 'novels',
-  '59bb2e5a3d2e5e3b85b87d9ab4daa2f3': 'reading',
   a8e6591f1afa426d859318a0a29d1237: 'samhsa',
   '3fcffebc58d15175b948b140434ef6e6': 'sports',
   '92e96efc082e5c62b0aac3847bdcdb33': 'staff-playlist',
@@ -51,23 +48,16 @@ export const CustomChannelApps = {
   '4b2f3f35debe4fbe96b77558a3364675': 'cas-es', // California Academy of Sciences (es)
   '08897e003ea9489eb3d86fc94ba08c21': 'support-ukraine',
   '608fd926be60462aba2feccba6c050c9': 'harper-collins',
-  '6da97a60cbd44e918137827bd5425efb': 'code-org',
   b6a8886278aa45a3a40c2e0ae5358115: 'pilas-engine',
   b06dd546e8ba4b44bf921862c9948ffe: 'wiixii',
+  fed29d60e4d84a1e8dcfc781d920b40e: 'biblioteca-elejandria', // Biblioteca Elejandria
+  c984c3f6cec55ecc997769213e5a855d: 'ck-12-spanish', // CK-12 Spanish
+  '1c98e92b8c2f536796960bed8d137a25': 'ceibal', // Ceibal
+  '07cd1633691b4473b6fda08caf826253': 'ciensacion', // Ciensación
+  c4ad70f67dff57738591086e466f9afc: 'proyecto-descartes', // Proyecto Descartes
+  f446655247a95c0aa94ca9fa4d66783b: 'proyecto-biosfera', // Proyecto Biosfera
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia',
-  '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment',
-  '05a4060cf5175df78edec8dc09e396a1': 'wikihow-cars-and-other-vehicles',
-  '69497db42937539e94fe3969f6995d2d': 'wikihow-computers-and-electronics',
-  '00b0d8dff13e518d801ef816227b2691': 'wikihow-education-and-communications',
-  b9fe8fe9b92b5af5964feccdadb78413: 'wikihow-food-and-entertaining',
-  e114fe9de66e513384e4ca2e9b529c18: 'wikihow-hobbies-and-crafts',
-  '9c494b7b879e512f96f60176df85968c': 'wikihow-holidays-and-traditions',
-  '304d529d4b1c597ea7d3c59b30ac3c14': 'wikihow-home-and-garden',
-  afbf0498da3c5db3947c291ddda8e21a: 'wikihow-personal-care-and-style',
-  '146efed5aa585229a49513219e73af66': 'wikihow-sports-and-fitness',
-  e4e4d0e342f951b09aa9ef1622f5301f: 'wikihow-work-world',
-  '6f6dd2720bd2574fa70a069ac9b75046': 'wikihow-youth',
 };
 
 export function getAppNameByID(id) {
@@ -193,7 +183,8 @@ export const ChannelCardThumbnails = {
   bcc6e12a0ddf4a17a8b600c6b880e3ed: 'common-sense-student-resources.jpg',
   '38eaaf9ec82a44f9ab6e7a44cb730f07': 'pbs-kids.jpg',
   '000409f81dbe5d1ba67101cb9fed4530': 'touchable-earth.jpg',
-  c9d7f950ab6b5a1199e3d6c10d7f0103: 'khan-academy.jpg',
+  c9d7f950ab6b5a1199e3d6c10d7f0103: 'khan-academy.jpg', // Khan English
+  c1f2b7e6ac9f56a2bb44fa7a48b66dce: 'khan-academy.jpg', // Khan Spanish
   '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home.jpg',
   ed519e3b798147569b46cb550dbfc373: 'blockly-games.jpg',
   e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy.jpg', // sikana english
@@ -238,6 +229,13 @@ export const ChannelCardThumbnails = {
   '6da97a60cbd44e918137827bd5425efb': 'code-org.png',
   b6a8886278aa45a3a40c2e0ae5358115: 'pilas-engine.png',
   b06dd546e8ba4b44bf921862c9948ffe: 'wiixii.jpg',
+  fed29d60e4d84a1e8dcfc781d920b40e: 'biblioteca-elejandria.png', // Biblioteca Elejandria
+  c984c3f6cec55ecc997769213e5a855d: 'ck-12-spanish.png', // CK-12 Spanish
+  '1c98e92b8c2f536796960bed8d137a25': 'ceibal.png', // Ceibal
+  da53f90b1be25752a04682bbc353659f: 'ciencia-nasa.png', // Ciencia NASA
+  '07cd1633691b4473b6fda08caf826253': 'ciensacion.png', // Ciensación
+  c4ad70f67dff57738591086e466f9afc: 'proyecto-descartes.png', // Proyecto Descartes
+  f446655247a95c0aa94ca9fa4d66783b: 'proyecto-biosfera.png', // Proyecto Biosfera
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.jpg',
   '58828121cc115549bda7fb3f71f4795e': 'wikihow-arts-and-entertainment.jpg',
@@ -304,6 +302,13 @@ export const ChannelCardIcons = {
   '8fa678af1dd05329bf3218c549b84996': 'phet-interactive-simulations.png', // phet spanish
   b6a8886278aa45a3a40c2e0ae5358115: 'pilas-engine.png',
   b06dd546e8ba4b44bf921862c9948ffe: 'wiixii.png',
+  fed29d60e4d84a1e8dcfc781d920b40e: 'biblioteca-elejandria.png', // Biblioteca Elejandria
+  c984c3f6cec55ecc997769213e5a855d: 'ck-12-spanish.png', // CK-12 Spanish
+  '1c98e92b8c2f536796960bed8d137a25': 'ceibal.png', // Ceibal
+  da53f90b1be25752a04682bbc353659f: 'ciencia-nasa.png', // Ciencia NASA
+  '07cd1633691b4473b6fda08caf826253': 'ciensacion.png', // Ciensación
+  c4ad70f67dff57738591086e466f9afc: 'proyecto-descartes.png', // Proyecto Descartes
+  f446655247a95c0aa94ca9fa4d66783b: 'proyecto-biosfera.png', // Proyecto Biosfera
   // Zim file based channels
   f62db29be20453c4a267132e93a9e602: 'wikipedia.png',
 };
