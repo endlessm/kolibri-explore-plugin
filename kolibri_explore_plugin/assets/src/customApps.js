@@ -5,7 +5,8 @@ import urls from 'kolibri.urls';
 export const CustomChannelApps = {
   ed519e3b798147569b46cb550dbfc373: 'blockly-games',
   bbb4ea407a3c450cb18cbaa76f2d75cd: 'cspathshala-english',
-  c9d7f950ab6b5a1199e3d6c10d7f0103: 'khan-academy',
+  c9d7f950ab6b5a1199e3d6c10d7f0103: 'khan-academy', // Khan English
+  c1f2b7e6ac9f56a2bb44fa7a48b66dce: 'khan-academy', // Khan Spanish
   '85b42a40745f4e2392ed62e72d4dad6e': 'oceanx',
   fc47aee82e0153e2a30197d3fdee1128: 'open-stax',
   '197934f144305350b5820c7c4dd8e194': 'phet-interactive-simulations', // phet english
@@ -182,7 +183,8 @@ export const ChannelCardThumbnails = {
   bcc6e12a0ddf4a17a8b600c6b880e3ed: 'common-sense-student-resources.jpg',
   '38eaaf9ec82a44f9ab6e7a44cb730f07': 'pbs-kids.jpg',
   '000409f81dbe5d1ba67101cb9fed4530': 'touchable-earth.jpg',
-  c9d7f950ab6b5a1199e3d6c10d7f0103: 'khan-academy.jpg',
+  c9d7f950ab6b5a1199e3d6c10d7f0103: 'khan-academy.jpg', // Khan English
+  c1f2b7e6ac9f56a2bb44fa7a48b66dce: 'khan-academy.jpg', // Khan Spanish
   '9c33eb395508447d96c96682cb18c57a': 'techbridge-girls-home.jpg',
   ed519e3b798147569b46cb550dbfc373: 'blockly-games.jpg',
   e9d0d54d209344849e9bed0aa8c222ad: 'sikana-diy.jpg', // sikana english
