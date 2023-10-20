@@ -36,8 +36,7 @@ COLLECTION_PATHS = os.path.join(
 if conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]:
     COLLECTION_PATHS = conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]
 
-# FIXME: Rename to PACK_IDS
-COLLECTION_GRADES = [
+COLLECTION_GRADES_EN = [
     "explorer",
     "artist",
     "scientist",
@@ -45,8 +44,15 @@ COLLECTION_GRADES = [
     "athlete",
     "curious",
     "extras",
-    "spanish",
 ]
+
+COLLECTION_GRADES_ES = [
+    "spanish",
+    "spanish-extras",
+]
+
+# FIXME: Rename to PACK_IDS
+COLLECTION_GRADES = COLLECTION_GRADES_EN + COLLECTION_GRADES_ES
 
 # FIXME: Rename to PACK_VERSIONS
 COLLECTION_NAMES = ["0001"]
@@ -71,17 +77,23 @@ class EndlessKeyContentManifest(ContentManifest):
         """
         self.grade = None
         self.name = None
+        self.language = None
         self.metadata = None
         self.available = None
         super().__init__()
 
     def get_extra_channel_ids(self):
-        all_channel_ids = _get_channel_ids_for_all_content_manifests()
+        all_channel_ids = _get_channel_ids_for_all_content_manifests(
+            self.language
+        )
         return all_channel_ids.difference(self.get_channel_ids())
 
-    def read_from_static_collection(self, grade, name, validate=False):
+    def read_from_static_collection(
+        self, grade, name, language, validate=False
+    ):
         self.grade = grade
         self.name = name
+        self.language = language
         manifest_filename = os.path.join(
             COLLECTION_PATHS, f"{grade}-{name}.json"
         )
@@ -522,6 +534,7 @@ class CollectionDownloadManager:
 
 
 _content_manifests = []
+_content_manifests_by_language = {}
 _content_manifests_by_grade_name = {}
 _collection_download_manager = CollectionDownloadManager()
 
@@ -532,24 +545,34 @@ def _read_content_manifests():
 
     free_space_gb = get_free_space() / 1024**3
 
-    def _create_manifest(grade, name):
+    def _create_manifest(grade, name, language):
         manifest = EndlessKeyContentManifest()
         try:
             # TODO: Validate the manifest files or remove validation
             # https://phabricator.endlessm.com/T34355
-            manifest.read_from_static_collection(grade, name, validate=False)
+            manifest.read_from_static_collection(
+                grade, name, language, validate=False
+            )
         except ContentManifestParseError as err:
             logger.error(err)
         else:
             manifest.set_availability(free_space_gb)
             _content_manifests.append(manifest)
 
+            _content_manifests_by_language.setdefault(language, [])
+            _content_manifests_by_language[language].append(manifest)
+
             _content_manifests_by_grade_name.setdefault(grade, {})
             _content_manifests_by_grade_name[grade][name] = manifest
 
     for grade in COLLECTION_GRADES:
         for name in COLLECTION_NAMES:
-            _create_manifest(grade, name)
+            language = None
+            if grade in COLLECTION_GRADES_EN:
+                language = "en"
+            elif grade in COLLECTION_GRADES_ES:
+                language = "es"
+            _create_manifest(grade, name, language)
 
 
 _read_content_manifests()
@@ -580,9 +603,9 @@ def _get_collections_info_by_grade_name(grade, name):
     }
 
 
-def _get_channel_ids_for_all_content_manifests():
+def _get_channel_ids_for_all_content_manifests(language):
     channel_ids = set()
-    for content_manifest in _content_manifests:
+    for content_manifest in _content_manifests_by_language[language]:
         channel_ids.update(content_manifest.get_channel_ids())
     return channel_ids
 
