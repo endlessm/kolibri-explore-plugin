@@ -32,6 +32,15 @@ async function loadBestLocaleData(locales) {
     }
   }
 
+  // Try again with only the locale's language.
+  for (const lang of locales.map(l => l.split('-')[0].toLowerCase())) {
+    try {
+      return await loadLocaleData(lang);
+    } catch {
+      continue;
+    }
+  }
+
   return await loadLocaleData(defaultLocale);
 }
 
