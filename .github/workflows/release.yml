@@ -19,8 +19,10 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      # Normalize the tag and ref names here so they can be used below.
+      # Normalize the tag, version and ref names here so they can be
+      # used below.
       tag: ${{ steps.set-tag.outputs.tag }}
+      version: ${{ steps.set-tag.outputs.version }}
       ref: "refs/tags/${{ steps.set-tag.outputs.tag }}"
 
       # Don't trigger app builds for major or rc releases since they're
@@ -43,10 +45,13 @@ jobs:
           script: |
             core.setFailed('Release must run from a v* tag')
 
-      - name: Normalize tag name
+      - name: Normalize tag name and version
         id: set-tag
         run: |
-          echo "tag=${{ inputs.tagname && inputs.tagname || github.ref_name }}" >> "$GITHUB_OUTPUT"
+          tag="${{ inputs.tagname && inputs.tagname || github.ref_name }}"
+          version="${tag#v}"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
 
   build:
     name: Build
@@ -146,6 +151,6 @@ jobs:
               repo: "kolibri-installer-android",
               event_type: "kolibri-explore-plugin-release",
               client_payload: {
-                VERSION: "${{ needs.validate.outputs.tag }}",
+                VERSION: "${{ needs.validate.outputs.version }}",
               }
             })
