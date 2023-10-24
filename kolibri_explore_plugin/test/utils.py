@@ -2,18 +2,30 @@
 #
 # Copyright 2023 Endless OS Foundation LLC
 # SPDX-License-Identifier: GPL-2.0-or-later
+import functools
 import json
 import logging
+import multiprocessing
 import os
+import queue
+import threading
 from base64 import b64decode
 from glob import iglob
 from hashlib import md5
+from http.server import SimpleHTTPRequestHandler
+from http.server import ThreadingHTTPServer
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
 TESTDIR = Path(__file__).parent.resolve()
 CHANNELSDIR = TESTDIR / "channels"
+
+
+class ExploreTestError(Exception):
+    """Exceptions from kolibri-explore-plugin tests"""
+
+    pass
 
 
 def create_contentdir(content_path, channels_path=CHANNELSDIR):
@@ -101,3 +113,77 @@ def create_contentdir(content_path, channels_path=CHANNELSDIR):
                 bridge.connection.execute(table.insert(), data[table.name])
 
         bridge.end()
+
+
+class LoggingHTTPRequestHandler(SimpleHTTPRequestHandler):
+    """SimpleHTTPRequestHandler with logging"""
+
+    def log_message(self, format, *args):
+        logger.debug(
+            "%s: %s - - [%s] %s",
+            threading.current_thread().name,
+            self.address_string(),
+            self.log_date_time_string(),
+            format % args,
+        )
+
+
+class ContentServer:
+    """Content HTTP server"""
+
+    def __init__(self, path):
+        self.path = Path(path)
+        self.proc = None
+        self.address = None
+        self.url = None
+
+        if not self.path.is_dir():
+            raise ValueError(f"{path} is not a directory")
+
+    def __enter__(self):
+        self.start()
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.stop()
+
+    def _run_server(self, path, queue):
+        handler_class = functools.partial(
+            LoggingHTTPRequestHandler,
+            directory=path,
+        )
+        server = ThreadingHTTPServer(("127.0.0.1", 0), handler_class)
+        queue.put(server.server_address)
+        server.serve_forever()
+
+    def start(self):
+        """Start the HTTP server
+
+        A separate process is used so that the HTTP server can block.
+        """
+        addr_queue = multiprocessing.Queue()
+        self.proc = multiprocessing.Process(
+            target=self._run_server, args=(self.path, addr_queue)
+        )
+        self.proc.start()
+        if not self.proc.is_alive():
+            raise ExploreTestError(f"HTTP process {self.proc.pid} exited")
+        try:
+            self.address = addr_queue.get(True, 5)
+        except queue.Empty:
+            raise ExploreTestError(
+                "HTTP process did not write address to queue"
+            ) from None
+
+        self.url = f"http://{self.address[0]}:{self.address[1]}"
+        logger.debug(
+            f"Serving {self.path} on {self.url} from process {self.proc.pid}"
+        )
+
+    def stop(self):
+        """Stop the HTTP server"""
+        if self.proc is not None:
+            if self.proc.is_alive():
+                logger.debug(f"Stopping HTTP server process {self.proc.pid}")
+                self.proc.terminate()
+            self.proc = None
