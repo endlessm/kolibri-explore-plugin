@@ -1,0 +1,59 @@
+{
+  "channels": [
+    {
+      "id": "89c858dc2dd24512b2eff27ac12d3d4a",
+      "version": 1,
+      "include_node_ids": [
+        "9570292af3334e4f8286ed89c6e08df4",
+        "f13d86bd78834071b81709c5455c3653"
+      ]
+    },
+    {
+      "id": "9c2e07c1bf8d4f4299e83592eb034020",
+      "version": 3,
+      "include_node_ids": [
+        "035614fb9c614e21871fd271ec8d1e18",
+        "f6aa860d9f1c421fa520bf2893dca95d"
+      ]
+    }
+  ],
+  "metadata": {
+    "title": "Inventor",
+    "subtitle": "0001",
+    "description": "inventor",
+    "required_gigabytes": 0,
+    "tagged_node_ids": [
+      {
+        "node_id": "89c858dc2dd24512b2eff27ac12d3d4a",
+        "tags": [
+          "featured-channel"
+        ]
+      },
+      {
+        "node_id": "9570292af3334e4f8286ed89c6e08df4",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "f13d86bd78834071b81709c5455c3653",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "035614fb9c614e21871fd271ec8d1e18",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "f6aa860d9f1c421fa520bf2893dca95d",
+        "tags": [
+          "highlight"
+        ]
+      }
+    ]
+  },
+  "channel_list_hash": ""
+}

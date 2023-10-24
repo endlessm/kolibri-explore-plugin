@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 TESTDIR = Path(__file__).parent.resolve()
 CHANNELSDIR = TESTDIR / "channels"
+COLLECTIONSDIR = TESTDIR / "collections"
 
 
 class ExploreTestError(Exception):

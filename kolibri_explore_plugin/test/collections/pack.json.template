@@ -1,0 +1,59 @@
+{
+  "channels": [
+    {
+      "id": "",
+      "version": 0,
+      "include_node_ids": [
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "",
+      "version": 0,
+      "include_node_ids": [
+        "",
+        ""
+      ]
+    }
+  ],
+  "metadata": {
+    "title": "",
+    "subtitle": "",
+    "description": "",
+    "required_gigabytes": 0,
+    "tagged_node_ids": [
+      {
+        "node_id": "",
+        "tags": [
+          "featured-channel"
+        ]
+      },
+      {
+        "node_id": "",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "",
+        "tags": [
+          "highlight"
+        ]
+      }
+    ]
+  },
+  "channel_list_hash": ""
+}

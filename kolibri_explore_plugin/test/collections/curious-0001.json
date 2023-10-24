@@ -1,0 +1,59 @@
+{
+  "channels": [
+    {
+      "id": "56048757b6644208a639fbdb03510ab8",
+      "version": 3,
+      "include_node_ids": [
+        "5b45ba733da84be4b348bfa3e57cdbdc",
+        "3d78511512c44097baeedc32d972e5eb"
+      ]
+    },
+    {
+      "id": "5e7db57c21df4230bad6e8b365754632",
+      "version": 4,
+      "include_node_ids": [
+        "20945f2430894c1baf64aa02dbf9775c",
+        "2ebc745323324cfaad91674b42f96ee3"
+      ]
+    }
+  ],
+  "metadata": {
+    "title": "Curious",
+    "subtitle": "0001",
+    "description": "curious",
+    "required_gigabytes": 0,
+    "tagged_node_ids": [
+      {
+        "node_id": "56048757b6644208a639fbdb03510ab8",
+        "tags": [
+          "featured-channel"
+        ]
+      },
+      {
+        "node_id": "5b45ba733da84be4b348bfa3e57cdbdc",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "3d78511512c44097baeedc32d972e5eb",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "20945f2430894c1baf64aa02dbf9775c",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "2ebc745323324cfaad91674b42f96ee3",
+        "tags": [
+          "highlight"
+        ]
+      }
+    ]
+  },
+  "channel_list_hash": ""
+}

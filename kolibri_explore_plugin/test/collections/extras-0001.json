@@ -1,0 +1,59 @@
+{
+  "channels": [
+    {
+      "id": "6aba580c1c7b41ebaac64e5ef7b1cb08",
+      "version": 1,
+      "include_node_ids": [
+        "e73c0cba43a945f7a79b55d467e3fbef",
+        "196dcbd78fa34a468e1b7c7416ee0242"
+      ]
+    },
+    {
+      "id": "817c628f90db40f2b489191c82e203c6",
+      "version": 1,
+      "include_node_ids": [
+        "2624218309a946428b4893c9d529f705",
+        "40ceecf41e10437aa299b43885f6c01b"
+      ]
+    }
+  ],
+  "metadata": {
+    "title": "Extras",
+    "subtitle": "0001",
+    "description": "extras",
+    "required_gigabytes": 0,
+    "tagged_node_ids": [
+      {
+        "node_id": "6aba580c1c7b41ebaac64e5ef7b1cb08",
+        "tags": [
+          "featured-channel"
+        ]
+      },
+      {
+        "node_id": "e73c0cba43a945f7a79b55d467e3fbef",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "196dcbd78fa34a468e1b7c7416ee0242",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "2624218309a946428b4893c9d529f705",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "40ceecf41e10437aa299b43885f6c01b",
+        "tags": [
+          "highlight"
+        ]
+      }
+    ]
+  },
+  "channel_list_hash": ""
+}

@@ -6,8 +6,52 @@ import pytest
 from django.core.management import call_command
 from kolibri.utils.conf import OPTIONS
 
+from .utils import COLLECTIONSDIR
 from .utils import ContentServer
 from .utils import create_contentdir
+
+
+@pytest.fixture(autouse=True)
+def kolibri_options(monkeypatch):
+    """Set Kolibri options for testing"""
+    monkeypatch.setitem(
+        OPTIONS["Explore"],
+        "CONTENT_COLLECTIONS_PATH",
+        str(COLLECTIONSDIR),
+    )
+
+    # collectionviews has a bunch of global singletons that need to be reset
+    # per test.
+    from kolibri_explore_plugin import collectionviews
+
+    monkeypatch.setattr(
+        collectionviews,
+        "COLLECTION_PATHS",
+        str(COLLECTIONSDIR),
+    )
+    monkeypatch.setattr(
+        collectionviews,
+        "_content_manifests",
+        [],
+    )
+    monkeypatch.setattr(
+        collectionviews,
+        "_content_manifests_by_language",
+        {},
+    )
+    monkeypatch.setattr(
+        collectionviews,
+        "_content_manifests_by_grade_name",
+        {},
+    )
+    monkeypatch.setattr(
+        collectionviews,
+        "_collection_download_manager",
+        collectionviews.CollectionDownloadManager(),
+    )
+
+    # Re-read the collections.
+    collectionviews._read_content_manifests()
 
 
 @pytest.fixture

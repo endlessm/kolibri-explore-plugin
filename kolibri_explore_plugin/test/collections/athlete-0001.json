@@ -1,0 +1,59 @@
+{
+  "channels": [
+    {
+      "id": "411af6738f164071b150843b973c3bc1",
+      "version": 3,
+      "include_node_ids": [
+        "bf8ced6d3b1b43c4a8fc66f56379655d",
+        "e129938827094367a9868108f0818783"
+      ]
+    },
+    {
+      "id": "4350f8ed80dd40dfbd4ed3c9732d449d",
+      "version": 4,
+      "include_node_ids": [
+        "e90d9e99c6d9485aace01ffe434f1009",
+        "7db0f6eb5e084a8d8b8dbf823dda7de6"
+      ]
+    }
+  ],
+  "metadata": {
+    "title": "Athlete",
+    "subtitle": "0001",
+    "description": "athlete",
+    "required_gigabytes": 0,
+    "tagged_node_ids": [
+      {
+        "node_id": "411af6738f164071b150843b973c3bc1",
+        "tags": [
+          "featured-channel"
+        ]
+      },
+      {
+        "node_id": "bf8ced6d3b1b43c4a8fc66f56379655d",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "e129938827094367a9868108f0818783",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "e90d9e99c6d9485aace01ffe434f1009",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "7db0f6eb5e084a8d8b8dbf823dda7de6",
+        "tags": [
+          "highlight"
+        ]
+      }
+    ]
+  },
+  "channel_list_hash": ""
+}

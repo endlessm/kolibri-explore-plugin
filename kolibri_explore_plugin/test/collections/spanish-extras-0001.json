@@ -1,0 +1,59 @@
+{
+  "channels": [
+    {
+      "id": "dc4f1c59c6c34584b806004e77362e31",
+      "version": 2,
+      "include_node_ids": [
+        "61bbc2b4385e4f508c9f3c361526ef36",
+        "e764e7ad06124476855b34d7fc80bb73"
+      ]
+    },
+    {
+      "id": "dd28be6f502c42b2a1d96396a930a446",
+      "version": 3,
+      "include_node_ids": [
+        "dc41def0c52249c6a090ad11cf81ac46",
+        "5881096609164e909cdaf3f8caba60e1"
+      ]
+    }
+  ],
+  "metadata": {
+    "title": "Spanish-Extras",
+    "subtitle": "0001",
+    "description": "spanish-extras",
+    "required_gigabytes": 0,
+    "tagged_node_ids": [
+      {
+        "node_id": "dc4f1c59c6c34584b806004e77362e31",
+        "tags": [
+          "featured-channel"
+        ]
+      },
+      {
+        "node_id": "61bbc2b4385e4f508c9f3c361526ef36",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "e764e7ad06124476855b34d7fc80bb73",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "dc41def0c52249c6a090ad11cf81ac46",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "5881096609164e909cdaf3f8caba60e1",
+        "tags": [
+          "highlight"
+        ]
+      }
+    ]
+  },
+  "channel_list_hash": ""
+}
