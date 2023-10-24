@@ -1,0 +1,449 @@
+{
+  "content_channelmetadata": [
+    {
+      "author": "eli",
+      "description": "test data",
+      "id": "be6a104a25d44c5682075c54f268eb43",
+      "last_updated": null,
+      "min_schema_version": "1",
+      "name": "testing",
+      "root_id": "be6a104a25d44c5682075c54f268eb43",
+      "tagline": null,
+      "thumbnail": "data:image/jpg;base64,dm7lxHR+vrklDrtEHJAwus6rbGq6/1pgS53qQYYw",
+      "version": 2
+    }
+  ],
+  "content_contentnode": [
+    {
+      "accessibility_labels": null,
+      "author": "",
+      "available": false,
+      "categories": null,
+      "channel_id": "be6a104a25d44c5682075c54f268eb43",
+      "coach_content": false,
+      "content_id": "be6a104a25d44c5682075c54f268eb43",
+      "description": "balbla1",
+      "duration": null,
+      "grade_levels": null,
+      "id": "be6a104a25d44c5682075c54f268eb43",
+      "kind": "topic",
+      "lang_id": null,
+      "learner_needs": null,
+      "learning_activities": null,
+      "level": 0,
+      "lft": 1,
+      "license_description": null,
+      "license_name": "WTFPL",
+      "license_owner": "",
+      "options": "{}",
+      "parent_id": null,
+      "resource_types": null,
+      "rght": 12,
+      "sort_order": null,
+      "title": "root",
+      "tree_id": 1
+    },
+    {
+      "accessibility_labels": null,
+      "author": "",
+      "available": false,
+      "categories": null,
+      "channel_id": "be6a104a25d44c5682075c54f268eb43",
+      "coach_content": false,
+      "content_id": "098304c7f7404075bd3bcc8f4ab1e0e7",
+      "description": "balbla2",
+      "duration": null,
+      "grade_levels": null,
+      "id": "91c4871f3b924c2fbfcdccbead2f11da",
+      "kind": "video",
+      "lang_id": null,
+      "learner_needs": null,
+      "learning_activities": null,
+      "level": 1,
+      "lft": 2,
+      "license_description": null,
+      "license_name": "WTFPL",
+      "license_owner": "",
+      "options": "{}",
+      "parent_id": "be6a104a25d44c5682075c54f268eb43",
+      "resource_types": null,
+      "rght": 3,
+      "sort_order": null,
+      "title": "c1",
+      "tree_id": 1
+    },
+    {
+      "accessibility_labels": null,
+      "author": "",
+      "available": false,
+      "categories": null,
+      "channel_id": "be6a104a25d44c5682075c54f268eb43",
+      "coach_content": false,
+      "content_id": "e5b3a235f02240089631c8831fceec0d",
+      "description": "balbla3",
+      "duration": null,
+      "grade_levels": null,
+      "id": "ac796cabd71347449c21a9d6c79d5293",
+      "kind": "topic",
+      "lang_id": null,
+      "learner_needs": null,
+      "learning_activities": null,
+      "level": 1,
+      "lft": 4,
+      "license_description": null,
+      "license_name": "GNU",
+      "license_owner": "",
+      "options": "{}",
+      "parent_id": "be6a104a25d44c5682075c54f268eb43",
+      "resource_types": null,
+      "rght": 11,
+      "sort_order": null,
+      "title": "c2",
+      "tree_id": 1
+    },
+    {
+      "accessibility_labels": null,
+      "author": "",
+      "available": false,
+      "categories": null,
+      "channel_id": "be6a104a25d44c5682075c54f268eb43",
+      "coach_content": false,
+      "content_id": "af46c13f5a7544d09d28c56df84d7934",
+      "description": "balbla4",
+      "duration": null,
+      "grade_levels": null,
+      "id": "ea2a4c0f028245aeb58ae7dd1e0761eb",
+      "kind": "html5_zip",
+      "lang_id": null,
+      "learner_needs": null,
+      "learning_activities": null,
+      "level": 2,
+      "lft": 5,
+      "license_description": null,
+      "license_name": "CC",
+      "license_owner": "",
+      "options": "{}",
+      "parent_id": "ac796cabd71347449c21a9d6c79d5293",
+      "resource_types": null,
+      "rght": 6,
+      "sort_order": null,
+      "title": "c2c1",
+      "tree_id": 1
+    },
+    {
+      "accessibility_labels": null,
+      "author": "",
+      "available": false,
+      "categories": null,
+      "channel_id": "be6a104a25d44c5682075c54f268eb43",
+      "coach_content": false,
+      "content_id": "3e78c4c941b64bbda50b770102cd559a",
+      "description": "balbla5",
+      "duration": null,
+      "grade_levels": null,
+      "id": "c6dd8fb6b5c54da2968117e9b27a20cf",
+      "kind": "document",
+      "lang_id": null,
+      "learner_needs": null,
+      "learning_activities": null,
+      "level": 2,
+      "lft": 7,
+      "license_description": null,
+      "license_name": "GNU",
+      "license_owner": "",
+      "options": "{}",
+      "parent_id": "ac796cabd71347449c21a9d6c79d5293",
+      "resource_types": null,
+      "rght": 8,
+      "sort_order": null,
+      "title": "c2c2",
+      "tree_id": 1
+    },
+    {
+      "accessibility_labels": null,
+      "author": "",
+      "available": false,
+      "categories": null,
+      "channel_id": "be6a104a25d44c5682075c54f268eb43",
+      "coach_content": false,
+      "content_id": "0817f36c0b4e4cfbbee335f41cc3a570",
+      "description": "balbla5",
+      "duration": null,
+      "grade_levels": null,
+      "id": "08744d55a42741a0bfe2ba2f28e2ef5f",
+      "kind": "audio",
+      "lang_id": null,
+      "learner_needs": null,
+      "learning_activities": null,
+      "level": 2,
+      "lft": 9,
+      "license_description": null,
+      "license_name": "GNU",
+      "license_owner": "",
+      "options": "{}",
+      "parent_id": "ac796cabd71347449c21a9d6c79d5293",
+      "resource_types": null,
+      "rght": 10,
+      "sort_order": null,
+      "title": "c2c3",
+      "tree_id": 1
+    }
+  ],
+  "content_contentnode_has_prerequisite": [
+    {
+      "from_contentnode_id": "91c4871f3b924c2fbfcdccbead2f11da",
+      "id": 1,
+      "to_contentnode_id": "be6a104a25d44c5682075c54f268eb43"
+    }
+  ],
+  "content_contentnode_related": [
+    {
+      "from_contentnode_id": "91c4871f3b924c2fbfcdccbead2f11da",
+      "id": 1,
+      "to_contentnode_id": "ac796cabd71347449c21a9d6c79d5293"
+    },
+    {
+      "from_contentnode_id": "ac796cabd71347449c21a9d6c79d5293",
+      "id": 2,
+      "to_contentnode_id": "91c4871f3b924c2fbfcdccbead2f11da"
+    }
+  ],
+  "content_contentnode_tags": [
+    {
+      "contentnode_id": "be6a104a25d44c5682075c54f268eb43",
+      "contenttag_id": "c351b080acc049ba9452ef5057acd395",
+      "id": 1
+    },
+    {
+      "contentnode_id": "be6a104a25d44c5682075c54f268eb43",
+      "contenttag_id": "32d5905b720b47289e3918fe75b09879",
+      "id": 2
+    },
+    {
+      "contentnode_id": "be6a104a25d44c5682075c54f268eb43",
+      "contenttag_id": "f69b25a7a47b4a5a973a75d46b5a2443",
+      "id": 3
+    },
+    {
+      "contentnode_id": "91c4871f3b924c2fbfcdccbead2f11da",
+      "contenttag_id": "c351b080acc049ba9452ef5057acd395",
+      "id": 4
+    },
+    {
+      "contentnode_id": "ac796cabd71347449c21a9d6c79d5293",
+      "contenttag_id": "32d5905b720b47289e3918fe75b09879",
+      "id": 5
+    }
+  ],
+  "content_contenttag": [
+    {
+      "id": "c351b080acc049ba9452ef5057acd395",
+      "tag_name": "tag_1"
+    },
+    {
+      "id": "32d5905b720b47289e3918fe75b09879",
+      "tag_name": "tag_2"
+    },
+    {
+      "id": "f69b25a7a47b4a5a973a75d46b5a2443",
+      "tag_name": "tag_3"
+    }
+  ],
+  "content_file": [
+    {
+      "contentnode_id": "91c4871f3b924c2fbfcdccbead2f11da",
+      "id": "7c97afb9ccf247899a4f684f50ddb0e4",
+      "lang_id": "en",
+      "local_file_id": "fcdfb39062a95b0c49aa68bf9183439c",
+      "preset": "high_res_video",
+      "priority": null,
+      "supplementary": false,
+      "thumbnail": false
+    },
+    {
+      "contentnode_id": "91c4871f3b924c2fbfcdccbead2f11da",
+      "id": "a51749d5d5ed4f8089c4f223a6a1006e",
+      "lang_id": "en",
+      "local_file_id": "1af02de9d9be8623bceabf4d37abede2",
+      "preset": "low_res_video",
+      "priority": null,
+      "supplementary": false,
+      "thumbnail": false
+    },
+    {
+      "contentnode_id": "91c4871f3b924c2fbfcdccbead2f11da",
+      "id": "cc544b784200436e9da413f355be4ec2",
+      "lang_id": null,
+      "local_file_id": "da1baca9d64e95a60aa90723950ad587",
+      "preset": "video_subtitle",
+      "priority": null,
+      "supplementary": true,
+      "thumbnail": false
+    },
+    {
+      "contentnode_id": "91c4871f3b924c2fbfcdccbead2f11da",
+      "id": "c723bba0ad5e41738c56976df3c97a10",
+      "lang_id": null,
+      "local_file_id": "b10a76942a97dcf97fbe00d2f947602a",
+      "preset": "video_thumbnail",
+      "priority": null,
+      "supplementary": false,
+      "thumbnail": true
+    },
+    {
+      "contentnode_id": "ac796cabd71347449c21a9d6c79d5293",
+      "id": "d0402bda4ec8455ebbea6064c9fe20e1",
+      "lang_id": null,
+      "local_file_id": "e90061846cc405cecc31adb81541e0c8",
+      "preset": "topic_thumbnail",
+      "priority": null,
+      "supplementary": false,
+      "thumbnail": true
+    },
+    {
+      "contentnode_id": "ea2a4c0f028245aeb58ae7dd1e0761eb",
+      "id": "db4ffbe14b5e4bdcb5de24cd0ef0da45",
+      "lang_id": "3",
+      "local_file_id": "a52d6e733a42d817e56e5275c24eac05",
+      "preset": "html5_zip",
+      "priority": null,
+      "supplementary": false,
+      "thumbnail": false
+    },
+    {
+      "contentnode_id": "ea2a4c0f028245aeb58ae7dd1e0761eb",
+      "id": "48e9d8abcefd463c8c0df45df9bfb1ba",
+      "lang_id": null,
+      "local_file_id": "81a0a27f4cf733d30a27ccce93621c9f",
+      "preset": "html5_thumbnail",
+      "priority": null,
+      "supplementary": false,
+      "thumbnail": true
+    },
+    {
+      "contentnode_id": "c6dd8fb6b5c54da2968117e9b27a20cf",
+      "id": "73818769cc2441b482a2c491322a9459",
+      "lang_id": null,
+      "local_file_id": "e356202311b26db2055139c7603c6436",
+      "preset": "document",
+      "priority": null,
+      "supplementary": false,
+      "thumbnail": false
+    },
+    {
+      "contentnode_id": "c6dd8fb6b5c54da2968117e9b27a20cf",
+      "id": "3a317877b32f451185f99676c56668f0",
+      "lang_id": null,
+      "local_file_id": "465db1fa1413173370e75aa7dbc5ef90",
+      "preset": "document_thumbnail",
+      "priority": null,
+      "supplementary": false,
+      "thumbnail": true
+    },
+    {
+      "contentnode_id": "08744d55a42741a0bfe2ba2f28e2ef5f",
+      "id": "6df6cff4a7cb47419e2f19e1a9af4406",
+      "lang_id": null,
+      "local_file_id": "cd0fd7b710f204d11a80eac7dfd9aad8",
+      "preset": "audio",
+      "priority": null,
+      "supplementary": false,
+      "thumbnail": false
+    }
+  ],
+  "content_language": [
+    {
+      "id": "en",
+      "lang_code": "en",
+      "lang_direction": "ltr",
+      "lang_name": "English-Test",
+      "lang_subcode": "01"
+    },
+    {
+      "id": "zh",
+      "lang_code": "zh",
+      "lang_direction": "ltr",
+      "lang_name": "Chinese-Test",
+      "lang_subcode": "02"
+    },
+    {
+      "id": "es",
+      "lang_code": "es",
+      "lang_direction": "ltr",
+      "lang_name": "Spanish-Test",
+      "lang_subcode": "03"
+    }
+  ],
+  "content_localfile": [
+    {
+      "_content": "afEADYMrQdUGHVQBpRgMboYL/mMrjoL/Dc4JkA==",
+      "available": false,
+      "extension": "mp4",
+      "file_size": 28,
+      "id": "fcdfb39062a95b0c49aa68bf9183439c"
+    },
+    {
+      "_content": "F2X4vRZGbw==",
+      "available": false,
+      "extension": "mp4",
+      "file_size": 7,
+      "id": "1af02de9d9be8623bceabf4d37abede2"
+    },
+    {
+      "_content": "936khhmcTyOfxf0Dyg==",
+      "available": false,
+      "extension": "vtt",
+      "file_size": 13,
+      "id": "da1baca9d64e95a60aa90723950ad587"
+    },
+    {
+      "_content": "CXyIxjNV3F+lCfRhrlYDYNUVxMLn",
+      "available": false,
+      "extension": "png",
+      "file_size": 21,
+      "id": "b10a76942a97dcf97fbe00d2f947602a"
+    },
+    {
+      "_content": "grW+HAY4CtjDiP0=",
+      "available": false,
+      "extension": "jpeg",
+      "file_size": 11,
+      "id": "e90061846cc405cecc31adb81541e0c8"
+    },
+    {
+      "_content": "own+GplHVV34SIVi58GT3Ldhy3FOM8RDeg==",
+      "available": false,
+      "extension": "zip",
+      "file_size": 25,
+      "id": "a52d6e733a42d817e56e5275c24eac05"
+    },
+    {
+      "_content": "ZpcMHEyZaozC/PHNfELnxTB5ihfVUf8yWaeWM7G7",
+      "available": false,
+      "extension": "jpeg",
+      "file_size": 30,
+      "id": "81a0a27f4cf733d30a27ccce93621c9f"
+    },
+    {
+      "_content": "utDd/unxqvdOJJHwnpfgJAE=",
+      "available": false,
+      "extension": "epub",
+      "file_size": 17,
+      "id": "e356202311b26db2055139c7603c6436"
+    },
+    {
+      "_content": "gTDNGKPiVl6oOGvuuMW/TEbPr+KgLuwb",
+      "available": false,
+      "extension": "png",
+      "file_size": 24,
+      "id": "465db1fa1413173370e75aa7dbc5ef90"
+    },
+    {
+      "_content": "RZtY+jewXtpYedKbiyR1YbWW1rM3eA==",
+      "available": false,
+      "extension": "mp3",
+      "file_size": 22,
+      "id": "cd0fd7b710f204d11a80eac7dfd9aad8"
+    }
+  ]
+}
