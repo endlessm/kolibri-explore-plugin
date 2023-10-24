@@ -9,12 +9,18 @@ import multiprocessing
 import os
 import queue
 import threading
+import time
 from base64 import b64decode
 from glob import iglob
 from hashlib import md5
 from http.server import SimpleHTTPRequestHandler
 from http.server import ThreadingHTTPServer
 from pathlib import Path
+
+from django.db import OperationalError
+from kolibri.core.tasks.job import State
+
+from kolibri_explore_plugin.models import BackgroundTask
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +31,12 @@ COLLECTIONSDIR = TESTDIR / "collections"
 
 class ExploreTestError(Exception):
     """Exceptions from kolibri-explore-plugin tests"""
+
+    pass
+
+
+class ExploreTestTimeoutError(ExploreTestError):
+    """Timeout exceptions from kolibri-explore-plugin tests"""
 
     pass
 
@@ -114,6 +126,43 @@ def create_contentdir(content_path, channels_path=CHANNELSDIR):
                 bridge.connection.execute(table.insert(), data[table.name])
 
         bridge.end()
+
+
+def wait_for_background_tasks(timeout=30):
+    """Wait for background tasks to complete with a timeout
+
+    Raises ExploreTestTimeoutError if they haven't completed in timeout
+    seconds.
+    """
+    deadline = time.monotonic() + timeout
+    while True:
+        # The storage hook is run from the worker, which is in a separate
+        # thread. Since it accesses the BackgroundTask table, this code is
+        # attempting to access the table concurrently. Occasionally that will
+        # throw an OperationalError because sqlite locks the table in each
+        # connection. Ignore that and carry on.
+        try:
+            incomplete_jobs = BackgroundTask.objects.exclude(
+                job_state=State.COMPLETED
+            )
+            num_incomplete_jobs = len(incomplete_jobs)
+        except OperationalError:
+            logger.exception("Could not query incomplete background tasks")
+            time.sleep(0.5)
+            continue
+
+        if num_incomplete_jobs == 0:
+            logger.debug("All background tasks competed")
+            return
+
+        if time.monotonic() >= deadline:
+            raise ExploreTestTimeoutError(
+                f"Background tasks did not complete within {timeout} seconds"
+            )
+        logger.debug(
+            f"Waiting for incomplete background tasks: {incomplete_jobs}"
+        )
+        time.sleep(0.5)
 
 
 class LoggingHTTPRequestHandler(SimpleHTTPRequestHandler):
