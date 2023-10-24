@@ -77,3 +77,12 @@ testpaths = 'kolibri_explore_plugin/test'
 # FIXME: Try to narrow the deprecation warnings to only those caused by
 # Kolibri.
 filterwarnings = 'ignore::DeprecationWarning'
+
+# FIXME: There’s currently an old copy of this in setup.cfg as well, until we
+# hard-depend on a new enough version of kolibri-tools to contain
+# https://github.com/learningequality/kolibri/issues/11146
+[tool.kolibri.i18n]
+project = 'kolibri_explore_plugin'
+locale_data_folder = 'kolibri_explore_plugin/locale'
+# Glob to exclude node_modules and static folders
+ignore = ['**/node_modules/**', '**/static/**']
