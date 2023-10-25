@@ -102,7 +102,10 @@ def enqueue_task(
 
 
 def enqueue_next_background_task():
-    """Locate the next background task and enqueue it for running"""
+    """Locate the next background task and enqueue it for running
+
+    Returns the enqueued BackgroundTask or None if no task was enqueued.
+    """
 
     # If there's already a job in progress, do nothing. We only want a
     # single background task running in order to not slow down the user
@@ -115,12 +118,12 @@ def enqueue_next_background_task():
     )
     if in_progress_jobs.exists():
         logger.debug("Not enqueuing next task as tasks in progress")
-        return
+        return None
 
     task = BackgroundTask.objects.filter(job_id="").first()
     if not task:
         logger.debug("All background tasks completed")
-        return
+        return None
 
     logger.info(f"Starting BackgroundTask {task}")
     params = json.loads(task.params)
@@ -131,6 +134,8 @@ def enqueue_next_background_task():
         **params,
     )
     task.update_job_id(job_id)
+
+    return task
 
 
 def storage_update_hook(job, orm_job, state=None, **kwargs):
