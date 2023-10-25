@@ -70,8 +70,6 @@ def get_remotecontentimport_task(
     if not channel_name:
         channel_metadata = get_channel_metadata(channel_id)
         channel_name = channel_metadata.name
-    if node_ids is None:
-        node_ids = []
     return {
         "task": TaskType.REMOTECONTENTIMPORT,
         "params": {
@@ -165,7 +163,7 @@ def storage_update_hook(job, orm_job, state=None, **kwargs):
             bg_task_params = json.loads(bg_task.params)
             channel_id = bg_task_params["channel_id"]
             thumbnail_task_data = get_remotecontentimport_task(
-                channel_id, all_thumbnails=True
+                channel_id, node_ids=[], all_thumbnails=True
             )
             BackgroundTask.create_from_task_data(thumbnail_task_data)
 
