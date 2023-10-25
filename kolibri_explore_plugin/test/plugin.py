@@ -49,9 +49,15 @@ def _setup_kolibri():
     # Enable our plugin and initialize the homedir.
     from kolibri.main import initialize
     from kolibri.plugins import config
+    from kolibri.utils.conf import OPTIONS
 
     config["INSTALLED_PLUGINS"].add("kolibri_explore_plugin")
     initialize()
+
+    # Always set a non-production run mode and disable pings so that they don't
+    # hang and interfere with other tasks.
+    OPTIONS["Deployment"]["RUN_MODE"] = "test"
+    OPTIONS["Deployment"]["DISABLE_PING"] = True
 
 
 @pytest.hookimpl(tryfirst=True)
