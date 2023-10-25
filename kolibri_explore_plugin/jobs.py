@@ -146,6 +146,8 @@ def enqueue_next_background_task():
 
 def storage_update_hook(job, orm_job, state=None, **kwargs):
     """StorageHook update hook"""
+    logger.debug(f"Running storage hook for {job}")
+
     if state is None:
         # We only care about state transitions here.
         return
@@ -158,6 +160,7 @@ def storage_update_hook(job, orm_job, state=None, **kwargs):
 
     # Synchronize the state if needed.
     if bg_task.job_state != state:
+        logger.debug(f"Updating {bg_task} job state to {state}")
         bg_task.job_state = state
         bg_task.save()
 
