@@ -1,10 +1,16 @@
 import json
+import time
+from itertools import product
 
 import pytest
 from django.urls import reverse
+from kolibri.core.content.models import ChannelMetadata
+from kolibri.core.content.models import ContentNode
 from rest_framework.test import APIClient
 
 from .utils import COLLECTIONSDIR
+from .utils import ExploreTestTimeoutError
+from .utils import wait_for_background_tasks
 from kolibri_explore_plugin import collectionviews
 
 
@@ -125,3 +131,60 @@ def test_get_should_resume():
         "grade": "artist",
         "name": "0001",
     }
+
+
+def run_download_manager(manager, manifest, user, timeout=30):
+    """Update the download manager until it completes
+
+    Raises ExploreTestTimeoutError if it hasn't completed in timeout seconds.
+    """
+    manager.start(manifest, user)
+    deadline = time.monotonic() + timeout
+    while True:
+        manager.update(user)
+        status = manager.get_status()
+        if status["stage"] == collectionviews.DownloadStage.COMPLETED.name:
+            return
+
+        if time.monotonic() >= deadline:
+            raise ExploreTestTimeoutError(
+                f"Download manager did not complete within {timeout} seconds"
+            )
+        time.sleep(0.5)
+
+
+# Kolibri's task worker seems to hang occasionally, causing the download tasks
+# to never complete. Retry twice on timeouts.
+@pytest.mark.flaky(reruns=2, only_rerun="ExploreTestTimeoutError")
+@pytest.mark.usefixtures("channel_import_db", "worker", "content_server")
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    ("grade", "name"),
+    product(
+        collectionviews.COLLECTION_GRADES, collectionviews.COLLECTION_NAMES
+    ),
+)
+def test_download_manager_clean(facility_user, grade, name):
+    """Test collections downloads from no content state"""
+    manifest = collectionviews._content_manifests_by_grade_name[grade][name]
+    manager = collectionviews.CollectionDownloadManager()
+
+    # Run the download manager and then wait for the background download tasks
+    # to complete.
+    run_download_manager(manager, manifest, facility_user)
+    wait_for_background_tasks()
+
+    # Check that the correct number of channels, nodes and tags are present.
+    # Each pack has 2 channels with 2 included nodes each. Each channel has 6
+    # nodes. The included nodes from each channel end up downloading 4 nodes -
+    # root topic, video, subtopic and document. So, each pack will have 8
+    # available nodes. The extra packs don't cause any nodes to become
+    # available since only the thumbnails are downloaded.
+    assert manifest.language in ("en", "es")
+    if manifest.language == "en":
+        num_packs = len(collectionviews.COLLECTION_GRADES_EN)
+    elif manifest.language == "es":
+        num_packs = len(collectionviews.COLLECTION_GRADES_ES)
+    assert ChannelMetadata.objects.count() == 2 * num_packs
+    assert ContentNode.objects.filter().count() == 12 * num_packs
+    assert ContentNode.objects.filter(available=True).count() == 8
