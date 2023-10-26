@@ -1,6 +1,5 @@
 import pytest
 from django.core.management import call_command
-from kolibri.core.content.models import ChannelMetadata
 from kolibri.core.tasks.job import State
 
 from .utils import wait_for_background_tasks
@@ -70,7 +69,7 @@ def test_get_remotecontentimport_task():
     ]
 
     # If the channel doesn't exist an exception will be raised.
-    with pytest.raises(ChannelMetadata.DoesNotExist):
+    with pytest.raises(ValueError, match=r"does not exist"):
         jobs.get_remotecontentimport_task(channel_id)
 
     # Import the channel and try again with no nodes specified.
