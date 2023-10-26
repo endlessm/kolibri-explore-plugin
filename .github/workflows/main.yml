@@ -122,7 +122,7 @@ jobs:
 
       - name: Python tests
         run: |
-          pipenv run python -m pytest
+          pipenv run python -m pytest --log-level DEBUG
 
       - name: Build
         run: |
