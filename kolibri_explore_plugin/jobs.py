@@ -11,6 +11,7 @@ from kolibri.core.tasks.job import Priority
 from kolibri.core.tasks.job import State
 from kolibri.core.tasks.main import job_storage
 from kolibri.core.tasks.utils import import_path_to_callable
+from kolibri.core.utils.lock import db_lock
 
 from .models import BackgroundTask
 
@@ -125,15 +126,20 @@ def enqueue_next_background_task():
         logger.debug("All background tasks completed")
         return None
 
+    # If the enqueued job changes state before the job ID has been recorded,
+    # the storage hook will skip the event since it won't find the background
+    # atask. Lock the database until that happens to prevent the storage hook
+    # from reading the BackgroundTask table.
     logger.info(f"Starting BackgroundTask {task}")
     params = json.loads(task.params)
-    job_id = enqueue_task(
-        task.func,
-        queue=BACKGROUND_QUEUE,
-        priority=Priority.REGULAR,
-        **params,
-    )
-    task.update_job_id(job_id)
+    with db_lock():
+        job_id = enqueue_task(
+            task.func,
+            queue=BACKGROUND_QUEUE,
+            priority=Priority.REGULAR,
+            **params,
+        )
+        task.update_job_id(job_id)
 
     return task
 
