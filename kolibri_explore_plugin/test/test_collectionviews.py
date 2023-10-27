@@ -3,9 +3,12 @@ import time
 from itertools import product
 
 import pytest
+import requests_mock
+from django.core.management import call_command
 from django.urls import reverse
 from kolibri.core.content.models import ChannelMetadata
 from kolibri.core.content.models import ContentNode
+from kolibri.core.content.models import LocalFile
 from rest_framework.test import APIClient
 
 from .utils import COLLECTIONSDIR
@@ -188,3 +191,45 @@ def test_download_manager_clean(facility_user, grade, name):
     assert ChannelMetadata.objects.count() == 2 * num_packs
     assert ContentNode.objects.filter().count() == 12 * num_packs
     assert ContentNode.objects.filter(available=True).count() == 8
+
+
+@pytest.mark.usefixtures("channel_import_db", "worker", "content_server")
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    ("grade", "name"),
+    product(
+        collectionviews.COLLECTION_GRADES, collectionviews.COLLECTION_NAMES
+    ),
+)
+def test_download_manager_preload(facility_user, grade, name):
+    """Test collections downloads with preloaded content"""
+    # Import the channels in full.
+    manifest = collectionviews._content_manifests_by_grade_name[grade][name]
+    all_channels = set(
+        list(manifest.get_channel_ids())
+        + list(manifest.get_extra_channel_ids())
+    )
+    for channel_id in all_channels:
+        call_command("importchannel", "network", channel_id)
+        call_command("importcontent", "--fail-on-error", "network", channel_id)
+
+    # Keep track of the number of channels and files downloaded. Make
+    # sure all channels and files have been downloaded.
+    num_initial_channels = ChannelMetadata.objects.count()
+    num_initial_files = LocalFile.objects.filter(available=True).count()
+    assert num_initial_channels == len(all_channels)
+    assert LocalFile.objects.filter(available=False).count() == 0
+
+    # Run the downloader with requests blocked. Since no URLs are mocked, all
+    # requests will fail. Since the download manager retries tasks forever, it
+    # will eventually time out on any request.
+    with requests_mock.Mocker():
+        manager = collectionviews.CollectionDownloadManager()
+        run_download_manager(manager, manifest, facility_user)
+        wait_for_background_tasks()
+
+    # Check that no additional channels or files have been downloaded.
+    assert ChannelMetadata.objects.count() == num_initial_channels
+    assert (
+        LocalFile.objects.filter(available=True).count() == num_initial_files
+    )

@@ -30,7 +30,11 @@ class TaskType:
 
 
 def get_channel_metadata(channel_id):
-    return ChannelMetadata.objects.get(id=channel_id)
+    """Returns the ChannelMetadata object or None if it doesn't exist"""
+    try:
+        return ChannelMetadata.objects.get(id=channel_id)
+    except ChannelMetadata.DoesNotExist:
+        return None
 
 
 def get_applyexternaltags_task(node_id, tags):
@@ -47,12 +51,11 @@ def get_remotechannelimport_task(channel_id, channel_name=None):
     if not channel_name:
         # Try to get the channel name from an existing channel database,
         # but this will fail on first import.
-        try:
-            channel_metadata = get_channel_metadata(channel_id)
-        except ChannelMetadata.DoesNotExist:
-            channel_name = "unknown"
-        else:
+        channel_metadata = get_channel_metadata(channel_id)
+        if channel_metadata:
             channel_name = channel_metadata.name
+        else:
+            channel_name = "unknown"
     return {
         "task": TaskType.REMOTECHANNELIMPORT,
         "params": {
@@ -70,6 +73,8 @@ def get_remotecontentimport_task(
 ):
     if not channel_name:
         channel_metadata = get_channel_metadata(channel_id)
+        if not channel_metadata:
+            raise ValueError(f"Channel {channel_id} does not exist")
         channel_name = channel_metadata.name
     return {
         "task": TaskType.REMOTECONTENTIMPORT,

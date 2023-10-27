@@ -82,11 +82,25 @@ class EndlessKeyContentManifest(ContentManifest):
         self.available = None
         super().__init__()
 
+    def get_latest_channels(self):
+        """Return set of channel id and latest version tuples"""
+        return {
+            (channel_id, max(self.get_channel_versions(channel_id)))
+            for channel_id in self.get_channel_ids()
+        }
+
     def get_extra_channel_ids(self):
         all_channel_ids = _get_channel_ids_for_all_content_manifests(
             self.language
         )
         return all_channel_ids.difference(self.get_channel_ids())
+
+    def get_latest_extra_channels(self):
+        """Return set of extra channel id and latest version tuples"""
+        all_channels = _get_latest_channels_for_all_content_manifests(
+            self.language
+        )
+        return all_channels.difference(self.get_latest_channels())
 
     def read_from_static_collection(
         self, grade, name, language, validate=False
@@ -134,20 +148,34 @@ class EndlessKeyContentManifest(ContentManifest):
 
         For all the channels in this content manifest.
         """
-        return [
-            get_remotechannelimport_task(channel_id)
-            for channel_id in self.get_channel_ids()
-        ]
+        tasks = []
+        for channel_id, channel_version in self.get_latest_channels():
+            metadata = get_channel_metadata(channel_id)
+            if metadata and metadata.version >= channel_version:
+                logger.debug(
+                    f"Skipping channel import task for {channel_id} since "
+                    "already present"
+                )
+                continue
+            tasks.append(get_remotechannelimport_task(channel_id))
+        return tasks
 
     def get_extra_channelimport_tasks(self):
         """Return a serializable object to create extra channelimport tasks
 
         For all channels featured in Endless Key content manifests.
         """
-        return [
-            get_remotechannelimport_task(channel_id)
-            for channel_id in self.get_extra_channel_ids()
-        ]
+        tasks = []
+        for channel_id, channel_version in self.get_latest_extra_channels():
+            metadata = get_channel_metadata(channel_id)
+            if metadata and metadata.version >= channel_version:
+                logger.debug(
+                    f"Skipping extra channel import task for {channel_id} "
+                    "since already present"
+                )
+                continue
+            tasks.append(get_remotechannelimport_task(channel_id))
+        return tasks
 
     def get_contentimport_tasks(self):
         """Return a serializable object to create contentimport tasks
@@ -610,6 +638,17 @@ def _get_channel_ids_for_all_content_manifests(language):
     for content_manifest in _content_manifests_by_language[language]:
         channel_ids.update(content_manifest.get_channel_ids())
     return channel_ids
+
+
+def _get_latest_channels_for_all_content_manifests(language):
+    """Return set of all channel id and latest version tuples"""
+    channels = {}
+    for content_manifest in _content_manifests_by_language[language]:
+        for channel_id in content_manifest.get_channel_ids():
+            version = max(content_manifest.get_channel_versions(channel_id))
+            if version > channels.get(channel_id, -1):
+                channels[channel_id] = version
+    return set(channels.items())
 
 
 @api_view(["GET"])
