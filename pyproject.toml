@@ -77,3 +77,9 @@ testpaths = 'kolibri_explore_plugin/test'
 # FIXME: Try to narrow the deprecation warnings to only those caused by
 # Kolibri.
 filterwarnings = 'ignore::DeprecationWarning'
+
+# Logging configuration. By default set the log level to INFO so there's
+# useful information on failures. Task handling is multithreaded, so add
+# the thread name to help debugging.
+log_level = 'INFO'
+log_format = '%(levelname)-8s %(name)s %(threadName)s %(message)s'

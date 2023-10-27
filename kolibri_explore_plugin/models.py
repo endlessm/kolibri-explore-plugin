@@ -77,6 +77,7 @@ class BackgroundTask(models.Model):
 
     def update_job_id(self, job_id):
         """Set a new job ID and reset the state to PENDING"""
+        logger.debug(f"Updating {self} job ID to {job_id}")
         self.job_id = job_id
         self.job_state = State.PENDING
         self.save()

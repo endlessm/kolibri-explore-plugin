@@ -11,6 +11,7 @@ from kolibri.core.tasks.job import Priority
 from kolibri.core.tasks.job import State
 from kolibri.core.tasks.main import job_storage
 from kolibri.core.tasks.utils import import_path_to_callable
+from kolibri.core.utils.lock import db_lock
 
 from .models import BackgroundTask
 
@@ -70,8 +71,6 @@ def get_remotecontentimport_task(
     if not channel_name:
         channel_metadata = get_channel_metadata(channel_id)
         channel_name = channel_metadata.name
-    if node_ids is None:
-        node_ids = []
     return {
         "task": TaskType.REMOTECONTENTIMPORT,
         "params": {
@@ -104,7 +103,10 @@ def enqueue_task(
 
 
 def enqueue_next_background_task():
-    """Locate the next background task and enqueue it for running"""
+    """Locate the next background task and enqueue it for running
+
+    Returns the enqueued BackgroundTask or None if no task was enqueued.
+    """
 
     # If there's already a job in progress, do nothing. We only want a
     # single background task running in order to not slow down the user
@@ -117,26 +119,35 @@ def enqueue_next_background_task():
     )
     if in_progress_jobs.exists():
         logger.debug("Not enqueuing next task as tasks in progress")
-        return
+        return None
 
     task = BackgroundTask.objects.filter(job_id="").first()
     if not task:
         logger.debug("All background tasks completed")
-        return
+        return None
 
+    # If the enqueued job changes state before the job ID has been recorded,
+    # the storage hook will skip the event since it won't find the background
+    # atask. Lock the database until that happens to prevent the storage hook
+    # from reading the BackgroundTask table.
     logger.info(f"Starting BackgroundTask {task}")
     params = json.loads(task.params)
-    job_id = enqueue_task(
-        task.func,
-        queue=BACKGROUND_QUEUE,
-        priority=Priority.REGULAR,
-        **params,
-    )
-    task.update_job_id(job_id)
+    with db_lock():
+        job_id = enqueue_task(
+            task.func,
+            queue=BACKGROUND_QUEUE,
+            priority=Priority.REGULAR,
+            **params,
+        )
+        task.update_job_id(job_id)
+
+    return task
 
 
 def storage_update_hook(job, orm_job, state=None, **kwargs):
     """StorageHook update hook"""
+    logger.debug(f"Running storage hook for {job}")
+
     if state is None:
         # We only care about state transitions here.
         return
@@ -149,6 +160,7 @@ def storage_update_hook(job, orm_job, state=None, **kwargs):
 
     # Synchronize the state if needed.
     if bg_task.job_state != state:
+        logger.debug(f"Updating {bg_task} job state to {state}")
         bg_task.job_state = state
         bg_task.save()
 
@@ -165,7 +177,7 @@ def storage_update_hook(job, orm_job, state=None, **kwargs):
             bg_task_params = json.loads(bg_task.params)
             channel_id = bg_task_params["channel_id"]
             thumbnail_task_data = get_remotecontentimport_task(
-                channel_id, all_thumbnails=True
+                channel_id, node_ids=[], all_thumbnails=True
             )
             BackgroundTask.create_from_task_data(thumbnail_task_data)
 

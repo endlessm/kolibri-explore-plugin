@@ -1,0 +1,59 @@
+{
+  "channels": [
+    {
+      "id": "b51baf46133045e3bce4d2d872a8f71d",
+      "version": 1,
+      "include_node_ids": [
+        "5a24503255ce43d98ebcb25d2b60f024",
+        "91a1bfc0ede544979f861909b7862537"
+      ]
+    },
+    {
+      "id": "b77bba2e4b884813b8e22d63b964fb73",
+      "version": 3,
+      "include_node_ids": [
+        "05755d03082c4444a3b0fef1e72d7219",
+        "7c251a8e820545e49fbe21b53194e433"
+      ]
+    }
+  ],
+  "metadata": {
+    "title": "Scientist",
+    "subtitle": "0001",
+    "description": "scientist",
+    "required_gigabytes": 0,
+    "tagged_node_ids": [
+      {
+        "node_id": "b51baf46133045e3bce4d2d872a8f71d",
+        "tags": [
+          "featured-channel"
+        ]
+      },
+      {
+        "node_id": "5a24503255ce43d98ebcb25d2b60f024",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "91a1bfc0ede544979f861909b7862537",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "05755d03082c4444a3b0fef1e72d7219",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "7c251a8e820545e49fbe21b53194e433",
+        "tags": [
+          "highlight"
+        ]
+      }
+    ]
+  },
+  "channel_list_hash": ""
+}

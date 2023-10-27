@@ -192,7 +192,9 @@ class EndlessKeyContentManifest(ContentManifest):
         For all the channels in this content manifest.
         """
         return [
-            get_remotecontentimport_task(channel_id, all_thumbnails=True)
+            get_remotecontentimport_task(
+                channel_id, node_ids=[], all_thumbnails=True
+            )
             for channel_id in self.get_channel_ids()
         ]
 

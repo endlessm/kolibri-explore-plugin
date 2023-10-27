@@ -1,0 +1,59 @@
+{
+  "channels": [
+    {
+      "id": "1af9e59af51f4c27a145433b83e3cea2",
+      "version": 4,
+      "include_node_ids": [
+        "305cce826f5645abb072b82961048ae4",
+        "2e9f1c47b00847ab859f27fa216adcce"
+      ]
+    },
+    {
+      "id": "1d11cf118c3d4691907a6abb880b7c20",
+      "version": 3,
+      "include_node_ids": [
+        "3faff591666c475eb9495f962e36d95a",
+        "89bfe3ddf45d4d3e864e2b71a08a99f4"
+      ]
+    }
+  ],
+  "metadata": {
+    "title": "Artist",
+    "subtitle": "0001",
+    "description": "artist",
+    "required_gigabytes": 0,
+    "tagged_node_ids": [
+      {
+        "node_id": "1af9e59af51f4c27a145433b83e3cea2",
+        "tags": [
+          "featured-channel"
+        ]
+      },
+      {
+        "node_id": "305cce826f5645abb072b82961048ae4",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "2e9f1c47b00847ab859f27fa216adcce",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "3faff591666c475eb9495f962e36d95a",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "89bfe3ddf45d4d3e864e2b71a08a99f4",
+        "tags": [
+          "highlight"
+        ]
+      }
+    ]
+  },
+  "channel_list_hash": ""
+}

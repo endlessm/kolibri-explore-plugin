@@ -1,0 +1,59 @@
+{
+  "channels": [
+    {
+      "id": "64fa38415b4849629d027069b4110bab",
+      "version": 2,
+      "include_node_ids": [
+        "9ec8e38f7eed4744af532c3757a742d3",
+        "d077718ec620479fbd320d4b06b76658"
+      ]
+    },
+    {
+      "id": "65a2964ce74943778bdabb348caebb0d",
+      "version": 4,
+      "include_node_ids": [
+        "48b2b950bdc747ceb6fe60ecd8436c91",
+        "b828889127344e9fba277dc6b3b89ae4"
+      ]
+    }
+  ],
+  "metadata": {
+    "title": "Explorer",
+    "subtitle": "0001",
+    "description": "explorer",
+    "required_gigabytes": 0,
+    "tagged_node_ids": [
+      {
+        "node_id": "64fa38415b4849629d027069b4110bab",
+        "tags": [
+          "featured-channel"
+        ]
+      },
+      {
+        "node_id": "9ec8e38f7eed4744af532c3757a742d3",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "d077718ec620479fbd320d4b06b76658",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "48b2b950bdc747ceb6fe60ecd8436c91",
+        "tags": [
+          "highlight"
+        ]
+      },
+      {
+        "node_id": "b828889127344e9fba277dc6b3b89ae4",
+        "tags": [
+          "highlight"
+        ]
+      }
+    ]
+  },
+  "channel_list_hash": ""
+}
