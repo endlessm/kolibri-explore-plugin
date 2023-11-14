@@ -54,7 +54,7 @@ def create_contentdir(content_path, channels_path=CHANNELSDIR):
     storage_path.mkdir(parents=True, exist_ok=True)
 
     for json_path in iglob(f"{channels_path}/*.json"):
-        logger.info(f"Loading channel JSON {json_path}")
+        logger.debug(f"Loading channel JSON {json_path}")
         with open(json_path, "r") as f:
             data = json.load(f)
 
@@ -67,16 +67,16 @@ def create_contentdir(content_path, channels_path=CHANNELSDIR):
         channel_id = channels[0]["id"]
         db_path = databases_path / f"{channel_id}.sqlite3"
         if db_path.exists():
-            logger.info(f"Removing existing channel database {db_path}")
+            logger.debug(f"Removing existing channel database {db_path}")
             db_path.unlink()
 
-        logger.info(f"Creating channel database {db_path}")
+        logger.debug(f"Creating channel database {db_path}")
         bridge = Bridge(db_path, schema_version=CURRENT_SCHEMA_VERSION)
         bridge.Base.metadata.bind = bridge.engine
         bridge.Base.metadata.create_all()
 
         # Create the content files from the localfile _content entries.
-        logger.info(f"Creating channel {channel_id} content files")
+        logger.debug(f"Creating channel {channel_id} content files")
         for localfile in data["content_localfile"]:
             id = localfile["id"]
             size = localfile["file_size"]
@@ -101,7 +101,7 @@ def create_contentdir(content_path, channels_path=CHANNELSDIR):
             localfile_dir.mkdir(parents=True, exist_ok=True)
             localfile_path = localfile_dir / f"{id}.{ext}"
             if localfile_path.exists():
-                logger.info(f"Validating content file {localfile_path}")
+                logger.debug(f"Validating content file {localfile_path}")
                 localfile_size = os.path.getsize(localfile_path)
                 if localfile_size != size:
                     raise ValueError(
