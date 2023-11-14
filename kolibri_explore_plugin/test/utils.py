@@ -8,6 +8,7 @@ import logging
 import multiprocessing
 import os
 import queue
+import shutil
 import threading
 import time
 from base64 import b64decode
@@ -65,6 +66,13 @@ def create_contentdir(content_path, channels_path=CHANNELSDIR):
             )
 
         channel_id = channels[0]["id"]
+
+        # For convenience, copy the input JSON file so the data can be
+        # introspected without loading a sqlite database.
+        db_json_path = databases_path / f"{channel_id}.json"
+        logger.debug(f"Creating channel JSON data {db_json_path}")
+        shutil.copyfile(json_path, db_json_path)
+
         db_path = databases_path / f"{channel_id}.sqlite3"
         if db_path.exists():
             logger.debug(f"Removing existing channel database {db_path}")
