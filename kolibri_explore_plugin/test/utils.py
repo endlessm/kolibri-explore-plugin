@@ -5,9 +5,7 @@
 import functools
 import json
 import logging
-import multiprocessing
 import os
-import queue
 import shutil
 import threading
 import time
@@ -178,8 +176,7 @@ class LoggingHTTPRequestHandler(SimpleHTTPRequestHandler):
 
     def log_message(self, format, *args):
         logger.debug(
-            "%s: %s - - [%s] %s",
-            threading.current_thread().name,
+            "%s - - [%s] %s",
             self.address_string(),
             self.log_date_time_string(),
             format % args,
@@ -191,7 +188,8 @@ class ContentServer:
 
     def __init__(self, path):
         self.path = Path(path)
-        self.proc = None
+        self.server = None
+        self.thread = None
         self.address = None
         self.url = None
 
@@ -205,43 +203,40 @@ class ContentServer:
     def __exit__(self, exc_type, exc_value, traceback):
         self.stop()
 
-    def _run_server(self, path, queue):
-        handler_class = functools.partial(
-            LoggingHTTPRequestHandler,
-            directory=path,
-        )
-        server = ThreadingHTTPServer(("127.0.0.1", 0), handler_class)
-        queue.put(server.server_address)
-        server.serve_forever()
+    def _run_server(self):
+        self.server.serve_forever()
 
     def start(self):
         """Start the HTTP server
 
-        A separate process is used so that the HTTP server can block.
+        A separate thread is used so that the HTTP server can block.
         """
-        addr_queue = multiprocessing.Queue()
-        self.proc = multiprocessing.Process(
-            target=self._run_server, args=(self.path, addr_queue)
+        handler_class = functools.partial(
+            LoggingHTTPRequestHandler,
+            directory=self.path,
         )
-        self.proc.start()
-        if not self.proc.is_alive():
-            raise ExploreTestError(f"HTTP process {self.proc.pid} exited")
-        try:
-            self.address = addr_queue.get(True, 5)
-        except queue.Empty:
-            raise ExploreTestError(
-                "HTTP process did not write address to queue"
-            ) from None
-
+        self.server = ThreadingHTTPServer(("127.0.0.1", 0), handler_class)
+        self.address = self.server.server_address
         self.url = f"http://{self.address[0]}:{self.address[1]}"
+
+        self.thread = threading.Thread(target=self._run_server, daemon=True)
+        self.thread.start()
+        if not self.thread.is_alive():
+            raise ExploreTestError(f"HTTP thread {self.thread.name} exited")
         logger.debug(
-            f"Serving {self.path} on {self.url} from process {self.proc.pid}"
+            f"Serving {self.path} on {self.url} from thread {self.thread.name}"
         )
 
     def stop(self):
         """Stop the HTTP server"""
-        if self.proc is not None:
-            if self.proc.is_alive():
-                logger.debug(f"Stopping HTTP server process {self.proc.pid}")
-                self.proc.terminate()
-            self.proc = None
+        if self.server is not None:
+            if self.thread is not None:
+                if self.thread.is_alive():
+                    logger.debug(
+                        f"Stopping HTTP server thread {self.thread.name}"
+                    )
+                    self.server.shutdown()
+                self.thread = None
+
+            self.server.server_close()
+            self.server = None
