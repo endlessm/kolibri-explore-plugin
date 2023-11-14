@@ -6,15 +6,19 @@ import functools
 import json
 import logging
 import os
+import re
 import shutil
 import threading
 import time
 from base64 import b64decode
 from glob import iglob
 from hashlib import md5
+from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler
 from http.server import ThreadingHTTPServer
+from io import BytesIO
 from pathlib import Path
+from urllib.parse import urlparse
 
 from django.db import OperationalError
 from kolibri.core.tasks.job import State
@@ -171,8 +175,143 @@ def wait_for_background_tasks(timeout=30):
         time.sleep(0.5)
 
 
-class LoggingHTTPRequestHandler(SimpleHTTPRequestHandler):
-    """SimpleHTTPRequestHandler with logging"""
+class ContentHTTPRequestHandler(SimpleHTTPRequestHandler):
+    """HTTP request handler for Kolibri content server"""
+
+    # Kolibri tries to access the raw socket in some scenarios, and that's not
+    # possible with HTTP/1.0 since the socket is closed immediately after the
+    # response is sent.
+    protocol_version = "HTTP/1.1"
+
+    # A list of path regex and handler tuples for routing requests.
+    ROUTES = [
+        (re.compile(r"^/api/public/info/$"), "_send_device_info"),
+        (
+            re.compile(
+                r"^/api/public/v1/channels/lookup/(?P<channel_id>[^/]+)$"
+            ),
+            "_send_channel_lookup",
+        ),
+    ]
+
+    def send_head(self):
+        url_parts = urlparse(self.path)
+        for regex, handler in self.ROUTES:
+            match = regex.match(url_parts.path)
+            if not match:
+                continue
+            func = getattr(self, handler)
+            return func(match)
+
+        return super().send_head()
+
+    def _send_device_info(self, match):
+        """Send server device information
+
+        See kolibri.core.device.utils.get_device_info.
+        """
+        from kolibri import __version__ as kolibri_version
+
+        data = {
+            "application": "studio",
+            "kolibri_version": kolibri_version,
+            "instance_id": "952d412212d549eb9b73a86f426d8a49",
+            "device_name": "Test Studio",
+            "operating_system": None,
+        }
+        content = json.dumps(data).encode("utf-8")
+
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(content)))
+        self.end_headers()
+        return BytesIO(content)
+
+    def _send_channel_lookup(self, match):
+        """Send channel information
+
+        See kolibri.core.public.api.get_public_channel_lookup,
+        kolibri.core.content.serializers.PublicChannelSerializer,
+        kolibri.core.content.base_models.ChannelMetadata and
+        kolibri.core.content.models.ChannelMetadata.
+        """
+        channel_id = match.group("channel_id")
+        channel = self._get_channel_data(channel_id)
+
+        if channel:
+            metadata = channel["content_channelmetadata"][0]
+            root_node = next(
+                node
+                for node in channel["content_contentnode"]
+                if node["id"] == metadata["root_id"]
+            )
+            root_lang_id = root_node.get("lang_id")
+            if root_lang_id:
+                root_lang = next(
+                    lang
+                    for lang in channel["content_language"]
+                    if lang["id"] == root_lang_id
+                )
+                root_lang_code = root_lang["lang_code"]
+            else:
+                root_lang_code = None
+
+            included_languages = [
+                lang["id"] for lang in channel.get("content_language", [])
+            ]
+            total_resource_count = len(
+                [
+                    node
+                    for node in channel["content_contentnode"]
+                    if node["kind"] != "topic"
+                ]
+            )
+            published_size = sum(
+                [f["file_size"] for f in channel["content_localfile"]]
+            )
+
+            data = [
+                {
+                    "id": metadata["id"],
+                    "name": metadata["name"],
+                    "language": root_lang_code,
+                    "included_languages": included_languages,
+                    "description": metadata.get("description", ""),
+                    "tagline": metadata.get("tagline", None),
+                    "total_resource_count": total_resource_count,
+                    "version": metadata["version"],
+                    "published_size": published_size,
+                    "last_published": metadata.get("last_updated"),
+                    "icon_encoding": metadata.get("thumbnail", ""),
+                    "matching_tokens": [],
+                    "public": True,
+                },
+            ]
+            status = HTTPStatus.OK
+        else:
+            data = {
+                "id": "NOT_FOUND",
+                "metadata": {"view": ""},
+            }
+            status = HTTPStatus.NOT_FOUND
+
+        content = json.dumps(data).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(content)))
+        self.end_headers()
+        return BytesIO(content)
+
+    def _get_channel_data(self, channel_id):
+        json_path = os.path.join(
+            self.directory,
+            f"content/databases/{channel_id}.json",
+        )
+        try:
+            with open(json_path) as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return None
 
     def log_message(self, format, *args):
         logger.debug(
@@ -212,7 +351,7 @@ class ContentServer:
         A separate thread is used so that the HTTP server can block.
         """
         handler_class = functools.partial(
-            LoggingHTTPRequestHandler,
+            ContentHTTPRequestHandler,
             directory=self.path,
         )
         self.server = ThreadingHTTPServer(("127.0.0.1", 0), handler_class)
