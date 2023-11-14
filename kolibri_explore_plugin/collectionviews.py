@@ -12,6 +12,9 @@ from kolibri.core.content.utils.content_manifest import ContentManifest
 from kolibri.core.content.utils.content_manifest import (
     ContentManifestParseError,
 )
+from kolibri.core.content.utils.import_export_content import (
+    get_import_export_data,
+)
 from kolibri.core.tasks.job import State as JobState
 from kolibri.core.tasks.main import job_storage
 from kolibri.utils import conf
@@ -189,6 +192,20 @@ class EndlessKeyContentManifest(ContentManifest):
             node_ids = list(
                 self._get_node_ids_for_channel(channel_metadata, channel_id)
             )
+
+            # Check if the desired nodes are already available.
+            num_resources, _, _ = get_import_export_data(
+                channel_id,
+                node_ids=node_ids,
+                available=False,
+            )
+            if num_resources == 0:
+                logger.debug(
+                    f"Skipping content import task for {channel_id} "
+                    "since all resources already present"
+                )
+                continue
+
             tasks.append(
                 get_remotecontentimport_task(
                     channel_id, channel_metadata.name, node_ids
@@ -219,12 +236,30 @@ class EndlessKeyContentManifest(ContentManifest):
 
         For all the channels in this content manifest.
         """
-        return [
-            get_remotecontentimport_task(
-                channel_id, node_ids=[], all_thumbnails=True
+        tasks = []
+
+        for channel_id in self.get_channel_ids():
+            # Check if the desired thumbnail nodes are already available.
+            num_resources, _, _ = get_import_export_data(
+                channel_id,
+                node_ids=[],
+                available=False,
+                all_thumbnails=True,
             )
-            for channel_id in self.get_channel_ids()
-        ]
+            if num_resources == 0:
+                logger.debug(
+                    f"Skipping content thumbnail task for {channel_id} "
+                    "since all resources already present"
+                )
+                continue
+
+            tasks.append(
+                get_remotecontentimport_task(
+                    channel_id, node_ids=[], all_thumbnails=True
+                )
+            )
+
+        return tasks
 
     def _get_node_ids_for_channel(self, channel_metadata, channel_id):
         """Get node IDs regardless of the version
