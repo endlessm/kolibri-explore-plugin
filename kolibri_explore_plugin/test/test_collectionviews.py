@@ -246,3 +246,5 @@ def test_download_manager_preload(facility_user, grade, name):
     assert channel_jobs == []
     content_jobs = job_storage.filter_jobs(func=TaskType.REMOTECONTENTIMPORT)
     assert content_jobs == []
+    import_jobs = job_storage.filter_jobs(func=TaskType.REMOTEIMPORT)
+    assert import_jobs == []

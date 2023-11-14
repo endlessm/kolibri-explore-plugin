@@ -29,6 +29,7 @@ from .jobs import get_applyexternaltags_task
 from .jobs import get_channel_metadata
 from .jobs import get_remotechannelimport_task
 from .jobs import get_remotecontentimport_task
+from .jobs import get_remoteimport_task
 from .models import BackgroundTask
 
 logger = logging.getLogger(__name__)
@@ -166,18 +167,37 @@ class EndlessKeyContentManifest(ContentManifest):
     def get_extra_channelimport_tasks(self):
         """Return a serializable object to create extra channelimport tasks
 
-        For all channels featured in Endless Key content manifests.
+        For all channels featured in Endless Key content manifests. In addition
+        to the channel metadata, all thumbnails are downloaded.
         """
         tasks = []
         for channel_id, channel_version in self.get_latest_extra_channels():
+            # Check if the channel metadata and thumbnails are already
+            # available.
             metadata = get_channel_metadata(channel_id)
             if metadata and metadata.version >= channel_version:
-                logger.debug(
-                    f"Skipping extra channel import task for {channel_id} "
-                    "since already present"
+                # The channel metadata is available. Now check if the thumbnail
+                # nodes are already available.
+                num_resources, _, _ = get_import_export_data(
+                    channel_id,
+                    node_ids=[],
+                    available=False,
+                    all_thumbnails=True,
                 )
-                continue
-            tasks.append(get_remotechannelimport_task(channel_id))
+                if num_resources == 0:
+                    logger.debug(
+                        f"Skipping extra channel import task for {channel_id} "
+                        "since channel metadata and all resources already "
+                        "present"
+                    )
+                    continue
+
+            tasks.append(
+                get_remoteimport_task(
+                    channel_id, node_ids=[], all_thumbnails=True
+                )
+            )
+
         return tasks
 
     def get_contentimport_tasks(self):

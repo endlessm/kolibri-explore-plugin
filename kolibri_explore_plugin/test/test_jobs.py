@@ -132,6 +132,89 @@ def test_get_remotecontentimport_task():
     }
 
 
+@pytest.mark.usefixtures("channel_import_db", "content_server")
+@pytest.mark.django_db
+def test_get_remoteimport_task():
+    channel_id = "b51baf46133045e3bce4d2d872a8f71d"
+    node_ids = [
+        "5a24503255ce43d98ebcb25d2b60f024",
+        "91a1bfc0ede544979f861909b7862537",
+    ]
+
+    # No nodes specified.
+    task = jobs.get_remoteimport_task(channel_id)
+    assert task == {
+        "task": jobs.TaskType.REMOTEIMPORT,
+        "params": {
+            "channel_id": channel_id,
+            "channel_name": "unknown",
+            "node_ids": None,
+            "exclude_node_ids": [],
+            "all_thumbnails": False,
+            "fail_on_error": True,
+        },
+    }
+
+    # Specify the nodes.
+    task = jobs.get_remoteimport_task(channel_id, node_ids=node_ids)
+    assert task == {
+        "task": jobs.TaskType.REMOTEIMPORT,
+        "params": {
+            "channel_id": channel_id,
+            "channel_name": "unknown",
+            "node_ids": node_ids,
+            "exclude_node_ids": [],
+            "all_thumbnails": False,
+            "fail_on_error": True,
+        },
+    }
+
+    # Override the channel name.
+    task = jobs.get_remoteimport_task(channel_id, channel_name="foo")
+    assert task == {
+        "task": jobs.TaskType.REMOTEIMPORT,
+        "params": {
+            "channel_id": channel_id,
+            "channel_name": "foo",
+            "node_ids": None,
+            "exclude_node_ids": [],
+            "all_thumbnails": False,
+            "fail_on_error": True,
+        },
+    }
+
+    # Specify an empty node list and all_thumbnails.
+    task = jobs.get_remoteimport_task(
+        channel_id, node_ids=[], all_thumbnails=True
+    )
+    assert task == {
+        "task": jobs.TaskType.REMOTEIMPORT,
+        "params": {
+            "channel_id": channel_id,
+            "channel_name": "unknown",
+            "node_ids": [],
+            "exclude_node_ids": [],
+            "all_thumbnails": True,
+            "fail_on_error": True,
+        },
+    }
+
+    # After importing the channel, the channel name will be known.
+    importchannel(channel_id)
+    task = jobs.get_remoteimport_task(channel_id)
+    assert task == {
+        "task": jobs.TaskType.REMOTEIMPORT,
+        "params": {
+            "channel_id": channel_id,
+            "channel_name": "testing",
+            "node_ids": None,
+            "exclude_node_ids": [],
+            "all_thumbnails": False,
+            "fail_on_error": True,
+        },
+    }
+
+
 @pytest.mark.usefixtures(
     "channel_import_db", "content_server", "facility_user", "worker"
 )

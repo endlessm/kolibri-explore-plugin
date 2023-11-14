@@ -27,6 +27,7 @@ class TaskType:
     APPLYEXTERNALTAGS = "kolibri_explore_plugin.tasks.applyexternaltags"
     REMOTECHANNELIMPORT = "kolibri.core.content.tasks.remotechannelimport"
     REMOTECONTENTIMPORT = "kolibri_explore_plugin.tasks.remotecontentimport"
+    REMOTEIMPORT = "kolibri.core.content.tasks.remoteimport"
 
 
 def get_channel_metadata(channel_id):
@@ -78,6 +79,33 @@ def get_remotecontentimport_task(
         channel_name = channel_metadata.name
     return {
         "task": TaskType.REMOTECONTENTIMPORT,
+        "params": {
+            "channel_id": channel_id,
+            "channel_name": channel_name,
+            "node_ids": node_ids,
+            "exclude_node_ids": [],
+            "all_thumbnails": all_thumbnails,
+            "fail_on_error": True,
+        },
+    }
+
+
+def get_remoteimport_task(
+    channel_id,
+    channel_name=None,
+    node_ids=None,
+    all_thumbnails=False,
+):
+    if not channel_name:
+        # Try to get the channel name from an existing channel database,
+        # but this will fail on first import.
+        channel_metadata = get_channel_metadata(channel_id)
+        if channel_metadata:
+            channel_name = channel_metadata.name
+        else:
+            channel_name = "unknown"
+    return {
+        "task": TaskType.REMOTEIMPORT,
         "params": {
             "channel_id": channel_id,
             "channel_name": channel_name,
@@ -178,9 +206,23 @@ def storage_update_hook(job, orm_job, state=None, **kwargs):
     elif state == State.COMPLETED:
         # If the completed task is a channel import, create the
         # associated thumbnail download task to be run later.
+        #
+        # FIXME: Previously the extra channels and their thumbnails were
+        # imported using 2 tasks. In order to keep the thumbnail task from
+        # being created before the channel was imported, the thumbnail task was
+        # created on the fly here. Now this is done with a single combined
+        # remoteimport task and this is no longer needed. However, it's kept
+        # for now in case there are existing installations that had started the
+        # background tasks but not completed them. Drop this at some point.
+        #
+        # https://github.com/endlessm/kolibri-explore-plugin/issues/890
         if bg_task.func == TaskType.REMOTECHANNELIMPORT:
             bg_task_params = json.loads(bg_task.params)
             channel_id = bg_task_params["channel_id"]
+            logger.warning(
+                f"Creating thumbnail task for {channel_id} legacy background "
+                "channel import task"
+            )
             thumbnail_task_data = get_remotecontentimport_task(
                 channel_id, node_ids=[], all_thumbnails=True
             )
