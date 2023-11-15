@@ -9,12 +9,14 @@ from django.urls import reverse
 from kolibri.core.content.models import ChannelMetadata
 from kolibri.core.content.models import ContentNode
 from kolibri.core.content.models import LocalFile
+from kolibri.core.tasks import main as tasks_main
 from rest_framework.test import APIClient
 
 from .utils import COLLECTIONSDIR
 from .utils import ExploreTestTimeoutError
 from .utils import wait_for_background_tasks
 from kolibri_explore_plugin import collectionviews
+from kolibri_explore_plugin.jobs import TaskType
 
 
 @pytest.mark.django_db
@@ -220,6 +222,11 @@ def test_download_manager_preload(facility_user, grade, name):
     assert num_initial_channels == len(all_channels)
     assert LocalFile.objects.filter(available=False).count() == 0
 
+    # Clear all the jobs to check if any downloading jobs were created
+    # later.
+    job_storage = tasks_main.job_storage
+    job_storage.clear(force=True)
+
     # Run the downloader with requests blocked. Since no URLs are mocked, all
     # requests will fail. Since the download manager retries tasks forever, it
     # will eventually time out on any request.
@@ -233,3 +240,11 @@ def test_download_manager_preload(facility_user, grade, name):
     assert (
         LocalFile.objects.filter(available=True).count() == num_initial_files
     )
+
+    # Check that no channel or content import jobs were created.
+    channel_jobs = job_storage.filter_jobs(func=TaskType.REMOTECHANNELIMPORT)
+    assert channel_jobs == []
+    content_jobs = job_storage.filter_jobs(func=TaskType.REMOTECONTENTIMPORT)
+    assert content_jobs == []
+    import_jobs = job_storage.filter_jobs(func=TaskType.REMOTEIMPORT)
+    assert import_jobs == []
