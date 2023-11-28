@@ -25,7 +25,7 @@ ipdb = "==0.13.2"
 # FIXME: Move to "~=0.16.0" when it's released.
 kolibri = { file = "https://github.com/learningequality/kolibri/releases/download/v0.16.0-beta6/kolibri-0.16.0b6-py2.py3-none-any.whl" }
 # Needed for old requests bundled with kolibri to work with newer python.
-cryptography = "~=37.0"
+cryptography = "~=41.0"
 
 [requires]
 python_version = "3"
