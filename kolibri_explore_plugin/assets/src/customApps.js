@@ -39,7 +39,6 @@ export const CustomChannelApps = {
   '2f95235c3709511fa12d007f31ed6a7b': 'steam',
   '1520f018610256549c98ca0140cceebe': 'virtual-field-trips',
   eb4373b5da054c07879d0c969dc1976a: 'virtual-science-teachers',
-  '59b8deeb90f544da923187e77c8d3820': 'wikihow',
   '1b1fc9bd453a4c52bb5628d9ae804ede': 'scigirls', // scigirls english
   ee52db4a62a94e9683599af8782f2d03: 'scigirls', // scigirls spanish
   f1ada7abc4194ff48a958337a31972c7: 'eie-families', // eie english
