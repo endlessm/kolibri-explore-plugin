@@ -64,6 +64,7 @@ class ExploreAsset(webpack_hooks.WebpackBundleHook):
             "hideDiscoveryTab": conf.OPTIONS["Explore"]["HIDE_DISCOVERY_TAB"],
             "feedbackUrl": conf.OPTIONS["Explore"]["FEEDBACK_URL"],
             "feedbackUrlEs": conf.OPTIONS["Explore"]["FEEDBACK_URL_ES"],
+            "kolibriProject": conf.OPTIONS["Deployment"]["PROJECT"],
         }
         if "Pwa" in conf.OPTIONS:
             pwa_options = {

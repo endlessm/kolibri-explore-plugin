@@ -67,6 +67,7 @@
 
 <script>
 
+  import urls from 'kolibri.urls';
   import { currentLanguage, languageIdToCode } from 'kolibri.utils.i18n';
   import ViewDashboardOutlineIcon from 'vue-material-design-icons/ViewDashboardOutline.vue';
   import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
@@ -91,6 +92,7 @@
     mixins: [commonExploreStrings],
     data() {
       return {
+        buildInfo: null,
         isOffline: false,
       };
     },
@@ -99,11 +101,23 @@
         return assets.EndlessLogo;
       },
       feedbackUrl() {
+        const hiddenFormFields = new URLSearchParams({
+          language: currentLanguage,
+          kolibriVersion: window.kolibriCoreAppGlobal.version,
+          kolibriProject: plugin_data.kolibriProject || 'Unknown',
+        });
+
+        if (this.buildInfo) {
+          hiddenFormFields[
+            'endlessKeyRelease'
+          ] = `${this.buildInfo.version_name} ${this.buildInfo.last_release}`;
+        }
+
         switch (languageIdToCode(currentLanguage)) {
           case 'es':
-            return plugin_data.feedbackUrlEs;
+            return plugin_data.feedbackUrlEs + '#' + hiddenFormFields.toString();
           default:
-            return plugin_data.feedbackUrl;
+            return plugin_data.feedbackUrl + '#' + hiddenFormFields.toString();
         }
       },
       showFeedbackButton() {
@@ -115,6 +129,9 @@
       showStoreButtons() {
         return !!plugin_data.androidApplicationId && !!plugin_data.windowsApplicationId;
       },
+    },
+    mounted() {
+      this.getBuildInfo();
     },
     created() {
       this.isOffline = !navigator.onLine;
@@ -168,6 +185,17 @@
         if (event.ctrlKey) {
           this.$store.commit('topicsRoot/SET_SHOW_SIDE_NAV', true);
         }
+      },
+      getBuildInfo() {
+        const buildInfo = urls.static(`build-info.json`);
+        fetch(buildInfo)
+          .then(response => response.json())
+          .then(data => {
+            this.buildInfo = data;
+          })
+          .catch(error => {
+            console.error(error);
+          });
       },
     },
     $trs: {
