@@ -1,5 +1,6 @@
 # Copyright 2022-2023 Endless OS Foundation LLC
 # SPDX-License-Identifier: GPL-2.0-or-later
+import itertools
 import logging
 import os
 import time
@@ -146,6 +147,15 @@ class EndlessKeyContentManifest(ContentManifest):
 
     def get_channels_count(self):
         return len(self.get_channel_ids())
+
+    def is_download_required(self):
+        return any(
+            itertools.chain(
+                self.get_channelimport_tasks(),
+                self.get_contentimport_tasks(),
+                self.get_contentthumbnail_tasks(),
+            )
+        )
 
     def get_channelimport_tasks(self):
         """Return a serializable object to create channelimport tasks
@@ -685,6 +695,7 @@ def _get_collections_info_by_grade_name(grade, name):
         "metadata": manifest.metadata,
         "available": manifest.available,
         "channelsCount": manifest.get_channels_count(),
+        "isDownloadRequired": manifest.is_download_required(),
     }
 
 

@@ -53,6 +53,7 @@ def test_get_collection_info():
                     "metadata": collection_data["metadata"],
                     "available": True,
                     "channelsCount": len(collection_data["channels"]),
+                    "isDownloadRequired": True,
                 }
             }
 
@@ -81,6 +82,7 @@ def test_get_all_collections_info():
                     "metadata": collection_data["metadata"],
                     "available": True,
                     "channelsCount": len(collection_data["channels"]),
+                    "isDownloadRequired": True,
                 }
             )
     expected_data = {"allCollectionsInfo": all_collections_info}

@@ -6,7 +6,7 @@
       <b-button
         pill
         class="mb-4 mt-4"
-        :disabled="isOffline"
+        :disabled="isDownloadRequired && isOffline"
         variant="primary"
         @click="downloadContent"
       >
@@ -29,6 +29,7 @@
 
   import { PageNames } from '../../constants';
   import isOfflineMixin from '../../mixins/isOfflineMixin';
+  import { getCollectionInfo } from '../../modules/coreExplore/utils';
   import WelcomeBase from './WelcomeBase';
 
   export default {
@@ -40,7 +41,15 @@
     data() {
       return {
         PageNames,
+        isDownloadRequired: true,
       };
+    },
+    mounted() {
+      return getCollectionInfo(this.$route.params.grade, this.$route.params.name).then(
+        collectionsInfo => {
+          this.isDownloadRequired = collectionsInfo.isDownloadRequired;
+        }
+      );
     },
     methods: {
       downloadContent() {
