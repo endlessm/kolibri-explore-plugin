@@ -78,6 +78,7 @@
   import { mapMutations } from 'vuex';
   import { assets } from 'ek-components';
   import commonExploreStrings from '../views/commonExploreStrings';
+  import isOfflineMixin from '../mixins/isOfflineMixin';
   import { PageNames } from '../constants';
 
   export default {
@@ -88,12 +89,7 @@
       MessageReplyTextOutlineIcon,
       ArrowDownIcon,
     },
-    mixins: [commonExploreStrings],
-    data() {
-      return {
-        isOffline: false,
-      };
-    },
+    mixins: [commonExploreStrings, isOfflineMixin],
     computed: {
       logo() {
         return assets.EndlessLogo;
@@ -115,15 +111,6 @@
       showStoreButtons() {
         return !!plugin_data.androidApplicationId && !!plugin_data.windowsApplicationId;
       },
-    },
-    created() {
-      this.isOffline = !navigator.onLine;
-      window.addEventListener('offline', this.onOffline);
-      window.addEventListener('online', this.onOnline);
-    },
-    destroyed() {
-      window.removeEventListener('offline', this.onOffline);
-      window.removeEventListener('online', this.onOnline);
     },
     methods: {
       ...mapMutations({
@@ -157,12 +144,6 @@
       },
       currentIsSearch() {
         return this.$route.name === PageNames.SEARCH;
-      },
-      onOffline() {
-        this.isOffline = true;
-      },
-      onOnline() {
-        this.isOffline = false;
       },
       onLogoClick(event) {
         if (event.ctrlKey) {

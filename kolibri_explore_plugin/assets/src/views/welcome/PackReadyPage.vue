@@ -28,6 +28,7 @@
 <script>
 
   import { PageNames } from '../../constants';
+  import isOfflineMixin from '../../mixins/isOfflineMixin';
   import WelcomeBase from './WelcomeBase';
 
   export default {
@@ -35,32 +36,17 @@
     components: {
       WelcomeBase,
     },
+    mixins: [isOfflineMixin],
     data() {
       return {
-        isOffline: false,
         PageNames,
       };
-    },
-    created() {
-      this.isOffline = !navigator.onLine;
-      window.addEventListener('offline', this.onOffline);
-      window.addEventListener('online', this.onOnline);
-    },
-    destroyed() {
-      window.removeEventListener('offline', this.onOffline);
-      window.removeEventListener('online', this.onOnline);
     },
     methods: {
       downloadContent() {
         const grade = this.$route.params.grade;
         const name = this.$route.params.name;
         this.$router.push({ name: PageNames.DOWNLOAD, params: { grade, name } });
-      },
-      onOffline() {
-        this.isOffline = true;
-      },
-      onOnline() {
-        this.isOffline = false;
       },
     },
     $trs: {
