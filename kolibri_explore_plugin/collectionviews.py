@@ -151,18 +151,17 @@ class EndlessKeyContentManifest(ContentManifest):
     def is_download_required(self):
         return any(
             itertools.chain(
-                self.get_channelimport_tasks(),
-                self.get_contentimport_tasks(),
-                self.get_contentthumbnail_tasks(),
+                self.iter_channelimport_tasks(),
+                self.iter_contentimport_tasks(),
+                self.iter_contentthumbnail_tasks(),
             )
         )
 
-    def get_channelimport_tasks(self):
+    def iter_channelimport_tasks(self):
         """Return a serializable object to create channelimport tasks
 
         For all the channels in this content manifest.
         """
-        tasks = []
         for channel_id, channel_version in self.get_latest_channels():
             metadata = get_channel_metadata(channel_id)
             if metadata and metadata.version >= channel_version:
@@ -171,16 +170,14 @@ class EndlessKeyContentManifest(ContentManifest):
                     "already present"
                 )
                 continue
-            tasks.append(get_remotechannelimport_task(channel_id))
-        return tasks
+            yield get_remotechannelimport_task(channel_id)
 
-    def get_extra_channelimport_tasks(self):
+    def iter_extra_channelimport_tasks(self):
         """Return a serializable object to create extra channelimport tasks
 
         For all channels featured in Endless Key content manifests. In addition
         to the channel metadata, all thumbnails are downloaded.
         """
-        tasks = []
         for channel_id, channel_version in self.get_latest_extra_channels():
             # Check if the channel metadata and thumbnails are already
             # available.
@@ -202,21 +199,15 @@ class EndlessKeyContentManifest(ContentManifest):
                     )
                     continue
 
-            tasks.append(
-                get_remoteimport_task(
-                    channel_id, node_ids=[], all_thumbnails=True
-                )
+            yield get_remoteimport_task(
+                channel_id, node_ids=[], all_thumbnails=True
             )
 
-        return tasks
-
-    def get_contentimport_tasks(self):
+    def iter_contentimport_tasks(self):
         """Return a serializable object to create contentimport tasks
 
         For all the channels in this content manifest.
         """
-        tasks = []
-
         for channel_id in self.get_channel_ids():
             channel_metadata = get_channel_metadata(channel_id)
             node_ids = list(
@@ -236,15 +227,11 @@ class EndlessKeyContentManifest(ContentManifest):
                 )
                 continue
 
-            tasks.append(
-                get_remotecontentimport_task(
-                    channel_id, channel_metadata.name, node_ids
-                )
+            yield get_remotecontentimport_task(
+                channel_id, channel_metadata.name, node_ids
             )
 
-        return tasks
-
-    def get_applyexternaltags_tasks(self):
+    def iter_applyexternaltags_tasks(self):
         """Return a serializable object to create applyexternaltags tasks
 
         As defined in this content manifest metadata.
@@ -252,22 +239,16 @@ class EndlessKeyContentManifest(ContentManifest):
         if "tagged_node_ids" not in self.metadata:
             return []
 
-        tasks = []
-
         for tagged in self.metadata["tagged_node_ids"]:
             node_id = tagged["node_id"]
             tags = tagged["tags"]
-            tasks.append(get_applyexternaltags_task(node_id, tags))
+            yield get_applyexternaltags_task(node_id, tags)
 
-        return tasks
-
-    def get_contentthumbnail_tasks(self):
+    def iter_contentthumbnail_tasks(self):
         """Return a serializable object to create thumbnail contentimport tasks
 
         For all the channels in this content manifest.
         """
-        tasks = []
-
         for channel_id in self.get_channel_ids():
             # Check if the desired thumbnail nodes are already available.
             num_resources, _, _ = get_import_export_data(
@@ -283,13 +264,9 @@ class EndlessKeyContentManifest(ContentManifest):
                 )
                 continue
 
-            tasks.append(
-                get_remotecontentimport_task(
-                    channel_id, node_ids=[], all_thumbnails=True
-                )
+            yield get_remotecontentimport_task(
+                channel_id, node_ids=[], all_thumbnails=True
             )
-
-        return tasks
 
     def _get_node_ids_for_channel(self, channel_metadata, channel_id):
         """Get node IDs regardless of the version
@@ -583,11 +560,11 @@ class CollectionDownloadManager:
         while not tasks and self._stage != DownloadStage.COMPLETED:
             self._stage = DownloadStage(self._stage + 1)
             if self._stage == DownloadStage.IMPORTING_CHANNELS:
-                tasks = self._content_manifest.get_channelimport_tasks()
+                tasks = self._content_manifest.iter_channelimport_tasks()
             elif self._stage == DownloadStage.IMPORTING_CONTENT:
-                tasks = self._content_manifest.get_contentimport_tasks()
+                tasks = self._content_manifest.iter_contentimport_tasks()
             elif self._stage == DownloadStage.APPLYING_EXTERNAL_TAGS:
-                tasks = self._content_manifest.get_applyexternaltags_tasks()
+                tasks = self._content_manifest.iter_applyexternaltags_tasks()
 
         if self._stage == DownloadStage.COMPLETED:
             logger.info("Download completed!")
@@ -595,17 +572,17 @@ class CollectionDownloadManager:
             # Download the manifest content thumbnails and the extra channels
             # in the background.
             thumbnail_tasks = (
-                self._content_manifest.get_contentthumbnail_tasks()
+                self._content_manifest.iter_contentthumbnail_tasks()
             )
             extra_channel_tasks = (
-                self._content_manifest.get_extra_channelimport_tasks()
+                self._content_manifest.iter_extra_channelimport_tasks()
             )
-            for task in thumbnail_tasks + extra_channel_tasks:
+            for task in itertools.chain(thumbnail_tasks, extra_channel_tasks):
                 BackgroundTask.create_from_task_data(task)
             logger.info("Starting background download tasks")
             enqueue_next_background_task()
 
-        self._tasks_pending = tasks
+        self._tasks_pending = list(tasks)
         self._tasks_previously_completed.extend(self._tasks_completed)
         self._tasks_completed = []
         logger.info(f"Started download stage: {self._stage.name}")
