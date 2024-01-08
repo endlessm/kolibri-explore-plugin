@@ -6,7 +6,7 @@
       <b-button
         pill
         class="mb-4 mt-4"
-        :disabled="isOffline"
+        :disabled="isDownloadRequired && isOffline"
         variant="primary"
         @click="downloadContent"
       >
@@ -28,6 +28,8 @@
 <script>
 
   import { PageNames } from '../../constants';
+  import isOfflineMixin from '../../mixins/isOfflineMixin';
+  import { getCollectionInfo } from '../../modules/coreExplore/utils';
   import WelcomeBase from './WelcomeBase';
 
   export default {
@@ -35,32 +37,25 @@
     components: {
       WelcomeBase,
     },
+    mixins: [isOfflineMixin],
     data() {
       return {
-        isOffline: false,
         PageNames,
+        isDownloadRequired: true,
       };
     },
-    created() {
-      this.isOffline = !navigator.onLine;
-      window.addEventListener('offline', this.onOffline);
-      window.addEventListener('online', this.onOnline);
-    },
-    destroyed() {
-      window.removeEventListener('offline', this.onOffline);
-      window.removeEventListener('online', this.onOnline);
+    mounted() {
+      return getCollectionInfo(this.$route.params.grade, this.$route.params.name).then(
+        collectionsInfo => {
+          this.isDownloadRequired = collectionsInfo.isDownloadRequired;
+        }
+      );
     },
     methods: {
       downloadContent() {
         const grade = this.$route.params.grade;
         const name = this.$route.params.name;
         this.$router.push({ name: PageNames.DOWNLOAD, params: { grade, name } });
-      },
-      onOffline() {
-        this.isOffline = true;
-      },
-      onOnline() {
-        this.isOffline = false;
       },
     },
     $trs: {
