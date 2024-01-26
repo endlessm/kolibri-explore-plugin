@@ -47,10 +47,10 @@ export function updateContentNodeProgress(channelId, contentId, progressFraction
   ContentNodeProgressResource.getModel(contentId).set({ progress_fraction: progressFraction });
 }
 
-export function getCollectionInfo(grade, name) {
+export function getCollectionInfo(name, sequence) {
   return client({
     url: urls['kolibri:kolibri_explore_plugin:get_collection_info'](),
-    params: { grade, name },
+    params: { name, sequence },
   }).then(({ data }) => {
     return data.collectionInfo;
   });
@@ -89,11 +89,11 @@ export function resumeDownload() {
   });
 }
 
-export function startDownload(grade, name) {
+export function startDownload(name, sequence) {
   return client({
     url: urls['kolibri:kolibri_explore_plugin:start_download'](),
     method: 'POST',
-    data: { grade, name },
+    data: { name, sequence },
   }).then(({ data }) => {
     return data.status;
   });

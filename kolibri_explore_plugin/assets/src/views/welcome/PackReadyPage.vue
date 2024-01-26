@@ -45,7 +45,7 @@
       };
     },
     mounted() {
-      return getCollectionInfo(this.$route.params.grade, this.$route.params.name).then(
+      return getCollectionInfo(this.$route.params.name, this.$route.params.sequence).then(
         collectionsInfo => {
           this.isDownloadRequired = collectionsInfo.isDownloadRequired;
         }
@@ -53,9 +53,9 @@
     },
     methods: {
       downloadContent() {
-        const grade = this.$route.params.grade;
         const name = this.$route.params.name;
-        this.$router.push({ name: PageNames.DOWNLOAD, params: { grade, name } });
+        const sequence = this.$route.params.sequence;
+        this.$router.push({ name: PageNames.DOWNLOAD, params: { name, sequence } });
       },
     },
     $trs: {
