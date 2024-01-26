@@ -47,6 +47,14 @@ export function updateContentNodeProgress(channelId, contentId, progressFraction
   ContentNodeProgressResource.getModel(contentId).set({ progress_fraction: progressFraction });
 }
 
+export function currentCollectionExists() {
+  return client({
+    url: urls['kolibri:kolibri_explore_plugin:current_collection_exists'](),
+  }).then(({ data }) => {
+    return data;
+  });
+}
+
 export function getCollectionInfo(name, sequence) {
   return client({
     url: urls['kolibri:kolibri_explore_plugin:get_collection_info'](),

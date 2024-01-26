@@ -32,6 +32,7 @@ from .jobs import get_remotechannelimport_task
 from .jobs import get_remotecontentimport_task
 from .jobs import get_remoteimport_task
 from .models import BackgroundTask
+from .models import CollectionState
 
 logger = logging.getLogger(__name__)
 
@@ -703,6 +704,13 @@ def _get_latest_channels_for_all_content_manifests(language):
             if version > channels.get(channel_id, -1):
                 channels[channel_id] = version
     return set(channels.items())
+
+
+@ensure_initiated
+@api_view(["GET"])
+def current_collection_exists(request):
+    """Return True if one of the collections is current."""
+    return Response(CollectionState.current_exists())
 
 
 @ensure_initiated

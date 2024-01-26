@@ -11,6 +11,7 @@ import { ChannelResource, ContentNodeResource } from '../../apiResources';
 import { CarouselItemsLength, SEARCH_MAX_RESULTS, PageNames } from '../../constants';
 import { CustomChannelApps, getBigThumbnail, getChannelIcon } from '../../customApps';
 import {
+  currentCollectionExists,
   getDownloadStatus,
   getShouldResume,
   resumeDownload,
@@ -147,9 +148,9 @@ export function decideWelcome(store) {
     return Promise.resolve();
   }
 
-  return Promise.all([getDownloadStatus(), getShouldResume()]).then(
-    ([status, { shouldResume, name, sequence }]) => {
-      if (_isDownloadComplete(status)) {
+  return Promise.all([currentCollectionExists(), getDownloadStatus(), getShouldResume()]).then(
+    ([currentExists, status, { shouldResume, name, sequence }]) => {
+      if (currentExists || _isDownloadComplete(status)) {
         store.commit('CORE_SET_PAGE_LOADING', false);
         store.commit('CORE_SET_ERROR', null);
         console.debug('Welcome: Download complete, redirecting to Explore page...');
