@@ -9,6 +9,7 @@ from enum import IntEnum
 
 from django.utils.translation import gettext_lazy as _
 from kolibri.core.content.errors import InsufficientStorageSpaceError
+from kolibri.core.content.models import ContentNode
 from kolibri.core.content.utils.content_manifest import ContentManifest
 from kolibri.core.content.utils.content_manifest import (
     ContentManifestParseError,
@@ -33,6 +34,8 @@ from .jobs import get_remotecontentimport_task
 from .jobs import get_remoteimport_task
 from .models import BackgroundTask
 from .models import CollectionState
+from .models import ContentNodeExtras
+from .models import ExternalContentTag
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +71,10 @@ PROGRESS_STEPS = {
     "downloading": 0.9,
     "completed": 1,
 }
+
+
+class ChannelNotImported(Exception):
+    pass
 
 
 class EndlessKeyContentManifest(ContentManifest):
@@ -155,8 +162,31 @@ class EndlessKeyContentManifest(ContentManifest):
                 self.iter_channelimport_tasks(),
                 self.iter_contentimport_tasks(),
                 self.iter_contentthumbnail_tasks(),
+                self.iter_applyexternaltags_tasks(),
+                self.iter_extra_channelimport_tasks(),
             )
         )
+
+    def metadata_installed(self):
+        return not any(self.iter_channelimport_tasks())
+
+    def content_installed(self):
+        try:
+            return not any(self.iter_contentimport_tasks())
+        except ChannelNotImported:
+            return False
+
+    def thumbnails_installed(self):
+        try:
+            return not any(self.iter_contentthumbnail_tasks())
+        except ChannelNotImported:
+            return False
+
+    def tags_applied(self):
+        return not any(self.iter_applyexternaltags_tasks())
+
+    def extra_metadata_installed(self):
+        return not any(self.iter_extra_channelimport_tasks())
 
     def iter_channelimport_tasks(self):
         """Return a serializable object to create channelimport tasks
@@ -211,6 +241,9 @@ class EndlessKeyContentManifest(ContentManifest):
         """
         for channel_id in self.get_channel_ids():
             channel_metadata = get_channel_metadata(channel_id)
+            if channel_metadata is None:
+                raise ChannelNotImported
+
             node_ids = list(
                 self._get_node_ids_for_channel(channel_metadata, channel_id)
             )
@@ -237,13 +270,34 @@ class EndlessKeyContentManifest(ContentManifest):
 
         As defined in this content manifest metadata.
         """
-        if "tagged_node_ids" not in self.metadata:
+        data = self._manifest_data.get("metadata", {})
+        if "tagged_node_ids" not in data:
             return []
 
-        for tagged in self.metadata["tagged_node_ids"]:
+        for tagged in data["tagged_node_ids"]:
             node_id = tagged["node_id"]
             tags = tagged["tags"]
-            yield get_applyexternaltags_task(node_id, tags)
+
+            node = None
+            missing_tags = []
+            try:
+                node = ContentNode.objects.get(id=node_id)
+            except ContentNode.DoesNotExist:
+                missing_tags = tags
+            else:
+                for tag_name in tags:
+                    try:
+                        ContentNodeExtras.objects.get(
+                            tags__tag_name=tag_name, content_node=node
+                        )
+                    except (
+                        ExternalContentTag.DoesNotExist,
+                        ContentNodeExtras.DoesNotExist,
+                    ):
+                        missing_tags.append(tag_name)
+
+            if missing_tags:
+                yield get_applyexternaltags_task(node_id, missing_tags)
 
     def iter_contentthumbnail_tasks(self):
         """Return a serializable object to create thumbnail contentimport tasks
@@ -252,12 +306,17 @@ class EndlessKeyContentManifest(ContentManifest):
         """
         for channel_id in self.get_channel_ids():
             # Check if the desired thumbnail nodes are already available.
-            num_resources, _, _ = get_import_export_data(
-                channel_id,
-                node_ids=[],
-                available=False,
-                all_thumbnails=True,
-            )
+            num_resources = None
+            try:
+                num_resources, _, _ = get_import_export_data(
+                    channel_id,
+                    node_ids=[],
+                    available=False,
+                    all_thumbnails=True,
+                )
+            except TypeError:
+                raise ChannelNotImported
+
             if num_resources == 0:
                 logger.debug(
                     f"Skipping content thumbnail task for {channel_id} "
