@@ -608,12 +608,15 @@ class CollectionDownloadManager:
 _content_manifests = []
 _content_manifests_by_language = {}
 _content_manifests_by_grade_name = {}
-_collection_download_manager = CollectionDownloadManager()
+_collection_download_manager = None
 
 
 def _read_content_manifests():
     global _content_manifests
     global _content_manifests_by_grade_name
+    global _collection_download_manager
+
+    _collection_download_manager = CollectionDownloadManager()
 
     free_space_gb = get_free_space() / 1024**3
 
@@ -647,7 +650,15 @@ def _read_content_manifests():
             _create_manifest(grade, name, language)
 
 
-_read_content_manifests()
+def ensure_initiated(api_function):
+    """Decorator to initiate only once in the first API call."""
+
+    def wrapper(*args, **kwargs):
+        if _collection_download_manager is None:
+            _read_content_manifests()
+        return api_function(*args, **kwargs)
+
+    return wrapper
 
 
 def _save_state_in_request_session(request):
@@ -694,6 +705,7 @@ def _get_latest_channels_for_all_content_manifests(language):
     return set(channels.items())
 
 
+@ensure_initiated
 @api_view(["GET"])
 def get_collection_info(request):
     """Return the collection metadata and availability."""
@@ -703,6 +715,7 @@ def get_collection_info(request):
     return Response({"collectionInfo": collection_info})
 
 
+@ensure_initiated
 @api_view(["GET"])
 def get_all_collections_info(request):
     """Return all the collections metadata and their availability."""
@@ -721,6 +734,7 @@ def get_all_collections_info(request):
     return Response({"allCollectionsInfo": info})
 
 
+@ensure_initiated
 @api_view(["GET"])
 def get_should_resume(request):
     """Return if there is a saved state that should be resumed."""
@@ -739,6 +753,7 @@ def get_should_resume(request):
     )
 
 
+@ensure_initiated
 @api_view(["POST"])
 def start_download(request):
     """Start downloading a collection.
@@ -780,6 +795,7 @@ def start_download(request):
     return Response({"status": status})
 
 
+@ensure_initiated
 @api_view(["POST"])
 def resume_download(request):
     """Resume download from a previous session.
@@ -808,6 +824,7 @@ def resume_download(request):
     return Response({"status": status})
 
 
+@ensure_initiated
 @api_view(["POST"])
 def update_download(request):
     """Continue downloading current collection.
@@ -830,6 +847,7 @@ def update_download(request):
     return Response({"status": status})
 
 
+@ensure_initiated
 @api_view(["DELETE"])
 def cancel_download(request):
     """Cancel current download and clear the saved state.
@@ -849,6 +867,7 @@ def cancel_download(request):
     return Response({"status": status})
 
 
+@ensure_initiated
 @api_view(["GET"])
 def get_download_status(request):
     """Return the download status."""
