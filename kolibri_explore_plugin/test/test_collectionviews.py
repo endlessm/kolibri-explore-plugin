@@ -24,40 +24,45 @@ def test_get_collection_info():
     url = reverse("kolibri:kolibri_explore_plugin:get_collection_info")
     client = APIClient()
 
-    # Unspecified or missing grade/name results in null info.
-    for grade, name in (
+    # Unspecified or missing name/sequence results in null info.
+    for name, sequence in (
         (None, None),
         ("foo", None),
-        (None, "foo"),
-        ("foo", "bar"),
+        (None, 999),
+        ("foo", 999),
     ):
         params = {}
-        if grade:
-            params["grade"] = grade
         if name:
             params["name"] = name
+        if sequence:
+            params["sequence"] = sequence
         resp = client.get(url, params)
         assert resp.status_code == 200
         assert resp.json() == {"collectionInfo": None}
 
     # Test each supported collection.
-    for grade in collectionviews.COLLECTION_GRADES:
-        for name in collectionviews.COLLECTION_NAMES:
-            collection_path = COLLECTIONSDIR / f"{grade}-{name}.json"
+    for name in collectionviews.COLLECTION_NAMES:
+        for sequence in collectionviews.COLLECTION_SEQUENCES:
+            collection_path = COLLECTIONSDIR / f"{name}-{sequence:04}.json"
             with collection_path.open("r") as f:
                 collection_data = json.load(f)
             expected_data = {
                 "collectionInfo": {
-                    "grade": grade,
                     "name": name,
-                    "metadata": collection_data["metadata"],
+                    "sequence": sequence,
+                    "title": collection_data["metadata"]["title"],
+                    "subtitle": collection_data["metadata"]["subtitle"],
+                    "description": collection_data["metadata"]["description"],
+                    "required_gigabytes": collection_data["metadata"][
+                        "required_gigabytes"
+                    ],
                     "available": True,
                     "channelsCount": len(collection_data["channels"]),
                     "isDownloadRequired": True,
                 }
             }
 
-            resp = client.get(url, {"grade": grade, "name": name})
+            resp = client.get(url, {"name": name, "sequence": sequence})
             assert resp.status_code == 200
             assert resp.json() == expected_data
 
@@ -68,18 +73,23 @@ def test_get_all_collections_info():
     client = APIClient()
 
     all_collections_info = []
-    for grade in collectionviews.COLLECTION_GRADES:
-        grade_info = {"grade": grade, "collections": []}
-        all_collections_info.append(grade_info)
-        for name in collectionviews.COLLECTION_NAMES:
-            collection_path = COLLECTIONSDIR / f"{grade}-{name}.json"
+    for name in collectionviews.COLLECTION_NAMES:
+        collection_info = {"name": name, "collections": []}
+        all_collections_info.append(collection_info)
+        for sequence in collectionviews.COLLECTION_SEQUENCES:
+            collection_path = COLLECTIONSDIR / f"{name}-{sequence:04}.json"
             with collection_path.open("r") as f:
                 collection_data = json.load(f)
-            grade_info["collections"].append(
+            collection_info["collections"].append(
                 {
-                    "grade": grade,
                     "name": name,
-                    "metadata": collection_data["metadata"],
+                    "sequence": sequence,
+                    "title": collection_data["metadata"]["title"],
+                    "subtitle": collection_data["metadata"]["subtitle"],
+                    "description": collection_data["metadata"]["description"],
+                    "required_gigabytes": collection_data["metadata"][
+                        "required_gigabytes"
+                    ],
                     "available": True,
                     "channelsCount": len(collection_data["channels"]),
                     "isDownloadRequired": True,
@@ -103,12 +113,16 @@ def test_get_should_resume():
     state = session.get("COLLECTIONS_STATE")
     assert state == current_state
     resp = client.get(url)
-    assert resp.json() == {"shouldResume": False, "grade": None, "name": None}
+    assert resp.json() == {
+        "shouldResume": False,
+        "name": None,
+        "sequence": None,
+    }
 
     # Intermediate state.
     current_state = {
-        "grade": "artist",
-        "name": "0001",
+        "collection_name": "artist",
+        "collection_sequence": 1,
         "stage": collectionviews.DownloadStage.IMPORTING_CONTENT.name,
     }
     session["COLLECTIONS_STATE"] = current_state
@@ -118,14 +132,14 @@ def test_get_should_resume():
     resp = client.get(url)
     assert resp.json() == {
         "shouldResume": True,
-        "grade": "artist",
-        "name": "0001",
+        "name": "artist",
+        "sequence": 1,
     }
 
     # Completed state.
     current_state = {
-        "grade": "artist",
-        "name": "0001",
+        "collection_name": "artist",
+        "collection_sequence": 1,
         "stage": collectionviews.DownloadStage.COMPLETED.name,
     }
     session["COLLECTIONS_STATE"] = current_state
@@ -135,17 +149,17 @@ def test_get_should_resume():
     resp = client.get(url)
     assert resp.json() == {
         "shouldResume": False,
-        "grade": "artist",
-        "name": "0001",
+        "name": "artist",
+        "sequence": 1,
     }
 
 
-def run_download_manager(manager, manifest, user, timeout=30):
+def run_download_manager(manager, collection, user, timeout=30):
     """Update the download manager until it completes
 
     Raises ExploreTestTimeoutError if it hasn't completed in timeout seconds.
     """
-    manager.start(manifest, user)
+    manager.start(collection, user)
     deadline = time.monotonic() + timeout
     while True:
         manager.update(user)
@@ -166,19 +180,19 @@ def run_download_manager(manager, manifest, user, timeout=30):
 @pytest.mark.usefixtures("channel_import_db", "worker", "content_server")
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    ("grade", "name"),
+    ("name", "sequence"),
     product(
-        collectionviews.COLLECTION_GRADES, collectionviews.COLLECTION_NAMES
+        collectionviews.COLLECTION_NAMES, collectionviews.COLLECTION_SEQUENCES
     ),
 )
-def test_download_manager_clean(facility_user, grade, name):
+def test_download_manager_clean(facility_user, name, sequence):
     """Test collections downloads from no content state"""
-    manifest = collectionviews._content_manifests_by_grade_name[grade][name]
+    collection = collectionviews._collections_by_name_sequence[name][sequence]
     manager = collectionviews.CollectionDownloadManager()
 
     # Run the download manager and then wait for the background download tasks
     # to complete.
-    run_download_manager(manager, manifest, facility_user)
+    run_download_manager(manager, collection, facility_user)
     wait_for_background_tasks()
 
     # Check that the correct number of channels, nodes and tags are present.
@@ -187,11 +201,11 @@ def test_download_manager_clean(facility_user, grade, name):
     # root topic, video, subtopic and document. So, each pack will have 8
     # available nodes. The extra packs don't cause any nodes to become
     # available since only the thumbnails are downloaded.
-    assert manifest.language in ("en", "es")
-    if manifest.language == "en":
-        num_packs = len(collectionviews.COLLECTION_GRADES_EN)
-    elif manifest.language == "es":
-        num_packs = len(collectionviews.COLLECTION_GRADES_ES)
+    assert collection.state.language_id in ("en", "es")
+    if collection.state.language_id == "en":
+        num_packs = len(collectionviews.COLLECTION_NAMES_EN)
+    elif collection.state.language_id == "es":
+        num_packs = len(collectionviews.COLLECTION_NAMES_ES)
     assert ChannelMetadata.objects.count() == 2 * num_packs
     assert ContentNode.objects.filter().count() == 12 * num_packs
     assert ContentNode.objects.filter(available=True).count() == 8
@@ -200,18 +214,18 @@ def test_download_manager_clean(facility_user, grade, name):
 @pytest.mark.usefixtures("channel_import_db", "worker", "content_server")
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    ("grade", "name"),
+    ("name", "sequence"),
     product(
-        collectionviews.COLLECTION_GRADES, collectionviews.COLLECTION_NAMES
+        collectionviews.COLLECTION_NAMES, collectionviews.COLLECTION_SEQUENCES
     ),
 )
-def test_download_manager_preload(facility_user, grade, name):
+def test_download_manager_preload(facility_user, name, sequence):
     """Test collections downloads with preloaded content"""
     # Import the channels in full.
-    manifest = collectionviews._content_manifests_by_grade_name[grade][name]
+    collection = collectionviews._collections_by_name_sequence[name][sequence]
     all_channels = set(
-        list(manifest.get_channel_ids())
-        + list(manifest.get_extra_channel_ids())
+        list(collection.get_channel_ids())
+        + list(collection.get_extra_channel_ids())
     )
     for channel_id in all_channels:
         call_command("importchannel", "network", channel_id)
@@ -234,7 +248,7 @@ def test_download_manager_preload(facility_user, grade, name):
     # will eventually time out on any request.
     with requests_mock.Mocker():
         manager = collectionviews.CollectionDownloadManager()
-        run_download_manager(manager, manifest, facility_user)
+        run_download_manager(manager, collection, facility_user)
         wait_for_background_tasks()
 
     # Check that no additional channels or files have been downloaded.
