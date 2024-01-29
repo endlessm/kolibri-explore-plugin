@@ -38,16 +38,16 @@ export default [
   },
   {
     name: PageNames.WELCOME_PACK_READY,
-    path: '/welcome/pack-ready/:grade/:name',
+    path: '/welcome/pack-ready/:name/:sequence',
     handler: () => {
       store.commit('SET_PAGE_NAME', PageNames.WELCOME_PACK_READY);
     },
   },
   {
     name: PageNames.DOWNLOAD,
-    path: '/download/:grade/:name',
+    path: '/download/:name/:sequence',
     handler: toRoute => {
-      decideDownload(store, toRoute.params.grade, toRoute.params.name);
+      decideDownload(store, toRoute.params.name, toRoute.params.sequence);
     },
   },
   {

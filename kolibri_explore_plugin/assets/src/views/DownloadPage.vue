@@ -124,9 +124,9 @@
       },
     },
     mounted() {
-      return getCollectionInfo(this.$route.params.grade, this.$route.params.name).then(
+      return getCollectionInfo(this.$route.params.name, this.$route.params.sequence).then(
         collectionsInfo => {
-          this.packTitle = collectionsInfo.metadata.title;
+          this.packTitle = collectionsInfo.title;
           return this.setUpdateInterval();
         }
       );

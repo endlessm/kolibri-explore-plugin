@@ -53,10 +53,10 @@
     methods: {
       packMetadataTitle,
       packMetadataSubtitle,
-      choosePack(grade) {
+      choosePack(name) {
         // FIXME: This is hardcoded to the (currently) only option.
-        const name = '0001';
-        this.$router.push({ name: PageNames.WELCOME_PACK_READY, params: { grade, name } });
+        const sequence = '0001';
+        this.$router.push({ name: PageNames.WELCOME_PACK_READY, params: { name, sequence } });
       },
     },
     $trs: {

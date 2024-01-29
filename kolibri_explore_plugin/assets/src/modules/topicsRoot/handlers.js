@@ -11,6 +11,7 @@ import { ChannelResource, ContentNodeResource } from '../../apiResources';
 import { CarouselItemsLength, SEARCH_MAX_RESULTS, PageNames } from '../../constants';
 import { CustomChannelApps, getBigThumbnail, getChannelIcon } from '../../customApps';
 import {
+  currentCollectionExists,
   getDownloadStatus,
   getShouldResume,
   resumeDownload,
@@ -147,9 +148,9 @@ export function decideWelcome(store) {
     return Promise.resolve();
   }
 
-  return Promise.all([getDownloadStatus(), getShouldResume()]).then(
-    ([status, { shouldResume, grade, name }]) => {
-      if (_isDownloadComplete(status)) {
+  return Promise.all([currentCollectionExists(), getDownloadStatus(), getShouldResume()]).then(
+    ([currentExists, status, { shouldResume, name, sequence }]) => {
+      if (currentExists || _isDownloadComplete(status)) {
         store.commit('CORE_SET_PAGE_LOADING', false);
         store.commit('CORE_SET_ERROR', null);
         console.debug('Welcome: Download complete, redirecting to Explore page...');
@@ -157,7 +158,7 @@ export function decideWelcome(store) {
       } else if (_isDownloadOngoing(status) || shouldResume) {
         console.debug('Welcome: Redirecting to Download page...');
         // The catch here is needed for ignoring redundant navigation errors.
-        router.replace({ name: PageNames.DOWNLOAD, params: { grade, name } }).catch(() => {});
+        router.replace({ name: PageNames.DOWNLOAD, params: { name, sequence } }).catch(() => {});
         store.commit('SET_PAGE_NAME', PageNames.DOWNLOAD);
         store.commit('CORE_SET_PAGE_LOADING', false);
         store.commit('CORE_SET_ERROR', null);
@@ -178,7 +179,7 @@ export function decidePackSelection(store) {
 
   if (languageIdToCode(currentLanguage) === 'es') {
     console.debug('Welcome: Downloading Spanish pack directly...');
-    router.replace({ name: PageNames.DOWNLOAD, params: { grade: 'spanish', name: '0001' } });
+    router.replace({ name: PageNames.DOWNLOAD, params: { name: 'spanish', sequence: '0001' } });
   } else {
     store.commit('SET_PAGE_NAME', PageNames.WELCOME_PACK_SELECTION);
   }
@@ -187,7 +188,7 @@ export function decidePackSelection(store) {
   store.commit('CORE_SET_ERROR', null);
 }
 
-export function decideDownload(store, grade, name) {
+export function decideDownload(store, name, sequence) {
   store.commit('CORE_SET_PAGE_LOADING', true);
 
   return Promise.all([getDownloadStatus(), getShouldResume()]).then(
@@ -211,7 +212,7 @@ export function decideDownload(store, grade, name) {
         });
       } else {
         console.debug('Downloading starter pack...');
-        return startDownload(grade, name).then(() => {
+        return startDownload(name, sequence).then(() => {
           store.commit('SET_PAGE_NAME', PageNames.DOWNLOAD);
           store.commit('CORE_SET_PAGE_LOADING', false);
           store.commit('CORE_SET_ERROR', null);

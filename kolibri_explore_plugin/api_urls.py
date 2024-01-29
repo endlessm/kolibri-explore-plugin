@@ -5,6 +5,7 @@ from django.conf.urls import url
 from rest_framework import routers
 
 from .collectionviews import cancel_download
+from .collectionviews import current_collection_exists
 from .collectionviews import get_all_collections_info
 from .collectionviews import get_collection_info
 from .collectionviews import get_download_status
@@ -39,6 +40,11 @@ router.register(
 
 urlpatterns = [
     url(r"^", include(router.urls)),
+    url(
+        r"ek-collections/current-collection-exists",
+        current_collection_exists,
+        name="current_collection_exists",
+    ),
     url(
         r"ek-collections/get-collection-info",
         get_collection_info,

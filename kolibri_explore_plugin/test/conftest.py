@@ -31,17 +31,17 @@ def kolibri_options(monkeypatch):
     )
     monkeypatch.setattr(
         collectionviews,
-        "_content_manifests",
+        "_collections",
         [],
     )
     monkeypatch.setattr(
         collectionviews,
-        "_content_manifests_by_language",
+        "_collections_by_language_id",
         {},
     )
     monkeypatch.setattr(
         collectionviews,
-        "_content_manifests_by_grade_name",
+        "_collections_by_name_sequence",
         {},
     )
     monkeypatch.setattr(

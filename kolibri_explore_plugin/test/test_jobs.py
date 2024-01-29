@@ -11,6 +11,7 @@ def importchannel(channel_id):
     return call_command("importchannel", "network", channel_id)
 
 
+@pytest.mark.django_db
 def test_get_applyexternaltags_task():
     node_id = "b51baf46133045e3bce4d2d872a8f71d"
     tags = ["foo", "bar", "baz"]

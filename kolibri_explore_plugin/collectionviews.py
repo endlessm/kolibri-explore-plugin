@@ -9,6 +9,7 @@ from enum import IntEnum
 
 from django.utils.translation import gettext_lazy as _
 from kolibri.core.content.errors import InsufficientStorageSpaceError
+from kolibri.core.content.models import ContentNode
 from kolibri.core.content.utils.content_manifest import ContentManifest
 from kolibri.core.content.utils.content_manifest import (
     ContentManifestParseError,
@@ -32,6 +33,9 @@ from .jobs import get_remotechannelimport_task
 from .jobs import get_remotecontentimport_task
 from .jobs import get_remoteimport_task
 from .models import BackgroundTask
+from .models import CollectionState
+from .models import ContentNodeExtras
+from .models import ExternalContentTag
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +45,9 @@ COLLECTION_PATHS = os.path.join(
 if conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]:
     COLLECTION_PATHS = conf.OPTIONS["Explore"]["CONTENT_COLLECTIONS_PATH"]
 
-COLLECTION_GRADES_EN = [
+# TODO: The collection language is hardcoded here. It should be split
+# in the endless-key-collections repo.
+COLLECTION_NAMES_EN = [
     "explorer",
     "artist",
     "scientist",
@@ -51,16 +57,14 @@ COLLECTION_GRADES_EN = [
     "extras",
 ]
 
-COLLECTION_GRADES_ES = [
+COLLECTION_NAMES_ES = [
     "spanish",
     "spanish-extras",
 ]
 
-# FIXME: Rename to PACK_IDS
-COLLECTION_GRADES = COLLECTION_GRADES_EN + COLLECTION_GRADES_ES
+COLLECTION_NAMES = COLLECTION_NAMES_EN + COLLECTION_NAMES_ES
 
-# FIXME: Rename to PACK_VERSIONS
-COLLECTION_NAMES = ["0001"]
+COLLECTION_SEQUENCES = [1]
 
 PROGRESS_STEPS = {
     "importing": 0.1,
@@ -69,22 +73,28 @@ PROGRESS_STEPS = {
 }
 
 
-class EndlessKeyContentManifest(ContentManifest):
+class ChannelNotImported(Exception):
+    pass
+
+
+class EndlessKeyCollection(ContentManifest):
     def __init__(self):
         """Extended content manifest for Endless Key
 
-        The EK collections are organized by grade. Example: the
-        "primary-small" collection has grade "primary" and name
-        "small"
+        The EK collections are organized by name and
+        sequence. Example: the "artist-0001" collection has name
+        "artist" and sequence 1.
 
         They also add more metadata and set availability according to
         disk space.
+
         """
-        self.grade = None
-        self.name = None
-        self.language = None
-        self.metadata = None
+
+        self.state = None
         self.available = None
+
+        self._manifest_data = None
+
         super().__init__()
 
     def get_latest_channels(self):
@@ -95,26 +105,24 @@ class EndlessKeyContentManifest(ContentManifest):
         }
 
     def get_extra_channel_ids(self):
-        all_channel_ids = _get_channel_ids_for_all_content_manifests(
-            self.language
+        all_channel_ids = _get_channel_ids_for_all_collections(
+            self.state.language_id
         )
         return all_channel_ids.difference(self.get_channel_ids())
 
     def get_latest_extra_channels(self):
         """Return set of extra channel id and latest version tuples"""
-        all_channels = _get_latest_channels_for_all_content_manifests(
-            self.language
+        all_channels = _get_latest_channels_for_all_collections(
+            self.state.language_id
         )
         return all_channels.difference(self.get_latest_channels())
 
     def read_from_static_collection(
-        self, grade, name, language, validate=False
+        self, name, sequence, language_id, validate=False
     ):
-        self.grade = grade
-        self.name = name
-        self.language = language
+
         manifest_filename = os.path.join(
-            COLLECTION_PATHS, f"{grade}-{name}.json"
+            COLLECTION_PATHS, f"{name}-{sequence:04}.json"
         )
 
         if not os.path.exists(manifest_filename):
@@ -124,12 +132,46 @@ class EndlessKeyContentManifest(ContentManifest):
 
         super().read(manifest_filename, validate)
 
+        data = self._manifest_data.get("metadata", {})
+
+        self.state, _created = CollectionState.objects.get_or_create(
+            name=name,
+            sequence=int(sequence),
+            defaults={
+                "language_id": language_id,
+                "is_extra": name.endswith("extras"),
+                "title": data.get("title"),
+                "subtitle": data.get("subtitle"),
+                "description": data.get("description"),
+                "required_gigabytes": int(data.get("required_gigabytes", 0)),
+            },
+        )
+
+        self.persist_install_state()
+
+    def persist_install_state(self):
+        self.state.metadata_installed = self.metadata_installed()
+        self.state.content_installed = self.content_installed()
+        self.state.thumbnails_installed = self.thumbnails_installed()
+        self.state.tags_applied = self.tags_applied()
+        self.state.save()
+
+    def update_state(self, stage):
+        if stage <= DownloadStage.IMPORTING_CHANNELS:
+            return
+
+        previous_stage = stage - 1
+        if previous_stage == DownloadStage.IMPORTING_CHANNELS:
+            self.state.metadata_installed = self.metadata_installed()
+        elif previous_stage == DownloadStage.IMPORTING_CONTENT:
+            self.state.content_installed = self.content_installed()
+        elif previous_stage == DownloadStage.APPLYING_EXTERNAL_TAGS:
+            self.state.tags_applied = self.tags_applied()
+            self.state.is_current = True
+            self.state.save()
+
     def read_dict(self, manifest_data, validate=False):
-        self.metadata = manifest_data.get("metadata")
-        if self.metadata is None:
-            raise ContentManifestParseError(
-                "metadata is a required field for Endless Key manifest"
-            )
+        self._manifest_data = manifest_data
         super().read_dict(manifest_data, validate)
 
     def to_dict(self):
@@ -138,12 +180,7 @@ class EndlessKeyContentManifest(ContentManifest):
     def set_availability(self, free_space_gb):
         # FIXME using a hardcoded number is silly. Find a way to get
         # the exact weight.
-        if "required_gigabytes" in self.metadata:
-            self.available = (
-                self.metadata["required_gigabytes"] < free_space_gb
-            )
-        else:
-            self.available = False
+        self.available = self.state.required_gigabytes < free_space_gb
 
     def get_channels_count(self):
         return len(self.get_channel_ids())
@@ -154,8 +191,31 @@ class EndlessKeyContentManifest(ContentManifest):
                 self.iter_channelimport_tasks(),
                 self.iter_contentimport_tasks(),
                 self.iter_contentthumbnail_tasks(),
+                self.iter_applyexternaltags_tasks(),
+                self.iter_extra_channelimport_tasks(),
             )
         )
+
+    def metadata_installed(self):
+        return not any(self.iter_channelimport_tasks())
+
+    def content_installed(self):
+        try:
+            return not any(self.iter_contentimport_tasks())
+        except ChannelNotImported:
+            return False
+
+    def thumbnails_installed(self):
+        try:
+            return not any(self.iter_contentthumbnail_tasks())
+        except ChannelNotImported:
+            return False
+
+    def tags_applied(self):
+        return not any(self.iter_applyexternaltags_tasks())
+
+    def extra_metadata_installed(self):
+        return not any(self.iter_extra_channelimport_tasks())
 
     def iter_channelimport_tasks(self):
         """Return a serializable object to create channelimport tasks
@@ -210,6 +270,9 @@ class EndlessKeyContentManifest(ContentManifest):
         """
         for channel_id in self.get_channel_ids():
             channel_metadata = get_channel_metadata(channel_id)
+            if channel_metadata is None:
+                raise ChannelNotImported
+
             node_ids = list(
                 self._get_node_ids_for_channel(channel_metadata, channel_id)
             )
@@ -236,13 +299,34 @@ class EndlessKeyContentManifest(ContentManifest):
 
         As defined in this content manifest metadata.
         """
-        if "tagged_node_ids" not in self.metadata:
+        data = self._manifest_data.get("metadata", {})
+        if "tagged_node_ids" not in data:
             return []
 
-        for tagged in self.metadata["tagged_node_ids"]:
+        for tagged in data["tagged_node_ids"]:
             node_id = tagged["node_id"]
             tags = tagged["tags"]
-            yield get_applyexternaltags_task(node_id, tags)
+
+            node = None
+            missing_tags = []
+            try:
+                node = ContentNode.objects.get(id=node_id)
+            except ContentNode.DoesNotExist:
+                missing_tags = tags
+            else:
+                for tag_name in tags:
+                    try:
+                        ContentNodeExtras.objects.get(
+                            tags__tag_name=tag_name, content_node=node
+                        )
+                    except (
+                        ExternalContentTag.DoesNotExist,
+                        ContentNodeExtras.DoesNotExist,
+                    ):
+                        missing_tags.append(tag_name)
+
+            if missing_tags:
+                yield get_applyexternaltags_task(node_id, missing_tags)
 
     def iter_contentthumbnail_tasks(self):
         """Return a serializable object to create thumbnail contentimport tasks
@@ -251,12 +335,17 @@ class EndlessKeyContentManifest(ContentManifest):
         """
         for channel_id in self.get_channel_ids():
             # Check if the desired thumbnail nodes are already available.
-            num_resources, _, _ = get_import_export_data(
-                channel_id,
-                node_ids=[],
-                available=False,
-                all_thumbnails=True,
-            )
+            num_resources = None
+            try:
+                num_resources, _, _ = get_import_export_data(
+                    channel_id,
+                    node_ids=[],
+                    available=False,
+                    all_thumbnails=True,
+                )
+            except TypeError:
+                raise ChannelNotImported
+
             if num_resources == 0:
                 logger.debug(
                     f"Skipping content thumbnail task for {channel_id} "
@@ -314,7 +403,7 @@ class CollectionDownloadManager:
         self._set_empty_state()
 
     def _set_empty_state(self):
-        self._content_manifest = None
+        self._collection = None
         self._stage = DownloadStage.NOT_STARTED
         self._current_job_id = None
         self._current_task = None
@@ -327,15 +416,15 @@ class CollectionDownloadManager:
     def is_state_unset(self):
         return (
             self._stage == DownloadStage.NOT_STARTED
-            and self._content_manifest is None
+            and self._collection is None
         )
 
-    def start(self, manifest, user):
+    def start(self, collection, user):
         """Start downloading a collection manifest."""
         if self._stage != DownloadStage.NOT_STARTED:
             raise DownloadError("A download has already started. Can't start")
 
-        self._content_manifest = manifest
+        self._collection = collection
         self._set_next_stage(user)
 
     def from_state(self, state):
@@ -343,12 +432,17 @@ class CollectionDownloadManager:
         if self._stage != DownloadStage.NOT_STARTED:
             raise DownloadError("A download has already started. Can't resume")
 
-        grade = state["grade"]
-        name = state["name"]
+        collection_name = state["collection_name"]
+        collection_sequence = state["collection_sequence"]
         stage_name = state["stage"]
 
-        self._content_manifest = _content_manifests_by_grade_name[grade][name]
         self._stage = DownloadStage[stage_name]
+
+        self._collection = _collections_by_name_sequence[collection_name][
+            collection_sequence
+        ]
+        self._collection.update_state(self._stage)
+
         self._current_job_id = state["current_job_id"]
         self._current_task = state["current_task"]
         self._tasks_pending = state["tasks_pending"]
@@ -356,8 +450,9 @@ class CollectionDownloadManager:
         self._tasks_previously_completed = state["tasks_previously_completed"]
 
         logger.info(
-            f"Download state loaded for grade={grade} name={name}, "
-            + f"stage={stage_name}"
+            f"Download state loaded for collection with "
+            f"name={collection_name} sequence={collection_sequence}, "
+            f"stage={stage_name}"
         )
         logger.debug(f"Loaded download state: {state}")
 
@@ -525,15 +620,15 @@ class CollectionDownloadManager:
         The state can be persisted and used in another session to
         regenerate this singleton using the from_state() method.
         """
-        grade = None
-        name = None
-        if self._content_manifest is not None:
-            grade = self._content_manifest.grade
-            name = self._content_manifest.name
+        collection_name = None
+        collection_sequence = None
+        if self._collection is not None:
+            collection_name = self._collection.state.name
+            collection_sequence = self._collection.state.sequence
 
         state = {
-            "grade": grade,
-            "name": name,
+            "collection_name": collection_name,
+            "collection_sequence": collection_sequence,
             "stage": self._stage.name,
             "current_job_id": self._current_job_id,
             "current_task": self._current_task,
@@ -559,23 +654,23 @@ class CollectionDownloadManager:
         tasks = []
         while not tasks and self._stage != DownloadStage.COMPLETED:
             self._stage = DownloadStage(self._stage + 1)
+            self._collection.update_state(self._stage)
+
             if self._stage == DownloadStage.IMPORTING_CHANNELS:
-                tasks = self._content_manifest.iter_channelimport_tasks()
+                tasks = self._collection.iter_channelimport_tasks()
             elif self._stage == DownloadStage.IMPORTING_CONTENT:
-                tasks = self._content_manifest.iter_contentimport_tasks()
+                tasks = self._collection.iter_contentimport_tasks()
             elif self._stage == DownloadStage.APPLYING_EXTERNAL_TAGS:
-                tasks = self._content_manifest.iter_applyexternaltags_tasks()
+                tasks = self._collection.iter_applyexternaltags_tasks()
 
         if self._stage == DownloadStage.COMPLETED:
             logger.info("Download completed!")
 
             # Download the manifest content thumbnails and the extra channels
             # in the background.
-            thumbnail_tasks = (
-                self._content_manifest.iter_contentthumbnail_tasks()
-            )
+            thumbnail_tasks = self._collection.iter_contentthumbnail_tasks()
             extra_channel_tasks = (
-                self._content_manifest.iter_extra_channelimport_tasks()
+                self._collection.iter_extra_channelimport_tasks()
             )
             for task in itertools.chain(thumbnail_tasks, extra_channel_tasks):
                 BackgroundTask.create_from_task_data(task)
@@ -605,49 +700,60 @@ class CollectionDownloadManager:
         logger.info(f"Enqueued job id {self._current_job_id}")
 
 
-_content_manifests = []
-_content_manifests_by_language = {}
-_content_manifests_by_grade_name = {}
-_collection_download_manager = CollectionDownloadManager()
+_collections = []
+_collections_by_language_id = {}
+_collections_by_name_sequence = {}
+_collection_download_manager = None
 
 
 def _read_content_manifests():
-    global _content_manifests
-    global _content_manifests_by_grade_name
+    global _collections
+    global _collections_by_name_sequence
+    global _collection_download_manager
+
+    _collection_download_manager = CollectionDownloadManager()
 
     free_space_gb = get_free_space() / 1024**3
 
-    def _create_manifest(grade, name, language):
-        manifest = EndlessKeyContentManifest()
+    def _create_manifest(name, sequence, language_id):
+        manifest = EndlessKeyCollection()
         try:
             # TODO: Validate the manifest files or remove validation
             # https://phabricator.endlessm.com/T34355
             manifest.read_from_static_collection(
-                grade, name, language, validate=False
+                name, sequence, language_id, validate=False
             )
         except ContentManifestParseError as err:
             logger.error(err)
         else:
             manifest.set_availability(free_space_gb)
-            _content_manifests.append(manifest)
+            _collections.append(manifest)
 
-            _content_manifests_by_language.setdefault(language, [])
-            _content_manifests_by_language[language].append(manifest)
+            _collections_by_language_id.setdefault(language_id, [])
+            _collections_by_language_id[language_id].append(manifest)
 
-            _content_manifests_by_grade_name.setdefault(grade, {})
-            _content_manifests_by_grade_name[grade][name] = manifest
+            _collections_by_name_sequence.setdefault(name, {})
+            _collections_by_name_sequence[name][sequence] = manifest
 
-    for grade in COLLECTION_GRADES:
-        for name in COLLECTION_NAMES:
-            language = None
-            if grade in COLLECTION_GRADES_EN:
-                language = "en"
-            elif grade in COLLECTION_GRADES_ES:
-                language = "es"
-            _create_manifest(grade, name, language)
+    for name in COLLECTION_NAMES:
+        for sequence in COLLECTION_SEQUENCES:
+            language_id = None
+            if name in COLLECTION_NAMES_EN:
+                language_id = "en"
+            elif name in COLLECTION_NAMES_ES:
+                language_id = "es"
+            _create_manifest(name, sequence, language_id)
 
 
-_read_content_manifests()
+def ensure_initiated(api_function):
+    """Decorator to initiate only once in the first API call."""
+
+    def wrapper(*args, **kwargs):
+        if _collection_download_manager is None:
+            _read_content_manifests()
+        return api_function(*args, **kwargs)
+
+    return wrapper
 
 
 def _save_state_in_request_session(request):
@@ -660,103 +766,119 @@ def _save_state_in_request_session(request):
     request.session["COLLECTIONS_STATE"] = new_state
 
 
-def _get_collections_info_by_grade_name(grade, name):
-    if grade not in _content_manifests_by_grade_name:
+def _get_collections_info_by_name_sequence(name, sequence):
+    if name not in _collections_by_name_sequence:
         return None
-    if name not in _content_manifests_by_grade_name[grade]:
+    if int(sequence) not in _collections_by_name_sequence[name]:
         return None
-    manifest = _content_manifests_by_grade_name[grade][name]
+    collection = _collections_by_name_sequence[name][int(sequence)]
     return {
-        "grade": manifest.grade,
-        "name": manifest.name,
-        "metadata": manifest.metadata,
-        "available": manifest.available,
-        "channelsCount": manifest.get_channels_count(),
-        "isDownloadRequired": manifest.is_download_required(),
+        "name": collection.state.name,
+        "sequence": collection.state.sequence,
+        "title": collection.state.title,
+        "subtitle": collection.state.subtitle,
+        "description": collection.state.description,
+        "required_gigabytes": collection.state.required_gigabytes,
+        "available": collection.available,
+        "channelsCount": collection.get_channels_count(),
+        "isDownloadRequired": collection.is_download_required(),
     }
 
 
-def _get_channel_ids_for_all_content_manifests(language):
+def _get_channel_ids_for_all_collections(language_id):
     channel_ids = set()
-    for content_manifest in _content_manifests_by_language[language]:
-        channel_ids.update(content_manifest.get_channel_ids())
+    for collection in _collections_by_language_id[language_id]:
+        channel_ids.update(collection.get_channel_ids())
     return channel_ids
 
 
-def _get_latest_channels_for_all_content_manifests(language):
+def _get_latest_channels_for_all_collections(language_id):
     """Return set of all channel id and latest version tuples"""
     channels = {}
-    for content_manifest in _content_manifests_by_language[language]:
-        for channel_id in content_manifest.get_channel_ids():
-            version = max(content_manifest.get_channel_versions(channel_id))
+    for collection in _collections_by_language_id[language_id]:
+        for channel_id in collection.get_channel_ids():
+            version = max(collection.get_channel_versions(channel_id))
             if version > channels.get(channel_id, -1):
                 channels[channel_id] = version
     return set(channels.items())
 
 
+@ensure_initiated
+@api_view(["GET"])
+def current_collection_exists(request):
+    """Return True if one of the collections is current."""
+    return Response(CollectionState.current_exists())
+
+
+@ensure_initiated
 @api_view(["GET"])
 def get_collection_info(request):
     """Return the collection metadata and availability."""
-    grade = request.query_params.get("grade")
     name = request.query_params.get("name")
-    collection_info = _get_collections_info_by_grade_name(grade, name)
+    sequence = request.query_params.get("sequence")
+    collection_info = _get_collections_info_by_name_sequence(name, sequence)
     return Response({"collectionInfo": collection_info})
 
 
+@ensure_initiated
 @api_view(["GET"])
 def get_all_collections_info(request):
     """Return all the collections metadata and their availability."""
     info = []
-    for grade in COLLECTION_GRADES:
-        grade_info = {
-            "grade": grade,
+    for name in COLLECTION_NAMES:
+        collection_info = {
+            "name": name,
             "collections": [],
         }
-        for name in COLLECTION_NAMES:
-            collection_info = _get_collections_info_by_grade_name(grade, name)
-            if collection_info is not None:
-                grade_info["collections"].append(collection_info)
-        info.append(grade_info)
+        for sequence in COLLECTION_SEQUENCES:
+            collection = _get_collections_info_by_name_sequence(name, sequence)
+            if collection is not None:
+                collection_info["collections"].append(collection)
+        info.append(collection_info)
 
     return Response({"allCollectionsInfo": info})
 
 
+@ensure_initiated
 @api_view(["GET"])
 def get_should_resume(request):
     """Return if there is a saved state that should be resumed."""
     saved_state = request.session.get("COLLECTIONS_STATE")
-    grade = None
     name = None
+    sequence = None
     if saved_state is not None:
-        grade = saved_state["grade"]
-        name = saved_state["name"]
+        name = saved_state["collection_name"]
+        sequence = saved_state["collection_sequence"]
     should_resume = (
         saved_state is not None
         and saved_state["stage"] != DownloadStage.COMPLETED.name
     )
     return Response(
-        {"shouldResume": should_resume, "grade": grade, "name": name}
+        {"shouldResume": should_resume, "name": name, "sequence": sequence}
     )
 
 
+@ensure_initiated
 @api_view(["POST"])
 def start_download(request):
     """Start downloading a collection.
 
-    Pass the collection "grade" and "name" in the POST data.
+    Pass the collection name and sequence in the POST data.
 
     Returns download status.
     """
-    grade = request.data.get("grade")
     name = request.data.get("name")
+    sequence = int(request.data.get("sequence"))
 
-    # Validate grade and name
-    if grade not in _content_manifests_by_grade_name:
-        raise APIException(f"Grade {grade} not found in content manifests")
-    if name not in _content_manifests_by_grade_name[grade]:
+    # Validate name and sequence
+    if name not in _collections_by_name_sequence:
         raise APIException(f"Name {name} not found in content manifests")
+    if sequence not in _collections_by_name_sequence[name]:
+        raise APIException(
+            f"Sequence {sequence} not found in content manifests"
+        )
 
-    manifest = _content_manifests_by_grade_name[grade][name]
+    collection = _collections_by_name_sequence[name][sequence]
 
     # Fail if a previous download can be resumed
     saved_state = request.session.get("COLLECTIONS_STATE")
@@ -765,8 +887,8 @@ def start_download(request):
 
     # Init the download manager and start downloading
     try:
-        _collection_download_manager.start(manifest, request.user)
-        logger.info(f"Download started for grade={grade} name={name}")
+        _collection_download_manager.start(collection, request.user)
+        logger.info(f"Download started for name={name} sequence={sequence}")
     except DownloadError as err:
         raise APIException(err)
 
@@ -780,6 +902,7 @@ def start_download(request):
     return Response({"status": status})
 
 
+@ensure_initiated
 @api_view(["POST"])
 def resume_download(request):
     """Resume download from a previous session.
@@ -794,9 +917,9 @@ def resume_download(request):
     # Init the download manager and start downloading
     try:
         _collection_download_manager.from_state(saved_state)
-        grade = saved_state["grade"]
         name = saved_state["name"]
-        logger.info(f"Download resumed for grade={grade} name={name}")
+        sequence = saved_state["sequence"]
+        logger.info(f"Download resumed for name={name} sequence={sequence}")
         logger.info(f"Resumed download state: {saved_state}")
     except DownloadError as err:
         raise APIException(err)
@@ -808,6 +931,7 @@ def resume_download(request):
     return Response({"status": status})
 
 
+@ensure_initiated
 @api_view(["POST"])
 def update_download(request):
     """Continue downloading current collection.
@@ -830,6 +954,7 @@ def update_download(request):
     return Response({"status": status})
 
 
+@ensure_initiated
 @api_view(["DELETE"])
 def cancel_download(request):
     """Cancel current download and clear the saved state.
@@ -849,6 +974,7 @@ def cancel_download(request):
     return Response({"status": status})
 
 
+@ensure_initiated
 @api_view(["GET"])
 def get_download_status(request):
     """Return the download status."""

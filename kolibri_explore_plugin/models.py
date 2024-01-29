@@ -33,6 +33,113 @@ class ContentNodeExtras(models.Model):
         return self.content_node.title
 
 
+class CollectionState(models.Model):
+    """Persist state of collections"""
+
+    name = models.SlugField(
+        blank=False,
+        max_length=64,
+        help_text=(
+            "Collection name. Must be unique along with the sequence number"
+        ),
+    )
+
+    sequence = models.PositiveIntegerField(
+        blank=False,
+        help_text=(
+            "Collection sequence number. Must be unique along with the name"
+        ),
+    )
+
+    language_id = models.CharField(
+        max_length=15,
+        help_text="Collection language.",
+    )
+
+    is_current = models.BooleanField(
+        default=False,
+        help_text=(
+            "Is this the current collection? "
+            "Only one collection can be current."
+        ),
+    )
+
+    is_extra = models.BooleanField(
+        default=False,
+        help_text=(
+            "An extra collection can't be current. "
+            "Contains extra content for collections of same language."
+        ),
+    )
+
+    # Metadata:
+
+    title = models.CharField(
+        max_length=64,
+        help_text="Collection title as displayed in the UI.",
+    )
+
+    subtitle = models.CharField(
+        max_length=512,
+        help_text="Collection subtitle as displayed in the UI.",
+    )
+
+    description = models.CharField(
+        max_length=512,
+        help_text="Collection description as displayed in the UI.",
+    )
+
+    required_gigabytes = models.PositiveIntegerField(
+        default=0,
+        help_text=("Disk size needed for installing the collection."),
+    )
+
+    # Collection installed status:
+
+    metadata_installed = models.BooleanField(
+        default=False,
+        help_text=(
+            "Whether the metadata of each channel in the "
+            "collection has been installed."
+        ),
+    )
+
+    thumbnails_installed = models.BooleanField(
+        default=False,
+        help_text=(
+            "Whether the thumbnails of each channel in "
+            "the collection has been installed."
+        ),
+    )
+
+    content_installed = models.BooleanField(
+        default=False,
+        help_text=(
+            "Whether the content of each channel in the "
+            "collection has been installed."
+        ),
+    )
+
+    tags_applied = models.BooleanField(
+        default=False,
+        help_text=(
+            "Whether the ExternalContentTag for content in"
+            " the collection has been applied."
+        ),
+    )
+
+    class Meta:
+        unique_together = ("name", "sequence")
+
+    def __str__(self):
+        return f"{self.name} - {self.sequence}"
+
+    @classmethod
+    def current_exists(cls):
+        """Check if one of the collections is current."""
+        return cls.objects.filter(is_current=True).exists()
+
+
 class BackgroundTask(models.Model):
     """Task for background content downloads"""
 
