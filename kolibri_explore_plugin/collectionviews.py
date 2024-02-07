@@ -639,6 +639,20 @@ class CollectionDownloadManager:
 
         return state
 
+    def validate_state(self, state):
+        """Check a serialized representation of this download manager's state.
+
+        Returns True if the state is valid.
+        """
+
+        required_keys = (
+            "collection_name",
+            "collection_sequence",
+            "stage",
+        )
+
+        return all(key in state for key in required_keys)
+
     def _next_task_or_stage(self, user):
         if not self._tasks_pending:
             # No more tasks pending in this stage, move to the next one
@@ -766,6 +780,15 @@ def _save_state_in_request_session(request):
     request.session["COLLECTIONS_STATE"] = new_state
 
 
+def _read_state_from_request_session(request):
+    saved_state = request.session.get("COLLECTIONS_STATE", {})
+
+    if _collection_download_manager.validate_state(saved_state):
+        return saved_state
+
+    return None
+
+
 def _get_collections_info_by_name_sequence(name, sequence):
     if name not in _collections_by_name_sequence:
         return None
@@ -843,7 +866,7 @@ def get_all_collections_info(request):
 @api_view(["GET"])
 def get_should_resume(request):
     """Return if there is a saved state that should be resumed."""
-    saved_state = request.session.get("COLLECTIONS_STATE")
+    saved_state = _read_state_from_request_session(request)
     name = None
     sequence = None
     if saved_state is not None:
@@ -881,7 +904,7 @@ def start_download(request):
     collection = _collections_by_name_sequence[name][sequence]
 
     # Fail if a previous download can be resumed
-    saved_state = request.session.get("COLLECTIONS_STATE")
+    saved_state = _read_state_from_request_session(request)
     if saved_state is not None:
         raise APIException("A previous download state was found. Resume it.")
 
@@ -910,7 +933,7 @@ def resume_download(request):
     Returns download status.
     """
 
-    saved_state = request.session.get("COLLECTIONS_STATE")
+    saved_state = _read_state_from_request_session(request)
     if saved_state is None:
         raise APIException("No download state was found. Can't resume.")
 
@@ -979,7 +1002,7 @@ def cancel_download(request):
 def get_download_status(request):
     """Return the download status."""
 
-    saved_state = request.session.get("COLLECTIONS_STATE")
+    saved_state = _read_state_from_request_session(request)
     if (
         _collection_download_manager.is_state_unset()
         and saved_state is not None
