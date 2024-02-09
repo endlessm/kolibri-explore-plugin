@@ -940,8 +940,8 @@ def resume_download(request):
     # Init the download manager and start downloading
     try:
         _collection_download_manager.from_state(saved_state)
-        name = saved_state["name"]
-        sequence = saved_state["sequence"]
+        name = saved_state["collection_name"]
+        sequence = saved_state["collection_sequence"]
         logger.info(f"Download resumed for name={name} sequence={sequence}")
         logger.info(f"Resumed download state: {saved_state}")
     except DownloadError as err:
