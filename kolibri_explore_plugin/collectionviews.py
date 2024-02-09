@@ -6,6 +6,7 @@ import os
 import time
 from enum import auto
 from enum import IntEnum
+from threading import RLock
 
 from django.utils.translation import gettext_lazy as _
 from kolibri.core.content.errors import InsufficientStorageSpaceError
@@ -71,6 +72,8 @@ PROGRESS_STEPS = {
     "downloading": 0.9,
     "completed": 1,
 }
+
+ENSURE_INITIATED_RLOCK = RLock()
 
 
 class ChannelNotImported(Exception):
@@ -763,8 +766,9 @@ def ensure_initiated(api_function):
     """Decorator to initiate only once in the first API call."""
 
     def wrapper(*args, **kwargs):
-        if _collection_download_manager is None:
-            _read_content_manifests()
+        with ENSURE_INITIATED_RLOCK:
+            if _collection_download_manager is None:
+                _read_content_manifests()
         return api_function(*args, **kwargs)
 
     return wrapper
