@@ -4,6 +4,18 @@
   >
     <ChannelHeader :section="section" />
 
+    <b-container v-if="false">
+      <div class="my-4">
+        <b-form-checkbox
+          v-model="hideUnavailableItems"
+          name="check-only-downloaded"
+          switch
+        >
+          Only downloaded items
+        </b-form-checkbox>
+      </div>
+    </b-container>
+
     <div v-if="isInlineLevel">
       <template v-if="loadingSubsectionNodes">
         <EkCardGridPlaceholder
@@ -75,6 +87,7 @@ export default {
     return {
       subsectionNodes: { nodes: [], hasMoreNodes: false, pagination: null },
       loadingSubsectionNodes: true,
+      hideUnavailableItems: window.kolibri.defaultHideUnavailable,
     };
   },
   computed: {
@@ -95,6 +108,10 @@ export default {
       if (this.isInlineLevel) {
         this.loadInlineLevel();
       }
+    },
+    hideUnavailableItems() {
+      console.log("Switched again!");
+      return this.fetchSubsectionNodes();
     },
   },
   mounted() {
@@ -119,6 +136,7 @@ export default {
         return window.kolibri.getContentByFilter({
           parent: subsection.id,
           maxResults: sectionPageSize,
+          includeUnavailable: !this.hideUnavailableItems,
         })
           .then((pageResult) => {
             this.$set(this.subsectionNodes, subsection.id, {
@@ -136,7 +154,10 @@ export default {
       if (!hasMoreNodes) {
         return null;
       }
-      return window.kolibri.getContentPage(pagination).then((pageResult) => {
+      return window.kolibri.getContentPage({
+        ...pagination,
+        ...(!this.hideUnavailableItems && { no_available_filtering: true }),
+      }).then((pageResult) => {
         this.$set(this.subsectionNodes, sectionId, {
           nodes: nodes.concat(pageResult.results),
           hasMoreNodes: pageResult.more !== null,
